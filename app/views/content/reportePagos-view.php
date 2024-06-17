@@ -146,7 +146,7 @@
 					</div>
 
 					<div class="card-body">
-						<table id="example1" class="table table-bordered table-striped" style="font-size: 13px;">
+						<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 							<thead>
 								<tr>
 									<th>Identificación</th>

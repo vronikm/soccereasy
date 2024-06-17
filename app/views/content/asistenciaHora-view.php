@@ -163,6 +163,7 @@
 										
 										<div class="col-md-12">						
 											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+											<a href="<?php echo APP_URL; ?>asistenciaHora/" class="btn btn-info btn-sm">Cancelar</a>
 											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
 										</div>
 									</div>	
@@ -172,7 +173,7 @@
 										<p class="lead mb-0">Horas ingresadas</p>
 									</div>
 									<div class="tab-content" id="custom-content-above-tabContent">
-										<table id="example1" class="table table-bordered table-striped">
+										<table id="example1" class="table table-bordered table-striped table-sm">
 											<thead>
 												<tr>
 													<th>N.</th>

@@ -75,7 +75,7 @@
 							</div>
 							<!-- ./card-header -->
 							<div class="card-body">
-								<table class="table table-bordered table-striped">
+								<table class="table table-bordered table-striped table-sm">
 									<thead>
 										<tr>
 											<th>Identificación</th>

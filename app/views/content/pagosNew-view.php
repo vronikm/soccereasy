@@ -402,7 +402,7 @@
 												<p class="lead mb-0">Pagos realizados</p>
 											</div>
 											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped">
+												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
 															<th>No</th>
@@ -551,7 +551,7 @@
 												<p class="lead mb-0">Pagos realizados de inscripción</p>
 											</div>
 											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped">
+												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
 															<th>No</th>
@@ -678,7 +678,7 @@
 												<p class="lead mb-0">Pagos de Nuevo Uniforme realizados</p>
 											</div>
 											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped">
+												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
 															<th>No</th>
@@ -802,7 +802,7 @@
 												<p class="lead mb-0">Pagos realizados por accesorios de entrenamiento</p>
 											</div>
 											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped">
+												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
 															<th>No</th>
@@ -938,7 +938,7 @@
 												<p class="lead mb-0">Pagos Otros realizados</p>
 											</div>
 											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped">
+												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
 															<th>No</th>

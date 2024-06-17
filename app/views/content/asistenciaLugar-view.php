@@ -14,12 +14,14 @@
 			$lugar_nombre = $datos['lugar_nombre'];
 			$lugar_direccion = $datos['lugar_direccion'];
 			$lugar_detalle = $datos['lugar_detalle'];
+			$lugar_sedeid = $datos['lugar_sedeid'];
 		}
 	}else{
 		$modulo_lugar = 'registrar_lugar';
 		$lugar_nombre = '';
 		$lugar_direccion = '';
 		$lugar_detalle = '';
+		$lugar_sedeid  = 0;
 	}	
 ?>
 
@@ -127,7 +129,7 @@
 										<div class="form-group">
 										<label for="lugar_sedeid">Sede</label>
 										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
-											<?php echo $insLugar->listarOptionSede(); ?>
+											<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
 										</select>	
 										</div>
 									</div>
@@ -165,7 +167,7 @@
 								<p class="lead mb-0">Lugar de entrenamiento</p>
 							</div>
 							<div class="tab-content" id="custom-content-above-tabContent">
-								<table id="example1" class="table table-bordered table-striped">
+								<table id="example1" class="table table-bordered table-striped table-sm">
 									<thead>
 										<tr>
 											<th>N.</th>

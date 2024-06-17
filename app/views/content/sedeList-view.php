@@ -79,31 +79,21 @@
 
 					<div class="card-body">
 					<a href="<?php echo APP_URL; ?>sedeNew/" class="btn float-right btn-info btn-sm" style="margin-top: 5px;">Nueva sede</a>
-						<table id="example3" class="table table-bordered table-striped">
-						<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Dirección</th>
-							<th>Correo</th>
-							<th>Teléfono</th>
-							<th>Opciones</th>
-						</tr>
-						</thead>
-						<tbody>
-						<?php 
-							echo $insSede->listarSedes(); 
-						?>	
-						
-						</tbody>
-						<tfoot>
-						<tr>
-							<th>Nombre</th>
-							<th>Dirección</th>
-							<th>Correo</th>
-							<th>Teléfono</th>
-							<th style="width: 220px;">Opciones</th>
-						</tr>
-						</tfoot>
+						<table id="example3" class="table table-bordered table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th>Dirección</th>
+									<th>Correo</th>
+									<th>Teléfono</th>
+									<th style="width: 220px;">Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									echo $insSede->listarSedes(); 
+								?>						
+							</tbody>						
 						</table>	
 					</div>
 				</div>

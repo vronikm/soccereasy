@@ -84,31 +84,21 @@
 					</div>
 
 					<div class="card-body">
-						<table id="example1" class="table table-bordered table-striped">
-						<thead>
-						<tr>
-							<th>Rol</th>
-							<th>Detalle</th>
-							<th>Estado</th>
-							<th>Permisos</th>
-							<th>Opciones</th>
-						</tr>
-						</thead>
-						<tbody>
-						<?php 
-							echo $insUsuario->listarRoles(); 
-						?>	
-						
-						</tbody>
-						<tfoot>
-						<tr>
-						<th>Rol</th>
-							<th>Detalle</th>
-							<th>Estado</th>
-							<th>Permisos</th>
-							<th>Opciones</th>
-						</tr>
-						</tfoot>
+						<table id="example1" class="table table-bordered table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Rol</th>
+									<th>Detalle</th>
+									<th>Estado</th>
+									<th>Permisos</th>
+									<th>Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php 
+									echo $insUsuario->listarRoles(); 
+								?>							
+							</tbody>							
 						</table>	
 					</div>
 				</div>
@@ -156,7 +146,7 @@
 		$(function () {
 			$("#example1").DataTable({
 			"responsive": true, "lengthChange": false, "autoWidth": false,
-			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		
 			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 			$('#example2').DataTable({
 			"paging": true,
