@@ -150,7 +150,7 @@
 												echo "<option value='0'>Todas</option>";	
 											}
 										?>																		
-										<?php echo $insAlumno->listarOptionSede($alumno_sedeid); ?>
+										<?php echo $insAlumno->listarSedebusqueda($alumno_sedeid); ?>
 									</select>	
 								</div>
 							</div>
