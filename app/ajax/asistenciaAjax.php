@@ -22,6 +22,9 @@
 		if($_POST['modulo_asistencia']=="registrar_lugar"){
 			echo $insPago->registrarLugarControlador();
 		}
+		if($_POST['modulo_asistencia']=="actualizar_lugar"){
+			echo $insPago->actualizarLugarControlador();
+		}		
 
 	}else{
 		session_destroy();

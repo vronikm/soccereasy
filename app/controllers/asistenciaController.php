@@ -6,8 +6,7 @@
 	class asistenciaController extends mainModel{
 
 		
-		public function registrarHoraControlador(){
-							
+		public function registrarHoraControlador(){							
 			
 			# Almacenando datos#
 			$hora_inicio 	= $this->limpiarCadena($_POST['hora_inicio']);
@@ -22,9 +21,8 @@
 					"texto"=>"No has llenado todos los campos obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
-		    }			
+				return json_encode($alerta);       
+		    }		
 
 			$hora_datos_reg=[
 				[
@@ -190,7 +188,6 @@
 			return json_encode($alerta);
 		}
 
-
 		public function BuscarHora($horaid){
 		
 			$consulta_datos="SELECT H.* 
@@ -307,9 +304,7 @@
 			$lugar_sedeid  	= $this->limpiarCadena($_POST['lugar_sedeid']);
 			$lugar_nombre	= $this->limpiarCadena($_POST['lugar_nombre']);
 			$lugar_direccion= $this->limpiarCadena($_POST['lugar_direccion']);
-			$lugar_detalle	= $this->limpiarCadena($_POST['lugar_detalle']);
-
-			
+			$lugar_detalle	= $this->limpiarCadena($_POST['lugar_detalle']);			
 			
 			# Verificando campos obligatorios #
 		    if($lugar_sedeid=="" || $lugar_nombre=="" || $lugar_direccion==""){
@@ -372,7 +367,99 @@
 			}
 
 			return json_encode($alerta);
+		}
 
+		public function actualizarLugarControlador(){
+			
+			$lugarid =$this->limpiarCadena($_POST['lugar_id']);
+
+			# Verificando pago #
+
+			$datos = $this->ejecutarConsulta("SELECT lugar_id FROM asistencia_lugar WHERE lugar_id = '$lugarid '");			
+			if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurró un error inesperado",
+					"texto"=>"No hemos encontrado la hora en el sistema: ".$lugarid,
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();				
+		    }				
+
+			# Almacenando datos#
+			$lugar_sedeid  	= $this->limpiarCadena($_POST['lugar_sedeid']);
+			$lugar_nombre	= $this->limpiarCadena($_POST['lugar_nombre']);
+			$lugar_direccion= $this->limpiarCadena($_POST['lugar_direccion']);
+			$lugar_detalle	= $this->limpiarCadena($_POST['lugar_detalle']);
+			
+			# Verificando campos obligatorios #
+		    if($lugar_sedeid=="" || $lugar_nombre=="" || $lugar_direccion==""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No has llenado todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		        
+		    }			
+
+			$lugar_datos_reg=[
+				[
+					"campo_nombre"=>"lugar_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$lugar_sedeid
+				],
+				[
+					"campo_nombre"=>"lugar_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$lugar_nombre
+				],				
+				[
+					"campo_nombre"=>"lugar_direccion",
+					"campo_marcador"=>":Direccion",
+					"campo_valor"=>$lugar_direccion
+				],	
+				[
+					"campo_nombre"=>"lugar_detalle",
+					"campo_marcador"=>":Detalle",
+					"campo_valor"=>$lugar_detalle
+				],			
+				[
+					"campo_nombre"=>"lugar_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>"A"
+				]
+			];			
+		
+			$condicion=[
+				"condicion_campo"=>"lugar_id",
+				"condicion_marcador"=>":Lugarid",
+				"condicion_valor"=>$lugarid
+			];			
+
+			if($this->actualizarDatos("asistencia_lugar",$lugar_datos_reg,$condicion)){				
+				
+				$alerta=[
+					"tipo"=>"redireccionar",			
+					"url"=>APP_URL.'asistenciaLugar/',					
+					"titulo"=>"Lugar actualizado",
+					"texto"=>"Los datos del lugar ".$lugarid." se actualizaron correctamente",
+					"icono"=>"success"	
+				];								
+
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar los datos de la hora ".$lugarid.", por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
 		}
 		
 	}

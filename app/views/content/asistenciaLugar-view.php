@@ -148,7 +148,7 @@
 
 									<div class="col-md-12">
 										<div class="form-group">
-											<label for="lugar_detalle">Detalle</label>
+											<label for="lugar_detalle">Ubicación</label>
 											<input type="text" class="form-control" id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
 										</div>
 									</div>
@@ -171,7 +171,7 @@
 											<th>Sede</th>
 											<th>Nombre</th>
 											<th>Dirección</th>
-											<th>Detalle</th>															
+											<th>Ubicación</th>															
 											<th style="width:300px;">Opciones</th>																
 										</tr>
 									</thead>
