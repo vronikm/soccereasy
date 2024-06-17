@@ -84,7 +84,17 @@ function alertas_ajax(alerta){
         });
 
     }else if(alerta.tipo=="redireccionar"){
-        window.location.href=alerta.url;
+        Swal.fire({
+            icon: alerta.icono,
+            title: alerta.titulo,
+            text: alerta.texto,
+            confirmButtonText: 'Aceptar'
+        }).then((result) => {
+            if(result.isConfirmed){               
+                window.location.href=alerta.url;
+            }
+        });
+        
     }
 }
 
