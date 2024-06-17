@@ -25,6 +25,9 @@
 		if($_POST['modulo_asistencia']=="actualizar_lugar"){
 			echo $insPago->actualizarLugarControlador();
 		}		
+		if($_POST['modulo_asistencia']=="eliminar_lugar"){
+			echo $insPago->eliminarLugarControlador();
+		}		
 
 	}else{
 		session_destroy();

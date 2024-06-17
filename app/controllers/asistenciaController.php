@@ -199,7 +199,6 @@
 		}
 
 		public function eliminarHoraControlador(){
-
 			
 			$horaid=$this->limpiarCadena($_POST['hora_id']);
 
@@ -273,7 +272,7 @@
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="eliminar_lugar">
-								<input type="hidden" name="hora_id" value="'.$rows['lugar_id'].'">						
+								<input type="hidden" name="lugar_id" value="'.$rows['lugar_id'].'">						
 								<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
 							</form>							
 
@@ -455,6 +454,43 @@
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
 					"texto"=>"No hemos podido actualizar los datos de la hora ".$lugarid.", por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}
+
+		public function eliminarLugarControlador(){
+			
+			$lugarid=$this->limpiarCadena($_POST['lugar_id']);
+
+			$lugar_datos=[
+				[
+					"campo_nombre"=>"lugar_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> 'E'
+				]
+			];
+
+			$condicion=[
+				"condicion_campo"=>"lugar_id",
+				"condicion_marcador"=>":Lugarid",
+				"condicion_valor"=>$lugarid
+			];
+
+			if($this->actualizarDatos("asistencia_lugar", $lugar_datos, $condicion)){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Lugar eliminado",
+					"texto"=>"El lugar fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido eliminar el lugar, por favor intente nuevamente",
 					"icono"=>"error"
 				];
 			}

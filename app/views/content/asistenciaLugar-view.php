@@ -155,7 +155,8 @@
 									
 									<div class="col-md-3">						
 										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+										<a href="<?php echo APP_URL; ?>asistenciaLugar/" class="btn btn-info btn-sm">Cancelar</a>
+										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>															
 									</div>
 								</div>	
 							</form>
