@@ -227,7 +227,7 @@
 			$fecha_final =  date('Y-m-d');
 			// Convertir la fecha a un timestamp
 			$timestamp = strtotime($fecha_final);
-			// Obtener el �ltimo d�a del mes de la fecha dada
+			// Obtener el último día del mes de la fecha dada
 			$ultimo_dia = date('Y-m-t', $timestamp);
 
 			$consulta_datos="SELECT CONCAT(
@@ -469,7 +469,7 @@
 				$minuto = date('i');
 				$segundo = date('s');
 
-				// Generar n�mero de recibo con fecha y hora al rev�s
+				// Generar número de recibo con fecha y hora al revés
 				$numero_recibo = $segundo . $anio . $minuto . $mes . $hora . $dia;
 				$pago_recibo = strrev($numero_recibo)."".$num_recibo;	
 				
