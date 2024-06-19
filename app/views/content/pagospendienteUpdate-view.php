@@ -271,7 +271,7 @@
 											
 										</div>
 
-										<button type="submit" class="btn btn-info">Guardar</button>
+										<button type="submit" class="btn btn-info btn-sm">Guardar</button>
 										<?php include "./app/views/inc/btn_back.php";	?>						
 									</form>									
 									<!-- /.tab-content -->

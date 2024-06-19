@@ -317,7 +317,7 @@
 											
 										</div>
 
-										<button type="submit" class="btn btn-info">Pagar</button>
+										<button type="submit" class="btn btn-info btn-sm">Pagar</button>
 										<?php include "./app/views/inc/btn_back.php";	?>						
 									</form>		
 									
@@ -325,7 +325,7 @@
 										<p class="lead mb-0">Pagos realizados</p>
 									</div>
 									<div class="tab-content" id="custom-content-above-tabContent">
-										<table id="example1" class="table table-bordered table-striped">
+										<table id="example1" class="table table-bordered table-striped table-sm">
 											<thead>
 												<tr>
 													<th>No</th>
