@@ -22,7 +22,6 @@
 			$imagen="";
 		} 
 
-		$fecha_recibo = strrev($datos["transaccion_fecha"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
 
 		$pairs = [];
@@ -43,7 +42,7 @@
 		$escuela=$escuela->fetch(); 
 	}
 
-	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"];
+	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"];
 
 	$image = $generator->render_image($symbology, $data, $optionsQR);
 	imagejpeg($image, $filename);
@@ -66,24 +65,24 @@
 
         $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "ESCUELA INDEPENDIENTE", 0, 0, 'C'); $y+=5;
         $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "DEL VALLE LOJA", 0, 0, 'C'); $y+=5;
-        $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 260, 8, mb_convert_encoding("De: Luis Roberto Álvarez Granda", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');$x=15; $y+=10;
+        $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 260, 8, mb_convert_encoding("De: Luis Roberto 脕lvarez Granda", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');$x=15; $y+=10;
 
-        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 8, mb_convert_encoding("Direcció:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');        
+        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 8, mb_convert_encoding("Direcci贸n:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');        
         $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 102, 8, mb_convert_encoding($escuela["escuela_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
         $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 8, mb_convert_encoding("Celular:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
         $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 8, mb_convert_encoding($escuela["escuela_movil"]." LOJA-ECUADOR", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(130, 35, 60, 10, "D");
         $pdf->Line(130, 38, 190, 38);
-        $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 7 ); $pdf->Cell( 19, 2, mb_convert_encoding("Fecha de emisión", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+        $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 7 ); $pdf->Cell( 19, 2, mb_convert_encoding("Fecha de emisi贸n", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
         $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "DIA", 0, 0, 'C');
         $pdf->SetXY( 150, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "MES", 0, 0, 'C');
-        $pdf->SetXY( 170, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, mb_convert_encoding("AÑO", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+        $pdf->SetXY( 170, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, mb_convert_encoding("A脩O", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
 
         //FECHA VARIABLE
-        $pdf->SetXY( 130, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('d', strtotime($datos['transaccion_fecha'])), 0, 0, 'C');
-        $pdf->SetXY( 150, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8,date('m', strtotime($datos['transaccion_fecha'])), 0, 0, 'C');
-        $pdf->SetXY( 170, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('Y', strtotime($datos['transaccion_fecha'])), 0, 0, 'C');
+        $pdf->SetXY( 130, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('d', strtotime($datos['transaccion_fecharegistro'])), 0, 0, 'C');
+        $pdf->SetXY( 150, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8,date('m', strtotime($datos['transaccion_fecharegistro'])), 0, 0, 'C');
+        $pdf->SetXY( 170, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('Y', strtotime($datos['transaccion_fecharegistro'])), 0, 0, 'C');
 
         $pdf->Line(150, 35, 150, 45);
         $pdf->Line(170, 35, 170, 45);

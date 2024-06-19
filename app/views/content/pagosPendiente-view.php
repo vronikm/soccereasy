@@ -163,7 +163,7 @@
 										</div>
 										<div class="col-md-12">
 											<div class="form-group">
-												<label for="pago_periodo">Periodo(mes/año)</label>															
+												<label for="pago_periodo">Periodo(mes/a帽o)</label>															
 												<input type="text" class="form-control" value="<?php echo $datos['pago_periodo']; ?>" disabled>															
 											</div>								
 										</div>
@@ -256,7 +256,7 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label for="pago_periodo">Periodo(mes/año)</label>															
+													<label for="pago_periodo">Periodo(mes/a帽o)</label>															
 													<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['pago_periodo']; ?>">															
 												</div>								
 											</div>
@@ -310,7 +310,7 @@
 											<div class="col-md-10">
 												<div class="form-group">
 												<label for="pago_concepto">Detalle</label>
-												<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="5" ><?php echo "Pago pendiente del rubro ".$datos['RUBRO']." por el valor de $".$datos['pago_saldo'] ." Dólares"; ?></textarea>
+												<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="5" ><?php echo "Pago pendiente del rubro ".$datos['RUBRO']." por el valor de $".$datos['pago_saldo'] ." D贸lares"; ?></textarea>
 												</div>
 											</div>
 
