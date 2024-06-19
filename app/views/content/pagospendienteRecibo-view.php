@@ -25,7 +25,6 @@
 			$imagen="";
 		} 
 
-		$fecha_recibo = strrev($datos["transaccion_fecha"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
 		
 		$pairs = [];
@@ -84,9 +83,6 @@
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
-	<!-- fileinput -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
 
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -162,9 +158,9 @@
 																</thead>
 																<tbody>
 																	<tr style="font-size: 12px">
-																		<td><?php echo  date('d', strtotime($datos['transaccion_fecha'])); ?></td>
-																		<td><?php echo date('m', strtotime($datos['transaccion_fecha'])); ?></td>
-																		<td><?php echo date('Y', strtotime($datos['transaccion_fecha'])); ?></td>												
+																		<td><?php echo  date('d', strtotime($datos['transaccion_fecharegistro'])); ?></td>
+																		<td><?php echo date('m', strtotime($datos['transaccion_fecharegistro'])); ?></td>
+																		<td><?php echo date('Y', strtotime($datos['transaccion_fecharegistro'])); ?></td>												
 																	</tr>														
 																</tbody>
 															</table>
@@ -237,9 +233,8 @@
 									</div>
 
 									<div class="col-4">										
-										<?php
-											//$svg = $generator->render_svg("qr-h","Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], ""); 
-											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], "", $optionsQR); 											
+										<?php											
+											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 											
 											echo $svg;  
 										?>								
 									</div>
@@ -252,8 +247,6 @@
 								<!-- this row will not appear when printing -->
 								<div class="row no-print">
 									<div class="col-12">
-										<!--button type="button" class="btn btn-success btn-sm float-right" style="margin-right: 135px;"><i class="far fa-credit-card"></i> Enviar recibo
-										</button-->
                                         <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
 
                                         
@@ -317,19 +310,5 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="app/views/dist/js/main.js" ></script-->
-	
-	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
-    
-	<script>
-        // Esta función se llama cuando el botón es clickeado
-        function printPage() {
-            window.addEventListener("load", window.print());
-        }
-    </script>
-	
-
   </body>
 </html>
