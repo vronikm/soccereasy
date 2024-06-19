@@ -160,7 +160,7 @@
 	$subject = mb_convert_encoding(	$subject, 'ISO-8859-1', 'UTF-8');
 	
 	$message = "Estimad@ ".$datos['REPRESENTANTE'].",
-    Adjunto al presente correo encontrará el recibo de pago de su representado ".$datos['alumno_primernombre']." ".$datos['alumno_segundonombre']." ".$datos['alumno_apellidopaterno']." ".$datos['alumno_apellidomaterno'].", por el rubro ".$datos['RUBRO']." ".$datos['pago_periodo'].".
+    Adjunto al presente correo encontrará el recibo de pago de su representad@ ".$datos['alumno_primernombre']." ".$datos['alumno_segundonombre']." ".$datos['alumno_apellidopaterno']." ".$datos['alumno_apellidomaterno'].", por el rubro ".$datos['RUBRO']." ".$datos['pago_periodo'].".
     
     NOTA: Este correo electrónico servirá como recibo oficial de su pago.
     
