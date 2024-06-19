@@ -1205,7 +1205,7 @@
 				FROM alumno_pago P	
 					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid 
 					INNER JOIN alumno_pago_transaccion PT ON PT.transaccion_pagoid = P.pago_id
-					LEFT JOIN alumno_representante E on E.repre_alumnoid = P.pago_alumnoid
+					LEFT JOIN alumno_representante E on E.repre_alumnoid = A.alumno_id
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid 				
 				WHERE PT.transaccion_id = ".$transaccion_id;	
