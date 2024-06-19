@@ -47,10 +47,7 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
-	
-	<!-- Ekko Lightbox -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
-	
+		
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
 
@@ -327,9 +324,6 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-
-	<!-- Ekko Lightbox -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
 
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
