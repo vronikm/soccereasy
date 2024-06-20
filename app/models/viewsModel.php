@@ -14,7 +14,7 @@
 						  ,"dashboard","pagosPendiente","pagospendienteUpdate","pagosRecibo"
 						  ,"pagospendienteRecibo","pagosDescuento","pagosReciboPDF","pagospendienteReciboPDF"
 						  ,"pagosReciboEnvio", "reportePagos","reportePendientes","pagospendienteReciboEnvio"
-						  ,"asistenciaHora","asistenciaLugar","tablasNew"];
+						  ,"asistenciaHora","asistenciaLugar","asistenciaHorario","tablasNew"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

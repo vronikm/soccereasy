@@ -84,16 +84,25 @@
               <p>Asistencia<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
+
               <li class="nav-item">
                 <a href="<?php echo APP_URL."asistenciaHora/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Ingreso Horas</p>
                 </a>
+
               </li>
               <li class="nav-item">
                 <a href="<?php echo APP_URL."asistenciaLugar/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Lugar entrenamiento</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."asistenciaHorario/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Horarios</p>
                 </a>
               </li>
             </ul>
