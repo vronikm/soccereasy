@@ -182,7 +182,7 @@
 				[
 					"campo_nombre"=>"tabla_estado",
 					"campo_marcador"=>":Estado",
-					"campo_valor"=> 0
+					"campo_valor"=> false
 				]
 			];
 
