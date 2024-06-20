@@ -175,9 +175,24 @@
               <li class="nav-item">
                 <a href="<?php echo APP_URL."roList/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Menús</p>
+                  <p>Roles</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."tablasNew/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Tablas</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."tablasNew/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Catálogos</p>
+                </a>
+              </li>
+              
             </ul>
           </li>
 
