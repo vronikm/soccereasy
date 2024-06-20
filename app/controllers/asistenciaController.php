@@ -284,7 +284,7 @@
 			return $tabla;			
 		}
 
-		public function listarOptionSede($lugarid){
+		public function listarOptionSede($sedeid){
 			$option="";
 
 			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
@@ -292,11 +292,35 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				if($lugarid == $rows['sede_id']){
+				if($sedeid == $rows['sede_id']){
 					$option.='<option value='.$rows['sede_id'].' selected="selected">'.$rows['sede_nombre'].'</option>';	
 				}else{
 					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
 				}
+			}
+			return $option;
+		}
+
+		public function listarOptionLugar($sedeid){
+			$option="";
+
+			$consulta_datos="SELECT lugar_id, lugar_nombre FROM asistencia_lugar WHERE  lugar_estado = 'A' AND lugar_sedeid  = ".$sedeid;	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$option.='<option value='.$rows['lugar_id'].'>'.$rows['lugar_nombre'].'</option>';				
+			}
+			return $option;
+		}
+
+		public function listarOptionHora(){
+			$option="";
+			$consulta_datos="SELECT hora_id, CONCAT(hora_inicio, ' | ', hora_fin) AS HORA FROM asistencia_hora WHERE hora_estado = 'A'";						
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$option.='<option value='.$rows[''].'>'.$rows['HORA'].'</option>';				
 			}
 			return $option;
 		}

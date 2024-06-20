@@ -2,25 +2,39 @@
 	date_default_timezone_set("America/Guayaquil");
 
 	use app\controllers\asistenciaController;
-	$insHora = new asistenciaController();	
+	$insLugar = new asistenciaController();	
 
-	$horaid = ($url[1] != "") ? $url[1] : 0;	
+	if(isset($_POST['lugar_sedeid'])){
+		$lugar_sedeid = $insLugar->limpiarCadena($_POST['lugar_sedeid']);
+	} ELSE{
+		$lugar_sedeid = 0;
+	}
 
-	if($horaid != 0){
-		$datos=$insHora->BuscarHora($horaid);		
+	$modulo_lugar = 'registrar_lugar';
+	$lugar_nombre = '';
+	$lugar_direccion = '';
+	$lugar_detalle = '';
+	$lugarid = ($url[1] != "") ? $url[1] : 0;
+
+	/*	
+
+	if($lugarid != 0){
+		$datos=$insLugar->BuscarLugar($lugarid);		
 		if($datos->rowCount()==1){
 			$datos=$datos->fetch(); 
-			$modulo_hora = 'actualizar';
-			$hora_inicio = $datos['hora_inicio'];
-			$hora_fin = $datos['hora_fin'];
-			$detalle = $datos['hora_detalle'];
+			$modulo_lugar = 'actualizar_lugar';
+			$lugar_nombre = $datos['lugar_nombre'];
+			$lugar_direccion = $datos['lugar_direccion'];
+			$lugar_detalle = $datos['lugar_detalle'];
+			$lugar_sedeid = $datos['lugar_sedeid'];
 		}
 	}else{
-		$modulo_hora = 'registrar';
-		$hora_inicio = '';
-		$hora_fin = '';
-		$detalle = '';
-	}	
+		$modulo_lugar = 'registrar_lugar';
+		$lugar_nombre = '';
+		$lugar_direccion = '';
+		$lugar_detalle = '';
+		//$lugar_sedeid  = 0;
+	}	*/
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +43,7 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?> | Ingreso Hora</title>
+	<title><?php echo APP_NAME; ?> | Horarios</title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -84,7 +98,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Ingreso Horas</h4>
+							<h4 class="m-0">Configuración de Horarios</h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -98,113 +112,153 @@
 			<!-- /.content-header -->
 
 			<!-- Main content -->
-			<section class="content">				
+			<section class="content">			
+				<form action="<?php echo APP_URL."asistenciaHorario/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+				
+				<div class="container-fluid">
+					<div class="card card-default">
+						<div class="card-header">
+							<h3 class="card-title">Criterios de búsqueda</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>  
+
+						<!-- card-body -->                
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+									<label for="lugar_sedeid">Sede</label>
+									<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
+										<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
+									</select>	
+									</div>
+								</div>
+
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="alumno_sedeid">.</label>
+										<button type="submit" class="form-control btn btn-info">Buscar</button>
+									</div>
+								</div>
+
+							</div>
+						
+						</div>
+					</div>
+				</div>  
+				</form>
+					
 				<!-- /.container-fluid información alumno -->
 				<div class="container-fluid">
 
 					<div class="card card-default">						
 						<div class="card-header">
-							<h3 class="card-title">Horas</h3>
+							<h3 class="card-title">Horario</h3>
 
 							<div class="card-tools">
-							<button type="button" class="btn btn-tool" data-card-widget="collapse">
-								<i class="fas fa-minus"></i>
-							</button>
-							<button type="button" class="btn btn-tool" data-card-widget="remove">
-								<i class="fas fa-times"></i>
-							</button>
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
 							</div>
 						</div>
 
+						<div class="card-body">						
 
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-12">
+							<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+								<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_lugar; ?>">
+								<input type="hidden" name="lugar_id" value="<?php echo $lugarid; ?>">											
+								
+								<div class="row">		
 
-								<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-									<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_hora; ?>">
-									<input type="hidden" name="hora_id" value="<?php echo $horaid; ?>">											
-									
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="hora_inicio">Hora inicio</label>
-
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="far fa-clock"></i></span>
-													</div>
-													<input type="text" class="form-control" id="hora_inicio" name="hora_inicio" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_inicio; ?>">
-												</div>
-												<!-- /.input group -->
-											</div>	
-										</div>
-
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="hora_fin">Hora fin</label>
-
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="far fa-clock"></i></spa>
-													</div>
-													<input type="text" class="form-control" id="hora_fin" name="hora_fin" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_fin; ?>">
-												</div>
-												<!-- /.input group -->
-											</div>	
-										</div>
-
-										<div class="col-md-7">
-											<div class="form-group">
-												<label for="detalle">Detalle</label>
-												<input type="text" class="form-control" id="detalle" name="detalle" value="<?php echo $detalle; ?>">
-											</div>
-										</div>
-
-										<div class="col-md-1">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label for="estado">Día</label>
-											<select class="form-control" id="estado" name="estado">																									
-												<option value='A'>Activo</option>
-												<option value='I'>Inactivo</option>
+											<label for="lugar_entrenamiento">Lugar de entrenamiento</label>
+											<select class="form-control" id="lugar_entrenamiento" name="lugar_entrenamiento">																									
+												<?php echo $insLugar->listarOptionLugar($lugar_sedeid); ?>
 											</select>	
 										</div>
-										</div>
-										
-										<div class="col-md-12">						
-											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-											<a href="<?php echo APP_URL; ?>asistenciaHora/" class="btn btn-info btn-sm">Cancelar</a>
-											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
-										</div>
-									</div>	
-								</form>
-
-									<div class="tab-custom-content">
-										<p class="lead mb-0">Horas ingresadas</p>
-									</div>
-									<div class="tab-content" id="custom-content-above-tabContent">
-										<table id="example1" class="table table-bordered table-striped table-sm">
-											<thead>
-												<tr>
-													<th>N.</th>
-													<th>Hora inicio</th>
-													<th>hora fin</th>
-													<th>Detalle</th>															
-													<th style="width:300px;">Opciones</th>																
-												</tr>
-											</thead>
-											<tbody>
-												<?php 
-													echo $insHora->listarHoras(); 
-												?>								
-											</tbody>
-										</table>
 									</div>
 
-								
-								
-								</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="hora">Hora</label>
+											<select class="form-control" id="hora" name="hora">																									
+												<?php echo $insLugar->listarOptionHora(); ?>
+											</select>	
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="dia">Día</label>
+											<select class="form-control" id="dia" name="dia">																									
+												<option value='LU'>Lunes</option>
+												<option value='MA'>Martes</option>
+												<option value='MI'>Miercoles</option>
+												<option value='JU'>Jueves</option>
+												<option value='VI'>Viernes</option>
+												<option value='SA'>Sabado</option>
+												<option value='DO'>Domingo</option>
+											</select>	
+										</div>
+									</div>
+
+
+									<div class="col-md-5">
+										<div class="form-group">
+											<label for="lugar_nombre">Lugar de entrenamiento</label>
+											<input type="text" class="form-control" id="lugar_nombre" name="lugar_nombre" value="<?php echo $lugar_nombre; ?>">
+										</div>	
+									</div>
+
+									<div class="col-md-5">
+										<div class="form-group">
+											<label for="lugar_direccion">Dirección</label>
+											<input type="text" class="form-control" id="lugar_direccion" name="lugar_direccion" value="<?php echo $lugar_direccion; ?>">
+										</div>	
+									</div>
+
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="lugar_detalle">Ubicación</label>
+											<input type="text" class="form-control" id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
+										</div>
+									</div>
+									
+									<div class="col-md-3">						
+										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+										<a href="<?php echo APP_URL; ?>asistenciaLugar/" class="btn btn-info btn-sm">Cancelar</a>
+										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>															
+									</div>
+								</div>	
+							</form>
+
+							<div class="tab-custom-content">
+								<p class="lead mb-0">Lugar de entrenamiento</p>
 							</div>
+							<div class="tab-content" id="custom-content-above-tabContent">
+								<table id="example1" class="table table-bordered table-striped table-sm">
+									<thead>
+										<tr>
+											<th>N.</th>
+											<th>Sede</th>
+											<th>Nombre</th>
+											<th>Dirección</th>
+											<th>Ubicación</th>															
+											<th style="width:300px;">Opciones</th>																
+										</tr>
+									</thead>
+									<tbody>
+										<?php 
+											echo $insLugar->listarLugar(); 
+										?>								
+									</tbody>
+								</table>
+							</div>						
 						</div>
 					</div>
 				</div>
