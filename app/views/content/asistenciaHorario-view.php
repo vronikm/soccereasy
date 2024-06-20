@@ -176,7 +176,7 @@
 
 									<div class="col-md-2">
 										<div class="form-group">
-											<label for="lugar_entrenamiento">Lugar de entrenamiento</label>
+											<label for="lugar_entrenamiento">Lugar entrenamiento</label>
 											<select class="form-control" id="lugar_entrenamiento" name="lugar_entrenamiento">																									
 												<?php echo $insLugar->listarOptionLugar($lugar_sedeid); ?>
 											</select>	

@@ -14,12 +14,14 @@
 			$hora_inicio = $datos['hora_inicio'];
 			$hora_fin = $datos['hora_fin'];
 			$detalle = $datos['hora_detalle'];
+			$estado = $datos['hora_estado'];
 		}
 	}else{
 		$modulo_hora = 'registrar';
 		$hora_inicio = '';
 		$hora_fin = '';
 		$detalle = '';
+		$estado = 'A';
 	}	
 ?>
 
@@ -154,21 +156,29 @@
 											</div>	
 										</div>
 
-										<div class="col-md-7">
+										<div class="col-md-6">
 											<div class="form-group">
 												<label for="detalle">Detalle</label>
 												<input type="text" class="form-control" id="detalle" name="detalle" value="<?php echo $detalle; ?>">
 											</div>
 										</div>
 
-										<div class="col-md-1">
-										<div class="form-group">
-											<label for="estado">Día</label>
-											<select class="form-control" id="estado" name="estado">																									
-												<option value='A'>Activo</option>
-												<option value='I'>Inactivo</option>
-											</select>	
-										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="estado">Estado</label>
+												<select class="form-control" id="estado" name="estado">		
+													<?php 
+														if($estado == 'A'){
+															echo '<option value="A" selected>Activo</option>
+																<option value="I" >Inactivo</option>';
+														}else{
+															echo '<option value="A" >Activo</option>
+																<option value="I" selected>Inactivo</option>';	
+														}
+													?>																				
+													
+												</select>	
+											</div>
 										</div>
 										
 										<div class="col-md-12">						
@@ -189,8 +199,9 @@
 													<th>N.</th>
 													<th>Hora inicio</th>
 													<th>hora fin</th>
-													<th>Detalle</th>															
-													<th style="width:300px;">Opciones</th>																
+													<th>Detalle</th>
+													<th>Estado</th>															
+													<th style="width:150px;">Opciones</th>																
 												</tr>
 											</thead>
 											<tbody>

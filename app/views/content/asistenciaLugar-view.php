@@ -15,6 +15,7 @@
 			$lugar_direccion = $datos['lugar_direccion'];
 			$lugar_detalle = $datos['lugar_detalle'];
 			$lugar_sedeid = $datos['lugar_sedeid'];
+			$lugar_estado= $datos['lugar_estado'];
 		}
 	}else{
 		$modulo_lugar = 'registrar_lugar';
@@ -22,6 +23,7 @@
 		$lugar_direccion = '';
 		$lugar_detalle = '';
 		$lugar_sedeid  = 0;
+		$lugar_estado = 'A';
 	}	
 ?>
 
@@ -148,10 +150,28 @@
 										</div>	
 									</div>
 
-									<div class="col-md-12">
+									<div class="col-md-10">
 										<div class="form-group">
 											<label for="lugar_detalle">Ubicación</label>
 											<input type="text" class="form-control" id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="estado">Estado</label>
+											<select class="form-control" id="estado" name="estado">		
+												<?php 
+													if($lugar_estado == 'A'){
+														echo '<option value="A" selected>Activo</option>
+															<option value="I" >Inactivo</option>';
+													}else{
+														echo '<option value="A" >Activo</option>
+															<option value="I" selected>Inactivo</option>';	
+													}
+												?>																				
+												
+											</select>	
 										</div>
 									</div>
 									
@@ -174,8 +194,9 @@
 											<th>Sede</th>
 											<th>Nombre</th>
 											<th>Dirección</th>
-											<th>Ubicación</th>															
-											<th style="width:300px;">Opciones</th>																
+											<th>Ubicación</th>	
+											<th>Estado</th>														
+											<th style="width:150px;">Opciones</th>																
 										</tr>
 									</thead>
 									<tbody>

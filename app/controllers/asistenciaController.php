@@ -76,7 +76,8 @@
 			$tabla="";
 		
 			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY hora_id) AS fila_numero
-					, H.* 
+					,CASE WHEN H.hora_estado = 'A' THEN 'Activo' ELSE 'Inactivo' END ESTADO 
+					,H.* 
 				FROM asistencia_hora H  
 				where H.hora_estado != 'E'
 				ORDER BY hora_id ASC";		
@@ -91,6 +92,7 @@
 						<td>'.$rows['hora_inicio'].'</td>
 						<td>'.$rows['hora_fin'].'</td>
 						<td>'.$rows['hora_detalle'].'</td>
+						<td>'.$rows['ESTADO'].'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="eliminar">
@@ -129,6 +131,7 @@
 			$hora_inicio 	= $this->limpiarCadena($_POST['hora_inicio']);
 			$hora_fin		= $this->limpiarCadena($_POST['hora_fin']);
 			$hora_detalle	= $this->limpiarCadena($_POST['detalle']);
+			$estado			= $this->limpiarCadena($_POST['estado']);
 			
 			# Verificando campos obligatorios #
 		    if($hora_inicio=="" || $hora_fin=="" ){
@@ -157,6 +160,11 @@
 					"campo_nombre"=>"hora_detalle",
 					"campo_marcador"=>":Horadetalle",
 					"campo_valor"=>$hora_detalle
+				],				
+				[
+					"campo_nombre"=>"hora_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>$estado
 				]
 			];			
 		
@@ -251,7 +259,8 @@
 			$tabla="";
 		
 			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY L.lugar_id) AS fila_numero
-					, L.*
+					,CASE WHEN L.lugar_estado = 'A' THEN 'Activo' ELSE 'Inactivo' END ESTADO 
+					,L.*
 					,S.sede_nombre
 				FROM asistencia_lugar L  
 					INNER JOIN general_sede S ON S.sede_id = L.lugar_sedeid 
@@ -269,6 +278,7 @@
 						<td>'.$rows['lugar_nombre'].'</td>
 						<td>'.$rows['lugar_direccion'].'</td>
 						<td>'.$rows['lugar_detalle'].'</td>
+						<td>'.$rows['ESTADO'].'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="eliminar_lugar">
@@ -420,6 +430,7 @@
 			$lugar_nombre	= $this->limpiarCadena($_POST['lugar_nombre']);
 			$lugar_direccion= $this->limpiarCadena($_POST['lugar_direccion']);
 			$lugar_detalle	= $this->limpiarCadena($_POST['lugar_detalle']);
+			$lugar_estado	= $this->limpiarCadena($_POST['estado']);
 			
 			# Verificando campos obligatorios #
 		    if($lugar_sedeid=="" || $lugar_nombre=="" || $lugar_direccion==""){
@@ -457,7 +468,7 @@
 				[
 					"campo_nombre"=>"lugar_estado",
 					"campo_marcador"=>":Estado",
-					"campo_valor"=>"A"
+					"campo_valor"=>$lugar_estado
 				]
 			];			
 		
