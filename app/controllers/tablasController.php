@@ -31,7 +31,7 @@
 				[
 					"campo_nombre"=>"tabla_estado",
 					"campo_marcador"=>":Estado",
-					"campo_valor"=>'A'
+					"campo_valor"=>true
 				]
 			];		
 
