@@ -164,9 +164,6 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jszip/jszip.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/pdfmake.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/vfs_fonts.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
@@ -188,6 +185,34 @@
 			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');			    
 		});
 	</script>    
+
+	<script>
+		$(function () {			
+			$('#quickForm').validate({
+				rules: {
+				tabla_nombre: {
+					required: true       
+				},
+				},
+				messages: {
+				tabla_nombre: {
+					required: "Por favor ingrese un nombre para la nueva tabla !!"
+				},				
+				},
+				errorElement: 'span',
+				errorPlacement: function (error, element) {
+				error.addClass('invalid-feedback');
+				element.closest('.form-group').append(error);
+				},
+				highlight: function (element, errorClass, validClass) {
+				$(element).addClass('is-invalid');
+				},
+				unhighlight: function (element, errorClass, validClass) {
+				$(element).removeClass('is-invalid');
+				}
+			});
+		});
+	</script>
   </body>
 </html>
 
