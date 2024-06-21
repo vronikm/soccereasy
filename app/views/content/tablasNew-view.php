@@ -92,23 +92,25 @@
 					<div class="card-body">						
 						<div class="row">
 							<div class="col-md-12">	
-								<div class="row" class="col-md-3>			
+											
 									<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/tablasAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 										<input type="hidden" name="modulo_tablas" value="<?php echo $modulo_tablas; ?>">
 										<input type="hidden" name="tabla_id" value="<?php echo $tablaid; ?>">	
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="tabla_nombre">Nombre</label>
-												<input type="text" class="form-control" id="tabla_nombre" name="tabla_nombre" value="<?php echo $tabla_nombre; ?>">
+										<div class="row">
+											<div class="col-md-6">										
+												<div class="form-group">
+													<label for="tabla_nombre">Nombre</label>
+													<input type="text" class="form-control" id="tabla_nombre" name="tabla_nombre" value="<?php echo $tabla_nombre; ?>">
+												</div>
 											</div>
-										</div>
-										<div class="col-md-12">						
-											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-											<a href="<?php echo APP_URL; ?>tablasNew/" class="btn btn-info btn-sm">Cancelar</a>
-											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+											<div class="col-md-12">						
+												<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+												<a href="<?php echo APP_URL; ?>tablasNew/" class="btn btn-info btn-sm">Cancelar</a>
+												<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+											</div>	
 										</div>									
 									</form>															
-								</div>
+								
 								<div class="tab-custom-content">
 									<h4 class="card-title">Tablas ingresadas</h4>
 								</div>										
@@ -154,6 +156,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	
 	<!-- DataTables  & Plugins -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -173,6 +176,9 @@
 	
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
+	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/additional-methods.min.js"></script>
 	
 	<!-- Page specific script -->
 	<script>
