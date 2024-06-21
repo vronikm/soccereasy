@@ -31,7 +31,7 @@
 				[
 					"campo_nombre"=>"tabla_estado",
 					"campo_marcador"=>":Estado",
-					"campo_valor"=>true
+					"campo_valor"=>'A'
 				]
 			];		
 
@@ -65,9 +65,9 @@
 		
 			$consulta_datos="SELECT tabla_id, 
 									tabla_nombre, 
-									CASE tabla_estado when 1 then 'Activa' when 0 then 'Inactiva' else tabla_estado end as ESTADO_TABLA
+									CASE tabla_estado when 'A' then 'Activa' when 'I' then 'Inactiva' else tabla_estado end as ESTADO_TABLA
 									FROM general_tabla G 
-									where G.tabla_estado != 0
+									where G.tabla_estado = 'A'
 									ORDER BY tabla_id ASC";	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -182,7 +182,7 @@
 				[
 					"campo_nombre"=>"tabla_estado",
 					"campo_marcador"=>":Estado",
-					"campo_valor"=> false
+					"campo_valor"=> 'I'
 				]
 			];
 
