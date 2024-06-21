@@ -174,7 +174,7 @@
 								
 								<div class="row">		
 
-									<div class="col-md-2">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="lugar_entrenamiento">Lugar entrenamiento</label>
 											<select class="form-control" id="lugar_entrenamiento" name="lugar_entrenamiento">																									
@@ -183,7 +183,7 @@
 										</div>
 									</div>
 
-									<div class="col-md-2">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="hora">Hora</label>
 											<select class="form-control" id="hora" name="hora">																									
@@ -192,7 +192,7 @@
 										</div>
 									</div>
 
-									<div class="col-md-2">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="dia">Día</label>
 											<select class="form-control" id="dia" name="dia">																									
@@ -207,27 +207,15 @@
 										</div>
 									</div>
 
-
-									<div class="col-md-5">
+									<div class="col-md-3">
 										<div class="form-group">
-											<label for="lugar_nombre">Lugar de entrenamiento</label>
-											<input type="text" class="form-control" id="lugar_nombre" name="lugar_nombre" value="<?php echo $lugar_nombre; ?>">
-										</div>	
-									</div>
-
-									<div class="col-md-5">
-										<div class="form-group">
-											<label for="lugar_direccion">Dirección</label>
-											<input type="text" class="form-control" id="lugar_direccion" name="lugar_direccion" value="<?php echo $lugar_direccion; ?>">
-										</div>	
-									</div>
-
-									<div class="col-md-12">
-										<div class="form-group">
-											<label for="lugar_detalle">Ubicación</label>
-											<input type="text" class="form-control" id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
+											<label for="profe">Profesor</label>
+											<select class="form-control" id="profe" name="profe">																									
+												<?php echo $insLugar->listarOptionProfesor(); ?>
+											</select>	
 										</div>
 									</div>
+								
 									
 									<div class="col-md-3">						
 										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
@@ -238,23 +226,25 @@
 							</form>
 
 							<div class="tab-custom-content">
-								<p class="lead mb-0">Lugar de entrenamiento</p>
+								<p class="lead mb-0">Horario de entrenamiento</p>
 							</div>
 							<div class="tab-content" id="custom-content-above-tabContent">
 								<table id="example1" class="table table-bordered table-striped table-sm">
 									<thead>
 										<tr>
-											<th>N.</th>
-											<th>Sede</th>
-											<th>Nombre</th>
-											<th>Dirección</th>
-											<th>Ubicación</th>															
+											<th>Lunes</th>
+											<th>Martes</th>
+											<th>Miercoles</th>
+											<th>Jueves</th>
+											<th>Viernes</th>	
+											<th>Sabado</th>
+											<th>Domingo</th>														
 											<th style="width:300px;">Opciones</th>																
 										</tr>
 									</thead>
 									<tbody>
 										<?php 
-											echo $insLugar->listarLugar(); 
+											//echo $insLugar->listarLugar(); 
 										?>								
 									</tbody>
 								</table>

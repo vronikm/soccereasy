@@ -1394,7 +1394,10 @@
 		public function listarRoles(){
 			$tabla="";
 
-			$consulta_datos="SELECT *, CASE WHEN rol_activo = 1 THEN 'Activo' ELSE 'Inactivo' END AS estado FROM seguridad_rol";	
+			$consulta_datos="SELECT *, 
+							CASE WHEN rol_estado = 'A' THEN 'Activo' ELSE 'Inactivo' END AS estado 
+							FROM seguridad_rol
+							WHERE rol_estado != 'E'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1407,20 +1410,213 @@
 						<td>'.$rows['estado'].'</td>
 						<td><a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-secondary btn-xs">Permisos</a></td>
 						<td>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-danger btn-xs">Eliminar</a>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Editar</a>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Ver</a>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_usuario" value="eliminarRol">
+								<input type="hidden" name="rol_id" value="'.$rows['rol_id'].'">						
+								<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
+							</form>							
+
+							<a href="'.APP_URL.'roList/'.$rows['rol_id'].'/" class="btn float-right btn-success btn-sm" style="margin-right: 5px;" >Editar</a>
+							
 						</td>
 					</tr>';	
 			}
 			return $tabla;
 		}
 
+		public function BuscarRol($rolid){
+		
+			$consulta_datos="SELECT R.* 
+					FROM seguridad_rol R										
+					WHERE rol_id = ".$rolid;	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function eliminarRol(){
+			
+			$rolid=$this->limpiarCadena($_POST['rol_id']);
+
+			$rol_datos=[
+				[
+					"campo_nombre"=>"rol_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> 'E'
+				]
+			];
+
+			$condicion=[
+				"condicion_campo"=>"rol_id",
+				"condicion_marcador"=>":Rolid",
+				"condicion_valor"=>$rolid
+			];
+
+			if($this->actualizarDatos("seguridad_rol", $rol_datos, $condicion)){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Lugar eliminado",
+					"texto"=>"El lugar fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido eliminar el lugar, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}
+
+		public function crearRol(){		
+			
+			# Almacenando datos#
+			$rol_nombre  	= $this->limpiarCadena($_POST['rol_nombre']);
+			$rol_detalle	= $this->limpiarCadena($_POST['rol_detalle']);
+			$rol_estado		= $this->limpiarCadena($_POST['rol_estado']);
+			
+			# Verificando campos obligatorios #
+		    if($rol_nombre=="" ){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No has llenado todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		        
+		    }			
+
+			$rol_datos_reg=[
+				[
+					"campo_nombre"=>"rol_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$rol_nombre
+				],
+				[
+					"campo_nombre"=>"rol_detalle",
+					"campo_marcador"=>":Detalle",
+					"campo_valor"=>$rol_detalle
+				],				
+				[
+					"campo_nombre"=>"rol_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>'A'
+				]
+			];		
+
+			$registrar_rol=$this->guardarDatos("seguridad_rol",$rol_datos_reg);
+
+			if($registrar_rol->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Registro Rol",
+					"texto"=>"Rol registrado correctamente",
+					"icono"=>"success"
+				];				
+			
+			}else{				
+
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No se pudo registrar el Rol, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}
+		
+
+		public function actualizarRol(){
+			
+			$rolid = $this->limpiarCadena($_POST['rol_id']);
+
+			# Verificando pago #
+			$datos = $this->ejecutarConsulta("SELECT rol_id FROM seguridad_rol WHERE rol_id = '$rolid '");			
+			if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurró un error inesperado",
+					"texto"=>"No hemos encontrado el Rol en el sistema: ".$rolid,
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();				
+		    }				
+
+			# Almacenando datos#
+			$rol_nombre  	= $this->limpiarCadena($_POST['rol_nombre']);
+			$rol_detalle	= $this->limpiarCadena($_POST['rol_detalle']);
+			$rol_estado		= $this->limpiarCadena($_POST['rol_estado']);
+			
+			# Verificando campos obligatorios #
+		    if($rol_nombre=="" ){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No has llenado todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		        
+		    }			
+
+			$rol_datos_reg=[
+				[
+					"campo_nombre"=>"rol_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$rol_nombre
+				],
+				[
+					"campo_nombre"=>"rol_detalle",
+					"campo_marcador"=>":Detalle",
+					"campo_valor"=>$rol_detalle
+				],				
+				[
+					"campo_nombre"=>"rol_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>$rol_estado
+				]
+			];			
+		
+			$condicion=[
+				"condicion_campo"=>"rol_id",
+				"condicion_marcador"=>":Rolid",
+				"condicion_valor"=>$rolid
+			];			
+
+			if($this->actualizarDatos("seguridad_rol",$rol_datos_reg,$condicion)){				
+				
+				$alerta=[
+					"tipo"=>"redireccionar",			
+					"url"=>APP_URL.'roList/',					
+					"titulo"=>"Lugar actualizado",
+					"texto"=>"Los datos del Rol ".$rolid." se actualizaron correctamente",
+					"icono"=>"success"	
+				];								
+
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar los datos del Rol ".$rolid.", por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}
 		
 		public function listarOptionRol($rolid){
 			$option="";
 			
-			$consulta_datos="SELECT rol_id, rol_nombre FROM seguridad_rol WHERE rol_activo = 1";	
+			$consulta_datos="SELECT rol_id, rol_nombre FROM seguridad_rol WHERE rol_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

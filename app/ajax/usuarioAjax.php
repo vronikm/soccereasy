@@ -22,6 +22,19 @@
 			echo $insUsuario->actualizarUsuarioControlador();
 		}
 
+		if($_POST['modulo_usuario']=="crearRol"){
+			echo $insUsuario->crearRol();
+		}
+
+		if($_POST['modulo_usuario']=="actualizarRol"){
+			echo $insUsuario->actualizarRol();
+		}
+
+		if($_POST['modulo_usuario']=="eliminarRol"){
+			echo $insUsuario->eliminarRol();
+		}
+
+		#-----------------------------validar---------------------------
 		if($_POST['modulo_usuario']=="eliminarFoto"){
 			echo $insUsuario->eliminarFotoUsuarioControlador();
 		}

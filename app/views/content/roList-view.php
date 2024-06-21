@@ -3,7 +3,23 @@
 
 	$insUsuario = new userController();
 
-	
+	$rolid = ($url[1] != "") ? $url[1] : 0;	
+
+	if($rolid != 0){
+		$datos=$insUsuario->BuscarRol($rolid);		
+		if($datos->rowCount()==1){
+			$datos=$datos->fetch(); 
+			$modulo_usuario = 'actualizarRol';
+			$rol_nombre = $datos['rol_nombre'];
+			$rol_detalle = $datos['rol_detalle'];		
+			$rol_estado = $datos['rol_estado'];
+		}
+	}else{
+		$modulo_usuario = 'crearRol';
+		$rol_nombre = '';
+		$rol_detalle = '';		
+		$rol_estado = 'A';
+	}	
 	
 ?>
 
@@ -75,7 +91,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Listado de usuarios</h3>
+						<h3 class="card-title">Roles ingresados</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -84,6 +100,57 @@
 					</div>
 
 					<div class="card-body">
+
+					<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+									<input type="hidden" name="modulo_usuario" value="<?php echo $modulo_usuario; ?>">
+									<input type="hidden" name="rol_id" value="<?php echo $rolid; ?>">											
+									
+									<div class="row">
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="rol_nombre">Rol</label>
+												<input type="text" class="form-control" id="rol_nombre" name="rol_nombre" value="<?php echo $rol_nombre; ?>">												
+											</div>	
+										</div>			
+
+										<div class="col-md-8">
+											<div class="form-group">
+												<label for="rol_detalle">Detalle</label>
+												<input type="text" class="form-control" id="rol_detalle" name="rol_detalle" value="<?php echo $rol_detalle; ?>">
+											</div>
+										</div>
+
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="rol_estado">Estado</label>
+												<select class="form-control" id="rol_estado" name="rol_estado">		
+													<?php 
+														if($rol_estado == 'A'){
+															echo '<option value="A" selected>Activo</option>
+																<option value="I" >Inactivo</option>';
+														}else{
+															echo '<option value="A" >Activo</option>
+																<option value="I" selected>Inactivo</option>';	
+														}
+													?>																				
+													
+												</select>	
+											</div>
+										</div>
+										
+										<div class="col-md-12">						
+											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+											<a href="<?php echo APP_URL; ?>roList/" class="btn btn-info btn-sm">Cancelar</a>
+											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+										</div>
+									</div>	
+								</form>
+
+
+						<div class="tab-custom-content">
+							<p class="lead mb-0">Roles ingresadas</p>
+						</div>
+
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
