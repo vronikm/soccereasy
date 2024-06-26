@@ -347,9 +347,9 @@
 			];	
 		
 			$condicion=[
-					"campo_nombre"=>"catalogo_valor",
-					"campo_marcador"=>":CatalogoValor",
-					"campo_valor"=>$codigo_catalogo
+					"condicion_campo"=>"catalogo_valor",
+					"condicion_marcador"=>":CatalogoValor",
+					"condicion_valor"=>$codigo_catalogo
 			];			
 			if($this->actualizarDatos("general_tabla_catalogo",$catalogo_datos_reg,$condicion)){				
 				$alerta=[
