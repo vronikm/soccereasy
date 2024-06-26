@@ -145,8 +145,9 @@
 												<th>Id Tabla</th>
 												<th>Nombre Tabla</th>
 												<th>Código Catálogo</th>
-												<th>Descripción</th>															
-												<th	>Opciones</th>																
+												<th>Descripción</th>
+												<th>Estado</th>															
+												<th style="width: 220px;">Opciones</th>																
 											</tr>
 										</thead>
 										<tbody>
