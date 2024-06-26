@@ -19,7 +19,21 @@
 		if($_POST['modulo_tablas']=="eliminar"){
 			echo $insTabla->eliminarTablaControlador();
 		}
-	}else{
+	}elseif(isset($_POST['modulo_catalogos'])){
+
+		$insCatalogo = new tablasController();
+
+		if($_POST['modulo_catalogos']=="registrar"){
+			echo $insCatalogo->registrarCatalogoControlador();
+		}		
+		if($_POST['modulo_catalogos']=="actualizar"){
+			echo $insCatalogo->actualizarCatalogoControlador();
+		}
+		if($_POST['modulo_catalogos']=="eliminar"){
+			echo $insCatalogo->eliminarCatalogoControlador();
+		}
+	}	
+	else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");
 	}
