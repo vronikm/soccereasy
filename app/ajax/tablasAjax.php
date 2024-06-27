@@ -29,6 +29,9 @@
 		if($_POST['modulo_catalogos']=="actualizar"){
 			echo $insCatalogo->actualizarCatalogoControlador();
 		}
+		if($_POST['modulo_catalogos']=="actualizarestado"){
+			echo $insCatalogo->actualizarCatalogoEstadoControlador();
+		}
 		if($_POST['modulo_catalogos']=="eliminar"){
 			echo $insCatalogo->eliminarCatalogoControlador();
 		}
