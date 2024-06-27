@@ -129,21 +129,18 @@
 						<!-- card-body -->                
 						<div class="card-body">
 							<div class="row">
-								<div class="col-md-2">
-									<div class="form-group">
-									<label for="lugar_sedeid">Sede</label>
-									<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
-										<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
-									</select>	
+								<div class="col-md-3">
+									<div class="input-group mb-3">
+										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
+											<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
+										</select>	
+										<span class="input-group-append">
+											<button type="submit" class="btn btn-info btn-flat">Buscar</button>
+										</span>
 									</div>
 								</div>
 
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="alumno_sedeid">.</label>
-										<button type="submit" class="form-control btn btn-info">Buscar</button>
-									</div>
-								</div>
+								
 
 							</div>
 						
@@ -215,7 +212,6 @@
 											</select>	
 										</div>
 									</div>
-								
 									
 									<div class="col-md-3">						
 										<button type="submit" class="btn btn-success btn-sm">Guardar</button>

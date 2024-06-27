@@ -294,6 +294,18 @@
 			return $tabla;			
 		}
 
+		public function listarOptionProfesor(){
+			
+			$option="";
+			$consulta_datos="SELECT hora_id, CONCAT(hora_inicio, ' | ', hora_fin) AS HORA FROM asistencia_hora WHERE hora_estado = 'A'";						
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$option.='<option value='.$rows[''].'>'.$rows['HORA'].'</option>';				
+			}
+			return $option;		
+		}
+
 		public function listarOptionSede($sedeid){
 			$option="";
 
