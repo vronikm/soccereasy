@@ -1456,14 +1456,14 @@
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Lugar eliminado",
-					"texto"=>"El lugar fue eliminado correctamente",
+					"texto"=>"El rol fue eliminado correctamente",
 					"icono"=>"success"
 				];
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
-					"texto"=>"No hemos podido eliminar el lugar, por favor intente nuevamente",
+					"texto"=>"No hemos podido eliminar el rol, por favor intente nuevamente",
 					"icono"=>"error"
 				];
 			}
@@ -1597,7 +1597,7 @@
 					"tipo"=>"redireccionar",			
 					"url"=>APP_URL.'roList/',					
 					"titulo"=>"Lugar actualizado",
-					"texto"=>"Los datos del Rol ".$rolid." se actualizaron correctamente",
+					"texto"=>"Los datos del Rol ".$rol_nombre." se actualizaron correctamente",
 					"icono"=>"success"	
 				];								
 
