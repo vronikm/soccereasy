@@ -100,7 +100,7 @@
 								<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
 							</form>							
 
-							<a href="'.APP_URL.'asistenciaHora/'.$rows['hora_id'].'/" class="btn float-right btn-success btn-sm" style="margin-right: 5px;" >Editar</a>
+							<a href="'.APP_URL.'asistenciaHora/'.$rows['hora_id'].'/" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;" >Editar</a>
 							
 						</td>
 					</tr>';	
