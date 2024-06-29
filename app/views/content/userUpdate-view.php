@@ -180,7 +180,7 @@
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_usuario">Usuario</label>
-											<input type="text" class="form-control" id="usuario_usuario" name="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>" disable>
+											<input type="text" class="form-control" id="usuario_usuario" name="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>">
 										</div>
 									</div>
 									<div class="col-md-3">

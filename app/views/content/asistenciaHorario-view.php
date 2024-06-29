@@ -2,39 +2,19 @@
 	date_default_timezone_set("America/Guayaquil");
 
 	use app\controllers\asistenciaController;
-	$insLugar = new asistenciaController();	
-
+	$insLugar = new asistenciaController();
+	
 	if(isset($_POST['lugar_sedeid'])){
-		$lugar_sedeid = $insLugar->limpiarCadena($_POST['lugar_sedeid']);
+		$lugar_sedeid =$_POST['lugar_sedeid'];
 	} ELSE{
 		$lugar_sedeid = 0;
 	}
-
+	
 	$modulo_lugar = 'registrar_lugar';
 	$lugar_nombre = '';
 	$lugar_direccion = '';
 	$lugar_detalle = '';
 	$lugarid = ($url[1] != "") ? $url[1] : 0;
-
-	/*	
-
-	if($lugarid != 0){
-		$datos=$insLugar->BuscarLugar($lugarid);		
-		if($datos->rowCount()==1){
-			$datos=$datos->fetch(); 
-			$modulo_lugar = 'actualizar_lugar';
-			$lugar_nombre = $datos['lugar_nombre'];
-			$lugar_direccion = $datos['lugar_direccion'];
-			$lugar_detalle = $datos['lugar_detalle'];
-			$lugar_sedeid = $datos['lugar_sedeid'];
-		}
-	}else{
-		$modulo_lugar = 'registrar_lugar';
-		$lugar_nombre = '';
-		$lugar_direccion = '';
-		$lugar_detalle = '';
-		//$lugar_sedeid  = 0;
-	}	*/
 ?>
 
 <!DOCTYPE html>
@@ -131,19 +111,16 @@
 							<div class="row">
 								<div class="col-md-3">
 									<div class="input-group mb-3">
-										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
-											<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
+										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">		
+											<option value="">- Seleccione una opción -</option>																							
+											<?php echo $insLugar->listarOptionSede(); ?>
 										</select>	
 										<span class="input-group-append">
 											<button type="submit" class="btn btn-info btn-flat">Buscar</button>
 										</span>
 									</div>
 								</div>
-
-								
-
-							</div>
-						
+							</div>						
 						</div>
 					</div>
 				</div>  
@@ -179,16 +156,6 @@
 											</select>	
 										</div>
 									</div>
-
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="hora">Hora</label>
-											<select class="form-control" id="hora" name="hora">																									
-												<?php echo $insLugar->listarOptionHora(); ?>
-											</select>	
-										</div>
-									</div>
-
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="dia">Día</label>
@@ -203,7 +170,14 @@
 											</select>	
 										</div>
 									</div>
-
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="hora">Hora</label>
+											<select class="form-control" id="hora" name="hora">																									
+												<?php echo $insLugar->listarOptionHora(); ?>
+											</select>	
+										</div>
+									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="profe">Profesor</label>
@@ -346,8 +320,5 @@
 			});
 		});
 	</script>
-	
-
-
   </body>
 </html>

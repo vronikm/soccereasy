@@ -290,7 +290,7 @@
 				}else{
 					$fechaM = "";				}
 
-				if($rows['usuario_activo']=='1'){
+				if($rows['usuario_estado']=='A'){
 					$estado = "Activo";
 					$texto = "Inactivar";
 					$boton = "btn-secondary";
@@ -525,20 +525,17 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
-
 			# Almacenando datos#
-		    $nombre=$this->limpiarCadena($_POST['usuario_nombre']);
+		    $nombre	=$this->limpiarCadena($_POST['usuario_nombre']);
 			$rolid	= $this->limpiarCadena($_POST['usuario_rolid']);
-		    $email=$this->limpiarCadena($_POST['usuario_email']);
-			$movil=$this->limpiarCadena($_POST['usuario_movil']);
+		    $email	=$this->limpiarCadena($_POST['usuario_email']);
+			$movil	=$this->limpiarCadena($_POST['usuario_movil']);
 
 		    $clave1=$this->limpiarCadena($_POST['usuario_clave']);
-		    $clave2=$this->limpiarCadena($_POST['usuario_clave2']);
-			
+		    $clave2=$this->limpiarCadena($_POST['usuario_clave2']);		
 
 		    # Verificando campos obligatorios #
 		    if($nombre=="" || $email=="" || $usuario==""){
@@ -549,7 +546,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    # Verificando integridad de los datos #
@@ -563,7 +559,6 @@
 				return json_encode($alerta);
 		       // exit();
 		    }
-
 		    # Verificando email #
 		    if($email!="" && $datos['usuario_email']!=$email){
 				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -576,21 +571,17 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					}
 				}else{
 					$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"Ha ingresado un correo electrónico no valido",
+						"texto"=>"Ha ingresado un correo electrónico no válido",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
-            }
-
-		
+            }		
 			 # Directorio de imagenes #
     		$img_dir="../views/fotos/usuario/";
 
@@ -635,7 +626,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					} 
 				}
 
@@ -648,7 +638,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Verificando peso de imagen #
@@ -674,8 +663,7 @@
 				}
 				*/
 				$foto=str_ireplace(" ","_",$datos['usuario_usuario']);
-				$foto=$foto."_".rand(0,100);
-				
+				$foto=$foto."_".rand(0,100);			
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
@@ -698,16 +686,13 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Eliminando imagen anterior #
 				if(is_file($img_dir.$datos['usuario_imagen']) && $datos['usuario_imagen']!=$foto){
 					chmod($img_dir.$datos['usuario_imagen'], 0777);
 					unlink($img_dir.$datos['usuario_imagen']);
-				}
-				
-				
+				}				
 				$usuario_datos_up=[
 					[
 						"campo_nombre"=>"usuario_nombre",
@@ -825,16 +810,14 @@
 		    	$datos=$datos->fetch();
 		    }
 				
-			if($datos['usuario_activo']==1){
+			if($datos['usuario_estado']=='A'){
 				$estadoA = '';
 			}else{
 				$estadoA = 1;
 			}
-
-
             $usuario_datos_up=[
 				[
-					"campo_nombre"=>"usuario_activo",
+					"campo_nombre"=>"usuario_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=> $estadoA
 				]
@@ -1152,7 +1135,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}",$apellido)){
@@ -1163,7 +1145,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    if($this->verificarDatos("[a-zA-Z0-9]{4,20}",$usuario)){
@@ -1174,7 +1155,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave2)){
@@ -1185,7 +1165,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    # Verificando email #
@@ -1200,7 +1179,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					}
 				}else{
 					$alerta=[
@@ -1210,7 +1188,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
             }
 
@@ -1223,7 +1200,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}else{
 				$clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
             }
@@ -1238,7 +1214,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }
 
 		    # Directorio de imagenes #
@@ -1257,7 +1232,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-		                //exit();
 		            } 
 		        }
 
@@ -1270,7 +1244,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
 		        }
 
 		        # Verificando peso de imagen #
@@ -1282,7 +1255,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
 		        }
 
 		        # Nombre de la foto #
@@ -1310,14 +1282,11 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
 		        }
 
     		}else{
     			$foto="";
     		}
-
-
 		    $usuario_datos_reg=[
 				[
 					"campo_nombre"=>"usuario_nombre",
@@ -1384,9 +1353,7 @@
 					"icono"=>"error"
 				];
 			}
-
 			return json_encode($alerta);
-
 		}
 
 		/* ==================================== Roles ==================================== */

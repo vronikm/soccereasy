@@ -98,10 +98,10 @@
 					$foto = APP_URL.'app/views/dist/img/default.png';
 				  }
 				
-				  if ($datos['usuario_activo']==1){
-					$ativo = "checked";
+				  if ($datos['usuario_estado']=='A'){
+					$activo = "checked";
 				  }else{
-					$ativo = "";
+					$activo = "";
 				  }
 
 				  if ($datos['usuario_tienebloqueo']==1){
@@ -148,7 +148,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
-											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" placeholder="Nombre usuario" value="<?php echo $datos['usuario_nombre']; ?>">
+											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" value="<?php echo $datos['usuario_nombre']; ?>" disabled="">
 										</div>
 									</div>
 								</div>
@@ -157,13 +157,13 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="usuario_email">Correo</label>
-											<input type="email" class="form-control" id="usuario_email" name="usuario_email" placeholder="Correo" value="<?php echo $datos['usuario_email']; ?>">	
+											<input type="email" class="form-control" id="usuario_email" name="usuario_email" value="<?php echo $datos['usuario_email']; ?>"  disabled="">	
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="usuario_movil">Teléfono</label>
-											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" placeholder="Teléfono, celular" value="<?php echo $datos['usuario_movil']; ?>">	
+											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['usuario_movil']; ?>" disabled="">	
 										</div>
 									</div>
 								</div>
@@ -181,19 +181,19 @@
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_usuario">Usuario</label>
-											<input type="text" class="form-control" id="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>" disable="">
+											<input type="text" class="form-control" id="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>" disabled="">
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_creacion">Fecha creación</label>
-											<input type="text" class="form-control" id="usuario_creacion" value="<?php echo $datos['usuario_fechacreacion']; ?>">	
+											<input type="text" class="form-control" id="usuario_creacion" value="<?php echo $datos['usuario_fechacreacion']; ?>" disabled="">	
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_modificacion">Fecha modificación</label>
-											<input type="text" class="form-control" id="usuario_modifiaion" value="<?php echo $datos['usuario_fechaactualizado']; ?>">	
+											<input type="text" class="form-control" id="usuario_modifiaion" value="<?php echo $datos['usuario_fechaactualizado']; ?>" disabled="">	
 										</div>
 									</div>
 								</div>
@@ -210,15 +210,15 @@
 									<div class="col-md-4">
 										<div class="form-group">
 											<div class="custom-control custom-checkbox">
-												<input class="custom-control-input" type="checkbox" id="usuario_activo" <?php echo $ativo; ?>>
-												<label for="usuario_activo" class="custom-control-label">Usuario activo</label>
+												<input class="custom-control-input" type="checkbox" id="usuario_estado" <?php echo $activo; ?>  disabled="">
+												<label for="usuario_estado" class="custom-control-label">Usuario activo</label>
 											</div>
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
 											<div class="custom-control custom-checkbox">
-												<input class="custom-control-input" type="checkbox" id=">usuario_tienebloqueo" <?php echo $bloqueo; ?>>
+												<input class="custom-control-input" type="checkbox" id=">usuario_tienebloqueo" <?php echo $bloqueo; ?> disabled="">
 												<label for=">usuario_tienebloqueo" class="custom-control-label">Usuario bloqueado</label>
 											</div>
 										</div>
@@ -226,7 +226,7 @@
 									<div class="col-md-4">
 										<div class="form-group">
 											<div class="custom-control custom-checkbox">
-												<input class="custom-control-input" type="checkbox" id=">usuario_cambioclave" <?php echo $cambiaclave; ?>>
+												<input class="custom-control-input" type="checkbox" id=">usuario_cambioclave" <?php echo $cambiaclave; ?> disabled="">
 												<label for=">usuario_cambioclave" class="custom-control-label">Cambio clave</label>
 											</div>
 										</div>	
