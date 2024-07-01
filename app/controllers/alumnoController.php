@@ -782,7 +782,10 @@
 
 		/*----------  Matriz de alumnos con opciones Ver, Actualizar, Eliminar  ----------*/
 		public function listarAlumnos($identificacion, $apellidopaterno, $primernombre, $ano, $sede){
-					
+			$estado = "";
+			$texto = "";
+			$boton = "";
+
 			if($identificacion!=""){
 				$identificacion .= '%'; 
 			}
@@ -795,7 +798,8 @@
 
 			$tabla="";
 			$consulta_datos="SELECT * FROM sujeto_alumno 
-								WHERE (alumno_primernombre LIKE '".$primernombre."' 
+								WHERE alumno_activo <> 'E'
+								AND (alumno_primernombre LIKE '".$primernombre."' 
 								OR alumno_identificacion LIKE '".$identificacion."' 
 								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
 			if($ano!=""){
@@ -823,7 +827,16 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				
+				if($rows['alumno_activo']=='S'){
+					$estado = "Activo";
+					$texto = "Inactivar";
+					$boton = "btn-secondary";
+				}else{
+					$estado = "Inactivo";
+					$texto = "Activar";
+					$boton = "btn-info";
+				}
+
 				$tabla.='
 					<tr>
 						<td>'.$rows['alumno_identificacion'].'</td>
@@ -831,9 +844,20 @@
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
 						<td>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-danger btn-sm">Eliminar</a>
-							<a href="'.APP_URL.'alumnoUpdate/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
-							<a href="'.APP_URL.'alumnoProfile/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/alumnoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_alumno" value="eliminar">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
+							</form>
+							
+							<a href="'.APP_URL.'alumnoUpdate/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Actualizar</a>							
+							<a href="'.APP_URL.'alumnoProfile/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
+							
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/alumnoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_alumno" value="actualizarestado">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
+							</form>
 						</td>
 					</tr>';	
 			}
@@ -968,66 +992,114 @@
 			return $tabla;
 		}
 
-
-
 		/*----------  Controlador eliminar alumno  ----------*/
-		public function eliminarAlumnoControlador(){
+		public function actualizarEstadoAlumnoControlador(){
 
-			$id=$this->limpiarCadena($_POST['usuario_id']);
-
-			if($id==1){
-				$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"No es posible eliminar el súper administrador del sistema",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		        //exit();
-			}
+			$alumno_id=$this->limpiarCadena($_POST['alumno_id']);
 
 			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM usuario WHERE usuario_id='$id'");
+		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id='$alumno_id'");
 		    if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error",
-					"texto"=>"El usuario no se encuentra en el sistema",
+					"texto"=>"El alumno no se encuentra en el sistema",
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
+			if($datos['alumno_activo']=='S'){
+				$estadoA = 'N';
+			}else{
+				$estadoA = 'S';
+			}
+            $alumno_datos_up=[
+				[
+					"campo_nombre"=>"alumno_activo",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> $estadoA
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"alumno_id",
+				"condicion_marcador"=>":Alumnoid",
+				"condicion_valor"=>$alumno_id
+			];
 
-		    $eliminarUsuario=$this->eliminarRegistro("usuario","usuario_id",$id);
+			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_up,$condicion)){
 
-		    if($eliminarUsuario->rowCount()==1){
-
-		    	if(is_file("../views/fotos/".$datos['usuario_foto'])){
-		            chmod("../views/fotos/".$datos['usuario_foto'],0777);
-		            unlink("../views/fotos/".$datos['usuario_foto']);
-		        }
-
-		        $alerta=[
+				$alerta=[
 					"tipo"=>"recargar",
-					"titulo"=>"Usuario eliminado",
-					"texto"=>"El usuario ".$datos['usuario_nombre']." ".$datos['usuario_apellido']." ha sido eliminado del sistema correctamente",
+					"titulo"=>"Estado actualizado correctamente",
+					"texto"=>"El estado del alumno ".$datos['alumno_primernombre']." | ".$datos['alumno_apellidopaterno']." fue actualizado correctamente",
 					"icono"=>"success"
 				];
-
-		    }else{
-
-		    	$alerta=[
+			}else{
+				$alerta=[
 					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"No fue posible eliminar el usuario ".$datos['usuario_nombre']." ".$datos['usuario_apellido']." del sistema, por favor intente nuevamente",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar el estado del alumno ".$datos['alumno_primernombre']." ".$datos['alumno_apellidopaterno'].", por favor intente nuevamente",
 					"icono"=>"error"
 				];
-		    }
+			}
+			return json_encode($alerta);
+		}
 
-		    return json_encode($alerta);
+		/*----------  Controlador eliminar alumno  ----------*/
+		public function eliminarAlumnoControlador(){
+
+			$alumno_id=$this->limpiarCadena($_POST['alumno_id']);
+
+			# Verificando usuario #
+		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id='$alumno_id'");
+		    if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"El alumno no se encuentra en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();
+		    }
+			if($datos['alumno_activo']=='S'){
+				$estadoA = 'E';
+			}else{
+				$estadoA = 'S';
+			}
+            $alumno_datos_up=[
+				[
+					"campo_nombre"=>"alumno_activo",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> $estadoA
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"alumno_id",
+				"condicion_marcador"=>":Alumnoid",
+				"condicion_valor"=>$alumno_id
+			];
+
+			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_up,$condicion)){
+
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"El alumno fue eliminado correctamente",
+					"texto"=>"El alumno ".$datos['alumno_primernombre']." | ".$datos['alumno_apellidopaterno']." fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido eliminar el alumno ".$datos['alumno_primernombre']." ".$datos['alumno_apellidopaterno'].", por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
 		}
 
 		
