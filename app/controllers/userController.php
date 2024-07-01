@@ -119,7 +119,8 @@
 		    }
 
 		    # Directorio de imagenes #
-    		$img_dir="../views/fotos/usuario/";
+    		$img_dir="../views/imagenes/fotos/usuario/";
+			$codigo=rand(0,100);
 
     		# Comprobar si se selecciono una imagen #
     		if($_FILES['usuario_foto']['name']!="" && $_FILES['usuario_foto']['size']>0){
@@ -151,11 +152,11 @@
 		        }
 
 		        # Verificando peso de imagen #
-		        if(($_FILES['usuario_foto']['size']/1024)>250){
+		        if(($_FILES['usuario_foto']['size']/1024)>4000){
 		        	$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"La imagen que ha seleccionado supera el peso permitido",
+						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
@@ -163,8 +164,8 @@
 		        }
 
 		        # Nombre de la foto #
-		        $foto=str_ireplace(" ","_",$nombre);
-		        $foto=$foto."_".rand(0,100);
+		        $foto=str_ireplace(" ","_",$usuario);
+		        $foto=$foto."_".$codigo;
 
 		        # Extension de la imagen #
 		        switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
@@ -176,19 +177,26 @@
 		            break;
 		        }
 
-		        chmod($img_dir,0777);
+		        $maxWidth = 800;
+    			$maxHeight = 600;
 
-		        # Moviendo imagen al directorio #
-		        if(!move_uploaded_file($_FILES['usuario_foto']['tmp_name'],$img_dir.$foto)){
-		        	$alerta=[
+				chmod($img_dir,0777);
+				$inputFile = ($_FILES['usuario_foto']['tmp_name']);
+       			$outputFile = $img_dir.$foto;
+
+				# Moviendo imagen al directorio #
+				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					
+				}else{
+					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"No podemos subir la imagen al sistema en este momento",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No es posible subir la imagen al sistema en este momento",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
-		        }
+				}
 
     		}else{
     			$foto="";
@@ -237,6 +245,11 @@
 					"campo_valor"=>date("Y-m-d H:i:s")
 				],
 				[
+					"campo_nombre"=>"usuario_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>'A'
+				],
+				[
 					"campo_nombre"=>"usuario_imagen",
 					"campo_marcador"=>":Foto",
 					"campo_valor"=>$foto
@@ -252,6 +265,33 @@
 					"texto"=>"El usuario ".$nombre." | ".$usuario." se registro con exito",
 					"icono"=>"success"
 				];
+
+				$check_usuarioid=$this->ejecutarConsulta("SELECT usuario_id FROM seguridad_usuario WHERE usuario_usuario ='$usuario'");
+				if($check_usuarioid->rowCount()>0){
+					$usuarioid=$check_usuarioid->fetchAll(); 					
+					foreach( $usuarioid as $rows ){
+						$usuario_id = $rows['usuario_id'];
+					}
+
+					if(isset($_POST['usuario_sedeid'])){
+						foreach($_POST['usuario_sedeid'] as $rows){
+							$usuario_sede_reg=[
+								[
+									"campo_nombre"=>"usuariosede_usuarioid",
+									"campo_marcador"=>":UsuarioId",
+									"campo_valor"=>$usuario_id
+								],
+								[
+									"campo_nombre"=>"usuariosede_sedeid",
+									"campo_marcador"=>":SedeId",
+									"campo_valor"=>$rows
+								]
+							];
+	
+							$this->guardarDatos("seguridad_usuario_sede",$usuario_sede_reg);
+						}
+					}									
+				}
 			}else{
 				
 				if(is_file($img_dir.$foto)){
@@ -558,11 +598,12 @@
 				];
 				return json_encode($alerta);
 		       // exit();
-		    }
+		    }			
+
 		    # Verificando email #
 		    if($email!="" && $datos['usuario_email']!=$email){
 				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-					$check_email=$this->ejecutarConsulta("SELECT usuario_email FROM usuario WHERE usuario_email='$email'");
+					$check_email=$this->ejecutarConsulta("SELECT usuario_email FROM seguridad_usuario WHERE usuario_email='$email'");
 					if($check_email->rowCount()>0){
 						$alerta=[
 							"tipo"=>"simple",
@@ -581,40 +622,73 @@
 					];
 					return json_encode($alerta);
 				}
-            }		
+            }				
+
 			 # Directorio de imagenes #
-    		$img_dir="../views/fotos/usuario/";
+			$img_dir="../views/imagenes/fotos/usuario/";
+			$codigorand=rand(0,100);
+
+			$usuario_datos_up=[
+				[
+					"campo_nombre"=>"usuario_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$nombre
+				],
+				[
+					"campo_nombre"=>"usuario_rolid",
+					"campo_marcador"=>":Rolid",
+					"campo_valor"=>$rolid
+				],
+				[
+					"campo_nombre"=>"usuario_movil",
+					"campo_marcador"=>":Movil",
+					"campo_valor"=>$movil
+				],
+				[
+					"campo_nombre"=>"usuario_email",
+					"campo_marcador"=>":Email",
+					"campo_valor"=>$email
+				],
+				[
+					"campo_nombre"=>"usuario_fechaactualizado",
+					"campo_marcador"=>":Actualizado",
+					"campo_valor"=>date("Y-m-d H:i:s")
+				]
+			];		
+			
+			if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave2)){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"Las CLAVES no coinciden con el formato solicitado",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+				//exit();
+			}else{
+				if($clave1!=$clave2){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"Las contraseñas que acaba de ingresar no coinciden, por favor verifique e intente nuevamente",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+					//exit();
+				}else{
+
+					$clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
+
+					$usuario_datos_up[] = [				
+						"campo_nombre"	=> "usuario_clave",
+						"campo_marcador"=> ":Clave",
+						"campo_valor"	=> $clave					
+					];	
+				}
+			}
 
     		# Comprobar si se selecciono una imagen #
-    		if($_FILES['usuario_foto']['name']=="" && $_FILES['usuario_foto']['size']<=0){
-				$usuario_datos_up=[
-					[
-						"campo_nombre"=>"usuario_nombre",
-						"campo_marcador"=>":Nombre",
-						"campo_valor"=>$nombre
-					],
-					[
-						"campo_nombre"=>"usuario_rolid",
-						"campo_marcador"=>":Rolid",
-						"campo_valor"=>$rolid
-					],
-					[
-						"campo_nombre"=>"usuario_movil",
-						"campo_marcador"=>":Movil",
-						"campo_valor"=>$movil
-					],
-					[
-						"campo_nombre"=>"usuario_email",
-						"campo_marcador"=>":Email",
-						"campo_valor"=>$email
-					],
-					[
-						"campo_nombre"=>"usuario_fechaactualizado",
-						"campo_marcador"=>":Actualizado",
-						"campo_valor"=>date("Y-m-d H:i:s")
-					]
-				];
-    		}ELSE{
+    		if($_FILES['usuario_foto']['name']!="" && $_FILES['usuario_foto']['size']>0){   		
 
 				# Creando directorio #
 				if(!file_exists($img_dir)){
@@ -627,7 +701,7 @@
 						];
 						return json_encode($alerta);
 					} 
-				}
+				}				
 
 				# Verificando formato de imagenes #
 				if(mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/png"){
@@ -641,29 +715,19 @@
 				}
 
 				# Verificando peso de imagen #
-				if(($_FILES['usuario_foto']['size']/1024)>250){
+				if(($_FILES['usuario_foto']['size']/1024)>4000){
 					$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"La imagen que ha seleccionado supera el peso permitido",
+						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
 					//exit();
 				}
 
-				# Nombre de la foto #
-				/*
-				if($datos['usuario_imagen']==""){
-					$foto=explode(".", $datos['usuario_imagen']);
-					$foto=$foto[0];
-				}else{
-					$foto=str_ireplace(" ","_",$datos['usuario_usuario']);
-					$foto=$foto."_".rand(0,100);
-				}
-				*/
 				$foto=str_ireplace(" ","_",$datos['usuario_usuario']);
-				$foto=$foto."_".rand(0,100);			
+				$foto=$foto."_".$codigorand;			
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
@@ -675,61 +739,41 @@
 					break;
 				}
 
-				chmod($img_dir,0777);
+				$maxWidth = 800;
+    			$maxHeight = 600;
 
-				# Moviendo imagen al directorio #
-				if(!move_uploaded_file($_FILES['usuario_foto']['tmp_name'],$img_dir.$foto)){
+				chmod($img_dir,0777);
+				$inputFile = ($_FILES['usuario_foto']['tmp_name']);
+       			$outputFile = $img_dir.$foto;
+
+				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+				
+				}else{
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"No podemos subir la imagen al sistema en este momento",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No es posible subir la imagen al sistema en este momento",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
 				}
-
+				
 				# Eliminando imagen anterior #
 				if(is_file($img_dir.$datos['usuario_imagen']) && $datos['usuario_imagen']!=$foto){
 					chmod($img_dir.$datos['usuario_imagen'], 0777);
 					unlink($img_dir.$datos['usuario_imagen']);
-				}				
-				$usuario_datos_up=[
-					[
-						"campo_nombre"=>"usuario_nombre",
-						"campo_marcador"=>":Nombre",
-						"campo_valor"=>$nombre
-					],
-					[
-						"campo_nombre"=>"usuario_rolid",
-						"campo_marcador"=>":Rolid",
-						"campo_valor"=>$rolid
-					],
-					[
-						"campo_nombre"=>"usuario_movil",
-						"campo_marcador"=>":Movil",
-						"campo_valor"=>$movil
-					],
-					[
-						"campo_nombre"=>"usuario_email",
-						"campo_marcador"=>":Email",
-						"campo_valor"=>$email
-					],
-					[
-						"campo_nombre"=>"usuario_fechaactualizado",
-						"campo_marcador"=>":Actualizado",
-						"campo_valor"=>date("Y-m-d H:i:s")
-					],
-					[
-						"campo_nombre"=>"usuario_imagen",
-						"campo_marcador"=>":Foto",
-						"campo_valor"=>$foto
-					]
-				];
-			}
+				}
+
+				$usuario_datos_up[] = [				
+					"campo_nombre"	=> "usuario_imagen",
+					"campo_marcador"=> ":Foto",
+					"campo_valor"	=> $foto					
+				];		
+			}	
 
 			$condicion=[
 				"condicion_campo"=>"usuario_id",
-				"condicion_marcador"=>":Usuario",
+				"condicion_marcador"=>":Usuarioid",
 				"condicion_valor"=>$usuario
 			];
 
@@ -767,6 +811,11 @@
 				}					
 
 			}else{
+				if(is_file($img_dir.$foto)){
+					chmod($img_dir.$foto,0777);
+					unlink($img_dir.$foto);
+				}
+				
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",

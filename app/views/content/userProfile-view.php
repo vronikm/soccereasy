@@ -93,7 +93,7 @@
 				$datos=$datos->fetch(); 
 				
 				if ($datos['usuario_imagen']!=""){
-					$foto = APP_URL.'app/views/fotos/usuario/'.$datos['usuario_imagen'];
+					$foto = APP_URL.'app/views/imagenes/fotos/usuario/'.$datos['usuario_imagen'];
 				  }else{
 					$foto = APP_URL.'app/views/dist/img/default.png';
 				  }
@@ -104,13 +104,13 @@
 					$activo = "";
 				  }
 
-				  if ($datos['usuario_tienebloqueo']==1){
+				  if ($datos['usuario_estado']=='B'){
 					$bloqueo = "checked";
 				  }else{
 					$bloqueo = "";
 				  }
 
-				  if ($datos['usuario_cambiaclave']==1){
+				  if ($datos['usuario_cambiaclave']=='N'){
 					$cambiaclave = "checked";
 				  }else{
 					$cambiaclave = "";

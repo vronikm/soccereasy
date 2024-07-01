@@ -92,7 +92,7 @@
 				$datos=$datos->fetch(); 
 				
 				if ($datos['usuario_imagen']!=""){
-					$foto = APP_URL.'app/views/fotos/usuario/'.$datos['usuario_imagen'];
+					$foto = APP_URL.'app/views/imagenes/fotos/usuario/'.$datos['usuario_imagen'];
 				}else{
 					$foto="";
 				}
@@ -101,7 +101,7 @@
 		<section class="content">
 			<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 			<input type="hidden" name="modulo_usuario" value="actualizar">
-			<input type="hidden" name="usuario_id" value="<?php echo $datos['usuario_id']; ?>">
+			<input type="hidden" name="usuario_id" value="<?php echo $usuario?>">
 					
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->

@@ -16,8 +16,8 @@
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
         <?php
-          if(is_file("app/views/fotos/usuario/".$_SESSION['foto'])){
-            echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/fotos/usuario/'.$_SESSION['foto'].'">';
+          if(is_file("app/views/imagenes/fotos/usuario/".$_SESSION['foto'])){
+            echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/imagenes/fotos/usuario/'.$_SESSION['foto'].'">';
           }else{
             echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/dist/img/default.png">';
           }
@@ -100,7 +100,7 @@
               </li>
 
               <li class="nav-item">
-                <a href="<?php echo APP_URL."asistenciaHorario/" ?>" class="nav-link">
+                <a href="<?php echo APP_URL."asistenciaListHorario/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Horarios</p>
                 </a>

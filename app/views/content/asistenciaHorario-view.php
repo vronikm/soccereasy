@@ -150,75 +150,49 @@
 
 									<div class="col-md-3">
 										<div class="form-group">
-											<label for="lugar_entrenamiento">Lugar entrenamiento</label>
-											<select class="form-control" id="lugar_entrenamiento" name="lugar_entrenamiento">																									
-												<?php echo $insLugar->listarOptionLugar($lugar_sedeid); ?>
-											</select>	
+											<label for="lugar_entrenamiento">Horario nombre</label>
+											
 										</div>
 									</div>
-									<div class="col-md-3">
+								
+									<div class="col-md-9">
 										<div class="form-group">
-											<label for="dia">Día</label>
-											<select class="form-control" id="dia" name="dia">																									
-												<option value='LU'>Lunes</option>
-												<option value='MA'>Martes</option>
-												<option value='MI'>Miercoles</option>
-												<option value='JU'>Jueves</option>
-												<option value='VI'>Viernes</option>
-												<option value='SA'>Sabado</option>
-												<option value='DO'>Domingo</option>
-											</select>	
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="hora">Hora</label>
-											<select class="form-control" id="hora" name="hora">																									
-												<?php echo $insLugar->listarOptionHora(); ?>
-											</select>	
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="profe">Profesor</label>
-											<select class="form-control" id="profe" name="profe">																									
-												<?php echo $insLugar->listarOptionProfesor(); ?>
-											</select>	
+											<label for="hora">Horario descripción</label>
+												
 										</div>
 									</div>
 									
-									<div class="col-md-3">						
-										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-										<a href="<?php echo APP_URL; ?>asistenciaLugar/" class="btn btn-info btn-sm">Cancelar</a>
-										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>															
-									</div>
 								</div>	
-							</form>
+							
 
-							<div class="tab-custom-content">
-								<p class="lead mb-0">Horario de entrenamiento</p>
-							</div>
-							<div class="tab-content" id="custom-content-above-tabContent">
-								<table id="example1" class="table table-bordered table-striped table-sm">
-									<thead>
-										<tr>
-											<th>Lunes</th>
-											<th>Martes</th>
-											<th>Miercoles</th>
-											<th>Jueves</th>
-											<th>Viernes</th>	
-											<th>Sabado</th>
-											<th>Domingo</th>														
-											<th style="width:300px;">Opciones</th>																
-										</tr>
-									</thead>
-									<tbody>
-										<?php 
-											//echo $insLugar->listarLugar(); 
-										?>								
-									</tbody>
-								</table>
-							</div>						
+								<div class="tab-custom-content">
+									<p class="lead mb-0">Horario de entrenamiento</p>
+								</div>
+								<div class="tab-content" id="custom-content-above-tabContent">
+									<table id="presupuesto" name="presupuesto" class="table table-bordered table-striped table-sm">
+										<thead>
+											<tr>
+												<th>Día</th>
+												<th>Lugar entrenamiento</th>
+												<th>Hora</th>
+												<th>Profesor</th>
+												<th><button type="button" class="btn btn-info btn-sm float-right btn_add" id="agregar" name="agregar">Agregar</button></th>	
+																				
+											</tr>
+										</thead>
+										<tbody>
+											<?php 
+												//echo $insLugar->listarLugar(); 
+											?>								
+										</tbody>
+									</table>
+								</div>
+
+								<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+								<a href="<?php echo APP_URL; ?>asistenciaHorario/" class="btn btn-info btn-sm">Cancelar</a>
+								<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>		
+							</form>	
+
 						</div>
 					</div>
 				</div>
@@ -271,19 +245,6 @@
 
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/jquery.validate.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/additional-methods.min.js"></script>
-	
-	<script>
-		$(function () {
-
-			//Datemask dd/mm/yyyy
-			$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-			//Datemask2 mm/dd/yyyy
-			$('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-			//Money Euro
-			$('[data-mask]').inputmask()
-
-		})  
-	</script>	
 
 	<script>
 		$(function () {
@@ -317,6 +278,46 @@
 				unhighlight: function (element, errorClass, validClass) {
 				$(element).removeClass('is-invalid');
 				}
+			});
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$(".btn_add").on("click", function() {
+				// Columna 1: Días de la semana
+				var column1 = "<select class='form-control' name='dia[]'>" +
+							"<option value='LU'>Lunes</option>" +
+							"<option value='MA'>Martes</option>" +
+							"<option value='MI'>Miércoles</option>" +
+							"<option value='JU'>Jueves</option>" +
+							"<option value='VI'>Viernes</option>" +
+							"<option value='SA'>Sábado</option>" +
+							"<option value='DO'>Domingo</option>" +
+							"</select>";
+				
+				// Columna 2: Lugares de entrenamiento con PHP
+				var column2 = "<select class='form-control' id='lugar_entrenamiento' name='lugar_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionLugar($lugar_sedeid)); ?></select>";
+				
+				// Columna 3: Horarios con PHP
+				var column3 = "<select class='form-control' id='hora_entrenamiento' name='hora_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionHora()); ?></select>";
+				
+				// Columna 4: Profesores con PHP
+				var column4 = "<select class='form-control' id='profesor_entrenamiento' name='profesor_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionProfesor()); ?></select>";
+				
+				// Agregar una nueva fila a la tabla
+				$("#presupuesto").append(
+					"<tr><td>" + column1 + "</td>" +
+					"<td>" + column2 + "</td>" +
+					"<td>" + column3 + "</td>" +
+					"<td>" + column4 + "</td>" +                    
+					"<td><button type='button' class='btn btn-danger btn-sm btn-icon icon-left btn_remove float-right'>Eliminar<i class='entypo-trash'></i></button></td></tr>"
+				);			    
+			});
+
+			// Evento para eliminar fila
+			$(document).on("click", ".btn_remove", function() {
+				$(this).closest("tr").remove();
 			});
 		});
 	</script>

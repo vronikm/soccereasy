@@ -297,11 +297,11 @@
 		public function listarOptionProfesor(){
 			
 			$option="";
-			$consulta_datos="SELECT usuario_nombre, usuario_rolid FROM seguridad_usuario WHERE usuario_rolid = 4 AND usuario_estado = 'A'";						
+			$consulta_datos="SELECT usuario_id, usuario_nombre FROM seguridad_usuario WHERE usuario_estado = 'A' AND usuario_rolid = '3'";						
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				$option.='<option value='.$rows[''].'>'.$rows['usuario_nombre'].'</option>';				
+				$option.='<option value='.$rows['usuario_id'].'>'.$rows['usuario_nombre'].'</option>';				
 			}
 			return $option;		
 		}
@@ -315,6 +315,24 @@
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';
+			}
+			return $option;
+		}
+
+		public function listarOptionSedebusqueda($sedeid){
+			$option="";
+
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($sedeid == $rows['sede_id']){
+					$option.='<option value='.$rows['sede_id'].' selected>'.$rows['sede_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
+				}
+					
 			}
 			return $option;
 		}
@@ -344,7 +362,7 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				$option.='<option value='.$rows[''].'>'.$rows['HORA'].'</option>';				
+				$option.='<option value='.$rows['hora_id'].'>'.$rows['HORA'].'</option>';				
 			}
 			return $option;
 		}
@@ -418,6 +436,65 @@
 			}
 
 			return json_encode($alerta);
+		}
+
+		public function listarAlumnos($identificacion, $apellidopaterno, $primernombre, $ano, $sede){
+					
+			if($identificacion!=""){
+				$identificacion .= '%'; 
+			}
+			if($primernombre!=""){
+				$primernombre .= '%';
+			} 
+			if($apellidopaterno!=""){
+				$apellidopaterno .= '%';
+			} 					
+
+			$tabla="";
+			$consulta_datos="SELECT * FROM sujeto_alumno 
+								WHERE (alumno_primernombre LIKE '".$primernombre."' 
+								OR alumno_identificacion LIKE '".$identificacion."' 
+								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
+			if($ano!=""){
+				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$ano."'"; 
+			}
+
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
+				$consulta_datos="SELECT * FROM sujeto_alumno WHERE YEAR(alumno_fechanacimiento) = '".$ano."'";
+			}
+			
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno=="" && $ano == ""){
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre <> '' ";
+			}
+
+			if($sede!=""){
+				if($sede == 0){
+					$consulta_datos .= " and alumno_sedeid <> '".$sede."'"; 
+				}else{
+					$consulta_datos .= " and alumno_sedeid = '".$sede."'"; 
+				}
+			}else{
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
+			}			
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				
+				$tabla.='
+					<tr>
+						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
+						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>
+							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-danger btn-sm">Eliminar</a>
+							<a href="'.APP_URL.'alumnoUpdate/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
+							<a href="'.APP_URL.'alumnoProfile/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
+						</td>
+					</tr>';	
+			}
+			return $tabla;			
 		}
 
 		public function actualizarLugarControlador(){
