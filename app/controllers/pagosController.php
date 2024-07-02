@@ -74,9 +74,15 @@
 				}else{
 					$botonpago = "btn-secondary";
 				}
+
+				if($rows['alumno_activo']=="N"){
+					$class = 'class="text-primary"';
+				}else{
+					$class = '';
+				}
 				
 				$tabla.='
-					<tr>
+					<tr '.$class.'>
 						<td>'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
