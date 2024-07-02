@@ -45,18 +45,26 @@
 				}
 			}else{
 				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
-			}			
+			}	
+			
+			$consulta_datos .= " AND alumno_activo <> 'E'";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				
-				$consulta_descuento = "SELECT descuento_alumnoid FROM alumno_pago_descuento WHERE descuento_alumnoid = ".$rows['alumno_id'];
+				$consulta_descuento = "SELECT descuento_alumnoid, descuento_estado  FROM alumno_pago_descuento WHERE descuento_alumnoid = ".$rows['alumno_id'];
 				$descuento = $this->ejecutarConsulta($consulta_descuento);
 				if($descuento->rowCount()==1){
-					$boton = "btn-info";
+					foreach($descuento as $rows_descuento){
+						if($rows_descuento["descuento_estado"] == 'N'){
+							$boton = "btn-warning";							
+						}else{
+							$boton = "btn-info";							
+						}
+					}								
 				}else{
-					$boton = "btn-secondary";
+					$boton = "btn-secondary";	
 				}
 				
 				$consulta_pagos = "SELECT pago_id FROM alumno_pago WHERE pago_alumnoid = ".$rows['alumno_id'];
