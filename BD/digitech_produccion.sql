@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 17-06-2024 a las 04:20:05
+-- Tiempo de generación: 01-07-2024 a las 21:29:40
 -- Versión del servidor: 8.2.0
 -- Versión de PHP: 8.2.13
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `alumno_cemergencia` (
   `cemer_parentesco` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`cemer_id`),
   KEY `cemer_alumnoid` (`cemer_alumnoid`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `alumno_cemergencia`
@@ -65,7 +65,12 @@ INSERT INTO `alumno_cemergencia` (`cemer_id`, `cemer_alumnoid`, `cemer_nombre`, 
 (20, 29, 'Bryan Díaz', '0990521693', '4MA'),
 (21, 42, 'Hermerl Mendosa', '0980870385', '4PA'),
 (22, 50, 'Cecilia Armijos', '0985209348', '4AB'),
-(23, 76, 'Angel Caraguay', '0939837873', '4TI');
+(23, 76, 'Angel Caraguay', '0939837873', '4TI'),
+(24, 78, 'Lucia Sanchez', '0989759683', '4MA'),
+(25, 79, 'Gabriela Calle', '0991191860', '4HE'),
+(26, 88, 'Geovanny Narvaez', '0985717000', '4PA'),
+(27, 90, 'Mayra Giraldo', '0939856364', '4HE'),
+(28, 118, 'Flavio Macas', '0993705882', '4PA');
 
 -- --------------------------------------------------------
 
@@ -143,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `alumno_pago` (
   KEY `pago_rubroid` (`pago_rubroid`),
   KEY `pago_formapagoid` (`pago_formapagoid`),
   KEY `pago_alumnoid` (`pago_alumnoid`)
-) ENGINE=MyISAM AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=222 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `alumno_pago`
@@ -233,10 +238,143 @@ INSERT INTO `alumno_pago` (`pago_id`, `pago_rubroid`, `pago_formapagoid`, `pago_
 (82, 'RNU', 'FEF', 63, 50.00, 10.00, 'Pago dos uniformes de entrenamiento', '2024-06-10', '2024-06-10', '2024-2026', '01516083421582', 'P', ''),
 (83, 'RPE', 'FEF', 74, 30.00, 0.00, 'Pago mes de junio', '2024-06-10', '2024-06-10', 'Junio / 2024', '01516094428183', 'C', ''),
 (84, 'RPE', 'FEF', 75, 30.00, 0.00, 'Pago mes de junio (más  $1 de partido amistoso)', '2024-06-10', '2024-06-10', 'Junio / 2024', '01516075425584', 'C', ''),
-(85, 'RNU', 'FEF', 26, 50.00, 50.00, 'Pago kit 3', '2024-06-10', '2024-06-10', '2024-2026', '01616050422385', 'P', ''),
+(85, 'RNU', 'FEF', 26, 100.00, 0.00, 'Pago kit 3', '2024-06-10', '2024-06-10', '2024-2026', '01616050422385', 'C', ''),
 (86, 'RIN', 'FEF', 76, 20.00, 0.00, 'Pago inscripción', '2024-06-10', '2024-06-10', '2024', '01616081424486', 'C', ''),
 (87, 'RPE', 'FEF', 76, 30.00, 0.00, 'Pago mes de junio', '2024-06-10', '2024-06-10', 'Junio / 2024', '01616091425087', 'C', ''),
-(88, 'RPE', 'FEF', 68, 20.00, 0.00, 'Pago mes junio', '2024-06-10', '2024-06-10', 'Junio / 2024', '01616014420088', 'C', '');
+(88, 'RPE', 'FEF', 68, 20.00, 0.00, 'Pago mes junio', '2024-06-10', '2024-06-10', 'Junio / 2024', '01616014420088', 'C', ''),
+(89, 'RIN', 'FEF', 78, 20.00, 0.00, 'Pago inscripción', '2024-06-17', '2024-06-17', '2024', '71316095420389', 'C', ''),
+(90, 'RPE', 'FEF', 78, 10.00, 0.00, 'Ajuste mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '71416000422290', 'C', ''),
+(91, 'RNU', 'FEF', 78, 70.00, 0.00, 'Pago kit 1', '2024-06-17', '2024-06-17', '2024-2026', '71416020421391', 'C', ''),
+(92, 'RIN', 'FEF', 79, 20.00, 0.00, 'Pago inscripción', '2024-06-17', '2024-06-17', '2024', '71416093423392', 'C', ''),
+(93, 'RPE', 'FEF', 79, 10.00, 0.00, 'Pago ajuste mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '71416093425593', 'C', ''),
+(94, 'RPE', 'FTR', 80, 30.00, 0.00, 'Pago mes de mayo', '2024-05-01', '2024-06-17', 'Mayo / 2024', '71516022424494', 'C', ''),
+(95, 'RPE', 'FTR', 80, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '71516032421395', 'C', ''),
+(96, 'RPE', 'FEF', 81, 15.00, 0.00, 'Pago ajuste mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '71516083421296', 'C', ''),
+(97, 'RNU', 'FEF', 81, 65.00, 25.00, 'Abono kit 2', '2024-06-17', '2024-06-17', '2024-2026', '71516004421297', 'P', ''),
+(98, 'RPE', 'FEF', 82, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '71516025427298', 'C', ''),
+(99, 'RNU', 'FEF', 26, 50.00, 0.00, 'Pago total kit 3', '2024-06-17', '2024-06-17', '2024-2026', '715160654251100', 'C', ''),
+(100, 'RNU', 'FEF', 58, 50.00, 0.00, 'Pago total kit 3', '2024-06-17', '2024-06-17', '2024-2026', '716160824293101', 'C', ''),
+(101, 'RPE', 'FEF', 85, 30.00, 0.00, 'Pago mes de mayo', '2024-05-06', '2024-06-17', 'Mayo / 2024', '716160944222102', 'C', ''),
+(102, 'RNU', 'FEF', 85, 50.00, 45.00, 'Abono kit 2', '2024-06-17', '2024-06-17', '2024-2026', '716160154280103', 'P', ''),
+(103, 'RNU', 'FEF', 86, 90.00, 0.00, 'Pago kit 2', '2024-06-17', '2024-06-17', '2024-2026', '717160004242104', 'C', ''),
+(104, 'RPE', 'FEF', 86, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '717160204201105', 'C', ''),
+(105, 'RNU', 'FEF', 55, 100.00, 0.00, 'Pago kit 3', '2024-06-17', '2024-06-17', '2024-2026', '717160404271106', 'C', ''),
+(106, 'RPE', 'FEF', 87, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '717160014220107', 'C', ''),
+(107, 'RIN', 'FEF', 88, 20.00, 0.00, 'Pago inscripción', '2024-06-17', '2024-06-17', '2024', '717160814220108', 'C', ''),
+(108, 'RPE', 'FEF', 88, 10.00, 0.00, 'Ajuste mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '717160814203109', 'C', ''),
+(109, 'RPE', 'FEF', 89, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '717160134245110', 'C', ''),
+(110, 'RNU', 'FEF', 89, 100.00, 0.00, 'Pago kit 3', '2024-06-17', '2024-06-17', '2024-2026', '717160334203111', 'C', ''),
+(111, 'RNU', 'FEF', 90, 70.00, 0.00, 'Abono kit 1', '2024-06-17', '2024-06-17', '2024-2026', '718160544225112', 'C', ''),
+(112, 'RPE', 'FEF', 91, 30.00, 0.00, 'Pago mes de junio', '2024-06-17', '2024-06-17', 'Junio / 2024', '718160654230113', 'C', ''),
+(113, 'RPE', 'FEF', 91, 30.00, 0.00, 'Pago mes de mayo', '2024-05-17', '2024-06-17', 'Mayo  / 2024', '718160754232114', 'C', ''),
+(114, 'RPE', 'FEF', 93, 30.00, 0.00, 'Pago mes de abril', '2024-04-17', '2024-06-17', 'Abril / 2024', '719160124295115', 'C', ''),
+(115, 'RPE', 'FEF', 93, 30.00, 0.00, 'Pago mes de mayo', '2024-05-17', '2024-06-17', 'Mayo / 2024', '719160224293116', 'C', ''),
+(116, 'RPE', 'FEF', 94, 30.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '813160154233117', 'C', ''),
+(117, 'RPE', 'FEF', 96, 30.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '814160114274118', 'C', ''),
+(118, 'RIN', 'FEF', 97, 20.00, 0.00, 'Pago inscripción', '2024-06-18', '2024-06-18', '2024', '815160604231119', 'C', ''),
+(119, 'RPE', 'FEF', 97, 20.00, 0.00, 'Pago ajuste total mes de junio (Hermana Jennifer Camacho)', '2024-06-18', '2024-06-18', 'Junio / 2024', '815160704213120', 'C', ''),
+(120, 'RNU', 'FTR', 98, 100.00, 0.00, 'Pago kit 3', '2024-06-18', '2024-06-18', '2024-2026', '815160154285121', 'C', ''),
+(121, 'RKE', 'FTR', 98, 50.00, 14.00, 'dos chompas impermeables', '2024-06-18', '2024-06-18', '2024', '815160854271122', 'P', ''),
+(122, 'RPE', 'FEF', 83, 25.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '816160204292123', 'C', ''),
+(123, 'RPE', 'FEF', 84, 25.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '816160204274124', 'C', ''),
+(124, 'RPE', 'FEF', 92, 25.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '816160304213125', 'C', ''),
+(125, 'RPE', 'FEF', 99, 30.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '816160904205126', 'C', ''),
+(126, 'RIN', 'FEF', 100, 20.00, 0.00, 'Pago inscripción', '2024-06-18', '2024-06-18', '2024', '817160004260127', 'C', ''),
+(127, 'RPE', 'FEF', 90, 30.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '817160024232128', 'C', ''),
+(128, 'RPE', 'FTR', 101, 20.00, 0.00, 'Pago ajuste mes de junio (no asiste por vacaciones)', '2024-06-18', '2024-06-18', 'Junio / 2024', '818160014291129', 'C', ''),
+(129, 'RPE', 'FTR', 101, 10.00, 20.00, 'Abono mes de julio', '2024-07-01', '2024-06-18', 'Julio / 2024', '818160014294130', 'P', ''),
+(130, 'RPE', 'FEF', 102, 30.00, 0.00, 'Pago mes de junio', '2024-06-18', '2024-06-18', 'Junio / 2024', '818160614231131', 'C', ''),
+(131, 'RNU', 'FEF', 102, 70.00, 0.00, 'Pago kit 1', '2024-06-18', '2024-06-18', '2024-2026', '818160614273132', 'C', ''),
+(132, 'RNU', 'FTR', 1, 135.00, 0.00, 'Pago kit 4 arqueros', '2024-06-18', '2024-06-18', '2024-2026', '818160734221134', 'C', '1_21.jpg'),
+(133, 'RPE', 'FTR', 103, 30.00, 0.00, 'Pago mes junio', '2024-06-10', '2024-06-18', 'Junio / 2024', '818160444253135', 'C', '103_60.jpg'),
+(134, 'RPE', 'FTR', 104, 12.50, 0.00, 'Pago de mes enero', '2024-01-01', '2024-06-18', 'Enero / 2024', '819160914223136', 'C', ''),
+(135, 'RPE', 'FEF', 104, 12.50, 0.00, 'Pago mes de febrero', '2024-02-01', '2024-06-18', 'Febrero / 2024', '819160024273137', 'E', ''),
+(136, 'RPE', 'FTR', 104, 12.50, 0.00, 'Pago mes de febrero', '2024-02-01', '2024-06-18', 'Febrero / 2024', '819160024265138', 'C', ''),
+(137, 'RPE', 'FTR', 104, 12.50, 0.00, 'Pago mes de marzo', '2024-03-01', '2024-06-18', 'Marzo/ 2024', '819160324205139', 'C', ''),
+(138, 'RPE', 'FTR', 104, 12.50, 0.00, 'Pago mes abril', '2024-04-01', '2024-06-18', 'Abril/ 2024', '819160524223140', 'C', ''),
+(139, 'RPE', 'FTR', 105, 12.50, 0.00, 'Pago mes de enero', '2024-01-01', '2024-06-18', 'Enero / 2024', '819160134242141', 'C', ''),
+(140, 'RPE', 'FTR', 105, 12.50, 0.00, 'Pago mes de enero', '2024-01-01', '2024-06-18', 'Enero / 2024', '819160234253142', 'E', ''),
+(141, 'RPE', 'FTR', 105, 12.50, 0.00, 'pago mes de febrero', '2024-02-01', '2024-06-18', 'Febrero / 2024', '819160244272143', 'C', ''),
+(142, 'RPE', 'FTR', 105, 12.50, 0.00, 'Pago mes de marzo', '2024-03-01', '2024-06-18', 'Marzo/ 2024', '819160344200144', 'C', ''),
+(143, 'RPE', 'FTR', 105, 12.50, 0.00, 'Pago mes de abril', '2024-04-01', '2024-06-18', 'Abril/ 2024', '819160344265145', 'C', ''),
+(144, 'RNU', 'FEF', 106, 100.00, 0.00, 'Pago kit 3', '2024-06-19', '2024-06-19', '2024-2026', '913160734260146', 'C', ''),
+(145, 'RNU', 'FEF', 107, 90.00, 10.00, 'Pago kit 3', '2024-06-19', '2024-06-19', '2024-2026', '914160904274147', 'P', ''),
+(146, 'RKE', 'FTR', 37, 70.00, 0.00, 'Pago kit 1', '2024-06-19', '2024-06-19', '2024-2026', '914160314215148', 'E', ''),
+(147, 'RNU', 'FEF', 37, 70.00, 0.00, 'Pago kit 1', '2024-06-19', '2024-06-19', '2024-2026', '914160414252149', 'C', ''),
+(148, 'RNU', 'FTR', 38, 70.00, 0.00, 'Pago kit 1', '2024-06-19', '2024-06-19', '2024-2026', '914160224252150', 'C', ''),
+(149, 'RNU', 'FTR', 29, 135.00, 0.00, 'pago kit 4 arqueros', '2024-06-19', '2024-06-19', '2024-2026', '914160824242151', 'C', '29_74.jpg'),
+(150, 'RNU', 'FEF', 108, 90.00, 0.00, 'Pago kit 2', '2024-06-19', '2024-06-19', '2024-2026', '914160244231152', 'C', ''),
+(151, 'RPE', 'FEF', 108, 30.00, 0.00, 'Pago mes junio', '2024-06-19', '2024-06-19', 'Junio / 2024', '914160344255154', 'C', ''),
+(152, 'RNU', 'FEF', 46, 100.00, 0.00, 'Pago kit 3', '2024-06-19', '2024-06-19', '2024-2026', '918160024232155', 'C', ''),
+(153, 'RPE', 'FEF', 110, 30.00, 0.00, 'Pago mes de junio', '2024-06-19', '2024-06-19', 'Junio / 2024', '918160134284156', 'C', ''),
+(154, 'RNU', 'FEF', 110, 60.00, 0.00, 'Pago uniformes de entrenamiento', '2024-06-19', '2024-06-19', '2024-2026', '918160234284157', 'C', ''),
+(155, 'RNU', 'FEF', 112, 135.00, 0.00, 'Pago kit 4 arqueros', '2024-06-19', '2024-06-19', '2024-2026', '919160004203158', 'C', ''),
+(156, 'RNU', 'FEF', 113, 100.00, 0.00, 'Pago kit 3', '2024-06-19', '2024-06-19', '2024-2026', '919160504263159', 'C', ''),
+(157, 'RPE', 'FTR', 112, 30.00, 0.00, 'Pago mes abril', '2024-04-01', '2024-06-19', 'Abril / 2024', '919160704281160', 'C', ''),
+(158, 'RPE', 'FTR', 112, 30.00, 0.00, 'Pago mes de mayo', '2024-05-01', '2024-06-19', 'Mayo / 2024', '919160704234161', 'C', ''),
+(159, 'RPE', 'FTR', 32, 30.00, 0.00, 'Pago mes de junio', '2024-06-06', '2024-06-19', 'Junio / 2024', '919160904252162', 'C', ''),
+(160, 'RNU', 'FTR', 32, 60.00, 0.00, 'Pago 2 uniformes de entrenamiento', '2024-06-19', '2024-06-19', '2024-2026', '919160014200163', 'C', ''),
+(161, 'RPE', 'FEF', 109, 25.00, 0.00, 'Pago mes de junio', '2024-06-20', '2024-06-20', 'Junio / 2024', '024160844292164', 'C', ''),
+(162, 'RPE', 'FEF', 114, 25.00, 0.00, 'Pago mes de junio', '2024-06-20', '2024-06-20', 'Junio / 2024', '024160054280165', 'C', ''),
+(163, 'RNU', 'FEF', 114, 100.00, 0.00, 'Pago kit 3', '2024-06-19', '2024-06-20', '2024-2026', '024160154262166', 'C', ''),
+(164, 'RNU', 'FEF', 109, 100.00, 0.00, 'Pago kit 3', '2024-06-19', '2024-06-20', '2024-2026', '024160254250167', 'C', ''),
+(165, 'RNU', 'FEF', 115, 60.00, 0.00, 'Pago 2 uniformes de entrenamiento', '2024-06-20', '2024-06-20', '2024-2026', '027160214235168', 'C', ''),
+(166, 'RPE', 'FEF', 116, 30.00, 0.00, 'Pago mes de junio', '2024-06-20', '2024-06-20', 'Junio / 2024', '027160024232169', 'C', ''),
+(167, 'RPE', 'FEF', 117, 20.00, 0.00, 'Pago mes de junio', '2024-06-20', '2024-06-20', 'Junio / 2024', '020260144230170', 'C', ''),
+(168, 'RNU', 'FEF', 79, 90.00, 0.00, 'Pago kit 2', '2024-06-21', '2024-06-21', '2024-2026', '124160424214171', 'C', ''),
+(169, 'RIN', 'FEF', 118, 20.00, 0.00, 'Pago inscripción', '2024-06-21', '2024-06-21', '2024', '125160104223172', 'C', ''),
+(170, 'RPE', 'FEF', 118, 5.00, 0.00, 'Pago ajuste semana junio', '2024-06-21', '2024-06-21', 'Junio / 2024', '125160204260173', 'C', ''),
+(171, 'RIN', 'FEF', 119, 20.00, 0.00, 'Pago inscripción', '2024-06-24', '2024-06-24', '2024', '424160614225174', 'C', ''),
+(172, 'RNU', 'FEF', 119, 75.00, 0.00, 'Pago kit de entrenamiento', '2024-06-24', '2024-06-24', '2024-2026', '424160814210175', 'C', ''),
+(173, 'RPE', 'FEF', 119, 5.00, 0.00, 'Pago ajuste días de junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '424160814202176', 'C', ''),
+(174, 'RPE', 'FEF', 119, 30.00, 0.00, 'Pago mes julio', '2024-07-01', '2024-06-24', 'Julio / 2024', '424160914251177', 'C', ''),
+(175, 'RPE', 'FEF', 33, 11.50, 18.50, 'Abono mes de julio', '2024-07-01', '2024-06-24', 'Julio / 2024', '424160534204178', 'P', ''),
+(176, 'RPE', 'FEF', 120, 30.00, 0.00, 'Pago mes Julio', '2024-07-01', '2024-06-24', 'Julio / 2024', '424160944222179', 'C', ''),
+(177, 'RIN', 'FEF', 120, 20.00, 0.00, 'Pago inscripción', '2024-06-24', '2024-06-24', '2024', '424160944274180', 'C', ''),
+(178, 'RNU', 'FEF', 120, 75.00, 0.00, 'Pago kit entrenamiento', '2024-06-24', '2024-06-24', '2024-2026', '424160054261181', 'C', ''),
+(179, 'RPE', 'FEF', 121, 30.00, 0.00, 'Pago mes de junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '424160954232182', 'C', ''),
+(180, 'RIN', 'FEF', 122, 20.00, 0.00, 'Pago inscripción', '2024-06-24', '2024-06-24', '2024', '425160704224183', 'C', ''),
+(181, 'RPE', 'FEF', 122, 5.00, 0.00, 'Pago ajuste mes junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '425160804242184', 'C', ''),
+(182, 'RNU', 'FEF', 118, 20.00, 40.00, 'Pago 2 uniformes entrenamiento', '2024-06-24', '2024-06-24', '2024-2026', '425160214225185', 'P', ''),
+(183, 'RIN', 'FEF', 123, 20.00, 0.00, 'Pago inscripción', '2024-06-24', '2024-06-24', '2024', '425160744230186', 'C', ''),
+(184, 'RPE', 'FEF', 123, 5.00, 0.00, 'Pago ajuste mes junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '425160744255187', 'C', ''),
+(185, 'RPE', 'FEF', 123, 30.00, 0.00, 'Pago mes julio', '2024-07-01', '2024-06-24', 'Julio / 2024', '425160844251188', 'C', ''),
+(186, 'RIN', 'FEF', 124, 20.00, 0.00, 'Pago inscripción', '2024-06-24', '2024-06-24', '2024', '427160304205189', 'C', ''),
+(187, 'RPE', 'FEF', 124, 5.00, 0.00, 'Pago mes junio (ajuste)', '2024-06-24', '2024-06-24', 'Junio / 2024', '427160404241190', 'C', ''),
+(188, 'RPE', 'FEF', 125, 0.00, 0.00, 'No asiste por vacaciones', '2024-07-01', '2024-06-24', 'Julio / 2024', '427160114250191', 'J', ''),
+(189, 'RPE', 'FEF', 100, 13.00, 0.00, 'Pago ajuste mes de junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '427160514260192', 'C', ''),
+(190, 'RNU', 'FEF', 12, 75.00, 0.00, 'Pago kit entrenamiento', '2024-06-24', '2024-06-24', '2024-2026', '427160644254193', 'C', ''),
+(191, 'RPE', 'FTR', 6, 30.00, 0.00, 'Pago mes junio', '2024-06-24', '2024-06-24', 'Junio / 2024', '427160754285194', 'C', ''),
+(192, 'RNU', 'FEF', 19, 75.00, 0.00, 'Pago kit 1 de entrenamiento', '2024-06-25', '2024-06-25', '2024-2026', '525160134241195', 'C', ''),
+(193, 'RIN', 'FEF', 128, 20.00, 0.00, '', '2024-06-25', '2024-06-25', '2024', '525160244283196', 'C', ''),
+(194, 'RPE', 'FEF', 128, 4.00, 0.00, 'Pago ajuste mes junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '525160244295197', 'C', ''),
+(195, 'RNU', 'FTR', 128, 75.00, 0.00, 'Pago kit 1 de entrenamiento', '2024-06-25', '2024-06-25', '2024-2026', '525160344293198', 'C', ''),
+(196, 'RIN', 'FEF', 127, 20.00, 0.00, '', '2024-06-24', '2024-06-24', '2024', '525160544264199', 'C', ''),
+(197, 'RPE', 'FEF', 127, 5.00, 0.00, 'Pago ajuste mes junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '525160644231200', 'C', ''),
+(198, 'RPE', 'FEF', 127, 5.00, 0.00, 'Pago ajuste mes junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '525160644242201', 'E', ''),
+(199, 'RNU', 'FEF', 127, 75.00, 0.00, 'Pago kit 1 de entrenamiento', '2024-06-24', '2024-06-24', '2024-2026', '525160644295202', 'C', ''),
+(200, 'RIN', 'FEF', 126, 20.00, 0.00, '', '2024-06-25', '2024-06-25', '2024', '525160844223203', 'C', ''),
+(201, 'RPE', 'FEF', 126, 5.00, 0.00, 'Pago ajuste mes junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '525160844235204', 'C', ''),
+(202, 'RNU', 'FEF', 126, 75.00, 0.00, 'Pago kit 1 de entrenamiento', '2024-06-25', '2024-06-25', '2024-2026', '525160944203205', 'C', ''),
+(203, 'RPE', 'FTR', 129, 30.00, 0.00, 'Pago mes junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '526160904232206', 'C', ''),
+(204, 'RPE', 'FEF', 130, 30.00, 0.00, 'Pago mes de junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '527160114263207', 'C', ''),
+(205, 'RNU', 'FEF', 131, 70.00, 0.00, 'Pago kit 1', '2024-06-25', '2024-06-25', '2024-2026', '528160034242208', 'C', ''),
+(206, 'RNU', 'FTR', 132, 75.00, 0.00, 'Pago kit 1', '2024-06-25', '2024-06-25', '2024-2026', '528160544242209', 'C', ''),
+(207, 'RPE', 'FTR', 133, 30.00, 0.00, 'Pago mes de junio', '2024-06-05', '2024-06-25', 'Junio / 2024', '528160354295210', 'C', ''),
+(208, 'RPE', 'FTR', 132, 30.00, 0.00, 'Pago mes de junio', '2024-06-25', '2024-06-25', 'Junio / 2024', '528160554205211', 'C', ''),
+(209, 'RIN', 'FTR', 135, 20.00, 0.00, 'Pago de inscripción', '2024-06-25', '2024-06-25', '2024-2026', '520260144282212', 'C', ''),
+(210, 'RNU', 'FTR', 135, 40.00, 35.00, 'Pago kit 1 uniforme de entrenamiento', '2024-06-25', '2024-06-25', '2024-2026', '520260544210213', 'P', ''),
+(211, 'RIN', 'FEF', 138, 20.00, 0.00, 'Pago inscripción', '2024-06-26', '2024-06-26', '2024', '624160004241214', 'C', ''),
+(212, 'RPE', 'FEF', 138, 3.00, 0.00, 'Pago ajuste mes de junio', '2024-06-26', '2024-06-26', 'Junio / 2024', '624160004224215', 'C', ''),
+(213, 'RIN', 'FEF', 139, 20.00, 0.00, 'Pago inscripción', '2024-06-26', '2024-06-26', '2024', '624160104202216', 'C', ''),
+(214, 'RPE', 'FEF', 139, 3.00, 0.00, 'Pago ajuste junio', '2024-06-26', '2024-06-26', 'Junio / 2024', '624160104224217', 'C', ''),
+(215, 'RIN', 'FEF', 140, 20.00, 0.00, 'Pago inscripción', '2024-06-26', '2024-06-26', '2024', '624160214203218', 'C', ''),
+(216, 'RPE', 'FEF', 140, 3.00, 0.00, 'Pago ajuste mes de junio', '2024-06-26', '2024-06-26', 'Junio / 2024', '624160314262219', 'C', ''),
+(217, 'RPE', 'FEF', 140, 30.00, 0.00, 'Pago mes de julio', '2024-07-01', '2024-06-26', 'Julio / 2024', '624160314264220', 'C', ''),
+(218, 'RNU', 'FTR', 140, 75.00, 0.00, 'Pago kit 1 entrenamiento', '2024-06-26', '2024-06-26', '2024-2026', '624160924235221', 'C', ''),
+(219, 'RPE', 'FEF', 141, 30.00, 0.00, 'Pago mes junio', '2024-06-27', '2024-06-27', 'Junio / 2024', '725160014294222', 'C', ''),
+(220, 'RPE', 'FJU', 103, 0.00, 0.00, 'No asiste por vacaciones', '2024-07-01', '2024-06-27', 'Julio / 2024', '728160204200223', 'J', ''),
+(221, 'RPE', 'FEF', 142, 30.00, 0.00, 'Pago mes de junio', '2024-06-27', '2024-06-27', 'Junio / 2024', '728160224205224', 'C', '');
 
 -- --------------------------------------------------------
 
@@ -256,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `alumno_pago_descuento` (
   PRIMARY KEY (`descuento_id`),
   KEY `descuento_alumnoid` (`descuento_alumnoid`),
   KEY `descuento_rubroid` (`descuento_rubroid`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `alumno_pago_descuento`
@@ -279,7 +417,19 @@ INSERT INTO `alumno_pago_descuento` (`descuento_id`, `descuento_rubroid`, `descu
 (14, 'DDS', 64, 25.00, 'Descuento por hermano', '2024-06-07', 'S'),
 (15, 'DDS', 66, 25.00, 'Descuento por hermano', '2024-06-10', 'S'),
 (16, 'DDS', 67, 25.00, 'Descuento por hermano', '2024-06-10', 'S'),
-(17, 'DDS', 68, 20.00, 'Descuento por familiar', '2024-06-10', 'S');
+(17, 'DDS', 68, 20.00, 'Descuento por familiar', '2024-06-10', 'S'),
+(18, 'DDS', 84, 25.00, 'Descuento por hermano', '2024-06-17', 'S'),
+(19, 'DDS', 83, 25.00, 'Descuento por hermano', '2024-06-17', 'S'),
+(20, 'DDS', 97, 25.00, 'Descuento por hermano', '2024-06-18', 'S'),
+(21, 'DDS', 76, 25.00, 'Descuento por hermano', '2024-06-18', 'S'),
+(22, 'DDS', 92, 25.00, 'Descuento por hermano', '2024-06-18', 'S'),
+(23, 'DDS', 104, 12.50, 'Descuento por mérito deportivo', '2024-06-18', 'S'),
+(24, 'DDS', 105, 12.50, 'Descuento por mérito deportivo', '2024-06-18', 'S'),
+(25, 'DDS', 114, 25.00, 'Descuento por hermano', '2024-06-20', 'S'),
+(26, 'DDS', 109, 25.00, 'Descuento por hermano', '2024-06-20', 'S'),
+(27, 'DDS', 117, 20.00, 'Descuento por mérito deportivo', '2024-06-20', 'S'),
+(28, 'DDS', 138, 25.00, 'Descuento por hermanos', '2024-06-26', 'S'),
+(29, 'DDS', 139, 25.00, 'Descuento por hermanos', '2024-06-26', 'S');
 
 -- --------------------------------------------------------
 
@@ -303,7 +453,16 @@ CREATE TABLE IF NOT EXISTS `alumno_pago_transaccion` (
   `transaccion_archivo` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`transaccion_id`),
   KEY `transaccion_pagoid` (`transaccion_pagoid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `alumno_pago_transaccion`
+--
+
+INSERT INTO `alumno_pago_transaccion` (`transaccion_id`, `transaccion_pagoid`, `transaccion_valorcalculado`, `transaccion_valor`, `transaccion_fecha`, `transaccion_fecharegistro`, `transaccion_formapagoid`, `transaccion_concepto`, `transaccion_periodo`, `transaccion_recibo`, `transaccion_estado`, `transaccion_archivo`) VALUES
+(1, 85, 50.00, 50.00, '2024-06-17', '2024-06-17', 'FEF', 'Pago pendiente kit 3 por el valor de $50.00', '2024-2026', '71516055427199', 'C', ''),
+(2, 111, 50.00, 50.00, '2024-06-18', '2024-06-18', 'FEF', 'Pago pendiente del kit 1 por el valor de $50.00 Dólares', '2024-2026', '818160034271133', 'C', ''),
+(3, 150, 50.00, 50.00, '2024-06-19', '2024-06-19', 'FEF', 'Pago pendiente del rubro Nuevo Uniforme por el valor de $50.00 Dólares', '2024-2026', '914160244234153', 'C', '');
 
 -- --------------------------------------------------------
 
@@ -328,7 +487,7 @@ CREATE TABLE IF NOT EXISTS `alumno_representante` (
   `repre_parentesco` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci NOT NULL,
   PRIMARY KEY (`repre_id`),
   KEY `repre_alumnoid` (`repre_alumnoid`)
-) ENGINE=MyISAM AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `alumno_representante`
@@ -410,7 +569,78 @@ INSERT INTO `alumno_representante` (`repre_id`, `repre_alumnoid`, `repre_tipoide
 (73, 74, 'CED', '1104454747', 'Manuel', 'Oswaldo', 'Salinas', 'Gonzalez', 'Sabiango e/ Lourdes y  Leopoldo Palacios', 'oswaldosalinas255@gmail.com', '0989394779', 'M', '4PA'),
 (74, 75, 'CED', '1105227530', 'Pablo', 'Alejandro', 'Arevalo', 'Ramon', 'Clodoveo Jaramillo', 'pablo_alejandro1493@hotmail.com', '0939986543', 'M', '4MA'),
 (75, 76, 'CED', '1104692080', 'Marisela', 'Alexandra', 'Valladolid', 'Herrera', 'Av. Eugenio Espejo y Adolfo Valarezo', 'maryalex1835@gmail.com', '0994251480', 'F', '4MA'),
-(76, 77, 'CED', '1104430077', 'Carmen', 'Liliana', 'Jumbo', 'Ortiz', 'José Maria Peña e/ Rocafuerte y 10 de Agosto', 'lili20_1987@hotmail.com', '0983411404', 'F', '4MA');
+(76, 77, 'CED', '1104430077', 'Carmen', 'Liliana', 'Jumbo', 'Ortiz', 'José Maria Peña e/ Rocafuerte y 10 de Agosto', 'lili20_1987@hotmail.com', '0983411404', 'F', '4MA'),
+(77, 78, 'CED', '1103906986', 'Hector', 'Eduardo', 'Quizhpe', 'Cabrera', 'Colinas Lojanas', 'eduardoquizhpecabrera@gmail.com', '0990046008', 'M', '4PA'),
+(78, 79, 'CED', '1103813935', 'Irma', 'Marieta', 'Sigcho', 'Gonzalez', 'Barrio Cruz de Yaguarcuna', 'irmasiccho78@hotmail.com', '0989842680', 'F', '4MA'),
+(79, 80, 'CED', '1106060450', 'Gabriela', 'Janneth', 'Medina', 'Peñaranda', 'México y Bolivia', 'gabimdina65@gmail.com', '0983101050', 'F', '4MA'),
+(80, 81, 'CED', '1719553297', 'Lorgia', 'Lucrecia', 'Peña', 'Alvarez', 'Juan Cueva Serrano y Eduardo Granda', 'lorgiap85@gmail.com', '0990552036', 'F', '4MA'),
+(81, 82, 'CED', '1104815566', 'Juan', 'Carlos', 'Maurat', 'Barros', 'Gonzalez Suarez y Angel Benjamin Carrión', 'jmauratbarros@gmail.com', '0991215646', 'M', '4PA'),
+(82, 83, 'CED', '1104503980', 'Rosa', 'Hermelinda', 'Abrigo', 'Tandazo', 'Chonta Cruz', 'arianimocha@hotmail.com', '0983365070', 'F', '4MA'),
+(83, 84, 'CED', '1104503980', 'Rosa', 'Hermelinda', 'Abrigo', 'Tandazo', 'Chonta Cruz', 'arianimocha@hotmail.com', '0983365070', 'F', '4MA'),
+(84, 85, 'CED', '1104466667', 'Tania', 'Maribel', 'Condolo', 'Salazar', 'Riveras de Jipiro', 'tmaribel08@gmail.com', '0994900051', 'F', '4MA'),
+(85, 86, 'CED', '1104154941', 'Johanna', 'del Cisne', 'Montalvan', 'Soto', 'Zamora Huayco, Rio Morona y Rio Santiago', 'lcda_johanna@hotmail.com', '0990361417', 'F', '4MA'),
+(86, 87, 'CED', '1103936595', 'Danny', 'Maria', 'Chamba', 'Jaramillo', 'San Sebastián', 'morochofrancisco29@gmail.com', '0968974282', 'F', '4MA'),
+(87, 88, 'CED', '1105234809', 'Rocío', 'Vanesa', 'Valverde', 'Sanchez', 'San Jose de Carigan', 'rociovanne14@gmail.com', '0980687811', 'F', '4MA'),
+(88, 89, 'CED', '1104104847', 'Byron', 'Jose', 'Shingre', 'Mora', 'Barrio Colinas Lojanas', 'shjose1990@gmail.com', '0988320523', 'M', '4PA'),
+(89, 90, 'CED', '1103486005', 'Lidia', '', 'Aguilar', 'Correa', 'Daniel Álvarez, Av. Benjamín Carrión y Pedro de Mendoza', 'lidiaaguilar138@gmail.com', '0988394774', 'F', '4MA'),
+(90, 91, 'CED', '1103386981', 'Luis', 'Alberto', 'Carrion', 'Bravo', 'Brasil y Colombia', 'luisacarrionbravo@yahoo.es', '0986846359', 'M', '4PA'),
+(91, 92, 'CED', '1104503980', 'Rosa', 'Hermelinda', 'Abrigo', 'Tandazo', 'Chonta Cruz', 'arianimocha@hotmail.com', '0983365070', 'F', '4MA'),
+(92, 93, 'CED', '1103779102', 'Bethys', 'Verónica', 'Solano', 'Morenho', 'Av. Benjamín Carrión e/ Emiliano Zapata y Francisco de Mora', 'bethys_2407@hotmail.com', '0981564147', 'F', '4MA'),
+(93, 94, 'CED', '1721842951', 'José', 'Mauricio', 'Sangoquiza', 'Guayasamin', 'Yaguarcuna', 'j2cmauricio@gmail.com', '0992107399', 'M', '4PA'),
+(94, 95, 'CED', '1105634842', 'Liliana', '', 'Quille', '', 'Estación Sur de Bomberos', 'jairoochoa146@gmail.com', '0981899756', 'F', '4MA'),
+(95, 96, 'CED', '1104553829', 'Ivan', 'Marcelo', 'Cevallos', 'Armijos', 'Época', 'imcevallos@gmail.com', '0994944637', 'M', '4PA'),
+(96, 97, 'CED', '1104692080', 'Marisela', 'Alexandra', 'Valladolid', 'Herrera', 'Av. Eugenio Espejo y Adolfo Valarezo', 'maryalex1835@gmail.com', '0994251480', 'F', '4MA'),
+(97, 98, 'CED', '1105071144', 'Diana', 'Elizabeth', 'Bazurto', 'Loor', 'Motupe, Chuquiribamba y Av. Ángel Felicísimo Rojas', 'johnnycuenca8@gmail.com', '0993903760', 'F', '4MA'),
+(98, 99, 'CED', '1103426225', 'Carlos', 'Ruben', 'Herrera', 'Placencia', 'México, e/ Chile y Bolivia', 'carlos.herrera@bayteq.com', '0989498297', 'M', '4PA'),
+(99, 100, 'CED', '1103729529', 'Edgar', 'Fernando', 'Calderón', 'Becerra', 'El Valle, José Samaniego y Salvador Bustamante Celi', 'edgarfernandocb@gmail.com', '0995780088', 'M', '4PA'),
+(100, 101, 'CED', '1104672371', 'Deysi', 'Maria', 'Montoya', 'Veintimilla', 'Vía Zalapa Bajo', 'deysiveintimilla30@gmail.com', '0969681846', 'F', '4MA'),
+(101, 102, 'CED', '1103299432', 'Vicente', 'Salvador', 'Armijos', 'Pesantez', 'Sucre y Colón', 'armijospesantez@hotmail.com', '0994821499', 'M', '4MA'),
+(102, 103, 'CED', '1105172538', 'Jessica', 'Verònica', 'Valladarez', '', 'Argentina y Venezuela', 'jessy_lojan@outlook.com', '0990368140', 'F', '4MA'),
+(103, 104, 'CED', '1105676595', 'Diana', 'Paola', 'Aleaga', 'Jaramillo', 'Zarzas 2', 'dianitadepinos@gmail.com', '0995438574', 'F', '4MA'),
+(104, 105, 'CED', '1105676595', 'Diana', 'Paola', 'Aleaga', 'Jaramillo', 'Zarzas 2', 'dianitadepinos@gmail.com', '0995438574', 'F', '4MA'),
+(105, 106, 'CED', '1105396087', 'Johanna', '', 'Azuero', '', 'Bolívar, e/ Cariamanga y Catacocha', 'johannalejandra.95@hotmail.com', '0979611890', 'F', '4MA'),
+(106, 107, 'CED', '1104438047', 'Angela', 'Tarcila', 'Alejandro', 'Salinas', 'Alberto Hidalgo y Jorge Castillo', 'anghelaalejandro1987@gmail.com', '0959439571', 'F', '4MA'),
+(107, 108, 'CED', '1104977218', 'Angel', 'Geovanny', 'Neira', 'Nero', 'Barrio Zalapa', 'neirangel41@gmail.com', '0987824210', 'M', '4PA'),
+(108, 109, 'CED', '1103858401', 'Johana', 'Vanessa', 'Cueva', 'Vega', 'Angel Savedra y Ramón del Valle', 'vane_cueva13@gmail.com', '0992215378', 'F', '4MA'),
+(109, 110, 'CED', '1103346787', 'Roger', '', 'Castillo', 'Jimenez', 'Cdla La Paz', 'a-nyjp@hotmail.com', '0939201312', 'M', '4MA'),
+(110, 111, 'CED', '1104505464', 'Enith', '', 'Jimenez', '', 'Av. Chuquiribamba y Chantaco', 'enithjg@hotmail.com', '0981691712', 'F', '4MA'),
+(111, 112, 'CED', '1103874416', 'Darwin', 'Enrique', 'Piedra', 'Carrillo', 'La Pradera', 'yesusloja@hotmail.com', '0996817807', 'M', '4MA'),
+(112, 113, 'CED', '1102917570', 'Manuel', 'Neptalí', 'Calderon', 'Sanchez', 'Hector Chita y Freddy Santander', 'neptalicalderonsmed@gmail.com', '0989789577', 'M', '4PA'),
+(113, 114, 'CED', '1103858401', 'Johana', 'Vanesa', 'Cueva', 'Vega', 'Angel Saverda y Ramón del Valle', 'vane_cueva13@gmail.com', '0992215378', 'F', '4MA'),
+(114, 115, 'CED', '1105684979', 'Daissy', 'Noemí', 'Poma', 'Poma', 'Punzara chico', 'deaissypomapoma@gmail.com', '0959182246', 'F', '4MA'),
+(115, 116, 'CED', '1103164502', 'Ronal', 'Fabricio', 'Jimenez', 'Ochoa', 'Cuxibamba y Tena', 'rfabricio02051973@hotmail.com', '0992481338', 'M', '4PA'),
+(116, 117, 'CED', '1104262082', 'Mayda', 'Vanessa', 'Guerrero', 'Picoita', 'Ciudad Alegría', 'brontorres@gmail.com', '0988718969', 'F', '4MA'),
+(117, 118, 'CED', '1104440670', 'Mercy', 'Janeth', 'Villa', 'Minga', 'Barrio Belén', 'camilamacasminga1990@gmail.com', '0986495083', 'F', '4MA'),
+(118, 119, 'CED', '1104317357', 'Edy', 'Benito', 'Zapata', 'Vera', 'Vía Malacatos', 'edyzapata98@gmail.com', '0992276253', 'M', '4PA'),
+(119, 120, 'CED', '1100419538', 'Rosa', 'Elvira', 'Criollo', 'Zhunaula', 'Carlos Roman N 213-37', 'rosa4796@hotmail.com', '0994841149', 'F', '4MA'),
+(120, 121, 'CED', '1104597586', 'Luis', 'Antonio', 'Sarango', 'Elizalde', 'Domingo Sarmiento y Salvador Allende', 'luis-sarango@hotmail.com', '0997018324', 'M', '4PA'),
+(121, 122, 'CED', '1106001033', 'Mayra', 'Edith', 'Vivanco', 'Jaramillo', 'San Jacinto parroquia Carigan', 'Mevivanco92@gmail.com', '0964140189', 'F', '4MA'),
+(122, 123, 'CED', '1105963506', 'Alan', 'Steven', 'Leon', 'Coronel', 'La Paz', 'villajordyalfredo@gmail.com', '0999859914', 'M', '4MA'),
+(123, 124, 'CED', '1102900436', 'Marco', 'Vinicio', 'Ledesma', 'Alvarado', 'Ciudadela Bellavista', 'ledesmavinicio71@gmail.com', '0996510101', 'M', '4PA'),
+(124, 125, 'CED', '1104838365', 'Edwin', 'Ivan', 'Benites', 'Marisaca', 'Colinas Lojanas', 'edwinbetinez796@gmail.com', '0985787016', 'M', '4PA'),
+(125, 126, 'CED', '1103053185', 'Esthela', 'Marilu', 'Masache', 'Narvaez', 'San Cayetano Bajo, Dublin y Marsella', 'esthelanarvaez3@gmail.com', '0983565901', 'F', '4MA'),
+(126, 127, 'CED', '1104772494', 'Gladys', 'Beatriz', 'Cuenca', 'Riofrio', 'El Paraíso', 'beatrizcuenca339@gmail.com', '0986869515', 'F', '4MA'),
+(127, 128, 'CED', '0750187015', 'Juddy', 'Anabel', 'Guaman', 'Ordoñez', 'Daniel Álvarez', 'juddy_1995@hotmail.com', '0994717332', 'F', '4MA'),
+(128, 129, 'CED', '1103126486', 'Lorena', '', 'Ruiz', 'Gavilanes', 'Colinas Lojanas', 'loreruiz2004@hotmail.com', '0996801805', 'F', '4MA'),
+(129, 130, 'CED', '1718733338', 'Maria', 'Teresa', 'Jiménez', '', 'Varsovia y París', 'estuardo_gpi@hotmail.com', '0997569362', 'F', '4MA'),
+(130, 131, 'CED', '1104472376', 'Roberth', 'Michael', 'Azanza', 'Calva', 'Rocafuerte y Ramón Pinto', 'rmazanza92@gmail.com', '0958740398', 'M', '4PA'),
+(131, 132, 'CED', '1104445059', 'Yesenia', 'Marisol', 'Cueva', 'Agurto', 'Daniel Álvarez', 'solmarisolcueva@gmail.com', '0993065079', 'F', '4MA'),
+(132, 133, 'CED', '1900478221', 'Jonathan', 'Xavier', 'Elizalde', 'Maldonado', 'Punzara Chico', 'jxelizalde13@hotmail.com', '0991108641', 'M', '4PA'),
+(133, 134, 'CED', '1104125545', 'Stefany', 'Salome', 'Ludeña', 'Salazar', 'Monseñor Alberto Zambrano Noruega entre Grecia e Irlanda', 'sludenasalazar@gmail.com', '0998453533', 'F', '4MA'),
+(134, 135, 'CED', '1104493950', 'Andrea', '', 'Morocho', 'Jaramillo', 'Ciprés y acacias-La Pradera', 'lisbeth06morocho@gmail.com', '0990312644', 'F', '4MA'),
+(135, 136, 'CED', '1312546060', 'Jandry', 'Ivan', 'Laz', 'Loor', 'Azuay y Nicolás García', 'jandrylaz90@gmail.com', '0969196882', 'M', '4MA'),
+(136, 137, 'CED', '1103778161', 'Diana', 'Cecilia', 'Guamán', 'Coronel', 'Avenida de los Paltas y Francia', 'dcguaman@gmail.com', '1111111111', 'F', '4MA'),
+(137, 138, 'CED', '1104156789', 'Lorena', 'Briggette', 'Serrano', 'Chuquimarca', 'Porfirio Díaz y Hernán Cortés', 'blorshi@gmail.com', '0996328878', 'F', '4MA'),
+(138, 139, 'CED', '1104156789', 'Lorena', 'Briggette', 'Serrano', 'Chuquimarca', 'Porfirio Díaz y Hernán Cortés', 'blorshi@gmail.com', '0996328878', 'F', '4MA'),
+(139, 140, 'CED', '1104139876', 'Ana', 'Alexandra', 'Pinzón', 'Vera', 'Barrio Conzacola', 'veralexandra2018@gmail.com', '0991257192', 'F', '4MA'),
+(140, 141, 'CED', '0705195105', 'Jessica', 'Claribel', 'Leon', 'Torres', 'Daniel Álvarez', 'leonjesi@hotmail.com', '0981735846', 'F', '4MA'),
+(141, 142, 'CED', '1150826616', 'Diego', 'Alejandro', 'Correa', 'Mena', 'Zarzas 2', 'dialcome3@hotmail.com', '0985568171', 'M', '4PA'),
+(142, 143, 'CED', '1104892482', 'Johanna', 'Maribel', 'Castillo', 'Jaramillo', 'Pedro Vicente Maldonado y Reinaldo Espinoza', 'johannacasjar93@gmail.com', '0979381073', 'F', '4MA'),
+(143, 144, 'CED', '1104063357', 'Bethy', '', 'Calderón', 'Espinoza', 'Colinas Lojanas-Huayrapungo y Benjamín Carrión', 'bece.24@hotmail.com', '0986706296', 'F', '4MA'),
+(144, 145, 'CED', '1104923452', 'Irene', 'de Lourdes', 'Chamba', 'Eras', 'Miraflores, calle Cañarís y Av. de los Paltas', 'irenechamba@gmail.com', '0939778112', 'F', '4MA'),
+(145, 146, 'CED', '1312546060', 'Jandry', 'Ivan', 'Laz', 'Loor', 'Azuay y Nicolás García', 'jandrylaz90@gmail.com', '0969169344', 'M', '4PA'),
+(146, 147, 'CED', '1150359782', 'Gabriela', 'Leonor', 'Iniguez', 'Tenicela', 'La Banda', 'imiguezgabriela46@gmail.com', '0982602992', 'F', '4MA'),
+(147, 148, 'CED', '1105071144', 'Elizabeth', '', 'Basurto', 'Loor', 'Motupe calles Ángel Felicísimo Rojas y San Agustín', 'dianabasurtoloor1993@gmail.com', '0993903760', 'F', '4MA');
 
 -- --------------------------------------------------------
 
@@ -464,10 +694,25 @@ CREATE TABLE IF NOT EXISTS `asistencia_hora` (
 --
 
 INSERT INTO `asistencia_hora` (`hora_id`, `hora_inicio`, `hora_fin`, `hora_detalle`, `hora_estado`) VALUES
-(1, '13:10:00', '14:10:00', 'Hora inicio', 'A'),
+(1, '13:00:00', '14:00:00', 'Hora inicio', 'A'),
 (2, '15:10:00', '16:00:00', 'Hora dos', 'A'),
 (3, '16:20:00', '17:20:00', 'hora tres', 'A'),
 (4, '17:20:00', '18:00:00', 'Hora fin', 'A');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `asistencia_horario`
+--
+
+DROP TABLE IF EXISTS `asistencia_horario`;
+CREATE TABLE IF NOT EXISTS `asistencia_horario` (
+  `horario_id` int NOT NULL AUTO_INCREMENT,
+  `horario_nombre` varchar(50) NOT NULL,
+  `horario_detalle` varchar(300) NOT NULL,
+  `horario_estado` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`horario_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -485,7 +730,7 @@ CREATE TABLE IF NOT EXISTS `asistencia_lugar` (
   `lugar_estado` char(1) NOT NULL DEFAULT 'A',
   PRIMARY KEY (`lugar_id`),
   KEY `lugar_sedeid` (`lugar_sedeid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `asistencia_lugar`
@@ -493,7 +738,27 @@ CREATE TABLE IF NOT EXISTS `asistencia_lugar` (
 
 INSERT INTO `asistencia_lugar` (`lugar_id`, `lugar_sedeid`, `lugar_nombre`, `lugar_direccion`, `lugar_detalle`, `lugar_estado`) VALUES
 (1, 1, 'Cancha los búfalos', 'Dirección', 'https://maps.app.goo.gl/rqhZMi2egExXy8NP6', 'A'),
-(2, 1, 'Champios', 'Dirección', 'https://maps.app.goo.gl/e16Esh2jHcBzp2dG6', 'A');
+(2, 1, 'Champios', 'Dirección', 'https://maps.app.goo.gl/e16Esh2jHcBzp2dG6', 'A'),
+(3, 1, 'Cancha Daniel Alvarez', 'Daniel Alvarez', 'https://maps.app.goo.gl/z1r2ijQJgthhk8Nc9', 'A');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `general_cancha`
+--
+
+DROP TABLE IF EXISTS `general_cancha`;
+CREATE TABLE IF NOT EXISTS `general_cancha` (
+  `cancha_id` int NOT NULL AUTO_INCREMENT,
+  `cancha_sedeid` int NOT NULL,
+  `sede_nombre` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
+  `sede_direccion` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
+  `sede_email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
+  `sede_telefono` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
+  `sede_movil` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
+  PRIMARY KEY (`cancha_id`),
+  KEY `cancha_sedeid` (`cancha_sedeid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -522,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `general_escuela` (
 --
 
 INSERT INTO `general_escuela` (`escuela_id`, `escuela_ruc`, `escuela_nombre`, `escuela_direccion`, `escuela_email`, `escuela_telefono`, `escuela_movil`, `escuela_logo`, `escuela_recibo`, `escuela_pension`, `escuela_inscripcion`) VALUES
-(1, '1103533913001', 'Escuela IDV Loja', 'Daniel Álvarez, Av. Eloy Alfaro y Porfirio Díaz Esq.', 'escuelaidvloja@gmail.com', '0993911650', '0993911650', '1103533913001_34.jpg', 88, 30.00, 20.00);
+(1, '1103533913001', 'Escuela IDV Loja', 'Daniel Álvarez, Av. Eloy Alfaro y Porfirio Díaz Esq.', 'escuelaidvloja@gmail.com', '0993911650', '0993911650', '1103533913001_34.jpg', 224, 30.00, 20.00);
 
 -- --------------------------------------------------------
 
@@ -560,7 +825,7 @@ DROP TABLE IF EXISTS `general_tabla`;
 CREATE TABLE IF NOT EXISTS `general_tabla` (
   `tabla_id` int NOT NULL AUTO_INCREMENT,
   `tabla_nombre` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci NOT NULL,
-  `tabla_estado` bit(1) NOT NULL,
+  `tabla_estado` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci NOT NULL,
   PRIMARY KEY (`tabla_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
@@ -569,13 +834,13 @@ CREATE TABLE IF NOT EXISTS `general_tabla` (
 --
 
 INSERT INTO `general_tabla` (`tabla_id`, `tabla_nombre`, `tabla_estado`) VALUES
-(1, 'tipo_documento', b'1'),
-(2, 'nacionalidad', b'1'),
-(3, 'posicion_juego', b'1'),
-(4, 'parentesco', b'1'),
-(5, 'rubros', b'1'),
-(6, 'forma_pago', b'1'),
-(7, 'descuento', b'1');
+(1, 'tipo_documento', 'A'),
+(2, 'nacionalidad', 'A'),
+(3, 'posicion_juego', 'A'),
+(4, 'parentesco', 'A'),
+(5, 'rubros', 'A'),
+(6, 'forma_pago', 'A'),
+(7, 'descuento', 'A');
 
 -- --------------------------------------------------------
 
@@ -677,18 +942,18 @@ CREATE TABLE IF NOT EXISTS `seguridad_rol` (
   `rol_detalle` varchar(300) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
   `rol_fechacreacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `rol_fechaactualizacion` datetime DEFAULT NULL,
-  `rol_eliminado` bit(1) NOT NULL DEFAULT b'0',
-  `rol_activo` bit(1) NOT NULL DEFAULT b'1',
+  `rol_estado` char(1) COLLATE utf8mb3_spanish2_ci NOT NULL DEFAULT 'A',
   PRIMARY KEY (`rol_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `seguridad_rol`
 --
 
-INSERT INTO `seguridad_rol` (`rol_id`, `rol_nombre`, `rol_detalle`, `rol_fechacreacion`, `rol_fechaactualizacion`, `rol_eliminado`, `rol_activo`) VALUES
-(1, 'Super Administrador', 'super administrador', '2024-04-21 10:57:59', '0000-00-00 00:00:00', b'0', b'1'),
-(2, 'Administrador', 'administrador del sisrema', '2024-04-21 10:58:11', '0000-00-00 00:00:00', b'0', b'1');
+INSERT INTO `seguridad_rol` (`rol_id`, `rol_nombre`, `rol_detalle`, `rol_fechacreacion`, `rol_fechaactualizacion`, `rol_estado`) VALUES
+(1, 'Super Administrador', 'super administrador', '2024-04-21 10:57:59', '0000-00-00 00:00:00', 'A'),
+(2, 'Administrador', 'administrador del sisrema', '2024-04-21 10:58:11', '0000-00-00 00:00:00', 'A'),
+(3, 'Profesor', 'Profesor', '2024-06-29 00:17:34', NULL, 'A');
 
 -- --------------------------------------------------------
 
@@ -708,26 +973,29 @@ CREATE TABLE IF NOT EXISTS `seguridad_usuario` (
   `usuario_fechacreacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `usuario_fechacambioclave` datetime DEFAULT NULL,
   `usuario_fechaactualizado` datetime DEFAULT NULL,
-  `usuario_cambiaclave` bit(1) NOT NULL DEFAULT b'0',
-  `usuario_tienebloqueo` bit(1) NOT NULL DEFAULT b'0',
-  `usuario_activo` bit(1) NOT NULL DEFAULT b'1',
-  `usuario_eliminado` bit(1) NOT NULL DEFAULT b'0',
+  `usuario_cambiaclave` char(1) COLLATE utf8mb3_spanish2_ci DEFAULT 'N',
+  `usuario_estado` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci NOT NULL DEFAULT 'A',
   `usuario_imagen` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish2_ci DEFAULT NULL,
   PRIMARY KEY (`usuario_id`),
   UNIQUE KEY `usuario_usuario` (`usuario_usuario`),
   UNIQUE KEY `usuario_email` (`usuario_email`),
   UNIQUE KEY `usuario_movil` (`usuario_movil`),
   KEY `usuario_rolid` (`usuario_rolid`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `seguridad_usuario`
 --
 
-INSERT INTO `seguridad_usuario` (`usuario_id`, `usuario_usuario`, `usuario_rolid`, `usuario_clave`, `usuario_nombre`, `usuario_email`, `usuario_movil`, `usuario_fechacreacion`, `usuario_fechacambioclave`, `usuario_fechaactualizado`, `usuario_cambiaclave`, `usuario_tienebloqueo`, `usuario_activo`, `usuario_eliminado`, `usuario_imagen`) VALUES
-(1, 'idvadminloja', 1, '$2y$10$F0J8k.lFjgGAK6I/tcbhyuMKSaitXy8ENMSBVZWErIoA6.VSU8MQy', 'Adminstrador del sistema', 'mail@mail.com', '9898989898', '2024-04-21 11:06:38', '0000-00-00 00:00:00', '2024-04-25 12:12:55', b'0', b'0', b'1', b'0', ''),
-(2, 'fbpinzon', 2, '$2y$10$f9Douwb5IJ/tUmP/0ENZVO8mVDX9A4ZPj.7sk20w2k3EB4eQ8oTX6', 'Freddy Pinzón Olmedo', 'fb@mail.om', '0993120984', '2024-04-24 22:30:21', NULL, '2024-06-13 22:17:47', b'0', b'0', b'0', b'0', 'fbpinzon_37.jpg'),
-(3, 'jdalvarez', 2, '$2y$10$D68bzcRdj.c.TDuc2rCWsOlnJMvDS5zoe6G/ziQbiXUf0NkOyJBXO', 'Jennyfer Daniela Álvarez Castro', 'jdalvarezcastro@gmail.com', '0996344221', '2024-05-21 19:48:50', NULL, '2024-05-21 19:48:50', b'0', b'0', b'1', b'0', '');
+INSERT INTO `seguridad_usuario` (`usuario_id`, `usuario_usuario`, `usuario_rolid`, `usuario_clave`, `usuario_nombre`, `usuario_email`, `usuario_movil`, `usuario_fechacreacion`, `usuario_fechacambioclave`, `usuario_fechaactualizado`, `usuario_cambiaclave`, `usuario_estado`, `usuario_imagen`) VALUES
+(1, 'idvadminloja', 1, '$2y$10$F0J8k.lFjgGAK6I/tcbhyuMKSaitXy8ENMSBVZWErIoA6.VSU8MQy', 'Adminstrador del sistema', 'mail@mail.com', '9898989898', '2024-04-21 11:06:38', '0000-00-00 00:00:00', '2024-04-25 12:12:55', '0', 'A', ''),
+(2, 'fbpinzon', 2, '$2y$10$f9Douwb5IJ/tUmP/0ENZVO8mVDX9A4ZPj.7sk20w2k3EB4eQ8oTX6', 'Freddy Bolivar Pinzón Olmedo', 'fb@mail.om', '0993120984', '2024-04-24 22:30:21', NULL, '2024-06-28 16:37:18', '0', 'A', 'fbpinzon_37.jpg'),
+(3, 'jdalvarez', 2, '$2y$10$D68bzcRdj.c.TDuc2rCWsOlnJMvDS5zoe6G/ziQbiXUf0NkOyJBXO', 'Jennyfer Daniela Álvarez Castro', 'jdalvarezcastro@gmail.com', '0996344221', '2024-05-21 19:48:50', NULL, '2024-05-21 19:48:50', '0', 'A', ''),
+(4, 'luis', 3, '$2y$10$tybB34Bhx7Gku4/VVCG2suPyF2WUov.mto7hXlHElRFonUVkCOiRq', 'Luis Alvarez', 'luis@mail.com', '065952135', '2024-06-29 09:23:43', NULL, '2024-06-30 12:21:16', '0', 'A', ''),
+(5, 'servilio', 3, '$2y$10$Jd9Vok6qP3cAf9WRzKGUoec9m.TGTyhNUYJPZPDuJwy3Rb5HIx/G6', 'Servilio mesa', 'srev@mail.com', '0993124954', '2024-06-29 09:27:10', NULL, '2024-06-29 09:27:10', '0', 'A', ''),
+(6, 'ctorres', 3, '$2y$10$rJPpig7cy3qU.j6G8dzsgOnleeC8Rw0tXMkXv7QF1kKhT40q6liWu', 'Carlos Torres', 'ctorres@mail.com', '02659847845', '2024-06-29 12:42:05', NULL, '2024-06-30 13:40:57', 'N', 'A', 'ctorres_90.jpg'),
+(7, 'fmarintes', 3, '$2y$10$tXxGp3UY94py2etikI5do.9rkuM/BAkheXB9miWVuOQ3TXOM3WeVq', 'freddy marin mena', 'marin@mail.com', '0556874529', '2024-06-29 22:32:09', NULL, '2024-06-29 22:32:09', 'N', 'A', 'fmarintes_27.jpg'),
+(8, 'pmpinzon', 3, '$2y$10$hJvRYvl1Y.IVJv8WDxjYheuLYg8fBRU.XQ5hDuOnmat2zNrrVBnS2', 'Pablo Pinzón', 'ppinzon@mailvd.com', '0265656598', '2024-06-29 23:49:07', NULL, '2024-06-30 12:20:31', 'N', 'A', 'pmpinzon_45.jpg');
 
 -- --------------------------------------------------------
 
@@ -748,7 +1016,12 @@ CREATE TABLE IF NOT EXISTS `seguridad_usuario_sede` (
 INSERT INTO `seguridad_usuario_sede` (`usuariosede_usuarioid`, `usuariosede_sedeid`) VALUES
 (1, 1),
 (2, 1),
-(3, 1);
+(3, 1),
+(4, 1),
+(0, 1),
+(8, 1),
+(6, 1),
+(4, 2);
 
 -- --------------------------------------------------------
 
@@ -784,7 +1057,7 @@ CREATE TABLE IF NOT EXISTS `sujeto_alumno` (
   KEY `alumno_posicionid` (`alumno_posicionid`),
   KEY `alumno_nacionalidadid` (`alumno_nacionalidadid`),
   KEY `alumno_tipoidentificacion` (`alumno_tipoidentificacion`)
-) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=149 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish2_ci;
 
 --
 -- Volcado de datos para la tabla `sujeto_alumno`
@@ -867,7 +1140,78 @@ INSERT INTO `sujeto_alumno` (`alumno_id`, `alumno_sedeid`, `alumno_posicionid`, 
 (74, 1, '3DE', 'ECU', 'CED', '1151082789', 'Derek', 'Emanuel', 'Salinas', 'Romero', '', 'Sabiango e/ Lourdes y  Leopoldo Palacios', '2015-08-07', '2023-11-07', 'M', 'N', 'S', '', 0, '', ''),
 (75, 1, '3DE', 'ECU', 'CED', '1151210455', 'Jeampierre', 'Alejandro', 'Arevalo', 'Soto', '', 'Clodoveo Jaramillo', '2016-12-15', '2024-05-09', 'M', 'N', 'S', '', 0, '', ''),
 (76, 1, '3DE', 'ECU', 'CED', '0707147195', 'Jennifer', 'Alexandra', 'Camacho', 'Valladolid', '', 'Av. Eugenio Espejo y Adolfo Valarezo', '2012-10-03', '2024-06-10', 'F', 'N', 'S', '', 0, '', ''),
-(77, 1, '3DE', 'ECU', 'CED', '1754969499', 'Jeremy', 'Leonel', 'Cuenca', 'Jumbo', '', 'José Maria Peña e/ Rocafuerte y 10 de Agosto', '2013-12-27', '2024-06-10', 'M', 'N', 'S', '', 0, '', '');
+(77, 1, '3DE', 'ECU', 'CED', '1754969499', 'Jeremy', 'Leonel', 'Cuenca', 'Jumbo', '', 'José Maria Peña e/ Rocafuerte y 10 de Agosto', '2013-12-27', '2024-06-10', 'M', 'N', 'S', '', 0, '', ''),
+(78, 1, '3DE', 'ECU', 'CED', '1150916771', 'Israel', 'Said', 'Quizhpe', 'Sanchez', '', 'Colinas Lojanas', '2014-03-15', '2024-06-17', 'M', 'N', 'S', '', 0, '', ''),
+(79, 1, '3DE', 'ECU', 'CED', '1150020954', 'Jhair', 'Nicolas', 'Calle', 'Sigcho', '', 'Barrio Cruz de Yaguarcuna', '2011-06-17', '2024-06-17', 'M', 'N', 'S', '', 0, '', ''),
+(80, 1, '3DE', 'ECU', 'CED', '1150916763', 'Josue', 'Daniel', 'Astudillo', 'Medina', '', 'México y Bolivia', '2014-05-06', '2023-12-07', 'M', 'N', 'S', '', 0, '', ''),
+(81, 1, '3DE', 'ECU', 'CED', '1150405015', 'Justin', 'Jose', 'Abad', 'Peña', '', 'Juan Cueva Serrano y Eduardo Granda', '2011-06-26', '2023-05-02', 'M', 'N', 'S', '', 0, '', ''),
+(82, 1, '3DE', 'ECU', 'CED', '1151387998', 'Thiago', 'Sebastian', 'Maurat', 'Morocho', '', 'Gonzalez Suarez y Angel Benjamin Carrión', '2019-02-02', '2023-02-06', 'M', 'N', 'S', '', 0, '', ''),
+(83, 1, '3DE', 'ECU', 'CED', '1150656690', 'Juliet', 'Valentina', 'Mocha', 'Abrigo', '', 'Chonta Cruz', '2013-04-08', '2023-04-05', 'F', 'S', 'S', '', 0, '', ''),
+(84, 1, '3DE', 'ECU', 'CED', '1150188462', 'Arianna', 'Adelina', 'Mocha', 'Abrigo', '', 'Chonta Cruz', '2010-07-31', '2023-04-06', 'F', 'S', 'S', '', 0, '', ''),
+(85, 1, '3DE', 'ECU', 'CED', '1150279766', 'César', 'Alexander', 'Tinitana', 'Condolo', '', 'Riveras de Jipiro', '2012-06-25', '2023-04-10', 'M', 'N', 'S', '', 0, '', ''),
+(86, 1, '3DE', 'ECU', 'CED', '1151211818', 'Christopher', 'Nicolade', 'Gusqui', 'Montalvan', '', 'Zamora Huayco, Rio Morona y Rio Santiago', '2016-12-22', '2023-07-03', 'M', 'N', 'S', '', 0, '', ''),
+(87, 1, '3DE', 'ECU', 'CED', '1103936595', 'Anthony', 'Nicanor', 'Morocho', 'Chamba', '', 'San Sebastián', '2011-07-09', '2023-08-08', 'M', 'N', 'S', '', 0, '', ''),
+(88, 1, '3DE', 'ECU', 'CED', '1150535837', 'Geovanny', 'Rogel', 'Narvaez', 'Valverde', '', 'San Jose de Carigan', '2013-03-20', '2024-06-17', 'M', 'N', 'S', '', 0, '', ''),
+(89, 1, '3DE', 'ECU', 'CED', '1150892717', 'Jose', 'Andres', 'Shingre', 'Cajamarca', '', 'Barrio Colinas Lojanas', '2014-03-29', '2023-08-01', 'M', 'N', 'S', '', 0, '', ''),
+(90, 1, '3DE', 'ECU', 'CED', '1753210689', 'Jostin', 'Fernando', 'Giraldo', 'Aguilar', '', 'Daniel Álvarez, Av. Benjamín Carrión y Pedro de Mendoza', '2012-08-21', '2023-05-01', 'M', 'N', 'S', '', 0, '', ''),
+(91, 1, '3DE', 'ECU', 'CED', '1150151247', 'Matias', 'Joel', 'Carrión', 'Celi', '', 'Brasil y Colombia', '2012-02-04', '2024-01-01', 'M', 'N', 'S', '', 0, '', ''),
+(92, 1, '3DE', 'ECU', 'CED', '1150140273', 'Juan', 'David', 'Cartuche', 'Abrigo', '', 'Chonta Cruz', '2008-03-09', '2023-04-01', 'M', 'N', 'S', '', 0, '', ''),
+(93, 1, '3DE', 'ECU', 'CED', '1151262209', 'Fernando', 'Julian', 'Jaramillo', 'Solano', '', 'Av. Benjamín Carrión e/ Emiliano Zapata y Francisco de Mora', '2017-08-07', '2023-07-04', 'M', 'N', 'S', '', 0, '', ''),
+(94, 1, '3DE', 'ECU', 'CED', '1755879663', 'Angel', 'Ismael', 'Sangoquiza', 'Romero', '', 'Yaguarcuna', '2014-07-08', '2024-01-06', 'M', 'N', 'S', '', 0, '', ''),
+(95, 1, '3DE', 'ECU', 'CED', '1150439089', 'Alison', 'Valentina', 'Ochoa', 'Quille', '', 'Estación Sur de Bomberos', '2012-06-18', '2023-08-17', 'F', 'N', 'S', '', 0, '', ''),
+(96, 1, '3DE', 'ECU', 'CED', '1150252045', 'Ivan', 'Andrés', 'Cevallos', 'Velepucha', '', 'Época', '2011-04-10', '2023-07-01', 'M', 'N', 'S', '', 0, '', ''),
+(97, 1, '3DE', 'ECU', 'CED', '1151585146', 'Arlette', 'Montserrate', 'Caraguay', 'Valladolid', '', 'Av. Eugenio Espejo y Adolfo Valarezo', '2021-09-05', '2024-06-10', 'F', 'S', 'S', '', 0, '', ''),
+(98, 1, '3DE', 'ECU', 'CED', '1150517322', 'Rusbell', 'Fernando', 'Cuenca', 'Basurto', '', 'Motupe, Chuquiribamba y Av. Ángel Felicísimo Rojas', '2013-01-27', '2024-04-01', 'M', 'S', 'S', '', 0, '', ''),
+(99, 1, '3DE', 'ECU', 'CED', '1150155198', 'Juan', 'David', 'Herrera', 'Parra', '', 'México, e/ Chile y Bolivia', '2012-01-27', '2024-05-08', 'M', 'N', 'S', '', 0, '', ''),
+(100, 1, '3DE', 'ECU', 'CED', '1150677852', 'Amir', 'Jhosua', 'Calderon', 'Jiménez', '', 'El Valle, José Samaniego y Salvador Bustamante Celi', '2013-07-16', '2024-06-17', 'M', 'N', 'S', '', 0, '', ''),
+(101, 1, '3DE', 'ECU', 'CED', '1150514097', 'Sebastian', 'Alejandro', 'Gonzalez', 'Montoya', '', 'Vía Zalapa Bajo', '2011-06-22', '2023-06-28', 'M', 'N', 'S', '', 0, '', ''),
+(102, 1, '3DE', 'ECU', 'CED', '1151023981', 'Jose', 'Vicente', 'Armijos', 'Díaz', '', 'Sucre y Colón', '2014-12-02', '2024-03-04', 'M', 'N', 'S', '', 0, '', ''),
+(103, 1, '3DE', 'ECU', 'CED', '1151054630', 'Erick', 'Sebastiàn', 'Sàenz de Viteri', 'Valladares', '', 'Argentina y Venezuela', '2015-04-11', '2024-06-18', 'M', 'N', 'S', '', 0, '', ''),
+(104, 1, '3DE', 'ECU', 'CED', '1900919489', 'Thiago', 'Alexander', 'Aguilar', 'Aleaga', '', 'Zarzas 2', '2012-03-04', '2022-01-01', 'M', 'S', 'S', '', 0, '1900919489_A49.jpg', ''),
+(105, 1, '3DE', 'ECU', 'CED', '1151193982', 'Eithan', 'Josue', 'Pinos', 'Aleaga', '', 'Zarzas 2', '2016-10-08', '2022-06-18', 'M', 'S', 'S', '', 0, '1151193982_A45.jpg', ''),
+(106, 1, '3DE', 'ECU', 'CED', '1151051537', 'Andrés', 'Alejandro', 'Lima', 'Azuero', '', 'Bolívar, e/ Cariamanga y Catacocha', '2013-12-17', '2024-04-01', 'M', 'N', 'S', '', 0, '', ''),
+(107, 1, '3DE', 'ECU', 'CED', '1151409388', 'Jhonny', 'Gael', 'Oviedo', 'Alejandro', '', 'Alberto Hidalgo y Jorge Castillo', '2019-05-10', '2022-10-05', 'M', 'S', 'S', '', 0, '', ''),
+(108, 1, '3DE', 'ECU', 'CED', '1150512372', 'Jhonny', 'Alejandro', 'Neira', 'Poma', '', 'Barrio Zalapa', '2009-11-16', '2024-02-01', 'M', 'N', 'S', '', 0, '', ''),
+(109, 1, '3DE', 'ECU', 'CED', '1151300215', 'Darwin', 'Matheo', 'Villavicencio', 'Cueva', '', 'Angel Savedra y Ramón del Valle', '2018-01-18', '2023-02-01', 'M', 'S', 'S', '', 0, '', ''),
+(110, 1, '3DE', 'ECU', 'CED', '1150936357', 'Roger', 'Andrés', 'Castillo', 'Guaman', '', 'Cdla La Paz', '2014-05-20', '2023-04-11', 'M', 'N', 'S', '', 0, '', ''),
+(111, 1, '3DE', 'ECU', 'CED', '1150797874', 'Eddy', 'Andrés', 'Carrión', 'Jiménez', '', 'Av. Chuquiribamba y Chantaco', '2009-05-09', '2024-01-08', 'M', 'N', 'S', '', 0, '', ''),
+(112, 1, '3DE', 'ECU', 'CED', '11060075425', 'Elias', 'Enrique', 'Piedra', 'Arias', '', 'La Pradera', '2010-06-05', '2022-04-01', 'M', 'N', 'S', '', 0, '', ''),
+(113, 1, '3DE', 'ECU', 'CED', '1150856993', 'Jhair', 'Neptalí', 'Calderón', 'Abad', '', 'Hector Chita y Freddy Santander', '2014-02-05', '2022-10-01', 'M', 'N', 'S', '', 0, '', ''),
+(114, 1, '3DE', 'ECU', 'CED', '1151477302', 'Sebastian', 'Gabriel', 'Villavicencio', 'Cueva', '', 'Angel Saveerda y Ramón del Valle', '2020-03-25', '2023-02-01', 'M', 'S', 'S', '', 0, '', ''),
+(115, 1, '3DE', 'ECU', 'CED', '1105684979', 'Javier', 'Elian', 'Jiménez', 'Poma', '', 'Punzara chico', '2014-05-24', '2023-02-01', 'M', 'N', 'S', '', 0, '', ''),
+(116, 1, '3DE', 'ECU', 'CED', '1151065321', 'Ronald', 'Sebastián', 'Jimenez', 'Montaño', '', 'Cuxibamba y Tena', '2015-03-26', '2023-09-04', 'M', 'N', 'S', '', 0, '', ''),
+(117, 1, '3DE', 'ECU', 'CED', '1150496337', 'Matias', 'Jose', 'Torres', 'Guerrero', '', '', '2013-01-03', '2024-04-20', 'M', 'N', 'S', '', 0, '', ''),
+(118, 1, '3DE', 'ECU', 'CED', '1151285390', 'Matias', 'Moises', 'Macas', 'Villa', '', 'Barrio Belén', '2017-11-15', '2024-06-21', 'M', 'N', 'S', '', 0, '', ''),
+(119, 1, '3DE', 'ECU', 'CED', '1150192910', 'Jeiner', 'Adrian', 'Zapata', 'Carrión', '', 'Vía Malacatos', '2008-10-11', '2024-06-24', 'M', 'N', 'S', '', 0, '', ''),
+(120, 1, '3DE', 'ECU', 'CED', '2450346867', 'Ramses', '', 'Ortega', 'Cordovilla', '', 'Carlos Roman N 213-37', '2012-04-02', '2024-07-01', 'M', 'N', 'S', '', 0, '', ''),
+(121, 1, '3DE', 'ECU', 'CED', '1151097597', 'Luis', 'Edward', 'Sarango', 'Jimenez', '', 'Domingo Sarmiento y Salvador Allende', '2015-09-25', '2023-11-06', 'M', 'N', 'S', '', 0, '', ''),
+(122, 1, '3DE', 'ECU', 'CED', '1151128996', 'Jean', 'Paul', 'Yaguache', 'Vivanco', '', 'San Jacinto parroquia Carigan', '2016-01-28', '2024-06-24', 'M', 'N', 'S', '', 0, '', ''),
+(123, 1, '3DE', 'ECU', 'CED', '1105963506', 'Alan', 'Steven', 'Leon', 'Coronel', '', 'La Paz', '2003-11-04', '2024-06-24', 'M', 'N', 'S', '', 0, '', ''),
+(124, 1, '3DE', 'ECU', 'CED', '1150663589', 'Maria', 'Gabriela', 'Ledesma', 'Jimenez', '', 'Ciudadela Bellavista', '2010-10-15', '2024-06-24', 'F', 'N', 'S', '', 0, '', ''),
+(125, 1, '3DE', 'ECU', 'CED', '1150658969', 'Matias', 'Sebastian', 'Inga', 'Chamba', '', 'Colinas Lojanas', '2010-01-18', '2023-07-17', 'M', 'N', 'S', '', 0, '', ''),
+(126, 1, '3DE', 'ECU', 'CED', '1729589232', 'Yeryck', 'Jesus', 'Valencia', 'Masache', '', 'San Cayetano Bajo, Dublin y Marsella', '2009-04-18', '2024-06-25', 'M', 'N', 'S', '', 0, '', ''),
+(127, 1, '3DE', 'ECU', 'CED', '1150229837', 'David', 'Alejandro', 'Carrión', 'Cuenca', '', 'El Paraíso', '2009-06-21', '2024-06-25', 'M', 'N', 'S', '', 0, '', ''),
+(128, 1, '3DE', 'ECU', 'CED', '0751244922', 'Isaias', 'Alejandro', 'Flores', 'Guaman', '', 'Daniel Álvarez', '2015-07-17', '2024-06-25', 'M', 'N', 'S', '', 0, '', ''),
+(129, 1, '3DE', 'ECU', 'CED', '1103126486', 'Roger', 'Alejandro', 'Carrasco', 'Ruiz', '', 'Colinas Lojanas', '2012-04-20', '2024-06-01', 'M', 'N', 'S', '', 0, '', ''),
+(130, 1, '3DE', 'ECU', 'CED', '1105718793', 'Cristhofer', 'Alexander', 'Pullaguari', 'Jimenez', '', 'Varsovia y París', '2008-08-06', '2023-09-12', 'M', 'N', 'S', '', 0, '', ''),
+(131, 1, '3DE', 'ECU', 'CED', '1151351184', 'Cristian', 'Mathias', 'García', 'Vásquez', '', 'Rocafuerte y Ramón Pinto', '2018-08-26', '2024-04-01', 'M', 'N', 'S', '', 0, '', ''),
+(132, 1, '3DE', 'ECU', 'CED', '1150645651', 'Santiago', 'Fidel', 'Ojeda', 'Cueva', '', 'Daniel Álvarez', '2013-04-30', '2024-02-01', 'M', 'N', 'S', '', 0, '', ''),
+(133, 1, '3DE', 'ECU', 'CED', '1151402250', 'Evan', 'Gabriel', 'Elizalde', 'Mendoza', '', 'Punzara Chico', '2019-04-11', '2023-08-04', 'M', 'N', 'S', '', 0, '', ''),
+(134, 1, '3DE', 'ECU', 'CED', '1151437355', 'Yurem', 'Ezequial', 'Cueva', 'Ludeña', '', '', '2019-09-17', '2024-01-03', 'M', 'N', 'S', '', 0, '', ''),
+(135, 1, '3DE', 'ECU', 'CED', '1150727491', 'Diego', 'Bolívar', 'Quezada', 'Morocho', '', 'Ciprés y acacias-La Pradera', '2013-08-26', '2024-06-25', 'M', 'S', 'S', '', 0, '', ''),
+(136, 1, '3DE', 'ECU', 'CED', '1151404538', 'Unai', 'Matías', 'Laz', 'Dìaz', '', 'Azuay y Nicolás García', '2019-04-19', '2023-02-01', 'M', 'S', 'S', '', 0, '1151404538_A82.jpg', '1151404538_R82.jpg'),
+(137, 1, '3DE', 'ECU', 'CED', '1151296728', 'Mathias', 'Isai', 'Chimbo', 'Guaman', '', 'Avenida de los Paltas y Francia', '2018-01-04', '2024-06-25', 'M', 'N', 'S', '', 0, '1151296728_A62.jpg', '1151296728_R62.jpg'),
+(138, 1, '3DE', 'ECU', 'CED', '1151091566', 'Bryanna', 'Cumanda', 'Guaicha', 'Serrano', '', 'Porfirio Díaz y Hernán Cortés', '2015-08-26', '2024-06-26', 'F', 'N', 'S', '', 0, '', ''),
+(139, 1, '3DE', 'ECU', 'CED', '1151237128', 'Geovanny', 'Jeanpool', 'Guaicha', 'Serrano', '', 'Porfirio Díaz y Hernán Cortés', '2017-04-19', '2024-06-26', 'M', 'S', 'S', '', 0, '', ''),
+(140, 1, '3DE', 'ECU', 'CED', '1151316351', 'David', 'Samuel', 'Morales', 'Pinzón', '', 'Barrio Conzacola', '2018-03-28', '2024-06-26', 'M', 'N', 'S', '', 0, '', ''),
+(141, 1, '3DE', 'ECU', 'CED', '1150902128', 'Mateo', 'Jeiner', 'Jimenez', 'Leon', '', 'Daniel Álvarez', '2014-01-08', '2023-07-10', 'M', 'N', 'S', '', 0, '', ''),
+(142, 1, '3DE', 'ECU', 'CED', '1150826616', 'Joaquín', 'Alejandro', 'Correa', 'Paucar', '', 'Zarzas 2', '2014-01-16', '2021-08-02', 'M', 'N', 'S', '', 0, '', ''),
+(143, 1, '3DE', 'ECU', 'CED', '0151860434', 'Francisco', 'Nicolás', 'Campos', 'Castillo', '', '', '2018-03-23', '2023-02-01', 'M', 'N', 'S', '', 0, '0151860434_A30.jpg', '0151860434_R30.jpg'),
+(144, 1, '3DE', 'ECU', 'CED', '1151367818', 'Erick', 'Andres', 'Poma', 'Calderòn', '', '', '2018-11-05', '2023-09-04', 'M', 'N', 'S', '', 0, '1151367818_A44.jpg', '1151367818_R44.jpg'),
+(145, 1, '3DE', 'ECU', 'CED', '0751485236', 'Ian', 'Samuel', 'Aucay', 'Chamba', '', 'Miraflores, calle Cañarís y Av. de los Paltas', '2017-05-13', '2024-01-08', 'M', 'S', 'S', '', 0, '0751485236_A18.jpg', '0751485236_R18.jpg'),
+(146, 1, '3DE', 'ECU', 'CED', '1151328851', 'Iker', 'Gael', 'Laz', 'Tarupi', '', '', '2018-05-21', '2023-06-01', 'M', 'S', 'S', '', 0, '1151328851_A4.jpg', '1151328851_R4.jpg'),
+(147, 1, '3DE', 'ECU', 'CED', '1151263595', 'Erick', 'Jimar', 'Cabrera', 'Iniguez', '', '', '2017-08-13', '2024-10-02', 'M', 'N', 'S', '', 0, '1151263595_A52.jpg', '1151263595_R52.jpg'),
+(148, 1, '3DE', 'ECU', 'CED', '1151242805', 'Adrian', 'Matheo', 'Cuenca', 'Basurto', '', 'Motupe calles Ángel Felicísimo Rojas y San Agustín', '2017-05-12', '2024-04-01', 'M', 'S', 'S', '', 0, '1151242805_A73.jpg', '1151242805_R73.jpg');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
