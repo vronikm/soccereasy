@@ -22,6 +22,10 @@
 			echo $insAlumno->actualizarAlumnoControlador();
 		}
 
+		if($_POST['modulo_alumno']=="actualizarestado"){
+			echo $insAlumno->actualizarEstadoAlumnoControlador();
+		}
+
 		if($_POST['modulo_alumno']=="eliminarFoto"){
 			echo $insAlumno->eliminarFotoAlumnoControlador();
 		}
