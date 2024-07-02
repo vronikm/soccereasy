@@ -1065,10 +1065,10 @@
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
-			if($datos['alumno_activo']=='S'){
+			if($datos['alumno_activo']=='S' || $datos['alumno_activo']=='N'){
 				$estadoA = 'E';
 			}else{
-				$estadoA = 'S';
+				$estadoA = 'X';
 			}
             $alumno_datos_up=[
 				[
