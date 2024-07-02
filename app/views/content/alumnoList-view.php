@@ -189,7 +189,7 @@
 									<th>Nombres</th>
 									<th>Apellidos</th>
 									<th>Año</th>									
-									<th>Opciones</th>
+									<th style="width: 220px;">Opciones</th>
 								</tr>
 							</thead>
 							<tbody>
