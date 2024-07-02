@@ -798,8 +798,7 @@
 
 			$tabla="";
 			$consulta_datos="SELECT * FROM sujeto_alumno 
-								WHERE alumno_activo <> 'E'
-								AND (alumno_primernombre LIKE '".$primernombre."' 
+								WHERE (alumno_primernombre LIKE '".$primernombre."' 
 								OR alumno_identificacion LIKE '".$identificacion."' 
 								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
 			if($ano!=""){
@@ -821,9 +820,11 @@
 					$consulta_datos .= " and alumno_sedeid = '".$sede."'"; 
 				}
 			}else{
-				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
 			}			
 
+			$consulta_datos .= " AND alumno_activo <> 'E'"; 
+			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
