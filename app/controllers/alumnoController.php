@@ -103,7 +103,7 @@
 		    }
 
 		    # Directorio de imagenes #
-    		$img_dir="../views/fotos/alumno/";
+    		$img_dir="../views/imagenes/fotos/alumno/";
 			$codigo=rand(0,100);
 
     		# Comprobar si se selecciono una imagen #
@@ -1297,7 +1297,7 @@
 
 			# Directorio de fotos #
 			$codigorand=rand(0,100);
-			$img_dir="../views/fotos/alumno/";
+			$img_dir="../views/imagenes/fotos/alumno/";
 
 			# Directorio de imagenes cedula#
 			$dir_cedula="../views/imagenes/cedulas/";
@@ -2181,7 +2181,7 @@
 		    }
 
 		    # Directorio de imagenes #
-    		$img_dir="../views/fotos/";
+    		$img_dir="../views/imagenes/fotos/";
 
     		chmod($img_dir,0777);
 
@@ -2275,7 +2275,7 @@
 		    }
 
 		    # Directorio de imagenes #
-    		$img_dir="../views/fotos/";
+    		$img_dir="../views/imagenes/fotos/";
 
     		# Comprobar si se selecciono una imagen #
     		if($_FILES['usuario_foto']['name']=="" && $_FILES['usuario_foto']['size']<=0){
