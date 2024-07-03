@@ -887,7 +887,7 @@
 		}
 
 		/*----------  Obtener la nacionalidad guardada  ----------*/
-		public function listarOptionNacionalidad_Borrar($alumno_nacionalidadid){
+		public function listarOptionNacionalidad($alumno_nacionalidadid){
 			$option="";
 
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
