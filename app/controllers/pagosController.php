@@ -267,7 +267,7 @@
 		public function listarOptionPago(){
 			$option="";
 
-			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 6 AND catalogo_estado = 1";	
+			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 6 AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -280,7 +280,7 @@
 		public function listarOptionDescuento($descuento_rubroid){
 			$option="";
 
-			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 7 AND catalogo_estado = 1";	
+			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 7 AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -297,7 +297,7 @@
 		public function listarOptionRubro(){
 			$option="";
 
-			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 5 AND catalogo_estado = 1";	
+			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 5 AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1205,7 +1205,7 @@
 				FROM alumno_pago P	
 					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid 
 					INNER JOIN alumno_pago_transaccion PT ON PT.transaccion_pagoid = P.pago_id
-					LEFT JOIN alumno_representante E on E.repre_alumnoid = A.alumno_id
+					LEFT JOIN alumno_representante E on E.repre_alumnoid = P.pago_alumnoid
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid 				
 				WHERE PT.transaccion_id = ".$transaccion_id;	
@@ -1295,7 +1295,7 @@
 		public function listarOptionPagoid($idformapago){
 			$option="";
 
-			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 6 AND catalogo_estado = 1";	
+			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 6 AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

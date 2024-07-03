@@ -887,7 +887,7 @@
 		}
 
 		/*----------  Obtener la nacionalidad guardada  ----------*/
-		public function listarOptionNacionalidad($alumno_nacionalidadid){
+		public function listarOptionNacionalidad_Borrar($alumno_nacionalidadid){
 			$option="";
 
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
@@ -2414,7 +2414,7 @@
 		/* ==================================== Roles ==================================== */
 
 		
-		public function listarOptionRol(){
+		public function listarOptionRol_Borrar(){
 			$option="";
 
 			$consulta_datos="SELECT rol_id, rol_nombre FROM seguridad_rol WHERE rol_activo = 1";	
@@ -2459,7 +2459,7 @@
 			return $option;
 		}
 
-		public function listarOptionSedeAlumno($alumnoid){
+		public function listarOptionSedeAlumno_Borrar($alumnoid){
 			$option="";	
 			$array_ = [];
 			$i=0;

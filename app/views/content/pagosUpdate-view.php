@@ -134,14 +134,14 @@
 										
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="pago_valor">Saldo</label>
+												<label for="pago_valor">Pago</label>
 												<input type="text" class="pull-right form-control" style="text-align:right;" value="<?php echo $datos['pago_valor']; ?>" disabled>
 											</div>
 										</div>
 
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="pago_saldo">Pago</label>
+												<label for="pago_saldo">Saldo</label>
 												<input type="text" class="form-control" style="text-align:right;" value="<?php echo $datos['pago_saldo']; ?>" disabled>
 											</div>
 										</div>								
