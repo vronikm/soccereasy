@@ -77,11 +77,11 @@
             </ul>
 
           </li>
-          <li class="nav-header">Asistencia</li>
+          <li class="nav-header">Horarios</li>
           <li class="nav-item">
             <a href="#" class="nav-link ">
               <i class="nav-icon fas fa-th"></i>
-              <p>Asistencia<i class="fas fa-angle-left right"></i></p>
+              <p>Horarios<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
 
