@@ -45,18 +45,26 @@
 				}
 			}else{
 				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
-			}			
+			}	
+			
+			$consulta_datos .= " AND alumno_activo <> 'E'";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				
-				$consulta_descuento = "SELECT descuento_alumnoid FROM alumno_pago_descuento WHERE descuento_alumnoid = ".$rows['alumno_id'];
+				$consulta_descuento = "SELECT descuento_alumnoid, descuento_estado  FROM alumno_pago_descuento WHERE descuento_alumnoid = ".$rows['alumno_id'];
 				$descuento = $this->ejecutarConsulta($consulta_descuento);
 				if($descuento->rowCount()==1){
-					$boton = "btn-info";
+					foreach($descuento as $rows_descuento){
+						if($rows_descuento["descuento_estado"] == 'N'){
+							$boton = "btn-warning";							
+						}else{
+							$boton = "btn-info";							
+						}
+					}								
 				}else{
-					$boton = "btn-secondary";
+					$boton = "btn-secondary";	
 				}
 				
 				$consulta_pagos = "SELECT pago_id FROM alumno_pago WHERE pago_alumnoid = ".$rows['alumno_id'];
@@ -66,9 +74,15 @@
 				}else{
 					$botonpago = "btn-secondary";
 				}
+
+				if($rows['alumno_activo']=="N"){
+					$class = 'class="text-primary"';
+				}else{
+					$class = '';
+				}
 				
 				$tabla.='
-					<tr>
+					<tr '.$class.'>
 						<td>'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>

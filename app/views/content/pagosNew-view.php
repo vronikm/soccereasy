@@ -12,7 +12,7 @@
 		$datos=$datos->fetch(); 
 		
 		if ($datos['alumno_imagen']!=""){
-			$foto = APP_URL.'app/views/fotos/alumno/'.$datos['alumno_imagen'];
+			$foto = APP_URL.'app/views/imagenes/fotos/alumno/'.$datos['alumno_imagen'];
 		}else{
 			$foto=APP_URL.'app/views/dist/img/alumno.jpg';
 		}
