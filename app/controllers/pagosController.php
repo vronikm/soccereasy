@@ -157,12 +157,6 @@
 			
 			return $datos;
 		}
-
-		public function informacionRepresentante($alumnoid){		
-			$consulta_datos="SELECT repre_correo FROM alumno_representante WHERE repre_alumnoid = ".$alumnoid;
-			$datos = $this->ejecutarConsulta($consulta_datos);		
-			return $datos;
-		}
 		
 		public function AlumnoDescuento($alumnoid){
 		
@@ -304,19 +298,6 @@
 				}else{
 					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
 				}									
-			}
-			return $option;
-		}
-
-		public function listarOptionRubro(){
-			$option="";
-
-			$consulta_datos="SELECT *FROM general_tabla_catalogo WHERE catalogo_tablaid = 5 AND catalogo_estado = 'A'";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){			
-				$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';					
 			}
 			return $option;
 		}
@@ -1199,7 +1180,7 @@
 							INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid
 							INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 							INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
-							LEFT JOIN alumno_representante E on E.repre_alumnoid = P.pago_alumnoid 
+							LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
 							LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
 								FROM alumno_pago_transaccion PT
 								WHERE PT.transaccion_estado = 'C'
@@ -1219,7 +1200,7 @@
 				FROM alumno_pago P	
 					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid 
 					INNER JOIN alumno_pago_transaccion PT ON PT.transaccion_pagoid = P.pago_id
-					LEFT JOIN alumno_representante E on E.repre_alumnoid = P.pago_alumnoid
+					LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid 				
 				WHERE PT.transaccion_id = ".$transaccion_id;	
