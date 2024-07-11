@@ -771,33 +771,6 @@
 			return $option;
 		}
 
-		/* Listar todos los alumnos*/
-		public function listarAlumnos_Borrar(){
-			$tabla="";
-			$fechaM = "";
-			$consulta_datos="SELECT * FROM sujeto_alumno";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				
-				$tabla.='
-					<tr>
-						<td>'.$rows['alumno_identificacion'].'</td>
-						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
-						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
-						<td>'.$rows['alumno_fechanacimiento'].'</td>
-						<td>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-danger btn-xs">Eliminar</a>
-							<a href="'.APP_URL.'alumnoUpdate/'.$rows['alumno_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
-							
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Ver</a>
-						</td>
-					</tr>';	
-			}
-			return $tabla;
-		}
-
 		/*----------  Controlador eliminar alumno  ----------*/
 		public function actualizarEstadoAlumnoControlador(){
 
@@ -906,9 +879,7 @@
 				];
 			}
 			return json_encode($alerta);
-		}
-
-		
+		}		
 
 		/*----------  Controlador actualizar alumno  ----------*/
 		public function actualizarAlumnoControlador(){
@@ -1631,7 +1602,6 @@
 			return json_encode($alerta);
 		}
 
-
 		/*----------  Controlador eliminar foto alumno  ----------*/
 		public function eliminarFotoAlumnoControlador(){
 
@@ -1724,7 +1694,6 @@
 
 			return json_encode($alerta);
 		}
-
 
 		/*----------  Controlador actualizar foto alumno  ----------*/
 		public function actualizarFotoAlumnoControlador(){
@@ -1883,22 +1852,22 @@
 			return json_encode($alerta);
 		}
 
-		/* ==================================== Roles ==================================== */
-
 		
-		public function listarOptionRol_Borrar(){
-			$option="";
-
-			$consulta_datos="SELECT rol_id, rol_nombre FROM seguridad_rol WHERE rol_activo = 1";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-
-				$option.='<option value='.$rows['rol_id'].'>'.$rows['rol_nombre'].'</option>';	
-			}
-			return $option;
+		# Consultar datos del representante para la vista vincular alumno
+		public function datosRepresentante($alumnoid){			
+			$consulta_repre = "SELECT repre_identificacion IDENTIFICACION, 
+									concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
+									catalogo_descripcion PARENTESCO
+									FROM sujeto_alumno, alumno_representante, general_tabla, general_tabla_catalogo
+									WHERE alumno_repreid = repre_id
+										and tabla_id = catalogo_tablaid
+										and repre_parentesco = catalogo_valor
+										and alumno_id =  ".$alumnoid;			
+			$datos = $this->ejecutarConsulta($consulta_repre);		
+			return $datos;
 		}
+
+		/* ==================================== Roles ==================================== */
 
 		public function listarOptionSede(){
 			$option="";
@@ -1930,32 +1899,6 @@
 			}
 			return $option;
 		}
-
-		public function listarOptionSedeAlumno_Borrar($alumnoid){
-			$option="";	
-			$array_ = [];
-			$i=0;
-			$sedeid=$this->seleccionarDatos("Unico","sujeto_alumno","alumno_id",$alumnoid);
-			
-			if(isset($sedeid)){
-				foreach ($sedeid as $key) {		
-					$array_[$i] = $key['alumno_sedeid'];
-					$i += 1;		
-				}				
-			}else{
-				$array_ = [];
-			}
-
-			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				$s=in_array($rows['sede_id'], $array_) ? "selected='selected'" : "";
-				$option.='<option value="'.$rows['sede_id'].'" '.$s.'>'.$rows['sede_nombre'].'</option>';	
-			}
-			return $option;
-		}
 		
 		public function listarCatalogoTipoDocumento(){
 			$option="";
@@ -1980,22 +1923,6 @@
 								FROM general_tabla_catalogo C
 								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
 								WHERE T.tabla_nombre = 'nacionalidad'";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
-			}
-			return $option;
-		}
-		
-		public function listarCatalogoPosicionJuego(){
-			$option="";
-
-			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
-								FROM general_tabla_catalogo C
-								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
-								WHERE T.tabla_nombre = 'posicion_juego'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

@@ -42,6 +42,14 @@
 			$cedulaR = APP_URL.'app/views/imagenes/cedulas/Sinregistro.jpg';
 		}
 
+	$representante=$insAlumno->datosRepresentante($alumnoid);
+	if($representante->rowCount()==1){
+		$representante=$representante->fetch();
+		$repre_identificacion = $representante['IDENTIFICACION'];
+		$repre_nombre 		  = $representante['REPRESENTANTE'];
+		$repre_parentesco	  = $representante['PARENTESCO'];
+	}
+
 	$datosmedic=$insAlumno->seleccionarDatos("Unico","alumno_infomedic","infomedic_alumnoid",$alumnoid);
 	if($datosmedic->rowCount()==1){
 		$datosmedic=$datosmedic->fetch();
@@ -210,6 +218,7 @@
 							<ul class="nav nav-pills">
 								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>
 								<li class="nav-item"><a class="nav-link" href="#cedula" data-toggle="tab">Cédula</a></li>
+								<li class="nav-item"><a class="nav-link" href="#representante" data-toggle="tab">Representante</a></li>
 								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
 								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
 							</ul>
@@ -334,6 +343,30 @@
 										</div>     
 									</div>  <!--./row line 874--> 
 									<!-- Fin segunda sección foto-->			
+								</div>
+
+								<!-- Tab información contacto de emergencia -->
+								<div class="tab-pane" id="representante">
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_identificacion">Identificación</label>
+												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" value="<?php echo $repre_identificacion;?>" disabled="" >                          
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_nombre">Nombre</label>
+												<input type="text" class="form-control" id="repre_nombre" name="repre_nombre" value="<?php echo $repre_nombre;?>" disabled="" >
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="repre_parentesco">Parentesco</label>
+												<input type="text" class="form-control" id="repre_parentesco" name="repre_parentesco" value="<?php echo $repre_parentesco;?>" disabled="" >
+											</div> 
+										</div>
+									</div>		
 								</div>
 
 								<!-- Tab de información médica del alumno -->
