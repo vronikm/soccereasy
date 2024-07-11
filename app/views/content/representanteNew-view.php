@@ -174,7 +174,7 @@
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="repre_celular">Celular</label>
-												<input type="text" class="form-control" id="repre_celular" name="repre_celular" placeholder="+593" required>
+												<input type="text" class="form-control" id="repre_celular" name="repre_celular" data-inputmask='"mask": "0999999999"' data-mask placeholder="Celular" required>
 											</div> 
 										</div>
 										<div class="col-md-3">
@@ -231,7 +231,7 @@
 										<div class="col-md-3">
 											<div class="form-group">
 												<label for="conyuge_celular">Celular</label>
-												<input type="text" class="form-control" id="conyuge_celular" name="conyuge_celular" placeholder="+593" >
+												<input type="text" class="form-control" id="conyuge_celular" name="conyuge_celular" data-inputmask='"mask": "0999999999"' data-mask placeholder="Celular" >
 											</div> 
 										</div>
 										<div class="col-md-3">
