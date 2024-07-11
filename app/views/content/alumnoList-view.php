@@ -175,7 +175,7 @@
 					<div class="card-header">
 						<h3 class="card-title">Resultado de la búsqueda</h3>
 						<div class="card-tools">
-							<a href="<?php echo APP_URL; ?>alumnoNew/" class="btn btn-primary btn-sm" >Nuevo Alumno</a>
+							<a href="<?php echo APP_URL; ?>representanteList/" class="btn btn-primary btn-sm" >Nuevo Alumno</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
