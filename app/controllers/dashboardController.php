@@ -6,23 +6,23 @@
 
 		/*----------  Obtener total alumnos activos  ----------*/
 		public function obtenerAlumnosActivosSedeL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeL FROM sujeto_alumno WHERE alumno_activo='S' and alumno_sedeid = 1");
+			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeL FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 1");
 		    return $alumnosActivosSedeL;
 		}
 
 		public function obtenerAlumnosActivosSedeC(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeC FROM sujeto_alumno WHERE alumno_activo='S' and alumno_sedeid = 2");
+			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeC FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 2");
 		    return $alumnosActivosSedeC;
 		}
 
 		/*----------  Obtener total alumnos inactivos  ----------*/
 		public function obtenerAlumnosInactivosSedeL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeL FROM sujeto_alumno WHERE alumno_activo='E' and alumno_sedeid = 1");
+			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeL FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 1");
 		    return $alumnosActivosSedeL;
 		}
 
 		public function obtenerAlumnosInactivosSedeC(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeC FROM sujeto_alumno WHERE alumno_activo='E' and alumno_sedeid = 2");
+			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeC FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 2");
 		    return $alumnosActivosSedeC;
 		}
 

@@ -1,6 +1,11 @@
 <?php
+	use app\controllers\representanteController;
+	$insRepre = new representanteController();
+
 	use app\controllers\alumnoController;
-	$insAlumno = new alumnoController();	
+	$insAlumno = new alumnoController();
+	
+	$repreid=$insAlumno->limpiarCadena($url[1]);
 ?>
 
 <!DOCTYPE html>
@@ -103,11 +108,10 @@
 					<div class="card">
 						<div class="card-header p-2">
 							<ul class="nav nav-pills">
-								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>											
-								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
-								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>
-								<li class="nav-item"><a class="nav-link" href="#representante" data-toggle="tab">Representante</a></li>
+								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>
 								<li class="nav-item"><a class="nav-link" href="#cedula" data-toggle="tab">Cédula</a></li>
+								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
+								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
 							</ul>
 						</div><!-- /.card-header -->
 					
@@ -116,478 +120,316 @@
 								<!-- Tab de información personal del alumno -->
 								<div class="active tab-pane" id="informacionp"> 
 									<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/alumnoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">
-									<input type="hidden" name="modulo_alumno" value="registrar">																						
+										<input type="hidden" name="modulo_alumno" value="registrar">	
+										<input type="hidden" name="alumno_repreid" value="<?php echo $repreid; ?>">																					
 
-									<!-- Primera sección foto-->
-									<div class="row">
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="alumno_foto">Foto (250KB)</label>		
-												<div class="input-group">											
-													<div class="fileinput fileinput-new" data-provides="fileinput">
-														<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput">
-															<img src=""></div>
-														<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
-														<div>
-															<span class="bton bton-white bton-file">
-																<span class="fileinput-new">Seleccionar Foto</span>
-																<span class="fileinput-exists">Cambiar</span>
-																<input type="file" name="alumno_foto" id="foto" accept="image/*">
-															</span>
-															<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
-														</div>
-													</div>
-												</div>		
-											</div>
-											<!-- /.form-group -->	
-										</div>
-										<div class="col-md-10"> 
-											<div class="row">
-												<div class="col-md-4">
-													<div class="form-group">
-														<label for="alumno_identificacion">Identificación</label>                        
-														<input type="text" class="form-control" id="alumno_identificacion" name="alumno_identificacion" placeholder="Identificación" required="required">
-													</div>
-												</div>											
-												<div class="col-md-4">                        
-													<div class="form-group">
-														<label for="alumno_apellido1">Apellido paterno</label>
-														<input type="text" class="form-control" id="alumno_apellido1" name="alumno_apellido1" placeholder="Primer apellido" required="required">
-													</div>
-												</div>
-												<div class="col-md-4">
-													<label for="alumno_apellido2">Apellido materno</label>
-													<input type="text" class="form-control" id="alumno_apellido2" name="alumno_apellido2" placeholder="Segundo apellido">
-												</div>
-												<div class="col-sm-4">
-													<div class="form-group">
-														<label for="alumno_tipoidentificacion">Tipo identificación</label>
-														<select id="alumno_tipoidentificacion" class="form-control select2" name="alumno_tipoidentificacion">																					
-															<?php echo $insAlumno->listarCatalogoTipoDocumento(); ?>
-														</select>
-													</div>          
-												</div>
-												<div class="col-md-4">                        
-													<div class="form-group">
-														<label for="alumno_nombre1">Primer nombre</label>
-														<input type="text" class="form-control" id="alumno_nombre1" name="alumno_nombre1" placeholder="Primer nombre" required="required">
-													</div>
-												</div>
-												<div class="col-md-4">
-													<label for="alumno_nombre2">Segundo nombre</label>
-													<input type="text" class="form-control" id="alumno_nombre2" name="alumno_nombre2" placeholder="Segundo nombre">
-												</div>    
-												<div class="col-md-4">
-													<div class="form-group">
-														<label for="alumno_nacionalidadid">Nacionalidad</label>
-														<select class="form-control select2" style="width: 100%;" id="alumno_nacionalidadid" name="alumno_nacionalidadid">
-															<?php echo $insAlumno->listarCatalogoNacionalidad(); ?>
-														</select>
-													</div> 
-												</div>
-												<div class="col-md-4">									
-													<div class="form-group">
-														<label for="alumno_fechanacimiento">Fecha nacimiento</label>
-														<div class="input-group">
-															<div class="input-group-prepend">
-																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+										<!-- Primera sección foto-->
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="alumno_foto">Foto (250KB)</label>		
+													<div class="input-group">											
+														<div class="fileinput fileinput-new" data-provides="fileinput">
+															<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput">
+																<img src=""></div>
+															<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
+															<div>
+																<span class="bton bton-white bton-file">
+																	<span class="fileinput-new">Seleccionar Foto</span>
+																	<span class="fileinput-exists">Cambiar</span>
+																	<input type="file" name="alumno_foto" id="foto" accept="image/*">
+																</span>
+																<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
 															</div>
-															<input type="date" class="form-control" name="alumno_fechanacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required="required">
 														</div>
-													<!-- /.input group -->
-													</div>												
+													</div>		
 												</div>
-												<div class="col-md-4">
-													<div class="form-group">
-														<label for="alumno_genero">Sexo</label>
-														<div class="form-check">
-															<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" required="required">
-															<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>
-															<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoF" name="alumno_genero" value="F">
-															<label class="col-sm-4 form-check-label" for="alumno_generoF">Femenino</label>
-														</div> 
-													</div>
-												</div>
+												<!-- /.form-group -->	
 											</div>
-											<!-- Fin primera sección foto-->
-										</div>
-									</div> <!--fin col md 10-->
-
-									<!-- Segunda sección foto-->
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label for="alumno_direccion">Dirección</label>
-												<textarea class="form-control" id="alumno_direccion" name="alumno_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
-											</div>	
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="alumno_hermanos">Tiene hermanos?</label>
-												<!-- radio -->
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="alumno_hermanosSi" name="alumno_hermanos" value="S" required="required">
-													<label class="col-sm-6 form-check-label" for="alumno_hermanosSi">Si</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="alumno_hermanosNo" name="alumno_hermanos" value="N" >
-													<label class="col-sm-4 form-check-label" for="alumno_hermanosNo">No</label>
-												</div>
-											</div>
-										</div>	
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="alumno_fechaingreso">Fecha ingreso</label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-													</div>
-													<input type="date" class="form-control" name="alumno_fechaingreso" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required="required">
-												</div>
-											<!-- /.input group -->
-											</div>								
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="alumno_sedeid">Sede</label>
-												<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">									
-													<?php echo $insAlumno->listarOptionSede(); ?>
-												</select>	
-											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-											<label for="alumno_nombrecorto">Nombre corto</label>
-											<input type="text" class="form-control" id="alumno_nombrecorto" name= "alumno_nombrecorto" placeholder="Nombre corto">
-											</div> 
-										</div>
-										<div class="col-sm-2">
-											<div class="form-group">
-												<label for="alumno_posicionid">Posición de juego</label>
-												<select class="form-control custom-select" style="width: 100%;" id="alumno_posicionid" name="alumno_posicionid">
-													<?php echo $insAlumno->listarCatalogoPosicionJuego(); ?>
-												</select>
-											</div>          
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="Numcamiseta">Número de camiseta</label>
-												<input type="text" class="form-control" id="alumno_numcamiseta" name="alumno_numcamiseta" placeholder="Número de camiseta"> 
-											</div>
-										</div>           
-									</div>  <!--./row line 874--> 
-									<!-- Fin segunda sección foto-->			
-								</div>
-
-								<!-- Tab de información médica del alumno -->
-								<div class="tab-pane" id="informacionm">
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="infomedic_tiposangre">Tipo de sangre</label>
-												<input type="text" class="form-control" id="infomedic_tiposangre" name="infomedic_tiposangre" placeholder="Tipo de sangre">                          
-											</div>
-										</div> 
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Peso">Peso (Kg)</label>
-												<input type="text" class="form-control" id="infomedic_peso" name="infomedic_peso" placeholder="Peso en kilogramos">                          
-											</div>
-										</div>   
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Talla">Talla (cm)</label>
-												<input type="text" class="form-control" id="infomedic_talla" name="infomedic_talla" placeholder="Talla en centímetros">                          
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Enfermedad">Enfermedad diagnosticada</label>
-												<input type="text" class="form-control" id="infomedic_enfermedad" name="infomedic_enfermedad" placeholder="Breve descripción de enfermedad">                          
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Medicamentos">Medicamentos</label>
-												<input type="text" class="form-control" id="infomedic_medicamentos" name="infomedic_medicamentos" placeholder="Breve descripción de dósis de medicamentos">                          
-											</div>
-										</div> 
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Alergia1">Alergia a medicamentos</label>
-												<input type="text" class="form-control" id="infomedic_alergia1" name="infomedic_alergia1" placeholder="Alergia a medicamentos">                          
-											</div>
-										</div> 
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Alergia2">Alergia a objetos</label>
-												<input type="text" class="form-control" id="infomedic_alergia2" name="infomedic_alergia2" placeholder="Alergia a objetos">                          
-											</div>
-										</div>  
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Cirugias">Cirugías</label>
-												<input type="text" class="form-control" id="infomedic_cirugias" name="infomedic_cirugias" placeholder="Breve descripción de cirugías">                          
-											</div>
-										</div>  
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Observacion">Observación</label>
-												<input type="text" class="form-control" id="infomedic_observacion" name="infomedic_observacion" placeholder="Observacion">                          
-											</div>
-										</div>  
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Covid">Carnet vacunación Covid</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="infomedic_covidSi" name="infomedic_covid" value="S" >
-													<label class="col-sm-6 form-check-label" for="infomedic_covidSi">Si</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="infomedic_covidNo" name="infomedic_covid" value="N" >
-													<label class="col-sm-4 form-check-label" for="infomedic_covidNo">No</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="Vacunas">Carnet vacunación habitual</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="infomedic_vacunasSi" name="infomedic_vacunas" value="S" >
-													<label class="col-sm-6 form-check-label" for="infomedic_vacunasSi">Si</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="infomedic_vacunasNo" name="infomedic_vacunas" value="N" >
-													<label class="col-sm-4 form-check-label" for="infomedic_vacunasNo">No</label>
-												</div>                         
-											</div>
-										</div>  
-									</div>
-								</div>
-
-								<!-- Tab información contacto de emergencia -->
-								<div class="tab-pane" id="contactoem">
-									<div class="row">
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="CEmergencia">Celular</label>
-												<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" placeholder="+593">                          
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="Nomcontactoemer">Nombre contacto</label>
-												<input type="text" class="form-control" id="cemer_nombre" name="cemer_nombre" placeholder="Nombre contacto">                          
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="cemer_parentesco">Parentesco</label>
-												<select class="form-control select2" style="width: 100%;" id="cemer_parentesco" name="cemer_parentesco">
-													<?php echo $insAlumno->listarCatalogoParentesco(); ?>
-												</select>
-											</div> 
-										</div>
-									</div>		
-								</div>
-
-								<!-- Tab información del representante del alumno -->
-								<div class="tab-pane" id="representante">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_identificacion">Identificación</label>                        
-												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" placeholder="Identificación" required="required">
-											</div>
-										</div>                   
-										<div class="col-md-4">                        
-											<div class="form-group">
-												<label for="repre_apellidopaterno">Apellido paterno</label>
-												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" placeholder="Primer apellido" required="required">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<label for="repre_apellidomaterno">Apellido materno</label>
-											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" placeholder="Segundo apellido" >
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label for="repre_tipoidentificacion">Tipo identificación</label>
-												<select id="repre_tipoidentificacion" class="form-control custom-select2" name="repre_tipoidentificacion">
-													<?php echo $insAlumno->listarCatalogoTipoDocumento(); ?>
-												</select>
-											</div>          
-										</div>
-										<div class="col-md-3">                        
-											<div class="form-group">
-												<label for="repre_primernombre">Primer nombre</label>
-												<input type="text" class="form-control" id="repre_primernombre" name="repre_primernombre" placeholder="Primer nombre" required="required">
-											</div>
-										</div>
-										<div class="col-md-3">
-											<label for="repre_segundonombre">Segundo nombre</label>
-											<input type="text" class="form-control" id="repre_segundonombre" name="repre_segundonombre" placeholder="Segundo nombre" >
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_parentesco">Parentesco</label>
-												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco">
-													<?php echo $insAlumno->listarCatalogoParentesco(); ?>
-												</select>
-											</div> 
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_direccion">Dirección</label>
-												<textarea class="form-control" id="repre_direccion" name="repre_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria" required></textarea>
-											</div>
-										</div>              
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_correo">Correo</label>
-												<input type="text" class="form-control" id="repre_correo" name="repre_correo" placeholder="Correo" required="required">
-											</div> 
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="repre_celular">Celular</label>
-												<input type="text" class="form-control" id="repre_celular" name="repre_celular" placeholder="+593" required="required">
-											</div> 
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" required="required">
-													<label class="col-sm-5 form-check-label" for="repre_sexoM">Masculino</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" name="repre_sexo"  value="F" >
-													<label class="col-sm-4 form-check-label" for="repre_sexoF">Femenino</label>
-												</div> 
-											</div>
-										</div>
-										<!-- /.container-fluid conyuge representante -->
-										<div class="container-fluid">
-											<div class="card-header">
-												<h3 class="card-title">Cónyuge del representante</h3>
-											</div>  
-											<!-- card-body -->
-											<div class="card-body">
+											<div class="col-md-10"> 
 												<div class="row">
-													<div class="col-sm-3">
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for="TidentificacionCRep">Tipo identificación</label>
-															<select id="conyuge_tipoidentificacion" class="form-control custom-select2" name="conyuge_tipoidentificacion">
+															<label for="alumno_identificacion">Identificación</label>                        
+															<input type="text" class="form-control" id="alumno_identificacion" name="alumno_identificacion" placeholder="Identificación" required="required">
+														</div>
+													</div>											
+													<div class="col-md-4">                        
+														<div class="form-group">
+															<label for="alumno_apellido1">Apellido paterno</label>
+															<input type="text" class="form-control" id="alumno_apellido1" name="alumno_apellido1" placeholder="Primer apellido" required="required">
+														</div>
+													</div>
+													<div class="col-md-4">
+														<label for="alumno_apellido2">Apellido materno</label>
+														<input type="text" class="form-control" id="alumno_apellido2" name="alumno_apellido2" placeholder="Segundo apellido">
+													</div>
+													<div class="col-sm-4">
+														<div class="form-group">
+															<label for="alumno_tipoidentificacion">Tipo identificación</label>
+															<select id="alumno_tipoidentificacion" class="form-control select2" name="alumno_tipoidentificacion">																					
 																<?php echo $insAlumno->listarCatalogoTipoDocumento(); ?>
 															</select>
 														</div>          
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-4">                        
 														<div class="form-group">
-															<label for="conyuge_identificacion">Identificación</label>                        
-															<input type="text" class="form-control" id="conyuge_identificacion" name="conyuge_identificacion" placeholder="Identificación">
-														</div>
-													</div>                   
-													<div class="col-md-3">                        
-														<div class="form-group">
-															<label for="conyuge_apellidopaterno">Apellido paterno</label>
-															<input type="text" class="form-control" id="conyuge_apellidopaterno" name="conyuge_apellidopaterno" placeholder="Primer apellido" >
+															<label for="alumno_nombre1">Primer nombre</label>
+															<input type="text" class="form-control" id="alumno_nombre1" name="alumno_nombre1" placeholder="Primer nombre" required="required">
 														</div>
 													</div>
-													<div class="col-md-3">
-														<label for="conyuge_apellidomaterno">Apellido materno</label>
-														<input type="text" class="form-control" id="conyuge_apellidomaterno" name="conyuge_apellidomaterno" placeholder="Segundo apellido" >
-													</div>
-													<div class="col-md-3">                        
+													<div class="col-md-4">
+														<label for="alumno_nombre2">Segundo nombre</label>
+														<input type="text" class="form-control" id="alumno_nombre2" name="alumno_nombre2" placeholder="Segundo nombre">
+													</div>    
+													<div class="col-md-4">
 														<div class="form-group">
-															<label for="conyuge_primernombre">Primer nombre</label>
-															<input type="text" class="form-control" id="conyuge_primernombre" name="conyuge_primernombre" placeholder="Primer nombre" >
-														</div>
-													</div>
-													<div class="col-md-3">
-														<label for="conyuge_segundonombre">Segundo nombre</label>
-														<input type="text" class="form-control" id="conyuge_segundonombre" name="conyuge_segundonombre" placeholder="Segundo nombre" >
-													</div>
-													<div class="col-md-3">
-														<div class="form-group">
-															<label for="conyuge_celular">Celular</label>
-															<input type="text" class="form-control" id="conyuge_celular" name="conyuge_celular" placeholder="+593">
+															<label for="alumno_nacionalidadid">Nacionalidad</label>
+															<select class="form-control select2" style="width: 100%;" id="alumno_nacionalidadid" name="alumno_nacionalidadid">
+																<?php echo $insAlumno->listarCatalogoNacionalidad(); ?>
+															</select>
 														</div> 
 													</div>
-													<div class="col-md-3">
+													<div class="col-md-4">									
 														<div class="form-group">
-															<label for="conyuge_correo">Correo</label>
-															<input type="text" class="form-control" id="conyuge_correo" name="conyuge_correo" placeholder="Correo">
-														</div> 
+															<label for="alumno_fechanacimiento">Fecha nacimiento</label>
+															<div class="input-group">
+																<div class="input-group-prepend">
+																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+																</div>
+																<input type="date" class="form-control" name="alumno_fechanacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required="required">
+															</div>
+														<!-- /.input group -->
+														</div>												
 													</div>
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="conyuge_direccion">Dirección</label>
-															<textarea class="form-control" id="conyuge_direccion" name="conyuge_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
+															<label for="alumno_fechaingreso">Fecha ingreso</label>
+															<div class="input-group">
+																<div class="input-group-prepend">
+																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+																</div>
+																<input type="date" class="form-control" name="alumno_fechaingreso" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required="required">
+															</div>
+														<!-- /.input group -->
+														</div>								
+													</div>
+												</div>
+												<!-- Fin primera sección foto-->
+											</div>
+										</div> <!--fin col md 10-->
+
+										<!-- Segunda sección foto-->
+										<div class="row">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="Numcamiseta">Número de camiseta</label>
+													<input type="text" class="form-control" id="alumno_numcamiseta" name="alumno_numcamiseta" placeholder="Número de camiseta"> 
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="alumno_sedeid">Sede</label>
+													<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">									
+														<?php echo $insAlumno->listarOptionSede(); ?>
+													</select>	
+												</div>
+											</div> 
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="alumno_direccion">Dirección</label>
+													<textarea class="form-control" id="alumno_direccion" name="alumno_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
+												</div>	
+											</div>  
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="alumno_hermanos">Tiene hermanos?</label>
+													<!-- radio -->
+													<div class="form-check">
+														<input class="col-sm-1 form-check-input" type="radio" id="alumno_hermanosSi" name="alumno_hermanos" value="S" required="required">
+														<label class="col-sm-6 form-check-label" for="alumno_hermanosSi">Si</label>
+														<input class="col-sm-1 form-check-input" type="radio" id="alumno_hermanosNo" name="alumno_hermanos" value="N" >
+														<label class="col-sm-4 form-check-label" for="alumno_hermanosNo">No</label>
+													</div>
+												</div>
+											</div>	 
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="alumno_genero">Sexo</label>
+													<div class="form-check">
+														<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" required="required">
+														<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>
+														<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoF" name="alumno_genero" value="F">
+														<label class="col-sm-4 form-check-label" for="alumno_generoF">Femenino</label>
+													</div> 
+												</div>
+											</div>       
+										</div>  <!--./row line 874--> 
+										<!-- Fin segunda sección foto-->			
+								</div>
+
+									<!-- Tab de información médica del alumno -->
+									<div class="tab-pane" id="informacionm">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="infomedic_tiposangre">Tipo de sangre</label>
+													<input type="text" class="form-control" id="infomedic_tiposangre" name="infomedic_tiposangre" placeholder="Tipo de sangre">                          
+												</div>
+											</div> 
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Peso">Peso (Kg)</label>
+													<input type="text" class="form-control" id="infomedic_peso" name="infomedic_peso" placeholder="Peso en kilogramos">                          
+												</div>
+											</div>   
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Talla">Talla (cm)</label>
+													<input type="text" class="form-control" id="infomedic_talla" name="infomedic_talla" placeholder="Talla en centímetros">                          
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Enfermedad">Enfermedad diagnosticada</label>
+													<input type="text" class="form-control" id="infomedic_enfermedad" name="infomedic_enfermedad" placeholder="Breve descripción de enfermedad">                          
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Medicamentos">Medicamentos</label>
+													<input type="text" class="form-control" id="infomedic_medicamentos" name="infomedic_medicamentos" placeholder="Breve descripción de dósis de medicamentos">                          
+												</div>
+											</div> 
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Alergia1">Alergia a medicamentos</label>
+													<input type="text" class="form-control" id="infomedic_alergia1" name="infomedic_alergia1" placeholder="Alergia a medicamentos">                          
+												</div>
+											</div> 
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Alergia2">Alergia a objetos</label>
+													<input type="text" class="form-control" id="infomedic_alergia2" name="infomedic_alergia2" placeholder="Alergia a objetos">                          
+												</div>
+											</div>  
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Cirugias">Cirugías</label>
+													<input type="text" class="form-control" id="infomedic_cirugias" name="infomedic_cirugias" placeholder="Breve descripción de cirugías">                          
+												</div>
+											</div>  
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Observacion">Observación</label>
+													<input type="text" class="form-control" id="infomedic_observacion" name="infomedic_observacion" placeholder="Observacion">                          
+												</div>
+											</div>  
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Covid">Carnet vacunación Covid</label>
+													<div class="form-check">
+														<input class="col-sm-1 form-check-input" type="radio" id="infomedic_covidSi" name="infomedic_covid" value="S" >
+														<label class="col-sm-6 form-check-label" for="infomedic_covidSi">Si</label>
+														<input class="col-sm-1 form-check-input" type="radio" id="infomedic_covidNo" name="infomedic_covid" value="N" >
+														<label class="col-sm-4 form-check-label" for="infomedic_covidNo">No</label>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="Vacunas">Carnet vacunación habitual</label>
+													<div class="form-check">
+														<input class="col-sm-1 form-check-input" type="radio" id="infomedic_vacunasSi" name="infomedic_vacunas" value="S" >
+														<label class="col-sm-6 form-check-label" for="infomedic_vacunasSi">Si</label>
+														<input class="col-sm-1 form-check-input" type="radio" id="infomedic_vacunasNo" name="infomedic_vacunas" value="N" >
+														<label class="col-sm-4 form-check-label" for="infomedic_vacunasNo">No</label>
+													</div>                         
+												</div>
+											</div>  
+										</div>
+									</div>
+
+									<!-- Tab información contacto de emergencia -->
+									<div class="tab-pane" id="contactoem">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="CEmergencia">Celular</label>
+													<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" placeholder="+593">                          
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="form-group">
+													<label for="Nomcontactoemer">Nombre contacto</label>
+													<input type="text" class="form-control" id="cemer_nombre" name="cemer_nombre" placeholder="Nombre contacto">                          
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="cemer_parentesco">Parentesco</label>
+													<select class="form-control select2" style="width: 100%;" id="cemer_parentesco" name="cemer_parentesco">
+														<?php echo $insAlumno->listarCatalogoParentesco(); ?>
+													</select>
+												</div> 
+											</div>
+										</div>		
+									</div>
+
+									<!-- Tab cedula del alumno -->
+									<div class="tab-pane" id="cedula">
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="alumno_cedulaA">Anverso</label>		
+													<div class="input-group">											
+														<div class="fileinput fileinput-new" data-provides="fileinput">
+															<div class="fileinput-new thumbnail" style="width: 330px; height: 210px;" data-trigger="fileinput">
+																<img src=""></div>
+															<div class="fileinput-preview fileinput-exists thumbnail" style="width: 330px; height: 210px"></div>
+															<div>
+																<span class="bton bton-white bton-file">
+																	<span class="fileinput-new">Seleccionar Foto</span>
+																	<span class="fileinput-exists">Cambiar</span>
+																	<input type="file" name="alumno_cedulaA" id="foto" accept="image/*">
+																</span>
+																<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
+															</div>
 														</div>
-													</div>              
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="conyuge_sexo">Sexo</label>
-															<div class="form-check">
-																<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" value="M" >
-																<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>
-																<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoF" name="conyuge_sexo" value="F">
-																<label class="col-sm-4 form-check-label" for="conyuge_sexoF">Femenino</label>
-															</div> 
+													</div>		
+												</div>
+												<!-- /.form-group -->	
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="alumno_cedulaR">Reverso</label>		
+													<div class="input-group">											
+														<div class="fileinput fileinput-new" data-provides="fileinput">
+															<div class="fileinput-new thumbnail" style="width: 330px; height: 210px;" data-trigger="fileinput">
+																<img src=""></div>
+															<div class="fileinput-preview fileinput-exists thumbnail" style="width: 330px; height: 210px"></div>
+															<div>
+																<span class="bton bton-white bton-file">
+																	<span class="fileinput-new">Seleccionar Foto</span>
+																	<span class="fileinput-exists">Cambiar</span>
+																	<input type="file" name="alumno_cedulaR" id="foto" accept="image/*">
+																</span>
+																<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
+															</div>
 														</div>
-													</div>               
-												</div>										
+													</div>		
+												</div>
+												<!-- /.form-group -->	
 											</div>
 										</div>
 									</div>
-								</div>
-								
-								<!-- Tab cedula del alumno -->
-								<div class="tab-pane" id="cedula">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="alumno_cedulaA">Anverso</label>		
-												<div class="input-group">											
-													<div class="fileinput fileinput-new" data-provides="fileinput">
-														<div class="fileinput-new thumbnail" style="width: 330px; height: 210px;" data-trigger="fileinput">
-															<img src=""></div>
-														<div class="fileinput-preview fileinput-exists thumbnail" style="width: 330px; height: 210px"></div>
-														<div>
-															<span class="bton bton-white bton-file">
-																<span class="fileinput-new">Seleccionar Foto</span>
-																<span class="fileinput-exists">Cambiar</span>
-																<input type="file" name="alumno_cedulaA" id="foto" accept="image/*">
-															</span>
-															<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
-														</div>
-													</div>
-												</div>		
-											</div>
-											<!-- /.form-group -->	
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="alumno_cedulaR">Reverso</label>		
-												<div class="input-group">											
-													<div class="fileinput fileinput-new" data-provides="fileinput">
-														<div class="fileinput-new thumbnail" style="width: 330px; height: 210px;" data-trigger="fileinput">
-															<img src=""></div>
-														<div class="fileinput-preview fileinput-exists thumbnail" style="width: 330px; height: 210px"></div>
-														<div>
-															<span class="bton bton-white bton-file">
-																<span class="fileinput-new">Seleccionar Foto</span>
-																<span class="fileinput-exists">Cambiar</span>
-																<input type="file" name="alumno_cedulaR" id="foto" accept="image/*">
-															</span>
-															<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
-														</div>
-													</div>
-												</div>		
-											</div>
-											<!-- /.form-group -->	
-										</div>
-									</div>	
-									<div class="card-footer">						
-										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
-									</div>	
+									
+										<div class="card-footer">						
+											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+										</div>	
 									</form>	
-								</div>
+
 								<!-- /.tab-pane -->
 							</div>
 							<!-- /.tab-content -->

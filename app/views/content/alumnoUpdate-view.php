@@ -114,88 +114,6 @@
 		$cemer_celular		="";
 		$cemer_parentesco	="";
 	}
-
-	$datosrepresentante=$insAlumno->seleccionarDatos("Unico","alumno_representante","repre_alumnoid",$alumnoid);
-
-	if($datosrepresentante->rowCount()==1){
-		$datosrepresentante=$datosrepresentante->fetch();
-		if ($datosrepresentante['repre_sexo']=='M'){
-			$repre_sexoM = "checked";
-		}else{
-			$repre_sexoM = "";
-		}
-
-		if ($datosrepresentante['repre_sexo']=='F'){
-			$repre_sexoF = "checked";
-		}else{
-			$repre_sexoF = "";
-		}
-
-		$repre_id					= $datosrepresentante['repre_id'];
-		$repre_tipoidentificacion 	= $datosrepresentante['repre_tipoidentificacion'];
-		$repre_identificacion 	  	= $datosrepresentante['repre_identificacion'];
-		$repre_primernombre		  	= $datosrepresentante['repre_primernombre'];
-		$repre_segundonombre 	 	= $datosrepresentante['repre_segundonombre'];
-		$repre_apellidopaterno 	  	= $datosrepresentante['repre_apellidopaterno'];
-		$repre_apellidomaterno 	 	= $datosrepresentante['repre_apellidomaterno'];
-		$repre_direccion 		  	= $datosrepresentante['repre_direccion'];
-		$repre_correo 			  	= $datosrepresentante['repre_correo'];
-		$repre_celular 			  	= $datosrepresentante['repre_celular'];
-		$repre_parentesco 		  	= $datosrepresentante['repre_parentesco'];
-	}else{
-		$repre_id					= "";
-		$repre_tipoidentificacion 	= "";
-		$repre_identificacion 	  	= "";
-		$repre_primernombre		  	= "";
-		$repre_segundonombre 	 	= "";
-		$repre_apellidopaterno 	  	= "";
-		$repre_apellidomaterno 	 	= "";
-		$repre_direccion 		  	= "";
-		$repre_correo 			  	= "";
-		$repre_celular 			  	= "";
-		$repre_parentesco 		  	= "";		
-		$repre_sexoF 				= "";
-		$repre_sexoM 				= "";
-	}
-
-	$datosconyugerep=$insAlumno->seleccionarDatos("Unico","alumno_representanteconyuge","conyuge_repid",$repre_id);
-	if($datosconyugerep->rowCount()==1){
-		$datosconyugerep=$datosconyugerep->fetch();
-		$conyuge_tipoidentificacion		=$datosconyugerep['conyuge_tipoidentificacion'];
-		$conyuge_identificacion			=$datosconyugerep['conyuge_identificacion'];
-		$conyuge_primernombre			=$datosconyugerep['conyuge_primernombre'];
-		$conyuge_segundonombre			=$datosconyugerep['conyuge_segundonombre'];
-		$conyuge_apellidopaterno		=$datosconyugerep['conyuge_apellidopaterno'];
-		$conyuge_apellidomaterno		=$datosconyugerep['conyuge_apellidomaterno'];
-		$conyuge_direccion				=$datosconyugerep['conyuge_direccion'];
-		$conyuge_correo					=$datosconyugerep['conyuge_correo'];
-		$conyuge_celular				=$datosconyugerep['conyuge_celular'];
-		
-		if ($datosconyugerep['conyuge_sexo']=='M'){
-			$conyuge_sexoM = "checked";
-		}else{
-			$conyuge_sexoM = "";
-		}
-
-		if ($datosconyugerep['conyuge_sexo']=='F'){
-			$conyuge_sexoF = "checked";
-		}else{
-			$conyuge_sexoF = "";
-		}
-
-	}else{
-		$conyuge_tipoidentificacion	="";
-		$conyuge_identificacion		="";
-		$conyuge_primernombre		="";
-		$conyuge_segundonombre		="";
-		$conyuge_apellidopaterno	="";
-		$conyuge_apellidomaterno	="";
-		$conyuge_direccion			="";
-		$conyuge_correo				="";
-		$conyuge_celular			="";
-		$conyuge_sexoM 				="";
-		$conyuge_sexoF 				="";
-	}
 ?>
 
 <!DOCTYPE html>
@@ -301,11 +219,10 @@
 					<div class="card">
 						<div class="card-header p-2">
 							<ul class="nav nav-pills">
-								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>											
-								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
-								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>
-								<li class="nav-item"><a class="nav-link" href="#representante" data-toggle="tab">Representante</a></li>
+								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>
 								<li class="nav-item"><a class="nav-link" href="#cedula" data-toggle="tab">Cédula</a></li>
+								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
+								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
 							</ul>
 						</div><!-- /.card-header -->
 					
@@ -394,14 +311,15 @@
 												</div>
 												<div class="col-md-4">
 													<div class="form-group">
-														<label for="alumno_genero">Sexo</label>
-														<div class="form-check">
-															<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" <?php echo $alumno_generoM; ?> required>
-															<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>
-															<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoF" name="alumno_genero" value="F" <?php echo $alumno_generoF; ?>>
-															<label class="col-sm-4 form-check-label" for="alumno_generoF">Femenino</label>
-														</div> 
-													</div>
+														<label for="alumno_fechaingreso">Fecha ingreso</label>
+														<div class="input-group">
+															<div class="input-group-prepend">
+																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+															</div>
+															<input type="date" class="form-control" name="alumno_fechaingreso" value="<?php echo $datos['alumno_fechaingreso']; ?>" required>
+														</div>
+													<!-- /.input group -->
+													</div>								
 												</div>
 											</div>
 											<!-- Fin primera sección foto-->
@@ -409,14 +327,28 @@
 									</div> <!--fin col md 10-->
 
 									<!-- Segunda sección foto-->
-									<div class="row">
-									<div class="col-md-6">
+									<div class="row">										
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="Numcamiseta">Número de camiseta</label>
+												<input type="text" class="form-control" id="alumno_numcamiseta" name="alumno_numcamiseta" value="<?php echo $datos['alumno_numcamiseta']; ?>"> 
+											</div>
+										</div>  
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="alumno_sedeid">Sede</label>
+												<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">									
+													<?php echo $insAlumno->listarSedeAlumno($datos['alumno_sedeid']); ?>
+												</select>	
+											</div>
+										</div> 
+										<div class="col-md-3">
 											<div class="form-group">
 												<label for="alumno_direccion">Dirección</label>
 												<input type="text" class="form-control" id="alumno_direccion" name="alumno_direccion" value="<?php echo $datos['alumno_direccion']; ?>">
 											</div>	
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-2">
 											<div class="form-group">
 												<label for="alumno_hermanos">Tiene hermanos?</label>
 												<!-- radio -->
@@ -427,47 +359,18 @@
 													<label class="col-sm-4 form-check-label" for="alumno_hermanosNo">No</label>
 												</div>
 											</div>
-										</div>	
+										</div>	  
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="alumno_fechaingreso">Fecha ingreso</label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-													</div>
-													<input type="date" class="form-control" name="alumno_fechaingreso" value="<?php echo $datos['alumno_fechaingreso']; ?>" required>
-												</div>
-											<!-- /.input group -->
-											</div>								
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="alumno_sedeid">Sede</label>
-												<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">									
-													<?php echo $insAlumno->listarSedeAlumno($datos['alumno_sedeid']); ?>
-												</select>	
+												<label for="alumno_genero">Sexo</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" <?php echo $alumno_generoM; ?> required>
+													<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoF" name="alumno_genero" value="F" <?php echo $alumno_generoF; ?>>
+													<label class="col-sm-4 form-check-label" for="alumno_generoF">Femenino</label>
+												</div> 
 											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="alumno_nombrecorto">Nombre corto</label>
-												<input type="text" class="form-control" id="alumno_nombrecorto" name= "alumno_nombrecorto" value="<?php echo $datos['alumno_nombrecorto']; ?>">
-											</div> 
-										</div>
-										<div class="col-sm-2">
-											<div class="form-group">
-												<label for="alumno_posicionid">Posición de juego</label>
-												<select class="form-control custom-select" style="width: 100%;" id="alumno_posicionid" name="alumno_posicionid">
-													<?php echo $insAlumno->listarOptionPosicionJuego($datos['alumno_posicionid']); ?>
-												</select>
-											</div>          
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="Numcamiseta">Número de camiseta</label>
-												<input type="text" class="form-control" id="alumno_numcamiseta" name="alumno_numcamiseta" value="<?php echo $datos['alumno_numcamiseta']; ?>"> 
-											</div>
-										</div>        
+										</div>   
 									</div>  <!--./row line 874--> 
 									<!-- Fin segunda sección foto-->			
 								</div>
@@ -579,158 +482,6 @@
 										</div>
 									</div>		
 								</div>
-
-								<!-- Tab información del representante del alumno -->
-								<div class="tab-pane" id="representante">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_identificacion">Identificación</label>                        
-												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" value="<?php echo $repre_identificacion; ?>" required>
-											</div>
-										</div>                   
-										<div class="col-md-4">                        
-											<div class="form-group">
-												<label for="repre_apellidopaterno">Apellido paterno</label>
-												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" value="<?php echo $repre_apellidopaterno; ?>" required>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<label for="repre_apellidomaterno">Apellido materno</label>
-											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" value="<?php echo $repre_apellidomaterno; ?>" >
-										</div>
-										<div class="col-sm-3">
-											<div class="form-group">
-												<label for="repre_tipoidentificacion">Tipo identificación</label>
-												<select id="repre_tipoidentificacion" class="form-control custom-select2" name="repre_tipoidentificacion">
-													<?php echo $insAlumno->listarOptionTipoIdentificacion($repre_tipoidentificacion); ?>
-												</select>
-											</div>          
-										</div>
-										<div class="col-md-3">                        
-											<div class="form-group">
-												<label for="repre_primernombre">Primer nombre</label>
-												<input type="text" class="form-control" id="repre_primernombre" name="repre_primernombre" value="<?php echo $repre_primernombre; ?>" required>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<label for="repre_segundonombre">Segundo nombre</label>
-											<input type="text" class="form-control" id="repre_segundonombre" name="repre_segundonombre" value="<?php echo $repre_segundonombre; ?>" >
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_parentesco">Parentesco</label>
-												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco">
-													<?php echo $insAlumno->listarOptionParentesco($repre_parentesco); ?>
-												</select>
-											</div> 
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_direccion">Dirección</label>
-												<input type="text" class="form-control" id="repre_direccion" name="repre_direccion" value="<?php echo $repre_direccion; ?>" required>
-											</div>
-										</div>              
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_correo">Correo</label>
-												<input type="text" class="form-control" id="repre_correo" name="repre_correo" value="<?php echo $repre_correo; ?>" required>
-											</div> 
-										</div>
-										<div class="col-md-2">
-											<div class="form-group">
-												<label for="repre_celular">Celular</label>
-												<input type="text" class="form-control" id="repre_celular" name="repre_celular" value="<?php echo $repre_celular; ?>" required>
-											</div> 
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
-												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" <?php echo $repre_sexoM;?> required>
-													<label class="col-sm-5 form-check-label" for="repre_sexoM">Masculino</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" name="repre_sexo" value="F" <?php echo $repre_sexoF;?> >
-													<label class="col-sm-4 form-check-label" for="repre_sexoF">Femenino</label>
-												</div> 
-											</div>
-										</div>
-										<!-- /.container-fluid conyuge representante -->
-										<div class="container-fluid">
-											<div class="card-header">
-												<h3 class="card-title">Cónyuge del representante</h3>
-											</div>  
-											<!-- card-body -->
-											<div class="card-body">
-												<div class="row">
-													<div class="col-sm-3">
-														<div class="form-group">
-															<label for="TidentificacionCRep">Tipo identificación</label>
-															<select id="conyuge_tipoidentificacion" class="form-control custom-select2" name="conyuge_tipoidentificacion">
-																<?php echo $insAlumno->listarOptionTipoIdentificacion($conyuge_tipoidentificacion); ?>
-															</select>
-														</div>          
-													</div>
-													<div class="col-md-3">
-														<div class="form-group">
-															<label for="conyuge_identificacion">Identificación</label>                        
-															<input type="text" class="form-control" id="conyuge_identificacion" name="conyuge_identificacion" value="<?php echo $conyuge_identificacion;?>" >
-														</div>
-													</div>                   
-													<div class="col-md-3">                        
-														<div class="form-group">
-															<label for="conyuge_apellidopaterno">Apellido paterno</label>
-															<input type="text" class="form-control" id="conyuge_apellidopaterno" name="conyuge_apellidopaterno" value="<?php echo $conyuge_apellidopaterno;?>" >
-														</div>
-													</div>
-													<div class="col-md-3">
-														<label for="conyuge_apellidomaterno">Apellido materno</label>
-														<input type="text" class="form-control" id="conyuge_apellidomaterno" name="conyuge_apellidomaterno" value="<?php echo $conyuge_apellidomaterno;?>" >
-													</div>
-													<div class="col-md-3">                        
-														<div class="form-group">
-															<label for="conyuge_primernombre">Primer nombre</label>
-															<input type="text" class="form-control" id="conyuge_primernombre" name="conyuge_primernombre" value="<?php echo $conyuge_primernombre;?>" >
-														</div>
-													</div>
-													<div class="col-md-3">
-														<label for="conyuge_segundonombre">Segundo nombre</label>
-														<input type="text" class="form-control" id="conyuge_segundonombre" name="conyuge_segundonombre" value="<?php echo $conyuge_segundonombre;?>" >
-													</div>
-													<div class="col-md-3">
-														<div class="form-group">
-															<label for="conyuge_celular">Celular</label>
-															<input type="text" class="form-control" id="conyuge_celular" name="conyuge_celular" value="<?php echo $conyuge_celular;?>">
-														</div> 
-													</div>
-													<div class="col-md-3">
-														<div class="form-group">
-															<label for="conyuge_correo">Correo</label>
-															<input type="text" class="form-control" id="conyuge_correo" name="conyuge_correo" value="<?php echo $conyuge_correo;?>">
-														</div> 
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="conyuge_direccion">Dirección</label>
-															<input type="text" class="form-control" id="conyuge_direccion" name="conyuge_direccion" value="<?php echo $conyuge_direccion; ?>" >
-														</div>
-													</div>              
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="conyuge_sexo">Sexo</label>
-															<div class="form-check">
-																<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" value="M" <?php echo $conyuge_sexoM;?> >
-																<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>
-																<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoF" name="conyuge_sexo" value="F" <?php echo $conyuge_sexoF;?> >
-																<label class="col-sm-4 form-check-label" for="conyuge_sexoF">Femenino</label>
-															</div> 
-														</div>
-													</div>               
-												</div>										
-											</div>
-										</div>
-									</div>								
-								</div>
-								<!-- /.tab-pane -->
 								
 								<!-- Tab cedula del alumno -->
 								<div class="tab-pane" id="cedula">

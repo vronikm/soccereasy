@@ -6,8 +6,9 @@
 	class alumnoController extends mainModel{
 
 		/*----------  Controlador registrar alumno  ----------*/		
-		public function registrarAlumnoControlador(){			
+		public function registrarAlumnoControlador(){						
 			/*---------------Variables para el registro del tab del alumno----------------*/
+			$alumno_repreid 			= $this->limpiarCadena($_POST['alumno_repreid']);
 			$alumno_identificacion 		= $this->limpiarCadena($_POST['alumno_identificacion']);
 			$alumno_apellidopaterno 	= $this->limpiarCadena($_POST['alumno_apellido1']);
 			$alumno_apellidomaterno 	= $this->limpiarCadena($_POST['alumno_apellido2']);
@@ -19,40 +20,14 @@
 			$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion']);	
 			$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso']);
 			$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid']);
-			$alumno_nombrecorto 		= $this->limpiarCadena($_POST['alumno_nombrecorto']);
-			$alumno_posicionid			= $this->limpiarCadena($_POST['alumno_posicionid']);					
+			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
+			$alumno_posicionid			= ""; //$this->limpiarCadena($_POST['alumno_posicionid']);					
 			$alumno_numcamiseta 		= $_POST['alumno_numcamiseta'];
-			$alumno_activo 				= "S";
+			$alumno_estado 				= "A";
 			$alumno_genero 				= "";
 			$alumno_hermanos 			= "";
 
-			/*---------------Variables para el registro del tab Representante del alumno----------------*/
-			$repre_tipoidentificacion 	= $this->limpiarCadena($_POST['repre_tipoidentificacion']);
-			$repre_identificacion 	  	= $this->limpiarCadena($_POST['repre_identificacion']);
-			$repre_primernombre		  	= $this->limpiarCadena($_POST['repre_primernombre']);
-			$repre_segundonombre 	 	= $this->limpiarCadena($_POST['repre_segundonombre']);
-			$repre_apellidopaterno 	  	= $this->limpiarCadena($_POST['repre_apellidopaterno']);
-			$repre_apellidomaterno 	 	= $this->limpiarCadena($_POST['repre_apellidomaterno']);
-			$repre_direccion 		  	= $this->limpiarCadena($_POST['repre_direccion']);
-			$repre_correo 			  	= $this->limpiarCadena($_POST['repre_correo']);
-			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
-			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
-			$repre_sexo 			  	= "";
-		
 			if ($alumno_numcamiseta == "" ){$alumno_numcamiseta = 0;}
-
-			if (isset($_POST['repre_sexo'])){$repre_sexo = $_POST['repre_sexo'];}	
-
-			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
-				$repre_direccion=="" || $repre_correo=="" || $repre_celular==""){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
-						"texto"=>"No ha completado los campos obligatorios del representante del alumno",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-			}
 
 			if (isset($_POST['alumno_genero']) && isset($_POST['alumno_hermanos'])) {
 				$alumno_genero 				= $_POST['alumno_genero'];
@@ -341,6 +316,11 @@
 				
 		    $alumno_datos_reg=[
 				[
+					"campo_nombre"=>"alumno_repreid",
+					"campo_marcador"=>":Repreid",
+					"campo_valor"=>$alumno_repreid
+				],
+				[
 					"campo_nombre"=>"alumno_sedeid",
 					"campo_marcador"=>":Sedeid",
 					"campo_valor"=>$alumno_sedeid
@@ -416,9 +396,9 @@
 					"campo_valor"=>$alumno_hermanos
 				],
 				[
-					"campo_nombre"=>"alumno_activo",
+					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Activo",
-					"campo_valor"=>$alumno_activo
+					"campo_valor"=>$alumno_estado
 				],
 				[
 					"campo_nombre"=>"alumno_imagen",
@@ -589,181 +569,6 @@
 					$this->guardarDatos("alumno_cemergencia",$cemergencia_reg);
 				}
 			 	/*---------------Fin de registro del tab Contacto Emergencia del alumno------*/
-
-   				/*---------------Registro del tab Representante del alumno----------------*/
-				$representante_reg=[
-					[
-						"campo_nombre"=>"repre_alumnoid",
-						"campo_marcador"=>":Alumnoid",
-						"campo_valor"=>$alumnoid
-					],						
-					[
-						"campo_nombre"=>"repre_tipoidentificacion",
-						"campo_marcador"=>":TipoIdentificacionRep",
-						"campo_valor"=>$repre_tipoidentificacion
-					],
-					[
-						"campo_nombre"=>"repre_identificacion",
-						"campo_marcador"=>":IdnetificacionRep",
-						"campo_valor"=>$repre_identificacion
-					],
-					[
-						"campo_nombre"=>"repre_primernombre",
-						"campo_marcador"=>":PrimerNombreRep",
-						"campo_valor"=>$repre_primernombre
-					],						
-					[
-						"campo_nombre"=>"repre_segundonombre",
-						"campo_marcador"=>":SegundoNombreRep",
-						"campo_valor"=>$repre_segundonombre
-					],						
-					[
-						"campo_nombre"=>"repre_apellidopaterno",
-						"campo_marcador"=>":ApellidoPatRep",
-						"campo_valor"=>$repre_apellidopaterno
-					],
-					[
-						"campo_nombre"=>"repre_apellidomaterno",
-						"campo_marcador"=>":ApellidoMaternoRep",
-						"campo_valor"=>$repre_apellidomaterno
-					],
-					[
-						"campo_nombre"=>"repre_direccion",
-						"campo_marcador"=>":DireccionRep",
-						"campo_valor"=>$repre_direccion
-					],						
-					[
-						"campo_nombre"=>"repre_correo",
-						"campo_marcador"=>":CorreoRep",
-						"campo_valor"=>$repre_correo
-					],						
-					[
-						"campo_nombre"=>"repre_celular",
-						"campo_marcador"=>":CelularRep",
-						"campo_valor"=>$repre_celular
-					],
-					[
-						"campo_nombre"=>"repre_sexo",
-						"campo_marcador"=>":SexoRep",
-						"campo_valor"=>$repre_sexo
-					],
-					[
-						"campo_nombre"=>"repre_parentesco",
-						"campo_marcador"=>":ParentescoRep",
-						"campo_valor"=>$repre_parentesco
-					]
-				];
-
-				$registrar_alumno_representante=$this->guardarDatos("alumno_representante",$representante_reg);
-				if($registrar_alumno_representante->rowCount()>0){
-
-					/*---------------Obtengo campo alumnoid para la tabla alumno_representanteconyuge-------------*/
-					$check_representanteid=$this->ejecutarConsulta("SELECT repre_id FROM alumno_representante WHERE repre_identificacion='$repre_identificacion'");
-			
-					if($check_representanteid->rowCount()==1){
-						$representante=$check_representanteid->fetchAll(); 					
-						foreach( $representante as $rows ){
-							$representanteid = $rows['repre_id'];
-						}				
-
-						/*---------------Registro de la información del cónyuge del representante del alumno---------*/
-						
-						/*---------------Variables para el registro del cónyuge del representante del alumno----------------*/
-						$conyuge_tipoidentificacion = $this->limpiarCadena($_POST['conyuge_tipoidentificacion']);
-						$conyuge_identificacion 	= $this->limpiarCadena($_POST['conyuge_identificacion']);
-						$conyuge_primernombre		= $this->limpiarCadena($_POST['conyuge_primernombre']);
-						$conyuge_segundonombre 	 	= $this->limpiarCadena($_POST['conyuge_segundonombre']);
-						$conyuge_apellidopaterno 	= $this->limpiarCadena($_POST['conyuge_apellidopaterno']);
-						$conyuge_apellidomaterno 	= $this->limpiarCadena($_POST['conyuge_apellidomaterno']);
-						$conyuge_direccion 		  	= $this->limpiarCadena($_POST['conyuge_direccion']);
-						$conyuge_correo 			= $this->limpiarCadena($_POST['conyuge_correo']);
-						$conyuge_celular 		  	= $this->limpiarCadena($_POST['conyuge_celular']);
-						$conyuge_sexo 			  	= "";
-
-						if (isset($_POST['conyuge_sexo'])){$conyuge_sexo = $_POST['conyuge_sexo'];}else{$conyuge_sexo = "";}
-				
-						
-						if($conyuge_identificacion!="" || $conyuge_primernombre!="" || $conyuge_segundonombre!="" || $conyuge_apellidopaterno!=""||
-							$conyuge_apellidomaterno!="" || $conyuge_direccion!="" || $conyuge_correo!="" || $conyuge_celular!=""){
-
-							$conyuge_reg=[
-								[
-									"campo_nombre"=>"conyuge_repid",
-									"campo_marcador"=>":Representanteid",
-									"campo_valor"=>$representanteid
-								],					
-								[
-									"campo_nombre"=>"conyuge_tipoidentificacion",
-									"campo_marcador"=>":TipoIdentificacionCRep",
-									"campo_valor"=>$conyuge_tipoidentificacion
-								],
-								[
-									"campo_nombre"=>"conyuge_identificacion",
-									"campo_marcador"=>":IdentificacionCRep",
-									"campo_valor"=>$conyuge_identificacion
-								],
-								[
-									"campo_nombre"=>"conyuge_primernombre",
-									"campo_marcador"=>":PrimerNombreCRep",
-									"campo_valor"=>$conyuge_primernombre
-								],						
-								[
-									"campo_nombre"=>"conyuge_segundonombre",
-									"campo_marcador"=>":SegundoNombreCRep",
-									"campo_valor"=>$conyuge_segundonombre
-								],						
-								[
-									"campo_nombre"=>"conyuge_apellidopaterno",
-									"campo_marcador"=>":ApellidoPatCRep",
-									"campo_valor"=>$conyuge_apellidopaterno
-								],
-								[
-									"campo_nombre"=>"conyuge_apellidomaterno",
-									"campo_marcador"=>":ApellidoMaternoCRep",
-									"campo_valor"=>$conyuge_apellidomaterno
-								],
-								[
-									"campo_nombre"=>"conyuge_direccion",
-									"campo_marcador"=>":DireccionCRep",
-									"campo_valor"=>$conyuge_direccion
-								],						
-								[
-									"campo_nombre"=>"conyuge_correo",
-									"campo_marcador"=>":CorreoCRep",
-									"campo_valor"=>$conyuge_correo
-								],						
-								[
-									"campo_nombre"=>"conyuge_celular",
-									"campo_marcador"=>":CelularCRep",
-									"campo_valor"=>$conyuge_celular
-								],
-								[
-									"campo_nombre"=>"conyuge_sexo",
-									"campo_marcador"=>":SexoCRep",
-									"campo_valor"=>$conyuge_sexo
-								]
-							];
-
-							$registrar_conyuge_rep=$this->guardarDatos("alumno_representanteconyuge",$conyuge_reg);
-							if($registrar_conyuge_rep->rowCount()>0){
-								$alerta=[
-									"tipo"=>"limpiar",
-									"titulo"=>"Alumno registrado",
-									"texto"=>"El alumno ".$alumno_identificacion." | ".$alumno_primernombre." ".$alumno_apellidopaterno." se registró con éxito",
-									"icono"=>"success"
-								]; 
-							}else{
-								$alerta=[
-									"tipo"=>"simple",
-									"titulo"=>"Ocurrió un error",
-									"texto"=>"No fue posible registrar la información de cónyuge del representante del alumno, por favor intente nuevamente",
-									"icono"=>"error"
-								];
-							}
-						}				
-					}								
-				}	
-				/*---------------Fin de registro de la información del cónyuge del representante del alumno*/ 	
 			}else{				
 				if(is_file($img_dir.$foto)){
 					chmod($img_dir.$foto,0777);
@@ -823,12 +628,12 @@
 				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
 			}			
 
-			$consulta_datos .= " AND alumno_activo <> 'E'"; 
+			$consulta_datos .= " AND alumno_estado <> 'E'"; 
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				if($rows['alumno_activo']=='S'){
+				if($rows['alumno_estado']=='A'){
 					$estado = "Activo";
 					$texto = "Inactivar";
 					$boton = "btn-secondary";
@@ -1011,14 +816,14 @@
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
-			if($datos['alumno_activo']=='S'){
-				$estadoA = 'N';
+			if($datos['alumno_estado']=='A'){
+				$estadoA = 'I';
 			}else{
-				$estadoA = 'S';
+				$estadoA = 'A';
 			}
             $alumno_datos_up=[
 				[
-					"campo_nombre"=>"alumno_activo",
+					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=> $estadoA
 				]
@@ -1066,14 +871,14 @@
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
-			if($datos['alumno_activo']=='S' || $datos['alumno_activo']=='N'){
+			if($datos['alumno_estado']=='A' || $datos['alumno_estado']=='I'){
 				$estadoA = 'E';
 			}else{
 				$estadoA = 'X';
 			}
             $alumno_datos_up=[
 				[
-					"campo_nombre"=>"alumno_activo",
+					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=> $estadoA
 				]
@@ -1136,40 +941,14 @@
 			$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion']);	
 			$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso']);
 			$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid']);
-			$alumno_nombrecorto 		= $this->limpiarCadena($_POST['alumno_nombrecorto']);
-			$alumno_posicionid			= $this->limpiarCadena($_POST['alumno_posicionid']);					
+			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
+			$alumno_posicionid			= ""; //$this->limpiarCadena($_POST['alumno_posicionid']);					
 			$alumno_numcamiseta 		= $_POST['alumno_numcamiseta'];
-			$alumno_activo 				= "S";
+			$alumno_estado 				= "A";
 			$alumno_genero 				= "";
 			$alumno_hermanos 			= "";
 
-			/*---------------Variables para el registro del tab Representante del alumno----------------*/
-			$repre_tipoidentificacion 	= $this->limpiarCadena($_POST['repre_tipoidentificacion']);
-			$repre_identificacion 	  	= $this->limpiarCadena($_POST['repre_identificacion']);
-			$repre_primernombre		  	= $this->limpiarCadena($_POST['repre_primernombre']);
-			$repre_segundonombre 	 	= $this->limpiarCadena($_POST['repre_segundonombre']);
-			$repre_apellidopaterno 	  	= $this->limpiarCadena($_POST['repre_apellidopaterno']);
-			$repre_apellidomaterno 	 	= $this->limpiarCadena($_POST['repre_apellidomaterno']);
-			$repre_direccion 		  	= $this->limpiarCadena($_POST['repre_direccion']);
-			$repre_correo 			  	= $this->limpiarCadena($_POST['repre_correo']);
-			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
-			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
-			$repre_sexo 			  	= "";
-
 			if ($alumno_numcamiseta == ""){$alumno_numcamiseta = 0;}
-
-			if (isset($_POST['repre_sexo'])){$repre_sexo = $_POST['repre_sexo'];}
-
-			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
-				$repre_direccion=="" || $repre_correo=="" || $repre_celular==""){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
-						"texto"=>"No ha completado los campos obligatorios del representante del alumno",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-			}
 
 			if (isset($_POST['alumno_genero']) && isset($_POST['alumno_hermanos'])) {
 				$alumno_genero 				= $_POST['alumno_genero'];
@@ -1284,9 +1063,9 @@
 					"campo_valor"=>$alumno_hermanos
 				],
 				[
-					"campo_nombre"=>"alumno_activo",
+					"campo_nombre"=>"alumno_estado",
 					"campo_marcador"=>":Activo",
-					"campo_valor"=>$alumno_activo
+					"campo_valor"=>$alumno_estado
 				],				
 				[
 					"campo_nombre"=>"alumno_numcamiseta",
@@ -1841,312 +1620,6 @@
 
 				}
 				/*---------------Fin de registro del tab Contacto Emergencia del alumno------*/
-
-   				/*---------------Registro del tab Representante del alumno----------------*/		
-				$representante=$this->ejecutarConsulta("SELECT * FROM alumno_representante WHERE repre_alumnoid='$alumnoid'");
-				if($representante->rowCount()>0){	
-					$representante_reg=[										
-						[
-							"campo_nombre"=>"repre_tipoidentificacion",
-							"campo_marcador"=>":TipoIdentificacionRep",
-							"campo_valor"=>$repre_tipoidentificacion
-						],
-						[
-							"campo_nombre"=>"repre_identificacion",
-							"campo_marcador"=>":IdnetificacionRep",
-							"campo_valor"=>$repre_identificacion
-						],
-						[
-							"campo_nombre"=>"repre_primernombre",
-							"campo_marcador"=>":PrimerNombreRep",
-							"campo_valor"=>$repre_primernombre
-						],						
-						[
-							"campo_nombre"=>"repre_segundonombre",
-							"campo_marcador"=>":SegundoNombreRep",
-							"campo_valor"=>$repre_segundonombre
-						],						
-						[
-							"campo_nombre"=>"repre_apellidopaterno",
-							"campo_marcador"=>":ApellidoPatRep",
-							"campo_valor"=>$repre_apellidopaterno
-						],
-						[
-							"campo_nombre"=>"repre_apellidomaterno",
-							"campo_marcador"=>":ApellidoMaternoRep",
-							"campo_valor"=>$repre_apellidomaterno
-						],
-						[
-							"campo_nombre"=>"repre_direccion",
-							"campo_marcador"=>":DireccionRep",
-							"campo_valor"=>$repre_direccion
-						],						
-						[
-							"campo_nombre"=>"repre_correo",
-							"campo_marcador"=>":CorreoRep",
-							"campo_valor"=>$repre_correo
-						],						
-						[
-							"campo_nombre"=>"repre_celular",
-							"campo_marcador"=>":CelularRep",
-							"campo_valor"=>$repre_celular
-						],
-						[
-							"campo_nombre"=>"repre_sexo",
-							"campo_marcador"=>":SexoRep",
-							"campo_valor"=>$repre_sexo
-						],
-						[
-							"campo_nombre"=>"repre_parentesco",
-							"campo_marcador"=>":ParentescoRep",
-							"campo_valor"=>$repre_parentesco
-						]
-					];
-					$condicion=[
-						"condicion_campo"=>"repre_alumnoid",
-						"condicion_marcador"=>":Alumnoid",
-						"condicion_valor"=>$alumnoid
-					];				
-
-					$this->actualizarDatos("alumno_representante",$representante_reg,$condicion);
-				}else{
-					if($repre_tipoidentificacion!="" || $repre_identificacion!="" || $$repre_primernombre!=""||	$repre_segundonombre!="" ||
-					   $repre_apellidopaterno!="" || $repre_apellidomaterno!="" || $repre_direccion!="" || $repre_correo!="" ||
-					   $repre_celular!="" || $repre_parentesco!="" || $repre_sexo!=""){
-				
-						$representante_reg=[
-							[
-								"campo_nombre"=>"repre_alumnoid",
-								"campo_marcador"=>":Alumnoid",
-								"campo_valor"=>$alumnoid
-							],						
-							[
-								"campo_nombre"=>"repre_tipoidentificacion",
-								"campo_marcador"=>":TipoIdentificacionRep",
-								"campo_valor"=>$repre_tipoidentificacion
-							],
-							[
-								"campo_nombre"=>"repre_identificacion",
-								"campo_marcador"=>":IdnetificacionRep",
-								"campo_valor"=>$repre_identificacion
-							],
-							[
-								"campo_nombre"=>"repre_primernombre",
-								"campo_marcador"=>":PrimerNombreRep",
-								"campo_valor"=>$repre_primernombre
-							],						
-							[
-								"campo_nombre"=>"repre_segundonombre",
-								"campo_marcador"=>":SegundoNombreRep",
-								"campo_valor"=>$repre_segundonombre
-							],						
-							[
-								"campo_nombre"=>"repre_apellidopaterno",
-								"campo_marcador"=>":ApellidoPatRep",
-								"campo_valor"=>$repre_apellidopaterno
-							],
-							[
-								"campo_nombre"=>"repre_apellidomaterno",
-								"campo_marcador"=>":ApellidoMaternoRep",
-								"campo_valor"=>$repre_apellidomaterno
-							],
-							[
-								"campo_nombre"=>"repre_direccion",
-								"campo_marcador"=>":DireccionRep",
-								"campo_valor"=>$repre_direccion
-							],						
-							[
-								"campo_nombre"=>"repre_correo",
-								"campo_marcador"=>":CorreoRep",
-								"campo_valor"=>$repre_correo
-							],						
-							[
-								"campo_nombre"=>"repre_celular",
-								"campo_marcador"=>":CelularRep",
-								"campo_valor"=>$repre_celular
-							],
-							[
-								"campo_nombre"=>"repre_sexo",
-								"campo_marcador"=>":SexoRep",
-								"campo_valor"=>$repre_sexo
-							],
-							[
-								"campo_nombre"=>"repre_parentesco",
-								"campo_marcador"=>":ParentescoRep",
-								"campo_valor"=>$repre_parentesco
-							]
-						];
-						
-						$this->guardarDatos("alumno_representante",$representante_reg);
-					}
-				}
-
-				/*---------------Registro de la información del cónyuge del representante del alumno---------*/
-					
-				/*---------------Variables para el registro del cónyuge del representante del alumno----------------*/
-				
-
-				$check_representanteid=$this->ejecutarConsulta("SELECT repre_id FROM alumno_representante WHERE repre_identificacion='$repre_identificacion'");
-				if($check_representanteid->rowCount()>0){
-					$representante=$check_representanteid->fetchAll(); 					
-					foreach( $representante as $rows ){
-						$representanteid = $rows['repre_id'];
-						
-					}
-
-					$conyuge_tipoidentificacion = $this->limpiarCadena($_POST['conyuge_tipoidentificacion']);
-					$conyuge_identificacion 	= $this->limpiarCadena($_POST['conyuge_identificacion']);
-					$conyuge_primernombre		= $this->limpiarCadena($_POST['conyuge_primernombre']);
-					$conyuge_segundonombre 	 	= $this->limpiarCadena($_POST['conyuge_segundonombre']);
-					$conyuge_apellidopaterno 	= $this->limpiarCadena($_POST['conyuge_apellidopaterno']);
-					$conyuge_apellidomaterno 	= $this->limpiarCadena($_POST['conyuge_apellidomaterno']);
-					$conyuge_direccion 		  	= $this->limpiarCadena($_POST['conyuge_direccion']);
-					$conyuge_correo 			= $this->limpiarCadena($_POST['conyuge_correo']);
-					$conyuge_celular 		  	= $this->limpiarCadena($_POST['conyuge_celular']);
-					$conyuge_sexo 			  	= "";
-
-					if (isset($_POST['conyuge_sexo'])){$conyuge_sexo = $_POST['conyuge_sexo'];}	
-
-					$conyuge=$this->ejecutarConsulta("SELECT * FROM alumno_representanteconyuge WHERE conyuge_repid='$representanteid'");
-					if($conyuge->rowCount()>0){				
-						
-						$conyuge_reg=[
-							[
-								"campo_nombre"=>"conyuge_repid",
-								"campo_marcador"=>":Representanteid",
-								"campo_valor"=>$representanteid
-							],					
-							[
-								"campo_nombre"=>"conyuge_tipoidentificacion",
-								"campo_marcador"=>":TipoIdentificacionCRep",
-								"campo_valor"=>$conyuge_tipoidentificacion
-							],
-							[
-								"campo_nombre"=>"conyuge_identificacion",
-								"campo_marcador"=>":IdentificacionCRep",
-								"campo_valor"=>$conyuge_identificacion
-							],
-							[
-								"campo_nombre"=>"conyuge_primernombre",
-								"campo_marcador"=>":PrimerNombreCRep",
-								"campo_valor"=>$conyuge_primernombre
-							],						
-							[
-								"campo_nombre"=>"conyuge_segundonombre",
-								"campo_marcador"=>":SegundoNombreCRep",
-								"campo_valor"=>$conyuge_segundonombre
-							],						
-							[
-								"campo_nombre"=>"conyuge_apellidopaterno",
-								"campo_marcador"=>":ApellidoPatCRep",
-								"campo_valor"=>$conyuge_apellidopaterno
-							],
-							[
-								"campo_nombre"=>"conyuge_apellidomaterno",
-								"campo_marcador"=>":ApellidoMaternoCRep",
-								"campo_valor"=>$conyuge_apellidomaterno
-							],
-							[
-								"campo_nombre"=>"conyuge_direccion",
-								"campo_marcador"=>":DireccionCRep",
-								"campo_valor"=>$conyuge_direccion
-							],						
-							[
-								"campo_nombre"=>"conyuge_correo",
-								"campo_marcador"=>":CorreoCRep",
-								"campo_valor"=>$conyuge_correo
-							],						
-							[
-								"campo_nombre"=>"conyuge_celular",
-								"campo_marcador"=>":CelularCRep",
-								"campo_valor"=>$conyuge_celular
-							],
-							[
-								"campo_nombre"=>"conyuge_sexo",
-								"campo_marcador"=>":SexoCRep",
-								"campo_valor"=>$conyuge_sexo
-							]
-						];
-
-						$condicion=[
-							"condicion_campo"=>"conyuge_repid",
-							"condicion_marcador"=>":Representanteid",
-							"condicion_valor"=>$representanteid
-						];
-						
-						$this->actualizarDatos("alumno_representanteconyuge",$conyuge_reg,$condicion);
-
-					}else{			
-
-						if($conyuge_identificacion!="" || $conyuge_primernombre!="" || $conyuge_segundonombre!="" || $conyuge_apellidopaterno!=""||
-						$conyuge_apellidomaterno!="" || $conyuge_direccion!="" || $conyuge_correo!="" || $conyuge_celular!=""){
-
-							$conyuge_reg=[
-								[
-									"campo_nombre"=>"conyuge_repid",
-									"campo_marcador"=>":Representanteid",
-									"campo_valor"=>$representanteid
-								],					
-								[
-									"campo_nombre"=>"conyuge_tipoidentificacion",
-									"campo_marcador"=>":TipoIdentificacionCRep",
-									"campo_valor"=>$conyuge_tipoidentificacion
-								],
-								[
-									"campo_nombre"=>"conyuge_identificacion",
-									"campo_marcador"=>":IdentificacionCRep",
-									"campo_valor"=>$conyuge_identificacion
-								],
-								[
-									"campo_nombre"=>"conyuge_primernombre",
-									"campo_marcador"=>":PrimerNombreCRep",
-									"campo_valor"=>$conyuge_primernombre
-								],						
-								[
-									"campo_nombre"=>"conyuge_segundonombre",
-									"campo_marcador"=>":SegundoNombreCRep",
-									"campo_valor"=>$conyuge_segundonombre
-								],						
-								[
-									"campo_nombre"=>"conyuge_apellidopaterno",
-									"campo_marcador"=>":ApellidoPatCRep",
-									"campo_valor"=>$conyuge_apellidopaterno
-								],
-								[
-									"campo_nombre"=>"conyuge_apellidomaterno",
-									"campo_marcador"=>":ApellidoMaternoCRep",
-									"campo_valor"=>$conyuge_apellidomaterno
-								],
-								[
-									"campo_nombre"=>"conyuge_direccion",
-									"campo_marcador"=>":DireccionCRep",
-									"campo_valor"=>$conyuge_direccion
-								],						
-								[
-									"campo_nombre"=>"conyuge_correo",
-									"campo_marcador"=>":CorreoCRep",
-									"campo_valor"=>$conyuge_correo
-								],						
-								[
-									"campo_nombre"=>"conyuge_celular",
-									"campo_marcador"=>":CelularCRep",
-									"campo_valor"=>$conyuge_celular
-								],
-								[
-									"campo_nombre"=>"conyuge_sexo",
-									"campo_marcador"=>":SexoCRep",
-									"campo_valor"=>$conyuge_sexo
-								]
-							];
-
-							$this->guardarDatos("alumno_representanteconyuge",$conyuge_reg);						
-							
-						}
-
-					}
-					
-				}							
-
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
@@ -2155,7 +1628,6 @@
 					"icono"=>"success"
 				];
 			}
-
 			return json_encode($alerta);
 		}
 

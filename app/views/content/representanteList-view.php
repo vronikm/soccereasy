@@ -1,37 +1,27 @@
 <?php
-	use app\controllers\alumnoController;
-	$insAlumno = new alumnoController();	
+	use app\controllers\representanteController;
+	$insRepre = new representanteController();	
 
-	if(isset($_POST['alumno_sedeid'])){
-		$alumno_sedeid = $insAlumno->limpiarCadena($_POST['alumno_sedeid']);
-	} ELSE{
-		$alumno_sedeid = "";
-	}
+	$repreid=$insRepre->limpiarCadena($url[1]);
 
-	if(isset($_POST['alumno_identificacion'])){
-		$alumno_identificacion = $insAlumno->limpiarCadena($_POST['alumno_identificacion']);
+	if(isset($_POST['repre_identificacion'])){
+		$repre_identificacion = $insRepre->limpiarCadena($_POST['repre_identificacion']);
 	} ELSE{
-		$alumno_identificacion = "";
+		$repre_identificacion = "";
 	}
 
-	if(isset($_POST['alumno_nombre1'])){
-		$alumno_primernombre = $insAlumno->limpiarCadena($_POST['alumno_nombre1']);
+	if(isset($_POST['repre_nombre1'])){
+		$repre_primernombre = $insRepre->limpiarCadena($_POST['repre_nombre1']);
 	} ELSE{
-		$alumno_primernombre = "";
+		$repre_primernombre = "";
 	}
 
-	if(isset($_POST['alumno_apellido1'])){
-		$alumno_apellidopaterno = $insAlumno->limpiarCadena($_POST['alumno_apellido1']);
+	if(isset($_POST['repre_apellido1'])){
+		$repre_apellidopaterno = $insRepre->limpiarCadena($_POST['repre_apellido1']);
 	} ELSE{
-		$alumno_apellidopaterno = "";
+		$repre_apellidopaterno = "";
 	}
-	
-	if(isset($_POST['alumno_ano'])){
-		$alumno_ano = $insAlumno->limpiarCadena($_POST['alumno_ano']);
-	} ELSE{
-		$alumno_ano = "";
-	}
-		
+
 ?>
 
 
@@ -40,7 +30,7 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Alumnos</title>
+	<title><?php echo APP_NAME; ?>| Representantes</title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -56,7 +46,7 @@
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-    
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -81,7 +71,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de alumnos</h1>
+				<h1 class="m-0">Búsqueda de representantes</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -94,79 +84,52 @@
 		</div>
 		<!-- /.content-header -->
 
-		<!-- Section listado de alumnos -->
+		<!-- Section listado de representados -->
 		<section class="content">
-			<form action="<?php echo APP_URL."alumnoList/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+			<form action="<?php echo APP_URL."representanteList/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
 			
-			<div class="container-fluid">
-				<div class="card card-default">
-					<div class="card-header">
-					<h3 class="card-title">Criterios de búsqueda</h3>
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
-						<i class="fas fa-minus"></i>
-						</button>
-					</div>
-					</div>  
-
-					<!-- card-body -->                
-					<div class="card-body">
-						<div class="row">
-							<div class="col-sm-2">
-								<div class="form-group">
-									<label for="alumno_identificacion">Identificación</label>                        
-									<input type="text" class="form-control" id="alumno_identificacion" name="alumno_identificacion" placeholder="Identificación" value="<?php echo $alumno_identificacion; ?>">
-								</div>        
+				<div class="container-fluid">
+					<div class="card card-default">
+						<div class="card-header">
+							<h3 class="card-title">Criterios de búsqueda</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus"></i>
+								</button>
 							</div>
-							<div class="col-sm-2">
-								<div class="form-group">
-									<label for="alumno_apellido1">Apellido paterno</label>
-									<input type="text" class="form-control" id="alumno_apellido1" name="alumno_apellido1" placeholder="Primer apellido" value="<?php echo $alumno_apellidopaterno; ?>">
-								</div>         
-							</div>
-							<div class="col-md-2">
-								<div class="form-group">
-									<label for="alumno_nombre1">Primer nombre</label>
-									<input type="text" class="form-control" id="alumno_nombre1" name="alumno_nombre1" placeholder="Primer nombre" value="<?php echo $alumno_primernombre; ?>">
-								</div>
-							</div>  
+						</div>  
 
-							<div class="col-md-2">
-								<div class="form-group">
+						<!-- card-body -->                
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-3">
 									<div class="form-group">
-										<label for="alumno_ano">Año</label>
-										<input type="text" class="form-control" id="alumno_ano" name="alumno_ano" placeholder="año" value="<?php echo $alumno_ano; ?>">
-									</div>	
+										<label for="repre_identificacion">Identificación</label>                        
+										<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" placeholder="Identificación" value="<?php echo $repre_identificacion; ?>">
+									</div>        
 								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="form-group">
-									<label for="alumno_sedeid">Sede</label>
-									<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">
-										<?php
-											if($alumno_sedeid == 0){	
-												echo "<option value='0' selected='selected'>Todas</option>";
-											}else{
-												echo "<option value='0'>Todas</option>";	
-											}
-										?>																		
-										<?php echo $insAlumno->listarSedebusqueda($alumno_sedeid); ?>
-									</select>	
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="repre_apellido1">Apellido paterno</label>
+										<input type="text" class="form-control" id="repre_apellido1" name="repre_apellido1" placeholder="Primer apellido" value="<?php echo $repre_apellidopaterno; ?>">
+									</div>         
 								</div>
-							</div>
-
-							<div class="col-md-2">
-								<div class="form-group">
-									<label for="alumno_sedeid">.</label>
-									<button type="submit" class="form-control btn btn-info">Buscar</button>
-								</div>
-							</div>
-
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="repre_nombre1">Primer nombre</label>
+										<input type="text" class="form-control" id="repre_nombre1" name="repre_nombre1" placeholder="Primer nombre" value="<?php echo $repre_primernombre; ?>">
+									</div>
+								</div>								
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="repre_buscar">.</label>
+										<button type="submit" class="form-control btn btn-info">Buscar</button>
+									</div>
+								</div>	
+							</div>					
 						</div>
-					
 					</div>
-				</div>
-            </div>  
+				</div>  
 			</form>
 
 			<div class="container-fluid">
@@ -175,30 +138,30 @@
 					<div class="card-header">
 						<h3 class="card-title">Resultado de la búsqueda</h3>
 						<div class="card-tools">
-							<a href="<?php echo APP_URL; ?>alumnoNew/" class="btn btn-primary btn-sm" >Nuevo Alumno</a>
+							<a href="<?php echo APP_URL; ?>representanteNew/" class="btn btn-primary btn-sm" >Nuevo Representante</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
 					</div>
-
+					
 					<div class="card-body">
+						
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
 									<th>Identificación</th>
 									<th>Nombres</th>
-									<th>Apellidos</th>
-									<th>Año</th>									
-									<th style="width: 220px;">Opciones</th>
+									<th>Apellidos</th>									
+									<th style="width: 420px;">Opciones</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php 
-									echo $insAlumno->listarAlumnos($alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_ano, $alumno_sedeid); 
+									echo $insRepre->listarRepresentantes($repre_identificacion,$repre_apellidopaterno, $repre_primernombre); 
 								?>								
 							</tbody>
-						</table>	
+						</table>					
 					</div>
 				</div>
 			<!-- /.row -->
@@ -233,6 +196,8 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jszip/jszip.min.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/vfs_fonts.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>

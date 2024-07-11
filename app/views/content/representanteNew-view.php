@@ -1,22 +1,8 @@
 <?php
-	use app\controllers\pagosController;
-	$insAlumno = new pagosController();	
-
-	$pagoid=$insLogin->limpiarCadena($url[1]);
-
-	$datos=$insAlumno->BuscarPago($pagoid);
+	use app\controllers\representanteController;
+	$insRepre = new representanteController();
 	
-	if($datos->rowCount()==1){
-		$datos=$datos->fetch(); 
-
-		if ($datos['pago_archivo']!=""){
-			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['pago_archivo'];
-		}else{
-			$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
-		} 
-	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
-	}
+	$repreid=$insRepre->limpiarCadena($url[1]);
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +11,7 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?> | Madificación pagos</title>
+	<title><?php echo APP_NAME; ?> | Registro nuevo representante</title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -47,7 +33,9 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
-		
+	<!-- dropzonejs -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
+	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
 
@@ -59,29 +47,21 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
     
 	<style>
-		.errorMSG {
-		  display: none;
-		}
-
 		input:invalid {
 		  box-shadow: 0 0 2px 1px red;
 		}
-
-		input:invalid ~ .errorMSG{
-		 
-		  width: 180px;
-		  font-size: 12px;		  
-		  color: red;
-		  vertical-align: top;
-		  margin: 0;
-		}
-
 		input:focus:invalid {
 		  box-shadow: none;
 		}
+		textarea:invalid {
+		  box-shadow: 0 0 2px 1px red;
+		}
+		textarea:focus:invalid {
+		  box-shadow: none;
+		}
 	</style>
-
   </head>
+
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
@@ -105,12 +85,12 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">Modificación rubro: <?php echo $datos['RUBRO']; ?></h1>
+							<h1 class="m-0">Nuevo Representante</h1>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
 								<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-								<li class="breadcrumb-item active">Ficha Alumno</li>
+								<li class="breadcrumb-item active">Ficha Representante</li>
 							</ol>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
@@ -120,162 +100,179 @@
 
 			<!-- Main content -->
 			<section class="content">				
-				<!-- /.container-fluid información alumno -->
-				<div class="container-fluid">
-
-					<div class="row">
-						<div class="col-md-3">
-							<div class="card card-secondary">		
-								<div class="card-header">
-									<h3 class="card-title">Pago realizado</h3>
-								</div>						
-								<div class="card-body">																			
-									<div class="row">									
-										
-										<div class="col-md-6">
+				<!-- /.container-fluid información representante -->
+				<div class="container-fluid">						
+					<div class="card">
+						<div class="card-header p-2">
+							<ul class="nav nav-pills">
+								<li class="nav-item"><a class="nav-link active" href="#informacionp" data-toggle="tab">Información Personal</a></li>
+								<li class="nav-item"><a class="nav-link" href="#conyuge" data-toggle="tab">Cónyuge</a></li>								
+							</ul>
+						</div><!-- /.card-header -->
+					
+						<div class="card-body">
+							<div class="tab-content">
+								<!-- Tab información del representante -->
+								<div class="active tab-pane" id="informacionp">
+									<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/representanteAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">
+									<input type="hidden" name="modulo_repre" value="registrar">																						
+									<div class="row">
+										<div class="col-md-4">
 											<div class="form-group">
-												<label for="pago_valor">Pago</label>
-												<input type="text" class="pull-right form-control" style="text-align:right;" value="<?php echo $datos['pago_valor']; ?>" disabled>
+												<label for="repre_identificacion">Identificación</label>                        
+												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" placeholder="Identificación" required>
+											</div>
+										</div>                   
+										<div class="col-md-4">                        
+											<div class="form-group">
+												<label for="repre_apellidopaterno">Apellido paterno</label>
+												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" placeholder="Primer apellido" required>
 											</div>
 										</div>
-
-										<div class="col-md-6">
+										<div class="col-md-4">
+											<label for="repre_apellidomaterno">Apellido materno</label>
+											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" placeholder="Segundo apellido" >
+										</div>
+										<div class="col-sm-3">
 											<div class="form-group">
-												<label for="pago_saldo">Saldo</label>
-												<input type="text" class="form-control" style="text-align:right;" value="<?php echo $datos['pago_saldo']; ?>" disabled>
-											</div>
-										</div>								
-									
-										<div class="col-md-12 ">
+												<label for="repre_tipoidentificacion">Tipo identificación</label>
+												<select id="repre_tipoidentificacion" class="form-control custom-select2" name="repre_tipoidentificacion" >
+													<?php echo $insRepre->listarCatalogoTipoDocumento(); ?>
+												</select>
+											</div>          
+										</div>
+										<div class="col-md-3">                        
 											<div class="form-group">
-												<label for="pago_archivo">Imagen pago</label>
-												<div class="text-center">	
-													<div class="row">
-														<div class="col-sm-6">							
-															<a href="<?php echo $imagen ?>" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">
-																<img src="<?php echo $imagen ?>" class="profile-user-img img-fluid mb-2" alt="white sample"/>
-															</a>	
-														</div>
-													</div>
-												</div>													
+												<label for="repre_primernombre">Primer nombre</label>
+												<input type="text" class="form-control" id="repre_primernombre" name="repre_primernombre" placeholder="Primer nombre" required>
 											</div>
-										<!-- /.form-group -->	
-										</div>												
+										</div>
+										<div class="col-md-3">
+											<label for="repre_segundonombre">Segundo nombre</label>
+											<input type="text" class="form-control" id="repre_segundonombre" name="repre_segundonombre" placeholder="Segundo nombre" >
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_parentesco">Parentesco</label>
+												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco" >													
+													<?php echo $insRepre->listarCatalogoParentesco(); ?>
+												</select>
+											</div> 
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="repre_direccion">Dirección</label>
+												<input type="text" class="form-control" id="repre_direccion" name="repre_direccion"  required>
+											</div>
+										</div>              
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_correo">Correo</label>
+												<input type="text" class="form-control" id="repre_correo" name="repre_correo" placeholder="Correo" required>
+											</div> 
+										</div>
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="repre_celular">Celular</label>
+												<input type="text" class="form-control" id="repre_celular" name="repre_celular" placeholder="+593" required>
+											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_sexo">Sexo</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" value="M" name="repre_sexo" required>
+													<label class="col-sm-5 form-check-label" for="repre_sexoM">Masculino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" value="F" name="repre_sexo" >
+													<label class="col-sm-4 form-check-label" for="repre_sexoF">Femenino</label>
+												</div> 
+											</div>
+										</div>
 									</div>									
-								</div><!-- /.card-body -->
+								</div>
+
+								<!-- Tab información del conyuge representante --> 
+								<div class="tab-pane" id="conyuge">
+									<div class="row">
+										<div class="col-md-3">											
+											<div class="form-group">
+												<label for="TidentificacionCRep">Tipo identificación</label>
+												<select id="conyuge_tipoidentificacion" class="form-control custom-select2" name="conyuge_tipoidentificacion" >
+													<?php echo $insRepre->listarCatalogoTipoDocumento(); ?>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="conyuge_identificacion">Identificación</label>                        
+												<input type="text" class="form-control" id="conyuge_identificacion" name="conyuge_identificacion" placeholder="Identificación" >
+											</div>
+										</div>                   
+										<div class="col-md-3">                        
+											<div class="form-group">
+												<label for="conyuge_apellidopaterno">Apellido paterno</label>
+												<input type="text" class="form-control" id="conyuge_apellidopaterno" name="conyuge_apellidopaterno" placeholder="Primer apellido" >
+											</div>
+										</div>
+										<div class="col-md-3">
+											<label for="conyuge_apellidomaterno">Apellido materno</label>
+											<input type="text" class="form-control" id="conyuge_apellidomaterno" name="conyuge_apellidomaterno" placeholder="Segundo apellido" >
+										</div>
+										<div class="col-md-3">                        
+											<div class="form-group">
+												<label for="conyuge_primernombre">Primer nombre</label>
+												<input type="text" class="form-control" id="conyuge_primernombre" name="conyuge_primernombre" placeholder="Primer nombre" >
+											</div>
+										</div>
+										<div class="col-md-3">
+											<label for="conyuge_segundonombre">Segundo nombre</label>
+											<input type="text" class="form-control" id="conyuge_segundonombre" name="conyuge_segundonombre" placeholder="Segundo nombre" >
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="conyuge_celular">Celular</label>
+												<input type="text" class="form-control" id="conyuge_celular" name="conyuge_celular" placeholder="+593" >
+											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="conyuge_correo">Correo</label>
+												<input type="text" class="form-control" id="conyuge_correo" name="conyuge_correo" placeholder="Correo" >
+											</div> 
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="conyuge_direccion">Dirección</label>
+												<input type="text" class="form-control" id="conyuge_direccion" name="conyuge_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria" >	
+											</div>
+										</div>              
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="conyuge_sexo">Sexo</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" >
+													<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoF" name="conyuge_sexo" >
+													<label class="col-sm-4 form-check-label" for="conyuge_sexoF">Femenino</label>
+												</div> 
+											</div>
+										</div>               
+									</div>										
+								</div>										
+								<div class="card-footer">						
+									<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+									<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+								</div>	
+									
+								</form>	
 							</div>
-							<!-- /.card -->
-						</div>
-
-						<div class="col-md-9">
-							<div class="card">
-								
-								<div class="card-body">
-									<div class="tab-content">
-										<div class="active tab-pane" id="pension"> 
-											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
-											<input type="hidden" name="modulo_pagos" value="actualizar">											
-											<input type="hidden" name="pago_id" value="<?php echo $pagoid; ?>">
-																	<!-- Post -->
-												<div class="row">
-													<div class="col-md-4">
-														<div class="form-group campo">
-															<label for="pago_fecha">Fecha de pago</label>
-															<div class="input-group">
-																<div class="input-group-prepend">
-																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-																</div>
-																<input type="date" class="form-control" id="pago_fecha" name="pago_fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $datos['pago_fecha']; ?>" required>
-																
-															</div>
-															<!-- /.input group -->
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_fecharegistro">Fecha de registro</label>
-															<div class="input-group">
-																<div class="input-group-prepend">
-																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-																</div>
-																<input type="date" class="form-control" id="pago_fecharegistro" name="pago_fecharegistro" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $datos['pago_fecharegistro']; ?>" required>
-															</div>
-															<!-- /.input group -->
-														</div>								
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_periodo">Periodo(mes/año)</label>															
-															<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['pago_periodo']; ?>" required>															
-														</div>								
-													</div>
-													
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_valor">Valor</label>
-															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" value="<?php echo $datos['pago_valor']; ?>" required>
-														</div>
-													</div>
-
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_saldo">Saldo</label>
-															<input type="text" class="form-control" style="text-align:right;" id="pago_saldo" name="pago_saldo" placeholder="0.00" value="<?php echo $datos['pago_saldo']; ?>">
-														</div>
-													</div>
-													
-													<div class="col-md-4">
-														<div class="form-group">
-														<label for="pago_formapagoid">Forma de pago</label>
-														<select class="form-control select2" id="pago_formapagoid" name="pago_formapagoid" onchange="ocultarDiv()" >																									
-															<?php echo $insAlumno->listarOptionPagoid($datos['pago_formapagoid']); ?>
-														</select>	
-														</div>
-													</div>
-													<div class="col-md-2 oculto" id="miDiv">
-														<div class="form-group">
-															<label for="pago_archivo">Imagen pago</label>		
-															<div class="input-group">											
-																<div class="fileinput fileinput-new" data-provides="fileinput">
-																	<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput">
-																		<img src="<?php echo $imagen ?>" id="miImagen">
-																	</div>
-																	<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
-																	<div>
-																		<span class="bton bton-white bton-file">
-																			<span class="fileinput-new">Subir Pago</span>
-																			<span class="fileinput-exists">Cambiar</span>
-																			<input type="file" name="pago_archivo" id="pago_archivo">
-																		</span>
-																		<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">X</a>
-																	</div>
-																</div>
-															</div>		
-														</div>
-													<!-- /.form-group -->	
-													</div>
-
-													<div class="col-md-10">
-														<div class="form-group">
-														<label for="pago_concepto">Detalle</label>
-														<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="5" ><?php echo $datos['pago_concepto']; ?></textarea>
-														</div>
-													</div>													
-												</div>
-												<button type="submit" class="btn btn-success btn-sm">Actualizar</button>
-												<?php include "./app/views/inc/btn_back.php";?>
-											</form>										
-										</div>									
-									</div>
-									<!-- /.tab-content -->
-								</div><!-- /.card-body -->
-							</div>
-							<!-- /.card -->
-						</div>
-					</div>
-				</div>
+							<!-- /.tab-pane -->
+						</div><!-- /.card-body -->
+						<!-- /.tab-content -->
+					</div><!-- /.card -->
+				</div><!-- /.container fluid -->
 			</section>
-			<!-- /.content -->     
+			<!-- /.content -->      
 		</div>
 		<!-- /.vista -->
 
@@ -312,6 +309,8 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+	<!-- dropzonejs -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
 
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
@@ -319,6 +318,9 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 
 	<!--script src="app/views/dist/js/main.js" ></script-->
+	
+	<!-- fileinput -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
     
 	<script>
 		$(function () {
@@ -454,67 +456,5 @@
 		}
 		// DropzoneJS Demo Code End
 	</script>
-	
-	<script>
-		$(document).ready(function () {
-			$("#pago_fecha").keyup(function () {
-				var value = $(this).val();
-				$("#pago_fecharegistro").val(value);	
-				
-				var fecha = new Date(value);
-				// Array con los nombres de los meses
-				var nombresMeses = [
-				"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-				"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-				];
-
-				// Obtener el mes (los meses van de 0 a 11 en JavaScript)
-				var mesNumero = fecha.getMonth();
-				var mesNombre = nombresMeses[mesNumero];
-				var año = fecha.getFullYear();
-
-				$("#pago_periodo").val(mesNombre + " / " + año );
-			});
-		});
-		
-	</script>
-
-	<script>
-		function ocultarDiv() {
-			var select = document.getElementById("pago_formapagoid");
-			var div = document.getElementById("miDiv");
-			var input = document.getElementById("pago_archivo");	
-			var imagen = document.getElementById("miImagen");		
-
-			if (select.value === "FEF" || select.value === "FJU") {
-				div.style.display = "none"; // Ocultar el div si se selecciona "Ocultar Div"
-				input.value = null;		
-				imagen.src = "";	
-			} else {
-				div.style.display = "block"; // Mostrar el div por defecto
-				input.value = null;		
-				imagen.src = "";		
-			}
-		}
-	</script>
-
-	<!-- Page specific script -->
-	<script>
-		$(function () {
-			$(document).on('click', '[data-toggle="lightbox"]', function(event) {
-			event.preventDefault();
-			$(this).ekkoLightbox({
-				alwaysShowClose: true
-			});
-			});
-
-			$('.filter-container').filterizr({gutterPixels: 3});
-			$('.btn[data-filter]').on('click', function() {
-			$('.btn[data-filter]').removeClass('active');
-			$(this).addClass('active');
-			});
-		})
-	</script>
-
   </body>
 </html>

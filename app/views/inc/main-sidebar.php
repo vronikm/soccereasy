@@ -42,40 +42,24 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-th"></i>
-              <p>Alumnos<i class="fas fa-angle-left right"></i></p>
+            <a href="<?php echo APP_URL."representanteList/" ?>" class="nav-link ">
+              <i class="nav-icon far fa-circle text-info"></i>
+              <p>Representantes</p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href=<?php echo APP_URL."alumnoList/";?> class="nav-link " >
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Alumnos</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."alumnoNew/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Nuevo</p>
-                </a>
-              </li>
-            </ul>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-th"></i>
-              <p>Pagos<i class="fas fa-angle-left right"></i></p>
+            <a href="<?php echo APP_URL."alumnoList/" ?>" class="nav-link ">
+              <i class="nav-icon far fa-circle text-info"></i>
+              <p>Alumnos</p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."pagosList/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Registro de pago</p>
-                </a>
-              </li>
-            </ul>
+          </li>
 
+          <li class="nav-item">
+            <a href="<?php echo APP_URL."pagosList/" ?>" class="nav-link ">
+              <i class="nav-icon far fa-circle text-info"></i>
+              <p>Pagos</p>
+            </a>
           </li>
           <li class="nav-header">Horarios</li>
           <li class="nav-item">

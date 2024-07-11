@@ -47,7 +47,7 @@
 				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
 			}	
 			
-			$consulta_datos .= " AND alumno_activo <> 'E'";
+			$consulta_datos .= " AND alumno_estado <> 'E'";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -75,7 +75,7 @@
 					$botonpago = "btn-secondary";
 				}
 
-				if($rows['alumno_activo']=="N"){
+				if($rows['alumno_estado']=="I"){
 					$class = 'class="text-primary"';
 				}else{
 					$class = '';
@@ -561,35 +561,46 @@
 				]
 			];		
 
-			$registrar_pago=$this->guardarDatos("alumno_pago",$pago_datos_reg);
-
-			if($registrar_pago->rowCount()>0){
-				$alerta=[
-					"tipo"=>"recargar",
-					"titulo"=>"Registro de pagos",
-					"texto"=>"El pago se registró correctamente",
-					"icono"=>"success"
-				];
-
-				// Actualizar numero de recibo
-				$this->ejecutarConsulta("UPDATE general_escuela SET escuela_recibo = ".$num_recibo." WHERE escuela_id = 1");
-			
-			}else{
-				
-				if(is_file($img_dir.$foto)){
-		            chmod($img_dir.$foto,0777);
-		            unlink($img_dir.$foto);
-		        }
-
+			if($pago_fecharegistro > date(date("Y-m-d H:i:s"))){
 				$alerta=[
 					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error inesperado",
-					"texto"=>"No se pudo registrar el pago, por favor intente nuevamente",
+					"titulo"=>"Error",
+					"texto"=>"La fecha de registro del pago es mayor a la fecha actual",
 					"icono"=>"error"
 				];
-			}
+				return json_encode($alerta);
 
-			return json_encode($alerta);
+			}else{
+				$registrar_pago=$this->guardarDatos("alumno_pago",$pago_datos_reg);
+				if($registrar_pago->rowCount()>0){
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Pago registrado",
+						"texto"=>"El pago se registró correctamente",
+						"icono"=>"success"
+					];
+	
+					// Actualizar numero de recibo
+					$this->ejecutarConsulta("UPDATE general_escuela SET escuela_recibo = ".$num_recibo." WHERE escuela_id = 1");
+				
+				}else{
+					
+					if(is_file($img_dir.$foto)){
+						chmod($img_dir.$foto,0777);
+						unlink($img_dir.$foto);
+					}
+	
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"No se pudo registrar el pago, por favor intente nuevamente",
+						"icono"=>"error"
+					];
+				}
+	
+				return json_encode($alerta);
+			}
+			
 
 		}
 
@@ -835,8 +846,8 @@
 			if($registrar_pago->rowCount()>0){
 				$alerta=[
 					"tipo"=>"recargar",
-					"titulo"=>"Registro de pago pendiente",
-					"texto"=>"El pago se registró correctamente",
+					"titulo"=>"Pago registrado",
+					"texto"=>"El pago pendiente se registró correctamente",
 					"icono"=>"success"
 				];
 				
@@ -1163,18 +1174,7 @@
 		}
 
 		public function generarRecibo($pagoid){
-		
-			/*$consulta_datos="SELECT  R.catalogo_descripcion RUBRO, F.catalogo_descripcion FORMAPAGO, P.*, A.* 
-				FROM alumno_pago P	
-					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid
-					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
-					
-					-- falta
-
-				WHERE P.pago_id = ".$pagoid;	*/
-
-				$consulta_datos="SELECT  IFNULL(T.total, 0) TOTAL_PP,
+			$consulta_datos="SELECT  IFNULL(T.total, 0) TOTAL_PP,
 						(P.pago_saldo + P.pago_valor) DEUDA_INICIAL, 
 						((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))PAGO_INICIAL, 
 						IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) SALDO_INICIAL, 

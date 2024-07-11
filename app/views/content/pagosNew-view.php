@@ -289,7 +289,7 @@
 															<div class="input-group-prepend">
 																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 															</div>
-															<input type="date" class="form-control" id="pago_fecha" name="pago_fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask <?php echo $disabled; ?> required>
+															<input type="date" class="form-control" id="pago_fecha" name="pago_fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $fechahoy; ?>" <?php echo $disabled; ?> required>
 															
 														</div>
 														<!-- /.input group -->
@@ -661,13 +661,8 @@
 														<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="3" ></textarea>
 														</div>
 													</div>
-
-												</div>
-
-													
-											
+												</div>											
 											<!-- /.post -->
-
 											<div class="card-footer">						
 												<button type="submit" class="btn btn-success btn-sm">Guardar</button>
 												<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
@@ -696,11 +691,9 @@
 														?>								
 													</tbody>
 												</table>
-											</div>
-											
+											</div>											
 										</div>
-										<!-- /.tab-pane -->
-										
+										<!-- /.tab-pane -->										
 										<div class="tab-pane" id="kit">
 												<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registrar">											
@@ -791,7 +784,6 @@
 													</div>
 												</div>										
 												<!-- /.post -->
-
 											<div class="card-footer">						
 												<button type="submit" class="btn btn-success btn-sm">Guardar</button>
 												<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
@@ -820,8 +812,7 @@
 														?>								
 													</tbody>
 												</table>
-											</div>
-											
+											</div>	
 										</div>
 										<!-- /.tab-pane -->
 										
@@ -886,15 +877,6 @@
 														</div>
 													</div>										
 
-													<!--div class="col-md-4">
-														<div class="form-group">
-														<label for="pago_rubroid">Rubro</label>
-														<select class="form-control select2" id="pago_rubroid" name="pago_rubroid">	
-															<option selected disabled>Seleccione un Rubro</option>										
-															<?php //echo $insAlumno->listarOptionRubro(); ?>
-														</select>	
-														</div>
-													</di-->
 													<div class="col-md-2" id="miDiv">
 														<div class="form-group">
 															<label for="pago_archivo">Imagen Pago</label>		
@@ -922,10 +904,7 @@
 														<textarea class="form-control" id="pago_concepto" name="pago_concepto" placeholder="Detalle del pago" rows="3" ></textarea>
 														</div>
 													</div>
-												</div>
-
-													
-											
+												</div>											
 											<!-- /.post -->
 
 											<div class="card-footer">						
@@ -956,11 +935,9 @@
 														?>								
 													</tbody>
 												</table>
-											</div>
-											
+											</div>											
 										</div>
-										<!-- /.tab-pane -->
-										
+										<!-- /.tab-pane -->										
 									</div>
 									<!-- /.tab-content -->
 								</div><!-- /.card-body -->
@@ -970,8 +947,7 @@
 					</div>
 				</div>
 			</section>
-			<!-- /.content -->
-      
+			<!-- /.content -->      
 		</div>
 		<!-- /.vista -->
 
@@ -989,8 +965,7 @@
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -1008,17 +983,11 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="app/views/dist/js/main.js" ></script-->
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>	
 	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
-    
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
 		
 	<script>
 		$(document).ready(function () {
@@ -1041,11 +1010,7 @@
 
 				$("#pago_periodo").val(mesNombre + " / " + año );
 			});
-		});
-		
+		});		
 	</script>
-	
-
-
   </body>
 </html>
