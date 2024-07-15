@@ -271,7 +271,8 @@
 
 			if($registrar_usuario->rowCount()==1){
 				$alerta=[
-					"tipo"=>"limpiar",
+					"tipo"=>"redireccionar",
+					"url"=>APP_URL.'userList/',
 					"titulo"=>"Usuario registrado",
 					"texto"=>"El usuario ".$nombre." | ".$usuario." se registró correctamente",
 					"icono"=>"success"
