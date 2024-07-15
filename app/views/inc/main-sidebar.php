@@ -61,6 +61,14 @@
               <p>Pagos</p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="<?php echo APP_URL."profesorNew/" ?>" class="nav-link ">
+              <i class="nav-icon far fa-circle text-info"></i>
+              <p>Profesores</p>
+            </a>
+          </li>
+
           <li class="nav-header">Horarios</li>
           <li class="nav-item">
             <a href="#" class="nav-link ">
@@ -120,12 +128,6 @@
                 <a href=<?php echo APP_URL."userList/";?> class="nav-link <?php if ($url[0]=='userList') echo 'active'; else echo ''; ?>" >
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Usuarios</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."userNew/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Nuevo</p>
                 </a>
               </li>
               <li class="nav-item">
