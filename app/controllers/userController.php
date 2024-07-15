@@ -757,9 +757,9 @@
 		    }
 				
 			if($datos['usuario_estado']=='A'){
-				$estadoA = '';
+				$estadoA = 'I';
 			}else{
-				$estadoA = 1;
+				$estadoA = 'A';
 			}
             $usuario_datos_up=[
 				[
