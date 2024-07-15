@@ -36,18 +36,13 @@
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
 	<!-- dropzonejs -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
 	<!-- fileinput -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
-    
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">    
 
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -101,8 +96,7 @@
 		<section class="content">
 			<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 			<input type="hidden" name="modulo_usuario" value="actualizar">
-			<input type="hidden" name="usuario_id" value="<?php echo $usuario?>">
-					
+			<input type="hidden" name="usuario_id" value="<?php echo $usuario?>">					
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
@@ -144,37 +138,39 @@
 							<!-- /.col -->
 							<div class="col-md-10">
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="usuario_identificacion">Identificación</label>                        
+											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['usuario_identificacion']; ?>" >
+										</div>
+									</div>	
+									<div class="col-md-4">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
 											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" placeholder="Nombre usuario" value="<?php echo $datos['usuario_nombre']; ?>">
 										</div>
 									</div>
-								</div>
-								<div class="row">
-									
-									<div class="col-md-6">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_email">Correo</label>
 											<input type="email" class="form-control" id="usuario_email" name="usuario_email" placeholder="Correo" value="<?php echo $datos['usuario_email']; ?>">	
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_movil">Teléfono</label>
 											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" placeholder="Teléfono, celular" value="<?php echo $datos['usuario_movil']; ?>">	
 										</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group">
-										<label for="usuario_rolid">Seguridad Rol</label>
-										<select class="form-control select2" id="usuario_rolid" name="usuario_rolid" style="width: 100%;">											
-											<option value="" selected="selected">Seleccionar rol</option>
-											<?php echo $insUsuario->listarOptionRol($datos['usuario_rolid']); ?>
-										</select>	
+											<label for="usuario_rolid">Seguridad Rol</label>
+											<select class="form-control select2" id="usuario_rolid" name="usuario_rolid" style="width: 100%;">											
+												<option value="" selected="selected">Seleccionar rol</option>
+												<?php echo $insUsuario->listarOptionRol($datos['usuario_rolid']); ?>
+											</select>	
 										</div>
 									</div>
 									<div class="col-md-3">
@@ -186,63 +182,47 @@
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_clave">Clave</label>
-											<input type="password" class="form-control" id="usuario_clave" name="usuario_clave">	
+											<input type="password" class="form-control" id="usuario_clave" name="usuario_clave" value="<?php echo $datos['usuario_clave']; ?>">	
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_clave2">Repetir clave</label>
-											<input type="password" class="form-control" id="usuario_clave2" name="usuario_clave2" autocomplete="new-password">	
+											<input type="password" class="form-control" id="usuario_clave2" name="usuario_clave2" value="<?php echo $datos['usuario_clave']; ?>">	
 										</div>
 									</div>
 								</div>
-								<!-- /.form-group -->
+								<!-- /.form-group -->	
 								
-							</div>
-							<!-- /.col -->
-							
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-12">
 								<div class="form-group">
 									<label for="usuario_sedeid">Sede</label>
 									<select class="duallistbox" id="usuario_sedeid" name="usuario_sedeid[]" multiple="multiple">
 										<?php echo $insUsuario->listarOptionSede($usuario); ?> 
 									</select>
-								</div>
-								<!-- /.form-group -->
+								</div>							
 							</div>
-							<!-- /.col -->
-						</div>
-						
-						<!-- /.row -->							
+							<!-- /.col -->								 						
+						</div>							
 					</div> 
-					<!-- /.card-body -->
-					
+					<!-- /.card-body -->					
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
 
 			<div class="card-footer">						
 				<button type="submit" class="btn btn-success btn-sm">Guardar</button>		
-				<?php include "./app/views/inc/btn_back.php";	?>
-				
+				<?php include "./app/views/inc/btn_back.php";	?>				
 			</div>
-
 			</form>
 		</section>
-		<!-- /.content -->
-		
+		<!-- /.content -->		
 		<?php
 			}else{
 				include "./app/views/inc/error_alert.php";
 			}
 		?>
-
       </div>
       <!-- /.vista -->
-
       <?php require_once "app/views/inc/footer.php"; ?>
 
       <!-- Control Sidebar -->
@@ -251,14 +231,11 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -278,19 +255,11 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 	<!-- dropzonejs -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="app/views/dist/js/main.js" ></script-->
-	
 	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
-
-	
-    
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
 	<script>
 		$(function () {
 			//Initialize Select2 Elements
@@ -425,8 +394,5 @@
 		}
 		// DropzoneJS Demo Code End
 	</script>
-
-	
-
   </body>
 </html>

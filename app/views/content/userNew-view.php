@@ -1,6 +1,13 @@
 <?php
 	use app\controllers\userController;
 	$insUsuario = new userController();	
+
+	if(isset($_POST['usuario_rolid'])){
+		$usuario_rolid = $insUsuario->limpiarCadena($_POST['usuario_rolid']);
+	} ELSE{
+		$usuario_rolid = "";
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +117,7 @@
 											<div class="fileinput-new thumbnail" style="width: 116px; height: 144px;" data-trigger="fileinput"><img src=""></div>
 											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 116px; max-height: 144px"></div>
 											<div>
-												<span class="bton bton-white bton-file">
+												<span class="btonFoto bton-white bton-file">
 													<span class="fileinput-new">Seleccionar Foto</span>
 													<span class="fileinput-exists">Cambiar</span>
 													<input type="file" name="usuario_foto" id="foto" accept="image/*">
@@ -125,7 +132,13 @@
 							<!-- /.col -->
 							<div class="col-md-10">
 								<div class="row">
-									<div class="col-md-6">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="usuario_identificacion">Identificación</label>                        
+											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" placeholder="Identificación" required="required">
+										</div>
+									</div>
+									<div class="col-md-4">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
 											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" placeholder="Nombre usuario">
@@ -137,10 +150,10 @@
 											<input type="email" class="form-control" id="usuario_email" name="usuario_email" placeholder="Correo">	
 										</div>
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
-											<label for="usuario_movil">Teléfono</label>
-											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" placeholder="Teléfono, celular">	
+											<label for="usuario_movil">Celular</label>
+											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" data-inputmask='"mask": "0999999999"' data-mask placeholder="Celular">	
 										</div>
 									</div>
 								</div>
@@ -153,6 +166,7 @@
 											<option value="" selected="selected">Seleccionar rol</option>
 											<?php echo $insUsuario->listarOptionRol(""); ?>
 										</select>	
+
 										</div>
 									</div>
 									<div class="col-md-3">
@@ -175,46 +189,30 @@
 									</div>
 								</div>
 								<!-- /.form-group -->
-								
-							</div>
-							<!-- /.col -->
-							
-						</div>
-						<!-- /.row -->
-						
-						<hr>
-						<div class="row">
-							<div class="col-12">
 								<div class="form-group">
 									<label for="usuario_sedeid">Sede</label>
 									<select class="duallistbox" id="usuario_sedeid" name="usuario_sedeid[]" multiple="multiple">
 										<?php echo $insUsuario->listarOptionSede(""); ?> 
 									</select>
 								</div>
-								<!-- /.form-group -->
 							</div>
-							<!-- /.col -->
+							<!-- /.col -->							
 						</div>
-
+						<!-- /.row -->
 					</div> 
-					<!-- /.card-body -->
-					
+					<!-- /.card-body -->					
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
-
 			<div class="card-footer">						
 				<button type="submit" class="btn btn-success btn-sm">Guardar</button>
 				<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
 			</div>
-
 			</form>
 		</section>
-		<!-- /.content -->
-      
+		<!-- /.content -->      
       </div>
       <!-- /.vista -->
-
       <?php require_once "app/views/inc/footer.php"; ?>
 
       <!-- Control Sidebar -->
@@ -223,14 +221,11 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -250,13 +245,9 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 	<!-- dropzonejs -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script-->
 	
 	<!-- fileinput -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>

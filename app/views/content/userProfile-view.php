@@ -74,7 +74,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Actualizar usuario</h1>
+						<h1 class="m-0">Ver perfil de usuario</h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -145,22 +145,25 @@
 							
 							<div class="col-md-10">
 								<div class="row">
-									<div class="col-md-12">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="usuario_identificacion">Identificación</label>                        
+											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['usuario_identificacion']; ?>" disabled="">
+										</div>
+									</div>									
+									<div class="col-md-4">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
 											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" value="<?php echo $datos['usuario_nombre']; ?>" disabled="">
 										</div>
 									</div>
-								</div>
-								<div class="row">
-									
-									<div class="col-md-6">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_email">Correo</label>
 											<input type="email" class="form-control" id="usuario_email" name="usuario_email" value="<?php echo $datos['usuario_email']; ?>"  disabled="">	
 										</div>
 									</div>
-									<div class="col-md-6">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_movil">Teléfono</label>
 											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['usuario_movil']; ?>" disabled="">	
@@ -197,16 +200,10 @@
 										</div>
 									</div>
 								</div>
-								<!-- /.form-group -->
-								
-							</div>
-							
-						</div>
-						<label>Estodo usuario</label>
-						<hr>
-						<div class="row">
-							<div class="col-12">
-								<div class="row">
+								<!-- /.form-group -->	
+								<label>Estado usuario</label>
+								<hr>		
+								<div class="row">											
 									<div class="col-md-4">
 										<div class="form-group">
 											<div class="custom-control custom-checkbox">
@@ -231,12 +228,9 @@
 											</div>
 										</div>	
 									</div>							
-								</div>
-								<!-- /.form-group -->
+								</div>	
 							</div>
-							<!-- /.col -->
 						</div>
-
 						<hr>
 						<div class="row">
 							<div class="col-12">
@@ -249,8 +243,7 @@
 								<!-- /.form-group -->
 							</div>
 							<!-- /.col -->
-						</div>
-						
+						</div>						
 						<!-- /.row -->							
 					</div> 
 					<!-- /.card-body -->
@@ -280,9 +273,7 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
