@@ -1202,7 +1202,7 @@
 					INNER JOIN alumno_pago_transaccion PT ON PT.transaccion_pagoid = P.pago_id
 					LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid 				
+					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = PT.transaccion_formapagoid				
 				WHERE PT.transaccion_id = ".$transaccion_id;	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
