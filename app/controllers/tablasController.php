@@ -300,6 +300,7 @@
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/tablasAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_catalogos" value="actualizarestado">
 								<input type="hidden" name="catalogo_valor" value="'.$rows['catalogo_valor'].'">						
+								<input type="hidden" name="catalogo_estado" value="'.$rows['ESTADO_CATALOGO'].'">
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
 							</form>
 
@@ -316,10 +317,10 @@
 			$catalogo_valor 	  = $this->limpiarCadena($_POST['catalogo_valor']);
 			$catalogo_tablaid	  = $this->limpiarCadena($_POST['catalogo_tablaid']);
 			$catalogo_descripcion = $this->limpiarCadena($_POST['catalogo_descripcion']);
-			$catalogo_estado	  = $this->limpiarCadena($_POST['catalogo_estado']);
+			$catalogo_estado	  = "";
 			$codigo_catalogo 	  = $this->limpiarCadena($_POST['codigo_catalogo']);
 
-			# Verificando pago #
+			# Verificando catálogo #
 			$datos = $this->ejecutarConsulta("SELECT * FROM general_tabla_catalogo 
 												WHERE catalogo_valor = '$codigo_catalogo'");
 			if($datos->rowCount()<=0){
@@ -331,7 +332,8 @@
 				];
 				return json_encode($alerta);
 		    }else{
-		    	$datos=$datos->fetch();				
+		    	$datos=$datos->fetch();
+				$catalogo_estado = $datos['catalogo_estado'];
 		    }		
 			# Verificando campos obligatorios #
 		    if($catalogo_valor=="" || $catalogo_descripcion==""){
@@ -394,7 +396,11 @@
 		}
 
 		public function BuscarCatalogo($catalogo_valor){		
-			$consulta_datos=("SELECT catalogo_valor, tabla_id, tabla_nombre, catalogo_descripcion 
+			$consulta_datos=("SELECT catalogo_valor, tabla_id, tabla_nombre, catalogo_descripcion, 
+								CASE WHEN catalogo_estado ='A' THEN 'Activo' 
+									 WHEN catalogo_estado = 'I' THEN 'Inactivo' 
+									 ELSE catalogo_estado 
+								END AS ESTADO 
 								FROM general_tabla, general_tabla_catalogo 
 								WHERE catalogo_tablaid = tabla_id
 									and catalogo_valor = '$catalogo_valor'");	

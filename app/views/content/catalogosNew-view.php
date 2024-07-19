@@ -12,7 +12,9 @@
 			$datos=$datos->fetch(); 
 			$modulo_catalogos = 'actualizar';
 			$catalogo_tabla = $datos['tabla_nombre'];
+			$catalogo_valor = $datos['catalogo_valor'];
 			$catalogo_descripcion = $datos['catalogo_descripcion'];
+			$catalogo_estado = $datos['ESTADO'];
 			$catalogo_tablaid = $datos['tabla_id'];
 		}
 	}else{
@@ -20,6 +22,7 @@
 		$catalogo_valor = '';
 		$catalogo_tabla = '';		
 		$catalogo_descripcion = '';
+		$catalogo_estado = 'A';
 		$catalogo_tablaid = 0;
 	}
 ?>
