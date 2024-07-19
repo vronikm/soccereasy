@@ -1574,8 +1574,8 @@
 		}
 
 		public function actualizarPagoPendiente(){			
-			
 			$transaccion_id = $this->limpiarCadena($_POST['transaccion_id']);
+
 			# Verificando pago #
 			$datos = $this->ejecutarConsulta("SELECT * FROM alumno_pago_transaccion WHERE transaccion_id = '$transaccion_id'");			
 			if($datos->rowCount()<=0){
@@ -1588,10 +1588,8 @@
 				return json_encode($alerta);
 		    }else{
 		    	$datos=$datos->fetch();				
-		    }					
-
+		    }
 			
-
 			# Almacenando datos#			
 			$transaccion_pagoid 		= $this->limpiarCadena($_POST['transaccion_pagoid']);
 			$transaccion_valorcalculado = $this->limpiarCadena($_POST['transaccion_valorcalculado']);
@@ -1601,8 +1599,7 @@
 			$transaccion_periodo		= $this->limpiarCadena($_POST['pago_periodo']);
 			$transaccion_valor 			= $_POST['pago_valor'];
 			$transaccion_formapagoid 	= $this->limpiarCadena($_POST['pago_formapagoid']);
-			$transaccion_concepto 		= $this->limpiarCadena($_POST['pago_concepto']);
-					
+			$transaccion_concepto 		= $this->limpiarCadena($_POST['pago_concepto']);				
 
 			$saldo = $transaccion_valorcalculado - $transaccion_valor;			
 
@@ -1665,8 +1662,7 @@
 						"campo_nombre"=>"transaccion_concepto",
 						"campo_marcador"=>":Concepto",
 						"campo_valor"=>$transaccion_concepto
-					],
-					
+					],					
 					[
 						"campo_nombre"=>"transaccion_periodo",
 						"campo_marcador"=>":Periodo",
@@ -1675,7 +1671,6 @@
 				];
 			
     		}ELSE{
-
 				# Creando directorio #
 				if(!file_exists($img_dir)){
 					if(!mkdir($img_dir,0777)){
@@ -1715,8 +1710,7 @@
 				}
 
 				$foto=str_ireplace(" ","_","pagopendiente".$transaccion_id);
-				$foto=$foto."_".rand(0,100);
-				
+				$foto=$foto."_".rand(0,100);				
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['pago_archivo']['tmp_name'])){
@@ -1799,19 +1793,15 @@
 				"condicion_campo"=>"transaccion_id",
 				"condicion_marcador"=>":Pagoid",
 				"condicion_valor"=>$transaccion_id 
-			];
-			
+			];			
 
 			if($this->actualizarDatos("alumno_pago_transaccion",$pago_datos_reg,$condicion)){				
-				
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Pago actualizado",
 					"texto"=>"Los datos del pago ".$transaccion_id ." se actualizaron correctamente",
 					"icono"=>"success"
 				];		
-
-				
 				
 				$check_pago=$this->ejecutarConsulta("SELECT pago_valor, pago_saldo FROM alumno_pago WHERE pago_id = ".$transaccion_pagoid);
 				//$check_pago=$this->seleccionarDatos("Unico","general_escuela","escuela_id","1");
@@ -1835,7 +1825,6 @@
 				// Actualizar saldo y valor
 				$this->ejecutarConsulta("UPDATE alumno_pago SET pago_valor = ".$pago_valor.", pago_saldo = ".$pago_saldo.", pago_estado = '".$estado_saldo."' WHERE pago_id = ".$transaccion_pagoid);
 			
-
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
@@ -1844,7 +1833,6 @@
 					"icono"=>"error"
 				];
 			}
-
 			return json_encode($alerta);
 		}
 	

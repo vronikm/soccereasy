@@ -233,7 +233,7 @@
 												<div class="form-group">
 												<label for="pago_formapagoid">Forma de pago</label>
 												<select class="form-control select2" id="pago_formapagoid" name="pago_formapagoid" >																									
-													<?php echo $insAlumno->listarOptionPagoid($datos['pago_formapagoid']); ?>
+													<?php echo $insAlumno->listarOptionPagoid($datos['transaccion_formapagoid']); ?>
 												</select>	
 												</div>
 											</div>
@@ -294,9 +294,7 @@
 		</aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->

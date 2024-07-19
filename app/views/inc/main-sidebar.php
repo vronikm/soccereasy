@@ -63,7 +63,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?php echo APP_URL."profesorNew/" ?>" class="nav-link ">
+            <a href="<?php echo APP_URL."profesorList/" ?>" class="nav-link ">
               <i class="nav-icon far fa-circle text-info"></i>
               <p>Profesores</p>
             </a>
