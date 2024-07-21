@@ -161,9 +161,9 @@
 									</div>								
 									<div class="col-sm-3">
 										<div class="form-group">
-											<label for="profesor_cargoid">Cargo</label>
-											<select id="profesor_cargoid" class="form-control custom-select2" name="profesor_cargoid" >
-												<?php echo $insProfesor->listarCargos(); ?>
+											<label for="profesor_especialidadid">Especialidad</label>
+											<select id="profesor_especialidadid" class="form-control custom-select2" name="profesor_especialidadid" >
+												<?php echo $insProfesor->listarEspecialidad(); ?>
 											</select>
 										</div>          
 									</div>

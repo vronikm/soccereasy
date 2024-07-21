@@ -1,6 +1,6 @@
 <?php
 	use app\controllers\profesorController;
-	$insUsuario = new profesorController();	
+	$insProfesor = new profesorController();	
 ?>
 
 <!DOCTYPE html>
@@ -71,6 +71,7 @@
 					<div class="card-header">
 						<h3 class="card-title">Listado de profesores</h3>
 						<div class="card-tools">
+							<a href="<?php echo APP_URL; ?>profesorNew/" class="btn btn-primary btn-sm" >Nuevo Profesor</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
@@ -82,9 +83,10 @@
 							<thead>
 								<tr>
 									<th>Identificación</th>
-									<th>Nombres</th>
-									<th>Apellidos</th>
-									<th>Cargo</th>
+									<th>Nombre y apellido</th>
+									<th>Correo</th>
+									<th>Celular</th>
+									<th>Estado</th>
 									<th style="width: 220px;">Opciones</th>
 								</tr>
 							</thead>
