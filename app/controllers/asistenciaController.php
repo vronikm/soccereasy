@@ -294,16 +294,21 @@
 			return $tabla;			
 		}
 
-		public function listarOptionProfesor(){
+		public function listarOptionProfesor($lugar_sedeid){
 			
 			$option="";
-			$consulta_datos="SELECT usuario_id, usuario_nombre FROM seguridad_usuario WHERE usuario_estado = 'A' AND usuario_rolid = '3'";						
+			$consulta_datos="SELECT profesor_id, profesor_nombre 
+							FROM sujeto_profesor 
+							INNER JOIN seguridad_usuario ON usuario_identificacion = profesor_identificacion
+							INNER JOIN seguridad_usuario_sede ON usuariosede_usuarioid = usuario_id 
+							WHERE usuario_estado = 'A' AND usuario_rolid = '3' AND usuariosede_sedeid =".$lugar_sedeid ;
+
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				$option.='<option value='.$rows['usuario_id'].'>'.$rows['usuario_nombre'].'</option>';				
 			}
-			return $option;		
+			return $option;
 		}
 
 		public function listarOptionSede(){
@@ -438,59 +443,63 @@
 			return json_encode($alerta);
 		}
 
-		public function listarAlumnos($identificacion, $apellidopaterno, $primernombre, $ano, $sede){
+		public function listarHorarios($horario_nombre, $horario_detalle, $horario_sedeid){
 					
-			if($identificacion!=""){
-				$identificacion .= '%'; 
+			if($horario_nombre!=""){
+				$horario_nombre .= '%'; 
 			}
-			if($primernombre!=""){
-				$primernombre .= '%';
+			if($horario_detalle!=""){
+				$horario_detalle .= '%';
 			} 
-			if($apellidopaterno!=""){
-				$apellidopaterno .= '%';
-			} 					
+		 					
 
 			$tabla="";
-			$consulta_datos="SELECT * FROM sujeto_alumno 
-								WHERE (alumno_primernombre LIKE '".$primernombre."' 
-								OR alumno_identificacion LIKE '".$identificacion."' 
-								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
-			if($ano!=""){
-				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$ano."'"; 
-			}
+			$consulta_datos="SELECT * FROM asistencia_horario 
+								WHERE (horario_nombre LIKE '".$horario_nombre."' 
+								OR horario_detalle LIKE '".$horario_detalle."') ";			
+			
 
-			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
-				$consulta_datos="SELECT * FROM sujeto_alumno WHERE YEAR(alumno_fechanacimiento) = '".$ano."'";
+			if($horario_nombre=="" && $horario_detalle=="" ){
+				$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_nombre <> '' ";
 			}
 			
-			if($identificacion=="" && $primernombre=="" && $apellidopaterno=="" && $ano == ""){
-				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre <> '' ";
-			}
 
-			if($sede!=""){
-				if($sede == 0){
-					$consulta_datos .= " and alumno_sedeid <> '".$sede."'"; 
+			if($horario_sedeid!=""){
+				if($horario_sedeid == 0){
+					$consulta_datos .= " and horario_sedeid  <> '".$horario_sedeid."'"; 
 				}else{
-					$consulta_datos .= " and alumno_sedeid = '".$sede."'"; 
+					$consulta_datos .= " and horario_sedeid  = '".$horario_sedeid."'"; 
 				}
 			}else{
-				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = '' ";
+				$consulta_datos = "SELECT * FROM asistencia_horario WHERE horario_nombre = '' ";
 			}			
+
+			$consulta_datos .= " AND horario_estado <> 'E'"; 
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
+
+				if ($rows['horario_estado'] == 'A'){
+					$estado = 'ACTIVO';
+					$class = '';
+				}elseif($rows['horario_estado'] == 'E'){
+					$estado = '<span class="badge bg-danger">ELIMINADO';
+					$class = 'class="text-danger"';
+				}elseif($rows['horario_estado'] == 'I'){
+					$estado = 'INACTIVO';
+					$class = 'class="text-primary"';
+				}
 				
 				$tabla.='
-					<tr>
-						<td>'.$rows['alumno_identificacion'].'</td>
-						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
-						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
-						<td>'.$rows['alumno_fechanacimiento'].'</td>
+					<tr '.$class.'>
+						<td>'.$rows['horario_nombre'].'</td>
+						<td>'.$rows['horario_detalle'].'</td>
+						<td>'.$estado.'</td>
 						<td>
-							<a href="invoice-print.html" rel="noopener" target="_blank" class="btn float-right btn-danger btn-sm">Eliminar</a>
-							<a href="'.APP_URL.'alumnoUpdate/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
-							<a href="'.APP_URL.'alumnoProfile/'.$rows['alumno_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
+							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-sm">Eliminar</a>
+							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/"  class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
+							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/"  class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
 						</td>
 					</tr>';	
 			}
@@ -626,6 +635,198 @@
 			}
 
 			return json_encode($alerta);
+		}
+
+		public function registrarHorario(){			
+			
+			
+			
+			# Almacenando datos 			
+			$lugar_sedeid		= $this->limpiarCadena($_POST['lugar_sedeid']);
+			$horario_nombre		= $this->limpiarCadena($_POST['horario_nombre']);
+			$horario_detalle	= $this->limpiarCadena($_POST['horario_detalle']);
+
+			/*
+			$detalle_horarioid 	= $this->limpiarCadena($_POST['hora_inicio']);
+			$detalle_lugarid	= $this->limpiarCadena($_POST['lugar']);
+			$detalle_horaid		= $this->limpiarCadena($_POST['hora']);
+			$detalle_profesorid	= $this->limpiarCadena($_POST['profesor']);
+			$detalle_dia		= $this->limpiarCadena($_POST['dia']);
+			*/
+			
+			# Verificando campos obligatorios #
+		    if($lugar_sedeid=="" || $horario_nombre=="" ){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No has llenado todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }		
+
+			$horario_datos_reg=[
+				[
+					"campo_nombre"=>"horario_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$lugar_sedeid
+				],
+				[
+					"campo_nombre"=>"horario_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$horario_nombre
+				],				
+				[
+					"campo_nombre"=>"horario_detalle",
+					"campo_marcador"=>":Detalle",
+					"campo_valor"=>$horario_detalle
+				],				
+				[
+					"campo_nombre"=>"horario_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>'A'
+				]
+			];   
+		    		
+
+			$registrar_hora=$this->guardarDatos("asistencia_horario",$horario_datos_reg);
+
+			if($registrar_hora->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Registro de horario",
+					"texto"=>"El horario se registró correctamente",
+					"icono"=>"success"
+				];	
+			
+			}else{				
+
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No se pudo registrar el horario, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+
+		}
+
+		public function actualizarHorario(){			
+			
+			
+			
+			# Almacenando datos 	
+
+			$lugar_sedeid		= $this->limpiarCadena($_POST['lugar_sedeid']);
+			$horario_nombre		= $this->limpiarCadena($_POST['horario_nombre']);
+			$horario_detalle	= $this->limpiarCadena($_POST['horario_detalle']);
+			$horario_id			= $this->limpiarCadena($_POST['horario_id']);		
+		
+			
+			
+			# Verificando campos obligatorios #
+		    if($lugar_sedeid=="" || $horario_nombre=="" ){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No has llenado todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }		
+
+			$horario_datos_reg=[
+				[
+					"campo_nombre"=>"horario_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$lugar_sedeid
+				],
+				[
+					"campo_nombre"=>"horario_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$horario_nombre
+				],				
+				[
+					"campo_nombre"=>"horario_detalle",
+					"campo_marcador"=>":Detalle",
+					"campo_valor"=>$horario_detalle
+				],				
+				[
+					"campo_nombre"=>"horario_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>'A'
+				]
+			];   
+
+			$condicion=[
+				"condicion_campo"=>"horario_id",
+				"condicion_marcador"=>":Horarioid",
+				"condicion_valor"=>$horario_id
+			];
+			if($this->actualizarDatos("asistencia_horario", $horario_datos_reg, $condicion)){					
+				
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Registro horario",
+					"texto"=>"El horario: ".$horario_id." se actualizó correctamente",
+					"icono"=>"success"
+				];
+
+				$detalle=$this->ejecutarConsulta("SELECT detalle_horarioid FROM asistencia_horario_detalle WHERE detalle_horarioid='$horario_id'");
+				if($detalle->rowCount()>0){
+					$this->eliminarRegistro("asistencia_horario_detalle","detalle_horarioid",$horario_id);					
+				}	
+
+				$dias = $_POST['dia'];
+				$lugares = $_POST['lugar'];
+				$horas = $_POST['hora'];
+				$profesores = $_POST['profesor'];
+		
+				for ($i = 0; $i < count($dias); $i++) { 
+
+					$horario_detalle_reg = [
+						[
+							"campo_nombre" => "detalle_horarioid",
+							"campo_marcador" => ":Horarioid",
+							"campo_valor" => $horario_id
+						],
+						[
+							"campo_nombre" => "detalle_lugarid",
+							"campo_marcador" => ":Lugarid",
+							"campo_valor" => $lugares[$i]
+						],
+						[
+							"campo_nombre" => "detalle_horaid",
+							"campo_marcador" => ":Horaid",
+							"campo_valor" => $horas[$i]
+						],
+						[
+							"campo_nombre" => "detalle_profesorid",
+							"campo_marcador" => ":Profesorid",
+							"campo_valor" => $profesores[$i]
+						],
+						[
+							"campo_nombre" => "detalle_dia",
+							"campo_marcador" => ":Dia",
+							"campo_valor" => $dias[$i]
+						]
+					];
+			
+					$this->guardarDatos("asistencia_horario_detalle",$horario_detalle_reg);
+				}
+
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Registro horario",
+					"texto"=>"No fue posible actualizar los datos del horario: ".$horario_id.", por favor intente nuevamente",
+					"icono"=>"success"
+				];
+			}
+			return json_encode($alerta);
+
 		}
 		
 	}

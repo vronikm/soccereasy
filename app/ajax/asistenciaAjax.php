@@ -27,6 +27,12 @@
 		}		
 		if($_POST['modulo_asistencia']=="eliminar_lugar"){
 			echo $insPago->eliminarLugarControlador();
+		}
+		if($_POST['modulo_asistencia']=="registrar_horario"){
+			echo $insPago->registrarHorario();
+		}
+		if($_POST['modulo_asistencia']=="actualizar_horario"){
+			echo $insPago->actualizarHorario();
 		}		
 
 	}else{

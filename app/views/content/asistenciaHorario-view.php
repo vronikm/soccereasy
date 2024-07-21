@@ -2,19 +2,24 @@
 	date_default_timezone_set("America/Guayaquil");
 
 	use app\controllers\asistenciaController;
-	$insLugar = new asistenciaController();
+	$insHorario = new asistenciaController();			
 	
-	if(isset($_POST['lugar_sedeid'])){
-		$lugar_sedeid =$_POST['lugar_sedeid'];
-	} ELSE{
-		$lugar_sedeid = 0;
+	$horario_id = ($url[1] != "") ? $url[1] : 0;	
+	$modulo_horario = ($horario_id == 0) ? 'registrar_horario' : 'actualizar_horario';
+
+	$datos=$insHorario->seleccionarDatos("Unico","asistencia_horario","horario_id",$horario_id);
+	if($datos->rowCount()==1){
+		$datos=$datos->fetch();
+		$lugar_sedeid 		= $datos['horario_sedeid'];
+		$horario_nombre 	= $datos['horario_nombre'];
+		$horario_detalle	= $datos['horario_detalle'];
+		$horario_estado		= $datos['horario_estado'];
+	}else{
+		$lugar_sedeid = isset($_POST['horario_sedeid']) ? $insHorario->limpiarCadena($_POST['horario_sedeid']) : 0;
+		$horario_nombre 	= "";
+		$horario_detalle	= "";
+		$horario_estado		= "";
 	}
-	
-	$modulo_lugar = 'registrar_lugar';
-	$lugar_nombre = '';
-	$lugar_direccion = '';
-	$lugar_detalle = '';
-	$lugarid = ($url[1] != "") ? $url[1] : 0;
 ?>
 
 <!DOCTYPE html>
@@ -93,39 +98,7 @@
 
 			<!-- Main content -->
 			<section class="content">			
-				<form action="<?php echo APP_URL."asistenciaHorario/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-				
-				<div class="container-fluid">
-					<div class="card card-default">
-						<div class="card-header">
-							<h3 class="card-title">Criterios de búsqueda</h3>
-							<div class="card-tools">
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-								<i class="fas fa-minus"></i>
-								</button>
-							</div>
-						</div>  
-
-						<!-- card-body -->                
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-3">
-									<div class="input-group mb-3">
-										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">		
-											<option value="">- Seleccione una opción -</option>																							
-											<?php echo $insLugar->listarOptionSede(); ?>
-										</select>	
-										<span class="input-group-append">
-											<button type="submit" class="btn btn-info btn-flat">Buscar</button>
-										</span>
-									</div>
-								</div>
-							</div>						
-						</div>
-					</div>
-				</div>  
-				</form>
-					
+									
 				<!-- /.container-fluid información alumno -->
 				<div class="container-fluid">
 
@@ -143,25 +116,24 @@
 						<div class="card-body">						
 
 							<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-								<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_lugar; ?>">
-								<input type="hidden" name="lugar_id" value="<?php echo $lugarid; ?>">											
+								<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_horario; ?>">
+								<input type="hidden" name="lugar_sedeid" value="<?php echo $lugar_sedeid; ?>">	
+								<input type="hidden" name="horario_id" value="<?php echo $horario_id; ?>">										
 								
-								<div class="row">		
-
+								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group">
-											<label for="lugar_entrenamiento">Horario nombre</label>
-											
+											<label for="horario_nombre">Horario nombre</label>
+											<input type="text" class="form-control" id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>" required >
 										</div>
 									</div>
 								
 									<div class="col-md-9">
 										<div class="form-group">
-											<label for="hora">Horario descripción</label>
-												
+											<label for="horario_detalle">Horario descripción</label>	
+											<input type="text" class="form-control" id="horario_detalle" name="horario_detalle" placeholder="Descripción" value="<?php echo $horario_detalle; ?>">
 										</div>
-									</div>
-									
+									</div>									
 								</div>	
 							
 
@@ -189,8 +161,8 @@
 								</div>
 
 								<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-								<a href="<?php echo APP_URL; ?>asistenciaHorario/" class="btn btn-info btn-sm">Cancelar</a>
-								<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>		
+								<a href="<?php echo APP_URL; ?>asistenciaListHorario/" class="btn btn-info btn-sm">Cancelar</a>
+								<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>								
 							</form>	
 
 						</div>
@@ -246,41 +218,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/jquery.validate.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-validation/additional-methods.min.js"></script>
 
-	<script>
-		$(function () {
-			
-			$('#quickForm').validate({
-				rules: {
-				hora_inicio: {
-					required: true       
-				},
-				hora_fin: {
-					required: true
-				},
-				},
-				messages: {
-				hora_inicio: {
-					required: "Por favor ingrese una hora"
-				},
-				hora_fin: {
-					required: "Por favor ingrese una hora",
-					minlength: "Your password must be at least 5 characters long"
-				},
-				},
-				errorElement: 'span',
-				errorPlacement: function (error, element) {
-				error.addClass('invalid-feedback');
-				element.closest('.form-group').append(error);
-				},
-				highlight: function (element, errorClass, validClass) {
-				$(element).addClass('is-invalid');
-				},
-				unhighlight: function (element, errorClass, validClass) {
-				$(element).removeClass('is-invalid');
-				}
-			});
-		});
-	</script>
+	
 
 	<script>
 		$(document).ready(function() {
@@ -297,13 +235,13 @@
 							"</select>";
 				
 				// Columna 2: Lugares de entrenamiento con PHP
-				var column2 = "<select class='form-control' id='lugar_entrenamiento' name='lugar_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionLugar($lugar_sedeid)); ?></select>";
+				var column2 = "<select class='form-control' id='lugar' name='lugar[]'><?php echo addslashes($insHorario->listarOptionLugar($lugar_sedeid)); ?></select>";
 				
 				// Columna 3: Horarios con PHP
-				var column3 = "<select class='form-control' id='hora_entrenamiento' name='hora_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionHora()); ?></select>";
+				var column3 = "<select class='form-control' id='hora' name='hora[]'><?php echo addslashes($insHorario->listarOptionHora()); ?></select>";
 				
 				// Columna 4: Profesores con PHP
-				var column4 = "<select class='form-control' id='profesor_entrenamiento' name='profesor_entrenamiento[]'><?php echo addslashes($insLugar->listarOptionProfesor()); ?></select>";
+				var column4 = "<select class='form-control' id='profesor' name='profesor[]'><?php echo addslashes($insHorario->listarOptionProfesor($lugar_sedeid)); ?></select>";
 				
 				// Agregar una nueva fila a la tabla
 				$("#presupuesto").append(

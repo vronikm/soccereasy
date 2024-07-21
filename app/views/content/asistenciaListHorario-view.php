@@ -2,19 +2,19 @@
 	use app\controllers\asistenciaController;
 	$insHorario = new asistenciaController();	
 
-	if(isset($_POST['asistencia_sedeid'])){
+	if(isset($_POST['horario_sedeid'])){
 		$horario_sedeid = $insHorario->limpiarCadena($_POST['horario_sedeid']);
 	} ELSE{
 		$horario_sedeid = 0;
 	}
 
-	if(isset($_POST['asistencia_'])){
+	if(isset($_POST['horario_nombre'])){
 		$horario_nombre = $insHorario->limpiarCadena($_POST['horario_nombre']);
 	} ELSE{
 		$horario_nombre = "";
 	}
 
-	if(isset($_POST['alumno_nombre1'])){
+	if(isset($_POST['horario_detalle'])){
 		$horario_detalle = $insHorario->limpiarCadena($_POST['horario_detalle']);
 	} ELSE{
 		$horario_detalle = "";
@@ -68,13 +68,13 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de horarios</h1>
+					<h1 class="m-0">Búsqueda de horarios</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
-					<li class="breadcrumb-item active">Dashboard v1</li>
-				</ol>
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="#">Inicio</a></li>
+						<li class="breadcrumb-item active">Ficha Alumno</li>
+					</ol>					
 				</div><!-- /.col -->
 			</div><!-- /.row -->
 			</div><!-- /.container-fluid -->
@@ -82,64 +82,71 @@
 		<!-- /.content-header -->
 
 		<!-- Section listado de alumnos -->
-		<section class="content">
-			<form action="<?php echo APP_URL."asistenciaListHorario/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-			
+		<section class="content">			
 			<div class="container-fluid">
 				<div class="card card-default">
 					<div class="card-header">
-					<h3 class="card-title">Criterios de búsqueda</h3>
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
-						<i class="fas fa-minus"></i>
-						</button>
-					</div>
+						<h3 class="card-title">Criterios de búsqueda</h3>
+						<div class="card-tools">
+								<?php
+								if($horario_sedeid != 0){
+									echo '										
+										<form action="'.APP_URL.'asistenciaHorario/"  method="POST" autocomplete="off" >								
+											<input type="hidden" name="horario_sedeid" value="'.$horario_sedeid.'">						
+											<button type="submit" class="btn float-right btn-ver btn-sm" >Nuevo</button>
+										</form>	
+									';
+								}
+							?>						
+						</div>	
 					</div>  
 
+					<form action="<?php echo APP_URL."asistenciaListHorario/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
 					<!-- card-body -->                
-					<div class="card-body">
-						<div class="row">
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label for="alumno_identificacion">Horario nombre</label>                        
-									<input type="text" class="form-control" id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>">
-								</div>        
-							</div>
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label for="alumno_apellido1">Horario detalle</label>
-									<input type="text" class="form-control" id="horario_detalle" name="horario_detalle" placeholder="Detalle" value="<?php echo $horario_detalle; ?>">
-								</div>         
-							</div>											
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="alumno_sedeid">Sede</label>
-									<select class="form-control select2" id="horario_sedeid" name="horario_sedeid">
-										<?php
-											if($horario_sedeid == 0){	
-												echo "<option value='0' selected='selected'>Todas</option>";
-											}else{
-												echo "<option value='0'>Todas</option>";	
-											}
-										?>																		
-										<?php echo $insHorario->listarOptionSedebusqueda($horario_sedeid); ?>
-									</select>	
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="horario_nombre">Horario nombre</label>                        
+										<input type="text" class="form-control" id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>">
+									</div>        
 								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="alumno_sedeid">.</label>
-									<button type="submit" class="form-control btn btn-info">Buscar</button>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label for="horario_detalle">Horario detalle</label>
+										<input type="text" class="form-control" id="horario_detalle" name="horario_detalle" placeholder="Detalle" value="<?php echo $horario_detalle; ?>">
+									</div>         
+								</div>											
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="horario_sedeid">Sede</label>
+										<select class="form-control select2" id="horario_sedeid" name="horario_sedeid">
+											<?php
+												if($horario_sedeid == 0){	
+													echo "<option value='0' selected='selected'>Seleccionar sede</option>";
+												}else{
+													echo "<option value='0'>Seleccionar sede</option>";	
+												}
+											?>																		
+											<?php echo $insHorario->listarOptionSedebusqueda($horario_sedeid); ?>
+										</select>	
+									</div>
 								</div>
-							</div>
 
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="alumno_sedeid">.</label>
+										<button type="submit" class="form-control btn btn-info">Buscar</button>
+									</div>
+								</div>
+
+							</div>
+						
 						</div>
-					
-					</div>
+					</form>
 				</div>
             </div>  
-			</form>
+		
 
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
@@ -158,15 +165,16 @@
 							<thead>
 								<tr>
 									<th>Horario</th>
-									<th>Nombres</th>
-									<th>Apellidos</th>
-									<th>Año</th>									
+									<th>Detalle</th>
+									<th>Estado</th>																
 									<th>Opciones</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php 
-									echo $insHorario->listarAlumnos($alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_ano, $alumno_sedeid); 
+									if($horario_nombre !='' || $horario_detalle !='' || $horario_sedeid != 0){
+										echo $insHorario->listarHorarios($horario_nombre, $horario_detalle, $horario_sedeid); 
+									}
 								?>								
 							</tbody>
 						</table>	
@@ -226,11 +234,3 @@
     
   </body>
 </html>
-
-
-
-
-
-
-
-
