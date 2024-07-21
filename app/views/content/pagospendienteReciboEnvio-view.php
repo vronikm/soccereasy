@@ -223,10 +223,11 @@
        		return json_encode($alerta);
 
     }
-    
+/*    
     chmod($file_path, 0777);
 	unlink($file_path);
 	header("Location: ".APP_URL."pagospendienteRecibo/".$pagoid."/");
+*/
 
      //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
    	// Envio de correo -----------------------------------

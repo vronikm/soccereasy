@@ -2,7 +2,34 @@
 	use app\controllers\profesorController;
 	$insProfesor = new profesorController();	
 
+	$profesorid=$insProfesor->limpiarCadena($url[1]);
 
+	$profesor_sexoM 	= "";
+	$profesor_sexoF		= "";
+
+	$datosprofesor=$insProfesor->seleccionarDatos("Unico","sujeto_profesor","profesor_id",$profesorid);
+	if($datosprofesor->rowCount()==1){
+		$datosprofesor=$datosprofesor->fetch();
+		if ($datosprofesor['profesor_foto']!=""){
+			$foto = APP_URL.'app/views/imagenes/fotos/profesor/'.$datosprofesor['profesor_foto'];
+		}else{
+			$foto = APP_URL.'app/views/dist/img/default.png';
+		}
+		if ($datosprofesor['profesor_genero']=='M'){
+			$profesor_sexoM = "checked";
+		}else{
+			$profesor_sexoF = "checked";
+		}
+	
+		$profesor_id					= $datosprofesor['profesor_id'];
+		$profesor_tipoidentificacion 	= $datosprofesor['profesor_tipoidentificacion'];
+		$profesor_identificacion 	  	= $datosprofesor['profesor_identificacion'];
+		$profesor_nombre		  		= $datosprofesor['profesor_nombre'];
+		$profesor_correo 			  	= $datosprofesor['profesor_correo'];
+		$profesor_celular 			  	= $datosprofesor['profesor_celular'];
+		$profesor_especialidadid	  	= $datosprofesor['profesor_especialidadid'];
+		$profesor_direccion 		  	= $datosprofesor['profesor_direccion'];
+		$profesor_fechaingreso			= $datosprofesor['profesor_fechaingreso'];
 ?>
 
 <!DOCTYPE html>
@@ -11,13 +38,12 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Nuevo profesor</title>
+	<title><?php echo APP_NAME; ?>| Actualizar profesor</title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">	
 	<!-- daterange picker -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
 	<!-- iCheck for checkboxes and radio inputs -->
@@ -34,65 +60,52 @@
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
 	<!-- dropzonejs -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
-    
-
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
       <!-- Preloader -->
       <!--?php require_once "app/views/inc/preloader.php"; ?-->
       <!-- /.Preloader -->
-
       <!-- Navbar -->
       <?php require_once "app/views/inc/navbar.php"; ?>
       <!-- /.navbar -->
-
       <!-- Main Sidebar Container -->
       <?php require_once "app/views/inc/main-sidebar.php"; ?>
       <!-- /.Main Sidebar Container -->  
 
       <!-- vista -->
       <div class="content-wrapper">
-
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Nuevo profesor</h1>
+						<h1 class="m-0">Ver perfil de profesor</h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
-							<li class="breadcrumb-item active">Dashboard v1</li>
+							<li class="breadcrumb-item"><a href="#">Inicio</a></li>
+							<li class="breadcrumb-item active">Ficha Representante</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content-header -->
-
 		<!-- Main content -->
 		<section class="content">
-			<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/profesorAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-			<input type="hidden" name="modulo_profesor" value="registrar">
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Información personal</h3>
+						<h3 class="card-title">Profesor: <?php echo $profesor_nombre; ?></h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -103,88 +116,72 @@
 					<!-- card-body -->					
 					<div class="card-body">						
 						<!-- row -->	
-						<div class="row">						
+						<div class="row">	
+							<!-- foto -->
 							<div class="col-md-2">
 								<div class="form-group">
-									<label for="profesor_foto">Foto</label>		
-									<div class="input-group">											
-										<div class="fileinput fileinput-new" data-provides="fileinput">
-											<div class="fileinput-new thumbnail" style="width: 116px; height: 144px;" data-trigger="fileinput"><img src=""></div>
-											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 116px; max-height: 144px"></div>
-											<div>
-												<span class="bton bton-white bton-file">
-													<span class="fileinput-new">Seleccionar Foto</span>
-													<span class="fileinput-exists">Cambiar</span>
-													<input type="file" name="profesor_foto" id="foto" accept="image/*">
-												</span>
-												<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
-											</div>
-										</div>
-									</div>		
-								</div>
-								<!-- /.form-group -->								
+									<label for="profesor_foto">Foto</label>
+									<div class="text-center">								
+										<img class="profile-user-img img-fluid" style="width: 148px; height: 184px;" src="<?php echo $foto; ?>" alt="User profile picture">                        
+									</div>
+								</div>								
+									<!-- /.form-group -->								
 							</div>
-							<!-- /.col -->
 							<div class="col-sm-10">
 								<div class="row">
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label for="profesor_tipoidentificacion">Tipo identificación</label>
-											<select id="profesor_tipoidentificacion" class="form-control custom-select2" name="profesor_tipoidentificacion" >
-												<?php echo $insProfesor->listarCatalogoTipoDocumento(); ?>
+											<select id="profesor_tipoidentificacion" class="form-control custom-select2" name="profesor_tipoidentificacion" value="<?php echo $profesor_tipoidentificacion; ?>" disabled="">
+												<?php echo $insProfesor->OptionTipoIdentificacion($profesor_tipoidentificacion); ?>
 											</select>
 										</div>          
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="profesor_identificacion">Identificación</label>                        
-											<input type="text" class="form-control" id="profesor_identificacion" name="profesor_identificacion" placeholder="Identificación" required="required">
+											<input type="text" class="form-control" id="profesor_identificacion" name="profesor_identificacion" value="<?php echo $profesor_identificacion; ?>" disabled="">
 										</div>
-									</div>
+									</div>									
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="profesor_nombre">Nombre y Apellido</label>
-											<input type="text" class="form-control" id="profesor_nombre" name="profesor_nombre" placeholder="Nombre profesor">
+											<input type="text" class="form-control" id="profesor_nombre" name="profesor_nombre" value="<?php echo $profesor_nombre; ?>" disabled="">
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="profesor_correo">Correo</label>
-											<input type="email" class="form-control" id="profesor_correo" name="profesor_correo" placeholder="Correo profesor">	
+											<input type="email" class="form-control" id="profesor_correo" name="profesor_correo" value="<?php echo $profesor_correo; ?>" disabled="">	
 										</div>
 									</div>
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="profesor_celular">Celular</label>
-											<input type="text" class="form-control" id="profesor_celular" name="profesor_celular" data-inputmask='"mask": "0999999999"' data-mask placeholder="Celular" required>
+											<input type="text" class="form-control" id="profesor_celular" name="profesor_celular" value="<?php echo $profesor_celular; ?>" disabled="">
 										</div> 
 									</div>								
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label for="profesor_especialidadid">Especialidad</label>
-											<select id="profesor_especialidadid" class="form-control custom-select2" name="profesor_especialidadid" >
-												<?php echo $insProfesor->listarEspecialidad(); ?>
+											<select id="profesor_especialidadid" class="form-control custom-select2" name="profesor_especialidadid" disabled="">
+												<?php echo $insProfesor->OptionEspecialidad($profesor_especialidadid); ?>
 											</select>
 										</div>          
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="profesor_fechaingreso">Fecha de ingreso</label>
-											<div class="input-group">
-												<div class="input-group-prepend">
-													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-												</div>
-												<input type="date" class="form-control" name="profesor_fechaingreso" id="profesor_fechaingreso" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask>
-											</div>
+											<input type="text" class="form-control" name="profesor_fechaingreso" id="profesor_fechaingreso" value="<?php echo $profesor_fechaingreso; ?>" disabled="">
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
 											<label for="profesor_genero">Sexo</label>
 											<div class="form-check">
-												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoM" name="profesor_genero" value="M" required="required">
+												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoM" name="profesor_genero" <?php echo $profesor_sexoM; ?> disabled="">
 												<label class="col-sm-5 form-check-label" for="profesor_generoM">Masculino</label>
-												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoF" name="profesor_genero" value="F">
+												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoF" name="profesor_genero" <?php echo $profesor_sexoF; ?> disabled="">
 												<label class="col-sm-4 form-check-label" for="profesor_generoF">Femenino</label>
 											</div> 
 										</div>
@@ -192,29 +189,31 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="profesor_direccion">Dirección</label>
-											<textarea class="form-control" id="profesor_direccion" name="profesor_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
+											<input type="text" class="form-control" id="profesor_direccion" name="profesor_direccion" value="<?php echo $profesor_direccion; ?>" disabled="">
 										</div>	
 									</div> 
-								</div>								
+								</div>
+								<!-- /.form-group -->		
 							</div>
-							<!-- /.col -->							
-						</div>
-						<!-- /.row -->
+						</div>					
+						<!-- /.row -->							
 					</div> 
-					<!-- /.card-body -->					
+					<!-- /.card-body -->
+					<div class="card-footer">						
+						<a href="#" class="btn btn-dark btn-back btn-sm">Regresar</a>												
+					</div>
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
-
-			<div class="card-footer">						
-				<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-				<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
-			</div>
-
-			</form>
 		</section>
 		<!-- /.content -->
-      
+		
+		<?php
+			}else{
+				include "./app/views/inc/error_alert.php";
+			}
+		?>
+
       </div>
       <!-- /.vista -->
 
@@ -226,9 +225,7 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
@@ -253,14 +250,9 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 	<!-- dropzonejs -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script-->
-	
 	<!-- fileinput -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
     
@@ -398,6 +390,8 @@
 		}
 		// DropzoneJS Demo Code End
 	</script>
+
+	<?php include "./app/views/inc/btn_back.php";	?>
 
   </body>
 </html>

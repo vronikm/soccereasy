@@ -14,7 +14,7 @@
 			$profesor_correo			= $this->limpiarCadena($_POST['profesor_correo']);		    		    
 			$profesor_celular			= $this->limpiarCadena($_POST['profesor_celular']);
 			$profesor_direccion			= $this->limpiarCadena($_POST['profesor_direccion']);
-			$profesor_cargoid			= $this->limpiarCadena($_POST['profesor_cargoid']);
+			$profesor_especialidadid	= $this->limpiarCadena($_POST['profesor_especialidadid']);
 			$profesor_fechaingreso		= $this->limpiarCadena($_POST['profesor_fechaingreso']);
 			$profesor_estado			= "A";
 
@@ -30,7 +30,6 @@
 				];
 				return json_encode($alerta);
 			}
-
 			# Verificando email #
 			if($profesor_correo!=""){
 				if(filter_var($profesor_correo, FILTER_VALIDATE_EMAIL)){
@@ -181,9 +180,9 @@
 					"campo_valor"=>$profesor_direccion
 				],
 				[
-					"campo_nombre"=>"profesor_cargoid",
+					"campo_nombre"=>"profesor_especialidadid",
 					"campo_marcador"=>":Cargo",
-					"campo_valor"=>$profesor_cargoid
+					"campo_valor"=>$profesor_especialidadid
 				],			
 				[
 					"campo_nombre"=>"profesor_fechaingreso",
@@ -349,7 +348,7 @@
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
 								FROM general_tabla_catalogo C
 								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
-								WHERE T.tabla_nombre = 'tipo_documento'";	
+								WHERE T.tabla_nombre = 'especialidad_profesor'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
