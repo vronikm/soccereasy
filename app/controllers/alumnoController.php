@@ -915,7 +915,6 @@
 			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
 			$alumno_posicionid			= ""; //$this->limpiarCadena($_POST['alumno_posicionid']);					
 			$alumno_numcamiseta 		= $_POST['alumno_numcamiseta'];
-			$alumno_estado 				= "A";
 			$alumno_genero 				= "";
 			$alumno_hermanos 			= "";
 
@@ -939,7 +938,7 @@
 		    if($alumno_identificacion=="" || $alumno_primernombre=="" || $alumno_apellidopaterno=="" || $alumno_fechanacimiento==""){
 		    	$alerta=[
 					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
+					"titulo"=>"Error",
 					"texto"=>"No ha completado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
@@ -950,7 +949,7 @@
 		    if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,40}",$alumno_primernombre)){
 		    	$alerta=[
 					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
+					"titulo"=>"Error",
 					"texto"=>"El campo nombre no coincide con el formato solicitado",
 					"icono"=>"error"
 				];
@@ -1032,12 +1031,7 @@
 					"campo_nombre"=>"alumno_hermanos",
 					"campo_marcador"=>":Hermanos",
 					"campo_valor"=>$alumno_hermanos
-				],
-				[
-					"campo_nombre"=>"alumno_estado",
-					"campo_marcador"=>":Activo",
-					"campo_valor"=>$alumno_estado
-				],				
+				],			
 				[
 					"campo_nombre"=>"alumno_numcamiseta",
 					"campo_marcador"=>":Camiseta",
@@ -1060,7 +1054,7 @@
 					if(!mkdir($img_dir,0777)){
 						$alerta=[
 							"tipo"=>"simple",
-							"titulo"=>"Ocurrió un error",
+							"titulo"=>"Error",
 							"texto"=>"No se creó el directorio",
 							"icono"=>"error"
 						];
@@ -1073,7 +1067,7 @@
 				if(mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/png"){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
 						"icono"=>"error"
 					];
@@ -1085,7 +1079,7 @@
 				if(($_FILES['alumno_foto']['size']/1024)>4000){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 						"icono"=>"error"
 					];
@@ -1121,7 +1115,7 @@
 				}else{
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"No es posible subir la imagen al sistema en este momento",
 						"icono"=>"error"
 					];
@@ -1138,10 +1132,8 @@
 					"campo_nombre" => "alumno_imagen",
 					"campo_marcador" => ":Foto",
 					"campo_valor" => $foto
-				];
-				
+				];				
 			}
-
 
 			if($_FILES['alumno_cedulaA']['name']!="" && $_FILES['alumno_cedulaA']['size']>0){
 		
@@ -1150,12 +1142,11 @@
 					if(!mkdir($dir_cedula,0777)){
 						$alerta=[
 							"tipo"=>"simple",
-							"titulo"=>"Ocurrió un error",
+							"titulo"=>"Error",
 							"texto"=>"No se creó el directorio",
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					} 
 				}
 
@@ -1163,30 +1154,27 @@
 				if(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/png"){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Verificando peso de imagen #
 				if(($_FILES['alumno_cedulaA']['size']/1024)>4000){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				#nombre de la imagen cedula
 				$CedulaA=str_ireplace(" ","_",$alumno_identificacion);
-				$CedulaA=$CedulaA."_A".$codigorand=rand(0,100);
-					
+				$CedulaA=$CedulaA."_A".$codigorand=rand(0,100);					
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])){
@@ -1211,7 +1199,7 @@
 				}else{
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
 						"icono"=>"error"
 					];
@@ -1228,8 +1216,7 @@
 					"campo_nombre" => "alumno_cedulaA",
 					"campo_marcador" => ":CedulaA",
 					"campo_valor" => $CedulaA
-				];
-				
+				];				
 			}
 
 			if($_FILES['alumno_cedulaR']['name']!="" && $_FILES['alumno_cedulaR']['size']>0){
@@ -1239,12 +1226,11 @@
 					if(!mkdir($dir_cedula,0777)){
 						$alerta=[
 							"tipo"=>"simple",
-							"titulo"=>"Ocurrió un error",
+							"titulo"=>"Error",
 							"texto"=>"No se creó el directorio",
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					} 
 				}
 
@@ -1252,30 +1238,27 @@
 				if(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/png"){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Verificando peso de imagen #
 				if(($_FILES['alumno_cedulaR']['size']/1024)>4000){
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				#nombre imagen cedula reverso
 				$CedulaR=str_ireplace(" ","_",$alumno_identificacion);
-				$CedulaR=$CedulaR."_R".$codigorand;
-				
+				$CedulaR=$CedulaR."_R".$codigorand;				
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])){
@@ -1300,7 +1283,7 @@
 				}else{
 					$alerta=[
 						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
+						"titulo"=>"Error",
 						"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
 						"icono"=>"error"
 					];
@@ -1317,8 +1300,7 @@
 					"campo_nombre" => "alumno_cedulaR",
 					"campo_marcador" => ":CedulaR",
 					"campo_valor" => $CedulaR
-				];
-				
+				];				
 			}
 
 			$condicion=[
