@@ -123,9 +123,21 @@
 							<!-- foto -->
 							<div class="col-md-2">
 								<div class="form-group">
-									<label for="profesor_foto">Foto</label>
-									<div class="text-center">								
-										<img class="profile-user-img img-fluid" style="width: 148px; height: 184px;" src="<?php echo $foto; ?>" alt="User profile picture">                        
+									<label for="profesor_foto">Foto (250KB)</label>		
+									<div class="input-group">											
+										<div class="fileinput fileinput-new" data-provides="fileinput">
+											<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput">
+												<img src="<?php echo $foto; ?>"></div>
+											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
+											<div>
+												<span class="bton bton-white bton-file">
+													<span class="fileinput-new">Seleccionar Foto</span>
+													<span class="fileinput-exists">Cambiar</span>
+													<input type="file" name="profesor_foto" id="profesor_foto" accept="image/*">
+												</span>
+												<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
+											</div>
+										</div>
 									</div>
 								</div>								
 									<!-- /.form-group -->								
