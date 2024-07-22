@@ -148,9 +148,9 @@
 												<th>Lugar entrenamiento</th>
 												<th>Hora</th>
 												<th>Profesor</th>
-												<th><button type="button" class="btn btn-info btn-sm float-right btn_add" id="agregar" name="agregar">Agregar</button></th>	
-																				
+												<th><button type="button" class="btn btn-info btn-sm float-right btn_add" id="agregar" name="agregar">Agregar</button></th>
 											</tr>
+											<?php echo $insHorario->listarDetalleHorario($horario_id); ?>
 										</thead>
 										<tbody>
 											<?php 
@@ -235,13 +235,13 @@
 							"</select>";
 				
 				// Columna 2: Lugares de entrenamiento con PHP
-				var column2 = "<select class='form-control' id='lugar' name='lugar[]'><?php echo addslashes($insHorario->listarOptionLugar($lugar_sedeid)); ?></select>";
+				var column2 = "<select class='form-control' id='lugar' name='lugar[]'><?php echo addslashes($insHorario->listarOptionLugar($lugar_sedeid,0)); ?></select>";
 				
 				// Columna 3: Horarios con PHP
-				var column3 = "<select class='form-control' id='hora' name='hora[]'><?php echo addslashes($insHorario->listarOptionHora()); ?></select>";
+				var column3 = "<select class='form-control' id='hora' name='hora[]'><?php echo addslashes($insHorario->listarOptionHora(0)); ?></select>";
 				
 				// Columna 4: Profesores con PHP
-				var column4 = "<select class='form-control' id='profesor' name='profesor[]'><?php echo addslashes($insHorario->listarOptionProfesor($lugar_sedeid)); ?></select>";
+				var column4 = "<select class='form-control' id='profesor' name='profesor[]'><?php echo addslashes($insHorario->listarOptionProfesor($lugar_sedeid,0)); ?></select>";
 				
 				// Agregar una nueva fila a la tabla
 				$("#presupuesto").append(

@@ -294,19 +294,107 @@
 			return $tabla;			
 		}
 
-		public function listarOptionProfesor($lugar_sedeid){
+		public function listarOptionProfesor($lugar_sedeid, $profesorid){
 			
 			$option="";
 			$consulta_datos="SELECT profesor_id, profesor_nombre 
-							FROM sujeto_profesor 
+							FROM sujeto_profesor
 							INNER JOIN seguridad_usuario ON usuario_identificacion = profesor_identificacion
 							INNER JOIN seguridad_usuario_sede ON usuariosede_usuarioid = usuario_id 
-							WHERE usuario_estado = 'A' AND usuario_rolid = '3' AND usuariosede_sedeid =".$lugar_sedeid ;
-
+							WHERE profesor_estado = 'A' AND usuariosede_sedeid =".$lugar_sedeid;
+							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				$option.='<option value='.$rows['usuario_id'].'>'.$rows['usuario_nombre'].'</option>';				
+				if($profesorid == $rows["profesor_id"]){
+					$option.='<option value='.$rows['profesor_id'].' selected>'.$rows['profesor_nombre'].'</option>';	
+				}else{
+					$option.='<option value='.$rows['profesor_id'].'>'.$rows['profesor_nombre'].'</option>';	
+				}			
+			}
+			return $option;
+		}
+
+		public function listarDetalleHorario($horario_id){
+			
+			$option="";
+			$consulta_datos="SELECT  lugar_id, lugar_sedeid, detalle_horaid, profesor_id, detalle_dia	  
+							FROM asistencia_horario_detalle
+							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
+							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
+							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							WHERE detalle_horarioid = ".$horario_id;
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$LU = "";
+				$MA = "";
+				$MI = "";
+				$JU = "";
+				$VI = "";
+				$SA = "";
+				$DO = "";		
+
+				switch ($rows["detalle_dia"]) {
+					case 'LU':
+						$dia = 'Lunes';
+						$LU = "selected";
+						break;
+					case 'MA':
+						$dia = 'Martes';
+						$MA = "selected";
+						break;
+					case 'MI':
+						$dia = 'Miércoles';
+						$MI = "selected";
+						break;
+					case 'JU':
+						$dia = 'Jueves';
+						$JU = "selected";
+						break;
+					case 'VI':
+						$dia = 'Viernes';
+						$VI = "selected";
+						break;
+					case 'SA':
+						$dia = 'Sábado';
+						$SA = "selected";
+						break;
+					case 'DO':
+						$dia = 'Domingo';
+						$DO = "selected";
+						break;
+					default:
+						$dia = 'Día desconocido';
+				}
+
+				// Columna 1: Días de la semana
+				$column1 = "<select class='form-control' name='dia[]'>
+							<option value='LU' ".$LU.">Lunes</option>
+							<option value='MA' ".$MA.">Martes</option>
+							<option value='MI' ".$MI.">Miércoles</option>
+							<option value='JU' ".$JU.">Jueves</option>
+							<option value='VI' ".$VI.">Viernes</option>
+							<option value='SA' ".$SA.">Sábado</option>
+							<option value='DO' ".$DO.">Domingo</option>
+							</select>";
+
+				// Columna 2: Lugares de entrenamiento con PHP
+				$column2 = "<select class='form-control' id='lugar' name='lugar[]'>".$this->listarOptionLugar($rows['lugar_sedeid'], $rows['lugar_id'])."</select>";
+				
+				// Columna 3: Horarios con PHP
+				$column3 = "<select class='form-control' id='hora' name='hora[]'>".$this->listarOptionHora($rows['detalle_horaid'])."</select>";
+				
+				// Columna 4: Profesores con PHP
+				$column4 = "<select class='form-control' id='profesor' name='profesor[]'>".$this->listarOptionProfesor($rows['lugar_sedeid'], $rows['profesor_id'])."</select>";
+				
+				$option.=		
+					"<tr><td>".$column1."</td>
+					<td>".$column2."</td>
+					<td>".$column3."</td>
+					<td>".$column4."</td>                  
+					<td><button type='button' class='btn btn-danger btn-sm btn-icon icon-left btn_remove float-right'>Eliminar<i class='entypo-trash'></i></button></td></tr>";	
 			}
 			return $option;
 		}
@@ -342,32 +430,44 @@
 			return $option;
 		}
 
-		public function listarOptionLugar($sedeid){
+		public function listarOptionLugar($sedeid, $lugarid){
 			$option="";
 			$consulta_datos="SELECT lugar_id, lugar_sedeid, lugar_nombre 
 								FROM asistencia_lugar 
 								WHERE  lugar_estado = 'A' 
-									AND lugar_sedeid  = ".$sedeid;									
-					
+									AND lugar_sedeid  = ".$sedeid;		
+
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				if($sedeid==$rows['lugar_sedeid']){
-					$option.='<option value='.$rows['lugar_id'].' selected="selected">'.$rows['lugar_nombre'].'</option>';
-				}else{
-					$option.='<option value='.$rows['lugar_id'].'>'.$rows['lugar_nombre'].'</option>';	
+				if($lugarid != 0){
+					if($lugarid==$rows['lugar_id']){
+						$option.='<option value='.$rows['lugar_id'].' selected="selected">'.$rows['lugar_nombre'].'</option>';
+					}else{
+						$option.='<option value='.$rows['lugar_id'].'>'.$rows['lugar_nombre'].'</option>';	
+					}
+				}else{	
+					if($sedeid==$rows['lugar_sedeid']){
+						$option.='<option value='.$rows['lugar_id'].' selected="selected">'.$rows['lugar_nombre'].'</option>';
+					}else{
+						$option.='<option value='.$rows['lugar_id'].'>'.$rows['lugar_nombre'].'</option>';	
+					}
 				}
 			}
 			return $option;
 		}
 
-		public function listarOptionHora(){
+		public function listarOptionHora($horaid){
 			$option="";
 			$consulta_datos="SELECT hora_id, CONCAT(hora_detalle, ' | ', hora_inicio, ' - ', hora_fin) AS HORA FROM asistencia_hora WHERE hora_estado = 'A'";						
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				$option.='<option value='.$rows['hora_id'].'>'.$rows['HORA'].'</option>';				
+			foreach($datos as $rows){				
+				if($horaid==$rows['hora_id']){
+					$option.='<option value='.$rows['hora_id'].' selected>'.$rows['HORA'].'</option>';
+				}else{
+					$option.='<option value='.$rows['hora_id'].'>'.$rows['HORA'].'</option>';	
+				}			
 			}
 			return $option;
 		}
@@ -498,8 +598,8 @@
 						<td>'.$estado.'</td>
 						<td>
 							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-sm">Eliminar</a>
-							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/"  class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
-							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/"  class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
+							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
+							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
 						</td>
 					</tr>';	
 			}
