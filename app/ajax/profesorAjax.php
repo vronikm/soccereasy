@@ -17,7 +17,14 @@
 		if($_POST['modulo_profesor']=="actualizar"){
 			echo $insProfesor->actualizarProfesorControlador();
 		}
-		
+
+		if($_POST['modulo_profesor']=="actualizarestado"){
+			echo $insProfesor->actualizarEstadoProfesorControlador();
+		}		
+
+		if($_POST['modulo_profesor']=="eliminar"){
+			echo $insProfesor->eliminarProfesorControlador();
+		}		
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");

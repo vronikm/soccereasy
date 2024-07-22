@@ -30,6 +30,7 @@
 		$profesor_especialidadid	  	= $datosprofesor['profesor_especialidadid'];
 		$profesor_direccion 		  	= $datosprofesor['profesor_direccion'];
 		$profesor_fechaingreso			= $datosprofesor['profesor_fechaingreso'];
+		$profesor_sueldo				= $datosprofesor['profesor_sueldo'];
 ?>
 
 <!DOCTYPE html>
@@ -194,9 +195,9 @@
 										<div class="form-group">
 											<label for="profesor_genero">Sexo</label>
 											<div class="form-check">
-												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoM" name="profesor_genero" <?php echo $profesor_sexoM; ?> >
+												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoM" name="profesor_genero" value="M" <?php echo $profesor_sexoM; ?> >
 												<label class="col-sm-5 form-check-label" for="profesor_generoM">Masculino</label>
-												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoF" name="profesor_genero" <?php echo $profesor_sexoF; ?> >
+												<input class="col-sm-1 form-check-input" type="radio" id="profesor_generoF" name="profesor_genero" value="F" <?php echo $profesor_sexoF; ?> >
 												<label class="col-sm-4 form-check-label" for="profesor_generoF">Femenino</label>
 											</div> 
 										</div>
@@ -210,7 +211,7 @@
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="profesor_sueldo">Sueldo USD</label>
-											<input type="text" class="form-control" id="profesor_sueldo" name="profesor_sueldo" placeholder="Sueldo" required>
+											<input type="text" class="form-control" id="profesor_sueldo" name="profesor_sueldo" value="<?php echo $profesor_sueldo; ?>">
 										</div> 
 									</div> 
 								</div>
