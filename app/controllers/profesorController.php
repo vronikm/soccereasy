@@ -16,10 +16,11 @@
 			$profesor_direccion			= $this->limpiarCadena($_POST['profesor_direccion']);
 			$profesor_especialidadid	= $this->limpiarCadena($_POST['profesor_especialidadid']);
 			$profesor_fechaingreso		= $this->limpiarCadena($_POST['profesor_fechaingreso']);
-			$profesor_sueldo			= $this->limpiarCadena($_POST['profesor_sueldo']);
+			$profesor_genero 			= $this->limpiarCadena($_POST['profesor_genero']);
+			$profesor_sueldo			= $this->limpiarCadena($_POST['profesor_sueldo']);			
 			$profesor_estado			= "A";
 
-			$profesor_genero = $this->limpiarCadena($_POST['profesor_genero']);
+			$profesor_sueldo = str_replace(['$', ',', ' '], '', $profesor_sueldo);
 
 			# Verificando campos obligatorios #
 			if($profesor_identificacion=="" || $profesor_nombre=="" || $profesor_celular=="" || $profesor_correo==""){
@@ -398,6 +399,8 @@
 			$profesor_sueldo			= $this->limpiarCadena($_POST['profesor_sueldo']);
 			$profesor_genero 			= $this->limpiarCadena($_POST['profesor_genero']);
 
+			$profesor_sueldo = str_replace(['$', ',', ' '], '', $profesor_sueldo);
+
 			# Verificando campos obligatorios #
 			if($profesor_identificacion=="" || $profesor_nombre=="" || $profesor_celular=="" || $profesor_correo==""){
 				$alerta=[
@@ -577,4 +580,113 @@
 			}
 			return json_encode($alerta);
         }
+
+		public function actualizarEstadoProfesorControlador(){
+
+			$profesor_id=$this->limpiarCadena($_POST['profesor_id']);
+
+			# Verificando usuario #
+		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_profesor WHERE profesor_id='$profesor_id'");
+		    if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"El profesor no se encuentra en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();
+		    }
+			if($datos['profesor_estado']=='A'){
+				$estadoA = 'I';
+			}else{
+				$estadoA = 'A';
+			}
+            $profesor_datos_up=[
+				[
+					"campo_nombre"=>"profesor_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> $estadoA
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"profesor_id",
+				"condicion_marcador"=>":Profesorid",
+				"condicion_valor"=>$profesor_id
+			];
+
+			if($this->actualizarDatos("sujeto_profesor",$profesor_datos_up,$condicion)){
+
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Estado actualizado correctamente",
+					"texto"=>"El estado del profesor ".$datos['profesor_nombre']." fue actualizado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar el estado del profesor ".$datos['profesor_nombre']." por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}
+
+		/*----------  Controlador eliminar profesor  ----------*/
+		public function eliminarProfesorControlador(){
+
+			$profesor_id=$this->limpiarCadena($_POST['profesor_id']);
+
+			# Verificando usuario #
+			$datos=$this->ejecutarConsulta("SELECT * FROM sujeto_profesor WHERE profesor_id='$profesor_id'");
+			if($datos->rowCount()<=0){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"El profesor no se encuentra en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}else{
+				$datos=$datos->fetch();
+			}
+			if($datos['profesor_estado']=='A' || $datos['profesor_estado']=='I'){
+				$estadoA = 'E';
+			}else{
+				$estadoA = 'X';
+			}
+			$profesor_datos_up=[
+				[
+					"campo_nombre"=>"profesor_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> $estadoA
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"profesor_id",
+				"condicion_marcador"=>":Profesorid",
+				"condicion_valor"=>$profesor_id
+			];
+
+			if($this->actualizarDatos("sujeto_profesor",$profesor_datos_up,$condicion)){
+
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"El profesor fue eliminado correctamente",
+					"texto"=>"El profesor ".$datos['profesor_nombre']." fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido eliminar el profesor ".$datos['profesor_nombre']." por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}
     }
