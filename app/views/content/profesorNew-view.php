@@ -1,8 +1,6 @@
 <?php
 	use app\controllers\profesorController;
-	$insProfesor = new profesorController();	
-
-
+	$insProfesor = new profesorController();
 ?>
 
 <!DOCTYPE html>
@@ -16,8 +14,7 @@
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">	
 	<!-- daterange picker -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
 	<!-- iCheck for checkboxes and radio inputs -->
@@ -34,19 +31,13 @@
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
 	<!-- dropzonejs -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
-    
-
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -65,7 +56,6 @@
 
       <!-- vista -->
       <div class="content-wrapper">
-
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
@@ -195,6 +185,12 @@
 											<textarea class="form-control" id="profesor_direccion" name="profesor_direccion" placeholder="Barrio, Calle principal, #casa, calle secundaria"></textarea>
 										</div>	
 									</div> 
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="profesor_sueldo">Sueldo USD</label>
+											<input type="text" class="form-control" id="profesor_sueldo" name="profesor_sueldo" placeholder="Sueldo" required>
+										</div> 
+									</div>
 								</div>								
 							</div>
 							<!-- /.col -->							
@@ -213,8 +209,7 @@
 
 			</form>
 		</section>
-		<!-- /.content -->
-      
+		<!-- /.content -->      
       </div>
       <!-- /.vista -->
 
@@ -227,13 +222,11 @@
       <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
-
     
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -253,14 +246,9 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 	<!-- dropzonejs -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script-->
-	
 	<!-- fileinput -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
     
@@ -399,5 +387,19 @@
 		// DropzoneJS Demo Code End
 	</script>
 
+	<!-- Aplicar la máscara de entrada para el campo sueldo-->
+	<script>
+        $(document).ready(function(){
+            Inputmask({
+                alias: "currency",
+                prefix: "$ ",  // Prefijo de la moneda
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                digitsOptional: false,
+                placeholder: "0"
+            }).mask("#profesor_sueldo");
+        });
+    </script>
   </body>
 </html>

@@ -13,6 +13,10 @@
 		if($_POST['modulo_profesor']=="registrar"){
 			echo $insProfesor->registrarProfesorControlador();
 		}
+
+		if($_POST['modulo_profesor']=="actualizar"){
+			echo $insProfesor->actualizarProfesorControlador();
+		}
 		
 	}else{
 		session_destroy();

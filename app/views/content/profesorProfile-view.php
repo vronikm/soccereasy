@@ -30,6 +30,7 @@
 		$profesor_especialidadid	  	= $datosprofesor['profesor_especialidadid'];
 		$profesor_direccion 		  	= $datosprofesor['profesor_direccion'];
 		$profesor_fechaingreso			= $datosprofesor['profesor_fechaingreso'];
+		$profesor_sueldo				= $datosprofesor['profesor_sueldo'];
 ?>
 
 <!DOCTYPE html>
@@ -191,7 +192,13 @@
 											<label for="profesor_direccion">Dirección</label>
 											<input type="text" class="form-control" id="profesor_direccion" name="profesor_direccion" value="<?php echo $profesor_direccion; ?>" disabled="">
 										</div>	
-									</div> 
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="profesor_sueldo">Sueldo USD</label>
+											<input type="text" class="form-control" id="profesor_sueldo" name="profesor_sueldo" value="<?php echo $profesor_sueldo; ?>" disabled="">
+										</div> 
+									</div>  
 								</div>
 								<!-- /.form-group -->		
 							</div>
@@ -391,6 +398,22 @@
 		// DropzoneJS Demo Code End
 	</script>
 
+
+	<!-- Aplicar la máscara de entrada para el campo sueldo-->
+	<script>
+        $(document).ready(function(){
+            Inputmask({
+                alias: "currency",
+                prefix: "$ ",  // Prefijo de la moneda
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                digitsOptional: false,
+                placeholder: "0"
+            }).mask("#profesor_sueldo");
+        });
+    </script>
+	
 	<?php include "./app/views/inc/btn_back.php";	?>
 
   </body>

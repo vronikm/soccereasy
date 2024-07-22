@@ -44,7 +44,6 @@
 
       <!-- vista -->
       <div class="content-wrapper">
-
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
@@ -114,9 +113,7 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
