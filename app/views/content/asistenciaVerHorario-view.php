@@ -11,12 +11,18 @@
 	$insHorario = new asistenciaController();	
 	$horario_id = ($url[1] != "") ? $insHorario->limpiarCadena($url[1]) : 0;
 
-	$datos=$insHorario->generarHorario($horario_id);
-	
-	if($datos->rowCount()>0){
-		$datos=$datos->fetch();
+	$datoshorario=$insHorario->seleccionarDatos("Unico","asistencia_horario","horario_id",$horario_id);
+	if($datoshorario->rowCount()==1){
+		$datoshorario=$datoshorario->fetch();
+		$lugar_sedeid 		= $datoshorario['horario_sedeid'];
+		$horario_nombre 	= $datoshorario['horario_nombre'];
+		$horario_detalle	= $datoshorario['horario_detalle'];
+		$horario_estado		= $datoshorario['horario_estado'];
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		$lugar_sedeid = isset($_POST['horario_sedeid']) ? $insHorario->limpiarCadena($_POST['horario_sedeid']) : 0;
+		$horario_nombre 	= "";
+		$horario_detalle	= "";
+		$horario_estado		= "";
 	}
 
 	$escuela=$insHorario->informacionEscuela();
@@ -90,7 +96,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Horario de: <?php echo $datos['horario_nombre'].", ".$datos['horario_detalle'] ; ?></h4>
+							<h4 class="m-0">Horario <?php echo $horario_nombre; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -115,7 +121,7 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg' ?>" style="width: 200px; height: 100px;"/>										
+											<img src="<?php echo APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg' ?>" style="width: 180px; height: 100px;"/>										
 											<br>Dirección: <?php echo $escuela["escuela_direccion"]; ?><br>
 											Celular: <?php echo $escuela["escuela_movil"]; ?> - LOJA - ECUADOR										
 										</address>
@@ -159,27 +165,25 @@
 								<!-- Table row -->
 								<div class="row">
 									<div class="col-12 table-responsive">
-										<table class="table table-striped table-sm">											
+										<table class="table table-striped table-bordered  table-sm">											
 											<tbody>
 												<tr>													
-													<th colspan="4">horario de: <?php echo $datos['horario_nombre']." ".$datos['horario_detalle']; ?></th>																							
-												</tr>	
-												<tr>													
-													<th>Recibo de: </th>	
-													<td colspan="3"><?php echo $datos['alumno_primernombre']." ".$datos['alumno_segundonombre']." ".$datos['alumno_apellidopaterno']." ".$datos['alumno_apellidomaterno']." (".date('Y', strtotime($datos['alumno_fechanacimiento'])).")"; ?></td>																										
-												</tr>	
-												<tr>													
-													<th>La Cantidad de: </th>	
-													<td colspan="3"><?php echo ucfirst($insAlumno->textoLetras($datos['PAGO_INICIAL'])); ?></td>																										
-												</tr>		
-												<tr>													
-													<th>Por Concepto de: </th>	
-													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['pago_periodo'].", ".$datos['pago_concepto']; ?></td>																										
-												</tr>	
-												<tr>													
-													<th>Forma de pago: </th>	
-													<td colspan="3"><?php echo $datos['FORMAPAGO']; ?></td>																										
-												</tr>							
+													<th colspan="8">Horario <?php echo $horario_nombre.", ".$horario_detalle; ?></th>																							
+												</tr>
+												<tr>		
+													<th></th>												
+													<th>LUNES</th>	
+													<th>MARTES</th>
+													<th>MIERCOLES</th>
+													<th>JUEVES</th>
+													<th>VIERNES</th>
+													<th>SABADO</th>
+													<th>DOMINGO</th>																						
+												</tr>
+													
+													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>																									
+													
+																		
 											</tbody>
 										</table>
 									</div>
@@ -188,24 +192,7 @@
 								<!-- /.row -->
 								<div class="row">
 									<div class="col-4">
-										<p class="lead">MONTO</p>
-
-										<div class="table-responsive table-sm">
-											<table class="table">
-												<tr>
-													<th style="width:50%">SUBTOTAL:</th>
-													<td>$ <?php echo number_format($datos['DEUDA_INICIAL'], 2); ?></td>
-												</tr>
-												<tr>
-													<th>ABONO:</th>
-													<td>$ <?php echo $datos['PAGO_INICIAL']; ?></td>
-												</tr>
-												<tr>
-													<th>SALDO:</th>
-													<td>$ <?php echo $datos['SALDO_INICIAL']; ?></td>
-												</tr>												
-											</table>
-										</div>
+																				
 									</div>
 									<!-- accepted payments column -->
 									<div class="col-4">										
@@ -214,7 +201,7 @@
 									<div class="col-4">										
 										<?php
 											('Content-Type: image/svg+xml');
-											$svg = $generator->render_svg($symbology,"Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 
+											$svg = $generator->render_svg($symbology,"Horario ".$horario_nombre." | "."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 
 											echo $svg;  
 										?>								
 									</div>
@@ -234,10 +221,10 @@
 										<button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
 											<i class="fas fa-download"></i> Descargar recibo
 										</button-->
-										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
+										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$horario_id.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar horario</a>
 
 
-										<a href="<?php echo APP_URL.'pagosReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo </a>
+										<a href="<?php echo APP_URL.'pagosReciboPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver horario</a>
 
 										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i>Imprimir recibo</button-->
 										

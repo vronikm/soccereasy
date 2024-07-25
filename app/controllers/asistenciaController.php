@@ -408,59 +408,72 @@
 
 		public function generarHorario($horario_id){
 			
-			$option="";
-			$consulta_datos = "SELECT 
-			'Hora' AS Categoria,
-			MAX(CASE WHEN detalle_dia = 1 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Lunes,
-			MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
-			MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miércoles,
-			MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
-			MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes,
-			MAX(CASE WHEN detalle_dia = 6 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Sábado,
-			MAX(CASE WHEN detalle_dia = 7 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Domingo
-		FROM asistencia_horario 
-		INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
-		LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
-		WHERE horario_id = ".$horario_id."
-		GROUP BY Categoria
-		
-		UNION ALL
-		
-		SELECT 
-			'Lugar' AS Categoria,
-			MAX(CASE WHEN detalle_dia = 1 THEN lugar_nombre END) AS Lunes,
-			MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
-			MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miércoles,
-			MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
-			MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes,
-			MAX(CASE WHEN detalle_dia = 6 THEN lugar_nombre END) AS Sábado,
-			MAX(CASE WHEN detalle_dia = 7 THEN lugar_nombre END) AS Domingo
-		FROM asistencia_horario 
-		INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
-		LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
-		WHERE horario_id = ".$horario_id."
-		GROUP BY Categoria
-		
-		UNION ALL
-		
-		SELECT 
-			'Profesor' AS Categoria,
-			MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
-			MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
-			MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miércoles,
-			MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
-			MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes,
-			MAX(CASE WHEN detalle_dia = 6 THEN profesor_nombre END) AS Sábado,
-			MAX(CASE WHEN detalle_dia = 7 THEN profesor_nombre END) AS Domingo
-		FROM asistencia_horario 
-		INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
-		LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
-		WHERE horario_id = ".$horario_id."
-		GROUP BY Categoria";
+			$tabla="";
+			$consulta_datos = "SELECT  
+								'Horario' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Cancha' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN lugar_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN lugar_nombre END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN lugar_nombre END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Profesor' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN profesor_nombre END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN profesor_nombre END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria";
 		
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
-			return $datos;
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.="	<tr style='font-size: 15px'>					
+								<th>".$rows['Categoria']."</th>	
+								<td>".$rows['Lunes']."</td>
+								<td>".$rows['Martes']."</td>
+								<td>".$rows['Miercoles']."</td>
+								<td>".$rows['Jueves']."</td>
+								<td>".$rows['Viernes']."</td>
+								<td>".$rows['Sabado']."</td>
+								<td>".$rows['Domingo']."</td>																									
+							</tr>";
+			}
+			return $tabla;
 		}
 
 		public function listarOptionSede(){
