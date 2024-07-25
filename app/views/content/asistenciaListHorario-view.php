@@ -91,7 +91,7 @@
 								<?php
 								if($horario_sedeid != 0){
 									echo '										
-										<form action="'.APP_URL.'asistenciaHorario/"  method="POST" autocomplete="off" >								
+										<form action="'.APP_URL.'asistenciaHorario/"  method="POST" autocomplete="off" target="_blank">								
 											<input type="hidden" name="horario_sedeid" value="'.$horario_sedeid.'">						
 											<button type="submit" class="btn float-right btn-ver btn-sm" >Nuevo</button>
 										</form>	

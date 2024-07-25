@@ -161,7 +161,8 @@
 								</div>
 
 								<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-								<a href="<?php echo APP_URL; ?>asistenciaListHorario/" class="btn btn-info btn-sm">Cancelar</a>
+								<!--a href="<?php echo APP_URL; ?>asistenciaListHorario/" class="btn btn-info btn-sm">Cancelar</a-->
+								<button onclick="cerrarPestana()" class="btn btn-info btn-sm">Cancelar</button>
 								<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>								
 							</form>	
 
@@ -225,13 +226,13 @@
 			$(".btn_add").on("click", function() {
 				// Columna 1: Días de la semana
 				var column1 = "<select class='form-control' name='dia[]'>" +
-							"<option value='LU'>Lunes</option>" +
-							"<option value='MA'>Martes</option>" +
-							"<option value='MI'>Miércoles</option>" +
-							"<option value='JU'>Jueves</option>" +
-							"<option value='VI'>Viernes</option>" +
-							"<option value='SA'>Sábado</option>" +
-							"<option value='DO'>Domingo</option>" +
+							"<option value='1'>Lunes</option>" +
+							"<option value='2'>Martes</option>" +
+							"<option value='3'>Miércoles</option>" +
+							"<option value='4'>Jueves</option>" +
+							"<option value='5'>Viernes</option>" +
+							"<option value='6'>Sábado</option>" +
+							"<option value='7'>Domingo</option>" +
 							"</select>";
 				
 				// Columna 2: Lugares de entrenamiento con PHP
@@ -259,5 +260,10 @@
 			});
 		});
 	</script>
+	<script type="text/javascript">
+        function cerrarPestana() {
+            window.close();
+        }
+    </script>
   </body>
 </html>
