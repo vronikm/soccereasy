@@ -462,7 +462,7 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				$tabla.="	<tr style='font-size: 15px'>					
+				$tabla.="	<tr style='font-size: 14px'>					
 								<th>".$rows['Categoria']."</th>	
 								<td>".$rows['Lunes']."</td>
 								<td>".$rows['Martes']."</td>

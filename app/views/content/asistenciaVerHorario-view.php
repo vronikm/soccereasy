@@ -179,10 +179,8 @@
 													<th>VIERNES</th>
 													<th>SABADO</th>
 													<th>DOMINGO</th>																						
-												</tr>
-													
-													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>																									
-													
+												</tr>													
+													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>
 																		
 											</tbody>
 										</table>
@@ -224,7 +222,7 @@
 										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$horario_id.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar horario</a>
 
 
-										<a href="<?php echo APP_URL.'pagosReciboPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver horario</a>
+										<a href="<?php echo APP_URL.'asistenciaHorarioPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver horario</a>
 
 										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i>Imprimir recibo</button-->
 										
