@@ -323,7 +323,8 @@
 							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
 							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
 							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
-							WHERE detalle_horarioid = ".$horario_id;
+							WHERE detalle_horarioid = ".$horario_id
+							.' ORDER BY detalle_dia';
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -337,31 +338,31 @@
 				$DO = "";		
 
 				switch ($rows["detalle_dia"]) {
-					case 'LU':
+					case 1:
 						$dia = 'Lunes';
 						$LU = "selected";
 						break;
-					case 'MA':
+					case 2:
 						$dia = 'Martes';
 						$MA = "selected";
 						break;
-					case 'MI':
+					case 3:
 						$dia = 'Miércoles';
 						$MI = "selected";
 						break;
-					case 'JU':
+					case 4:
 						$dia = 'Jueves';
 						$JU = "selected";
 						break;
-					case 'VI':
+					case 5:
 						$dia = 'Viernes';
 						$VI = "selected";
 						break;
-					case 'SA':
+					case 6:
 						$dia = 'Sábado';
 						$SA = "selected";
 						break;
-					case 'DO':
+					case 7:
 						$dia = 'Domingo';
 						$DO = "selected";
 						break;
@@ -371,13 +372,13 @@
 
 				// Columna 1: Días de la semana
 				$column1 = "<select class='form-control' name='dia[]'>
-							<option value='LU' ".$LU.">Lunes</option>
-							<option value='MA' ".$MA.">Martes</option>
-							<option value='MI' ".$MI.">Miércoles</option>
-							<option value='JU' ".$JU.">Jueves</option>
-							<option value='VI' ".$VI.">Viernes</option>
-							<option value='SA' ".$SA.">Sábado</option>
-							<option value='DO' ".$DO.">Domingo</option>
+							<option value='1' ".$LU.">Lunes</option>
+							<option value='2' ".$MA.">Martes</option>
+							<option value='3' ".$MI.">Miércoles</option>
+							<option value='4' ".$JU.">Jueves</option>
+							<option value='5' ".$VI.">Viernes</option>
+							<option value='6' ".$SA.">Sábado</option>
+							<option value='7' ".$DO.">Domingo</option>
 							</select>";
 
 				// Columna 2: Lugares de entrenamiento con PHP
@@ -397,6 +398,82 @@
 					<td><button type='button' class='btn btn-danger btn-sm btn-icon icon-left btn_remove float-right'>Eliminar<i class='entypo-trash'></i></button></td></tr>";	
 			}
 			return $option;
+		}
+
+		public function informacionEscuela(){		
+			$consulta_datos="SELECT * FROM general_escuela WHERE escuela_id  = 1";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function generarHorario($horario_id){
+			
+			$tabla="";
+			$consulta_datos = "SELECT  
+								'Horario' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Cancha' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN lugar_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN lugar_nombre END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN lugar_nombre END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Profesor' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes,
+								MAX(CASE WHEN detalle_dia = 6 THEN profesor_nombre END) AS Sabado,
+								MAX(CASE WHEN detalle_dia = 7 THEN profesor_nombre END) AS Domingo
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria";
+		
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.="	<tr style='font-size: 15px'>					
+								<th>".$rows['Categoria']."</th>	
+								<td>".$rows['Lunes']."</td>
+								<td>".$rows['Martes']."</td>
+								<td>".$rows['Miercoles']."</td>
+								<td>".$rows['Jueves']."</td>
+								<td>".$rows['Viernes']."</td>
+								<td>".$rows['Sabado']."</td>
+								<td>".$rows['Domingo']."</td>																									
+							</tr>";
+			}
+			return $tabla;
 		}
 
 		public function listarOptionSede(){
@@ -599,7 +676,7 @@
 						<td>
 							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-sm">Eliminar</a>
 							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-sm" style="margin-right: 5px;">Actualizar</a>							
-							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Ver</a>
+							<a href="'.APP_URL.'asistenciaVerHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-sm" style="margin-right: 5px;">Horario</a>
 						</td>
 					</tr>';	
 			}
