@@ -3,7 +3,7 @@
 	namespace app\controllers;
 	use app\models\mainModel;
 
-	class torneosController extends mainModel{
+	class torneoController extends mainModel{
 
 		/*----------  Controlador registrar usuario  ----------*/
 		public function registrarTorneoControlador(){
@@ -156,12 +156,12 @@
 				]
 			];
 
-			$registrar_torneo=$this->guardarDatos("torneos_torneo",$torneo_datos_reg);
+			$registrar_torneo=$this->guardarDatos("torneo_torneo",$torneo_datos_reg);
 
 			if($registrar_torneo->rowCount()==1){
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'torneosList/',
+					"url"=>APP_URL.'torneoList/',
 					"titulo"=>"Torneo registrado",
 					"texto"=>"El torneo ".$torneo_nombre." se registró correctamente",
 					"icono"=>"success"
@@ -195,7 +195,7 @@
 									 WHEN torneo_estado = 'I' THEN 'Inactivo' 
 									 ELSE torneo_estado 
 								END AS ESTADO 
-							 FROM torneos_torneo
+							 FROM torneo_torneo
 							 WHERE torneo_estado IN ('A','I')
 							 ORDER BY torneo_fechaactualizado asc";	
 					
@@ -223,20 +223,20 @@
 						<td>'.$rows['torneo_descripcion'].'</td>
 						<td>'.$estado.'</td>
 						<td>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/torneosAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_torneos" value="eliminar">
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/torneoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_torneo" value="eliminar">
 								<input type="hidden" name="torneo_id" value="'.$rows['torneo_id'].'">						
 								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 3px;">Eliminar</button>
 							</form>
 							
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/torneosAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_torneos" value="actualizarestado">
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/torneoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_torneo" value="actualizarestado">
 								<input type="hidden" name="torneo_id" value="'.$rows['torneo_id'].'">						
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 3px;""> '.$texto.' </button>
 							</form>
 
-							<a href="'.APP_URL.'torneosList/'.$rows['torneo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>
-							<a href="'.APP_URL.'equiposList/'.$rows['torneo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Equipos</a>
+							<a href="'.APP_URL.'torneoList/'.$rows['torneo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>
+							<a href="'.APP_URL.'equipoList/'.$rows['torneo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Equipos</a>
 						</td>
 					</tr>';	
 			}
@@ -250,7 +250,7 @@
 									 WHEN torneo_estado = 'I' THEN 'Inactivo' 
 									 ELSE torneo_estado 
 								END AS ESTADO 
-							 FROM torneos_torneo
+							 FROM torneo_torneo
 							 WHERE torneo_id =".$torneoid."
 							 	AND torneo_estado IN ('A','I')");	
 
@@ -263,7 +263,7 @@
 			$torneoid=$this->limpiarCadena($_POST['torneo_id']);
 
 			# Verificando existencia de torneo #
-			$torneo=$this->ejecutarConsulta("SELECT * FROM torneos_torneo WHERE torneo_id='$torneoid'");
+			$torneo=$this->ejecutarConsulta("SELECT * FROM torneo_torneo WHERE torneo_id='$torneoid'");
 			if($torneo->rowCount()<=0){	
 				$alerta=[
 					"tipo"=>"simple",
@@ -441,11 +441,11 @@
 				"condicion_valor"=>$torneoid
 			];
 
-			if($this->actualizarDatos("torneos_torneo",$torneo_datos_reg,$condicion)){					
+			if($this->actualizarDatos("torneo_torneo",$torneo_datos_reg,$condicion)){					
 				
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'torneosList/',
+					"url"=>APP_URL.'torneoList/',
 					"titulo"=>"Torneo actualizado",
 					"texto"=>"El torneo ".$torneo_nombre." se actualizó correctamente",
 					"icono"=>"success"
@@ -465,7 +465,7 @@
 			$torneoid=$this->limpiarCadena($_POST['torneo_id']);
 
 			# Verificando usuario #
-			$torneo=$this->ejecutarConsulta("SELECT * FROM torneos_torneo WHERE torneo_id='$torneoid'");
+			$torneo=$this->ejecutarConsulta("SELECT * FROM torneo_torneo WHERE torneo_id='$torneoid'");
 			if($torneo->rowCount()<=0){	
 		        $alerta=[
 					"tipo"=>"simple",
@@ -495,7 +495,7 @@
 				"condicion_valor"=>$torneoid
 			];
 
-			if($this->actualizarDatos("torneos_torneo",$torneo_datos_up,$condicion)){
+			if($this->actualizarDatos("torneo_torneo",$torneo_datos_up,$condicion)){
 
 				$alerta=[
 					"tipo"=>"recargar",
@@ -520,7 +520,7 @@
 			$torneoid=$this->limpiarCadena($_POST['torneo_id']);
 
 			# Verificando existencia de torneo #
-			$torneo=$this->ejecutarConsulta("SELECT * FROM torneos_torneo WHERE torneo_id='$torneoid'");
+			$torneo=$this->ejecutarConsulta("SELECT * FROM torneo_torneo WHERE torneo_id='$torneoid'");
 			if($torneo->rowCount()<=0){	
 				$alerta=[
 					"tipo"=>"simple",
@@ -531,14 +531,14 @@
 				return json_encode($alerta);
 			}else{					
 				$equipostorneo=$this->ejecutarConsulta("SELECT * 
-															FROM torneos_equipos 
+															FROM torneo_equipo 
 															WHERE equipo_estado in ('A','I') 
 																AND equipo_torneoid='$torneoid'");
 				if($equipostorneo->rowCount()>0){	
 					$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Error",
-						"texto"=>"El torneo tiene equipos activos, para continuar debe eliminar",
+						"texto"=>"El torneo tiene equipos activos, para continuar debe eliminarlos",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
@@ -564,7 +564,7 @@
 				"condicion_valor"=>$torneoid
 			];
 
-			if($this->actualizarDatos("torneos_torneo",$torneo_datos_up,$condicion)){
+			if($this->actualizarDatos("torneo_torneo",$torneo_datos_up,$condicion)){
 
 				$alerta=[
 					"tipo"=>"recargar",

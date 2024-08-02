@@ -2,7 +2,7 @@
 	namespace app\controllers;
 	use app\models\mainModel;
 
-	class equiposController extends mainModel{
+	class equipoController extends mainModel{
 
 		/*----------  Controlador registrar usuario  ----------*/
 		public function registrarEquipoControlador(){
@@ -135,12 +135,12 @@
 				]
 			];
 
-			$registrar_equipo=$this->guardarDatos("torneos_equipos",$equipo_datos_reg);
+			$registrar_equipo=$this->guardarDatos("torneo_equipo",$equipo_datos_reg);
 
 			if($registrar_equipo->rowCount()==1){
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'equiposList/'.$equipo_torneoid,
+					"url"=>APP_URL.'equipoList/'.$equipo_torneoid,
 					"titulo"=>"Equipo registrado",
 					"texto"=>"El equipo ".$equipo_nombre." se registró correctamente",
 					"icono"=>"success"
@@ -173,7 +173,7 @@
 									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
 									 ELSE equipo_estado 
 								END AS ESTADO 
-							 FROM torneos_equipos, torneos_torneo
+							 FROM torneo_equipo, torneo_torneo
 							 WHERE equipo_torneoid = ".$equipo_torneoid."
 							 	AND torneo_id = equipo_torneoid
 							 	AND equipo_estado IN ('A','I')
@@ -199,20 +199,20 @@
 						<td>'.$rows['equipo_categoria'].'</td>
 						<td>'.$estado.'</td>
 						<td>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/equiposAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_equipos" value="eliminar">
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/equipoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_equipo" value="eliminar">
 								<input type="hidden" name="equipo_id" value="'.$rows['equipo_id'].'">						
 								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 3px;">Eliminar</button>
 							</form>
 							
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/equiposAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_equipos" value="actualizarestado">
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/equipoAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_equipo" value="actualizarestado">
 								<input type="hidden" name="equipo_id" value="'.$rows['equipo_id'].'">						
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 3px;""> '.$texto.' </button>
 							</form>
 
-							<a href="'.APP_URL.'equiposList/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>
-							<a href="'.APP_URL.'torneosProfile/'.$rows['equipo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Jugadores</a>
+							<a href="'.APP_URL.'equipoList/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>
+							<a href="'.APP_URL.'jugadorList/'.$rows['equipo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Jugadores</a>
 						</td>
 					</tr>';	
 			}
@@ -221,7 +221,7 @@
 
 		public function BuscarTorneoEquipo($equipo_torneoid){		
 			$consulta_datos=("SELECT torneo_id, torneo_nombre
-							 FROM torneos_torneo
+							 FROM torneo_torneo
 							 WHERE torneo_id =".$equipo_torneoid);	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
@@ -234,7 +234,7 @@
 									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
 									 ELSE equipo_estado 
 								END AS ESTADO 
-							 FROM torneos_equipos
+							 FROM torneo_equipo
 							 WHERE equipo_estado IN ('A','I')
 							 	AND equipo_id =".$equipo_id);	
 
@@ -246,7 +246,7 @@
 			$equipoid=$this->limpiarCadena($_POST['equipo_id']);
 
 			# Verificando existencia de equipo #
-			$equipo=$this->ejecutarConsulta("SELECT * FROM torneos_equipos WHERE equipo_id='$equipoid'");
+			$equipo=$this->ejecutarConsulta("SELECT * FROM torneo_equipo WHERE equipo_id='$equipoid'");
 			if($equipo->rowCount()<=0){	
 				$alerta=[
 					"tipo"=>"simple",
@@ -400,11 +400,11 @@
 				"condicion_valor"=>$equipoid
 			];
 
-			if($this->actualizarDatos("torneos_equipos",$equipo_datos_reg,$condicion)){					
+			if($this->actualizarDatos("torneo_equipo",$equipo_datos_reg,$condicion)){					
 				
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'equiposList/'.$equipo_torneoid.'/'.$equipoid,
+					"url"=>APP_URL.'equipoList/'.$equipo_torneoid.'/'.$equipoid,
 					"titulo"=>"Equipo actualizado",
 					"texto"=>"El equipo ".$equipo_nombre." se actualizó correctamente",
 					"icono"=>"success"
@@ -424,7 +424,7 @@
 			$equipoid=$this->limpiarCadena($_POST['equipo_id']);
 
 			# Verificando equipo #
-			$equipo=$this->ejecutarConsulta("SELECT * FROM torneos_equipos WHERE equipo_id='$equipoid'");
+			$equipo=$this->ejecutarConsulta("SELECT * FROM torneo_equipo WHERE equipo_id='$equipoid'");
 			if($equipo->rowCount()<=0){	
 		        $alerta=[
 					"tipo"=>"simple",
@@ -454,7 +454,7 @@
 				"condicion_valor"=>$equipoid
 			];
 
-			if($this->actualizarDatos("torneos_equipos",$equipo_datos_up,$condicion)){
+			if($this->actualizarDatos("torneo_equipo",$equipo_datos_up,$condicion)){
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Estado actualizado correctamente",
@@ -477,7 +477,7 @@
 
 			$equipoid=$this->limpiarCadena($_POST['equipo_id']);
 			# Verificando usuario #
-			$equipo=$this->ejecutarConsulta("SELECT * FROM torneos_equipos WHERE equipo_id='$equipoid'");
+			$equipo=$this->ejecutarConsulta("SELECT * FROM torneo_equipo WHERE equipo_id='$equipoid'");
 			if($equipo->rowCount()<=0){	
 				$alerta=[
 					"tipo"=>"simple",
@@ -508,11 +508,11 @@
 				"condicion_valor"=>$equipoid
 			];
 
-			if($this->actualizarDatos("torneos_equipos",$equipo_datos_up,$condicion)){
+			if($this->actualizarDatos("torneo_equipo",$equipo_datos_up,$condicion)){
 
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'equiposList/'.$equipo_torneoid.'/'.$equipoid,
+					"url"=>APP_URL.'equipoList/'.$equipo_torneoid.'/'.$equipoid,
 					"titulo"=>"Equipo eliminado",
 					"texto"=>"El equipo ".$equipo['equipo_nombre']." se eliminó correctamente",
 					"icono"=>"success"
@@ -526,5 +526,14 @@
 				];
 			}
 			return json_encode($alerta);
+		}
+
+		public function BuscarEquipoJugador($equipo_torneoid){		
+			$consulta_datos=("SELECT torneo_id, torneo_nombre
+							 FROM torneo_torneo
+							 WHERE torneo_id =".$equipo_torneoid);	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
 		}
     }

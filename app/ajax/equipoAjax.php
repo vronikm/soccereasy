@@ -4,25 +4,25 @@
 	require_once "../views/inc/session_start.php";
 	require_once "../../autoload.php";
 	
-	use app\controllers\equiposController;
+	use app\controllers\equipoController;
 
-	if(isset($_POST['modulo_equipos'])){
+	if(isset($_POST['modulo_equipo'])){
 
-		$insEquipo = new equiposController();
+		$insEquipo = new equipoController();
 
-		if($_POST['modulo_equipos']=="registrar"){
+		if($_POST['modulo_equipo']=="registrar"){
 			echo $insEquipo->registrarEquipoControlador();
 		}
 
-		if($_POST['modulo_equipos']=="actualizar"){
+		if($_POST['modulo_equipo']=="actualizar"){
 			echo $insEquipo->actualizarEquipoControlador();
 		}
 
-		if($_POST['modulo_equipos']=="actualizarestado"){
+		if($_POST['modulo_equipo']=="actualizarestado"){
 			echo $insEquipo->actualizarEstadoEquipoControlador();
 		}		
 
-		if($_POST['modulo_equipos']=="eliminar"){
+		if($_POST['modulo_equipo']=="eliminar"){
 			echo $insEquipo->eliminarEquipoControlador();
 		}		
 	}else{

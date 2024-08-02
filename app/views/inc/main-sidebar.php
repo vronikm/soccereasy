@@ -70,7 +70,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?php echo APP_URL."torneosList/" ?>" class="nav-link ">
+            <a href="<?php echo APP_URL."torneoList/" ?>" class="nav-link ">
               <i class="nav-icon far fa-circle text-info"></i>
               <p>Torneos</p>
             </a>

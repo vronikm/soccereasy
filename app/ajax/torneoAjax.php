@@ -4,25 +4,25 @@
 	require_once "../views/inc/session_start.php";
 	require_once "../../autoload.php";
 	
-	use app\controllers\torneosController;
+	use app\controllers\torneoController;
 
-	if(isset($_POST['modulo_torneos'])){
+	if(isset($_POST['modulo_torneo'])){
 
-		$insTorneo = new torneosController();
+		$insTorneo = new torneoController();
 
-		if($_POST['modulo_torneos']=="registrar"){
+		if($_POST['modulo_torneo']=="registrar"){
 			echo $insTorneo->registrarTorneoControlador();
 		}
 
-		if($_POST['modulo_torneos']=="actualizar"){
+		if($_POST['modulo_torneo']=="actualizar"){
 			echo $insTorneo->actualizarTorneoControlador();
 		}
 
-		if($_POST['modulo_torneos']=="actualizarestado"){
+		if($_POST['modulo_torneo']=="actualizarestado"){
 			echo $insTorneo->actualizarEstadoTorneoControlador();
 		}		
 
-		if($_POST['modulo_torneos']=="eliminar"){
+		if($_POST['modulo_torneo']=="eliminar"){
 			echo $insTorneo->eliminarTorneoControlador();
 		}		
 	}else{
