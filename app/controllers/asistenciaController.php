@@ -415,9 +415,7 @@
 								MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
 								MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miercoles,
 								MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
-								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes,
-								MAX(CASE WHEN detalle_dia = 6 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Sabado,
-								MAX(CASE WHEN detalle_dia = 7 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Domingo
+								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes							
 							FROM asistencia_horario 
 							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
 							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
@@ -432,9 +430,7 @@
 								MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
 								MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miercoles,
 								MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
-								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes,
-								MAX(CASE WHEN detalle_dia = 6 THEN lugar_nombre END) AS Sabado,
-								MAX(CASE WHEN detalle_dia = 7 THEN lugar_nombre END) AS Domingo
+								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes								
 							FROM asistencia_horario 
 							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
 							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
@@ -449,9 +445,7 @@
 								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
 								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
 								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
-								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes,
-								MAX(CASE WHEN detalle_dia = 6 THEN profesor_nombre END) AS Sabado,
-								MAX(CASE WHEN detalle_dia = 7 THEN profesor_nombre END) AS Domingo
+								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes
 							FROM asistencia_horario 
 							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
 							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
@@ -468,12 +462,64 @@
 								<td>".$rows['Martes']."</td>
 								<td>".$rows['Miercoles']."</td>
 								<td>".$rows['Jueves']."</td>
-								<td>".$rows['Viernes']."</td>
-								<td>".$rows['Sabado']."</td>
-								<td>".$rows['Domingo']."</td>																									
+								<td>".$rows['Viernes']."</td>																														
 							</tr>";
 			}
 			return $tabla;
+		}
+
+		public function HorarioPDF($horario_id){			
+			
+			$consulta_datos = "SELECT  
+								'Horario' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes							
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
+							WHERE horario_id = ".$horario_id;		
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);			
+			return $datos;
+		}
+
+		public function CanchaPDF($horario_id){
+
+			$consulta_datos = "SELECT 
+								'Cancha' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN lugar_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes								
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
+							WHERE horario_id = ".$horario_id;		
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);			
+			return $datos;
+		}
+
+		public function ProfesorPDF($horario_id){
+			
+			$consulta_datos = "SELECT 
+								'Profesor' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							WHERE horario_id = ".$horario_id;		
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);	
+			return $datos;
 		}
 
 		public function listarOptionSede(){
