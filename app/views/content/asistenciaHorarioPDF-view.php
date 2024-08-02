@@ -30,7 +30,22 @@
 
     $escuela=$insHorario->informacionEscuela();
     if($escuela->rowCount()==1){
-	$escuela=$escuela->fetch(); 
+	    $escuela=$escuela->fetch(); 
+    }
+
+    $HorarioPDF = $insHorario->HorarioPDF($horario_id);
+    if($HorarioPDF->rowCount()==1){
+	    $HorarioPDF=$HorarioPDF->fetch(); 
+    }
+
+    $CanchaPDF = $insHorario->CanchaPDF($horario_id);
+    if($CanchaPDF->rowCount()==1){
+	    $CanchaPDF=$CanchaPDF->fetch(); 
+    }
+
+    $ProfesorPDF = $insHorario->ProfesorPDF($horario_id);
+    if($ProfesorPDF->rowCount()==1){
+	    $ProfesorPDF=$ProfesorPDF->fetch(); 
     }
    											
     $data="Horario ".$horario_nombre. " | "."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"];
@@ -86,60 +101,49 @@
     $pdf->Line(10, 67, 200, 67);
     $pdf->Line(10, 74, 200, 74);
     $pdf->Line(10, 81, 200, 81);
-    $pdf->Line(10, 88, 200, 88);
+    $pdf->Line(10, 88, 200, 88);   
 
     $pdf->SetXY( 15, 52 ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 20, 8, "Horario ".$horario_nombre.", ".$horario_detalle, 0, 0, 'L');
+    $C = 27;
+    $CC = 35;
+    $pdf->Line($C, 60, $C, 88); $C+=$CC;
+    $pdf->Line($C, 60, $C, 88); $C+=$CC;
+    $pdf->Line($C, 60, $C, 88); $C+=$CC;
+    $pdf->Line($C, 60, $C, 88); $C+=$CC;
+    $pdf->Line($C, 60, $C, 88);
 
+    $pdf->SetXY( 38, 63.5 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "LUNES", 0, 0, 'L');    
+    $pdf->SetXY( 70, 63.5 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "MARTES", 0, 0, 'L');
+    $pdf->SetXY( 103, 63.5 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "MIERCOLES", 0, 0, 'L');
+    $pdf->SetXY( 140, 63.5 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "JUEVES", 0, 0, 'L');
+    $pdf->SetXY( 175, 63.5 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "VIERNES", 0, 0, 'L');
 
-    $pdf->SetXY( 15, 62 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 4, "Recibo de:", 0, 0, 'L');
-    $pdf->SetXY( 46, 62 ); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell( 20, 4, mb_convert_encoding(" ", 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 10, 71 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "Horario", 0, 0, 'L');
+    $pdf->SetXY( 10, 78); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "Cancha", 0, 0, 'L');
+    $pdf->SetXY( 10, 85); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "Profesor", 0, 0, 'L');
 
-    $pdf->SetXY( 15, 71 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, 0, "La cantidad de:", 0, 0, 'L');
-    $pdf->SetXY( 46, 71 ); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell( 20, 0, mb_convert_encoding(ucfirst(""), 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 30, 71 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, $HorarioPDF['Lunes'], 0, 0, 'L');
+    $pdf->SetXY( 65, 71 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0,$HorarioPDF['Martes'], 0, 0, 'L');
+    $pdf->SetXY( 101, 71 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, $HorarioPDF['Miercoles'], 0, 0, 'L');
+    $pdf->SetXY( 136, 71 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, $HorarioPDF['Jueves'], 0, 0, 'L');
+    $pdf->SetXY( 170, 71 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, $HorarioPDF['Viernes'], 0, 0, 'L');
 
-    $pdf->SetXY( 15, 80 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, -3, "Por concepto de:", 0, 0, 'L');
-    $pdf->SetXY( 46, 80 ); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell( 20, -3, mb_convert_encoding("", 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-
-    $pdf->SetXY( 15, 89 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 20, -7, "Forma de pago:", 0, 0, 'L');
-    $pdf->SetXY( 46, 89 ); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell( 20, -7, mb_convert_encoding("", 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
- 
-    //Sección de totales y firmas
-    //ubicacion horizontal, ubicacion vertical, ancho, alto bajo
-    $pdf->SetLineWidth(0.1); $pdf->Rect(100, 88, 100, 33, "D"); $x=5; $y=13;
-
-    //Cuadro de firmas
-    $pdf->SetLineWidth(0.1); $pdf->Rect(100, 88, 100, 25, "D"); $x=5; $y=13;
-
-    //margen, alto izquierdo de separación de línea, ancho de la fila de lado a lado, alto derecho de separación de línea
-    $pdf->Line(10, 97, 100, 97);
-    $pdf->Line(10, 105, 100, 105);
-    $pdf->Line(10, 113, 100, 113);
-
-    $pdf->SetXY( 20, 87 ); $pdf->SetFont( "Arial", "", 12 ); $pdf->Cell( 12, 13, "MONTO", 0, 0, 'R');
-    $pdf->SetXY( 20, 87 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 17, 29, "SUBTOTAL:", 0, 0, 'R');
-    $pdf->SetXY( 20, 88 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 11, 43, "ABONO:", 0, 0, 'R');
-    $pdf->SetXY( 20, 90 ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 10, 56, "SALDO:", 0, 0, 'R');
-
+    $pdf->SetXY( 27, 78 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Lunes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 62, 78 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Martes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 97, 78 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Miercoles']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 132, 78 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Jueves']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 167, 78 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($CanchaPDF['Viernes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
    
-
-    
-    
-    $pdf->Image(APP_URL.$filename, 165, 89, 23, 23);
-    //$pdf->Image(APP_URL.'app/views/dist/img/temp/50416091422114.png', 165, 89, 23, 23);
-
-    
+    $pdf->SetXY( 27, 85 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Lunes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 62, 85 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Martes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 97, 85 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Miercoles']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 132, 85 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Jueves']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+    $pdf->SetXY( 167, 85 ); $pdf->SetFont( "Arial", "", 8 ); $pdf->Cell( 20, 0, mb_convert_encoding($ProfesorPDF['Viernes']?? '', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
      
+    $pdf->Image(APP_URL.$filename, 171, 93, 23, 23);
+      
     unlink($filename);
-    //echo "$fecha";		
-    
-    //$pdf->Output("recibos/recibo-".$num.".pdf","F","T");
+   
     $pdf->Output("$horario_id.pdf","I","T");
     
-    //$path = "bookings/".$fecha.$file."booking.pdf";  
-
-    //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
-
-    // Envio de correo -----------------------------------
-
-
-
+  

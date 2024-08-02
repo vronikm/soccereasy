@@ -176,9 +176,7 @@
 													<th>MARTES</th>
 													<th>MIERCOLES</th>
 													<th>JUEVES</th>
-													<th>VIERNES</th>
-													<th>SABADO</th>
-													<th>DOMINGO</th>																						
+													<th>VIERNES</th>																																		
 												</tr>													
 													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>
 																		
