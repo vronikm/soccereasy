@@ -14,22 +14,44 @@
 								pago_periodo PERIODO,  
 								R.catalogo_descripcion RUBRO,  
 								F.catalogo_descripcion FORMA_PAGO, 
-								pago_valor VALOR_PAGADO, 
-								pago_saldo VALOR_PENDIENTE,
-								case pago_estado when 'P' then 'Pendiente' when 'J' then 'Justificado' when 'E' then 'Eliminado' when 'C' then 'Cancelado' else pago_estado end ESTADO_PAGO
+								((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))VALOR_PAGADO, 
+								IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) VALOR_PENDIENTE,
+								case IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
 							from alumno_pago P
 								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
+								FROM alumno_pago_transaccion PT
+								WHERE PT.transaccion_estado <> 'E'
+								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
+								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
-								/*and pago_fecharegistro between '2024-05-01' and '2024-06-01'*/
 								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-							order by pago_fecharegistro";
+							
+							union all 
+														
+							SELECT A.alumno_identificacion IDENTIFICACION,
+								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
+								transaccion_fecha FECHA_PAGO, 
+								transaccion_fecharegistro FECHA_REG_SISTEMA, 
+								transaccion_periodo PERIODO,  
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO, 
+								transaccion_valor VALOR_PAGADO, 
+								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
+								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
+							from alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
+							where transaccion_estado <> 'E'
+								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				
+			foreach($datos as $rows){				
 				$tabla.='
 					<tr>
 						<td>'.$rows['IDENTIFICACION'].'</td>
@@ -53,9 +75,7 @@
 			return $fecha_maxima;
 		}
 
-		public function valoresPendientes(){
-			
-			
+		public function valoresPendientes(){		
 			$tabla="";
 			$NUM_SALDO = 0;
 			$SALDO = 0;

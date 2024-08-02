@@ -4,15 +4,20 @@
 
 	$alumnosActivosSedeL=$insDashboard->obtenerAlumnosActivosSedeL();	
 	$alumnosActivosSedeC=$insDashboard->obtenerAlumnosActivosSedeC();
+	$alumnosActivosSedeV=$insDashboard->obtenerAlumnosActivosSedeV();
 
 	$alumnosInactivosSedeL=$insDashboard->obtenerAlumnosInactivosSedeL();	
 	$alumnosInactivosSedeC=$insDashboard->obtenerAlumnosInactivosSedeC();
+	$alumnosInactivosSedeV=$insDashboard->obtenerAlumnosInactivosSedeV();
 
 	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCanceladoSedeL();	
 	$pagosCanceladoSedeC=$insDashboard->obtenerPagosCanceladoSedeC();
+	$pagosCanceladoSedeV=$insDashboard->obtenerPagosCanceladoSedeV();
 
 	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendienteSedeL();	
 	$pagosPendienteSedeC=$insDashboard->obtenerPagosPendienteSedeC();
+	$pagosPendienteSedeV=$insDashboard->obtenerPagosPendienteSedeV();
+
 	
 	if($alumnosActivosSedeL->rowCount()>0){
 		$alumnosActivosSedeL=$alumnosActivosSedeL->fetch();
@@ -26,6 +31,13 @@
 		$totalActivosSedeC=$alumnosActivosSedeC["totalActivosSedeC"];
 	}else{
 		$totalActivosSedeC= 0;
+	}
+
+	if($alumnosActivosSedeV->rowCount()>0){
+		$alumnosActivosSedeV=$alumnosActivosSedeV->fetch();
+		$totalActivosSedeV=$alumnosActivosSedeV["totalActivosSedeV"];
+	}else{
+		$totalActivosSedeV= 0;
 	}
 
 	if($alumnosInactivosSedeL->rowCount()>0){
@@ -42,6 +54,13 @@
 		$totalInactivosSedeC= 0;
 	}
 
+	if($alumnosInactivosSedeV->rowCount()>0){
+		$alumnosInactivosSedeV=$alumnosInactivosSedeV->fetch();
+		$totalInactivosSedeV=$alumnosInactivosSedeV["totalInactivosSedeV"];
+	}else{
+		$totalInactivosSedeV= 0;
+	}
+
 	if($pagosCanceladoSedeL->rowCount()>0){
 		$pagosCanceladoSedeL=$pagosCanceladoSedeL->fetch();
 		$totalCanceladoSedeL=$pagosCanceladoSedeL["totalCanceladoSedeL"];
@@ -54,6 +73,13 @@
 		$totalCanceladoSedeC=$pagosCanceladoSedeC["totalCanceladoSedeC"];
 	}else{
 		$totalCanceladoSedeC= 0;
+	}
+
+	if($pagosCanceladoSedeV->rowCount()>0){
+		$pagosCanceladoSedeV=$pagosCanceladoSedeV->fetch();
+		$totalCanceladoSedeV=$pagosCanceladoSedeV["totalCanceladoSedeV"];
+	}else{
+		$totalCanceladoSedeV= 0;
 	}
 	
 	if($pagosPendienteSedeL->rowCount()>0){
@@ -68,6 +94,13 @@
 		$totalPendienteSedeC=$pagosPendienteSedeC["totalPendienteSedeC"];
 	}else{
 		$totalPendienteSedeC= 0;
+	}
+
+	if($pagosPendienteSedeV->rowCount()>0){
+		$pagosPendienteSedeV=$pagosPendienteSedeV->fetch();
+		$totalPendienteSedeV=$pagosPendienteSedeV["totalPendienteSedeV"];
+	}else{
+		$totalPendienteSedeV= 0;
 	}
 ?>
 
@@ -289,6 +322,83 @@
 								<i class="ion ion-cash"></i>
 								</div>
 								<a href="<?php echo APP_URL;?>pagosList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+						</div>
+					</div>
+				</div>
+
+				<div class="card card-default">
+					<div class="card-header">
+						<h3 class="card-title">SEDE VILCABAMBA</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+							</button>
+						</div>
+					</div>
+
+					<div class="card-body">
+						<div class="row">
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+								<div class="small-box bg-info">
+									<div class="inner">
+									<h3><?php echo $totalActivosSedeV; ?></h3>
+									
+									<p>Alumnos activos</p>
+									</div>
+									<div class="icon">
+									<i class="ion ion-person"></i>
+									</div>
+									<a href="<?php echo APP_URL;?>alumnoList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-success">
+								<div class="inner">
+								<h3><?php echo $totalCanceladoSedeV; ?></h3>
+
+								<p>Pagos receptados</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-cash"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>reportePagos/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-warning">
+								<div class="inner">
+								<h3><?php echo $totalInactivosSedeV; ?></h3>
+
+								<p>Alumnos inactivos</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-android-warning"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>pagosList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							</div>
+							</div>
+							<!-- ./col -->
+							<div class="col-lg-3 col-6">
+							<!-- small box -->
+							<div class="small-box bg-danger">
+								<div class="inner">
+								<h3><?php echo $totalPendienteSedeV; ?></h3>
+
+								<p>Pagos pendientes</p>
+								</div>
+								<div class="icon">
+								<i class="ion ion-cash"></i>
+								</div>
+								<a href="<?php echo APP_URL;?>reportePendientes/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+							
 							</div>
 							</div>
 							<!-- ./col -->

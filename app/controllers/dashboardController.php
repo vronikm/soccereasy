@@ -15,6 +15,11 @@
 		    return $alumnosActivosSedeC;
 		}
 
+        public function obtenerAlumnosActivosSedeV(){
+			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeV FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 3");
+		    return $alumnosActivosSedeV;
+		}
+
 		/*----------  Obtener total alumnos inactivos  ----------*/
 		public function obtenerAlumnosInactivosSedeL(){
 			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeL FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 1");
@@ -26,15 +31,29 @@
 		    return $alumnosActivosSedeC;
 		}
 
+        public function obtenerAlumnosInactivosSedeV(){
+			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeV FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 3");
+		    return $alumnosActivosSedeV;
+		}
+
 		/*----------  Obtener total pagos cancelados  ----------*/
 		public function obtenerPagosCanceladoSedeL(){
-			$pagosCanceladoSedeL=$this->ejecutarConsulta("SELECT COUNT(*) totalCanceladoSedeL FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 1 AND pago_estado='C';");
+			$pagosCanceladoSedeL=$this->ejecutarConsulta("SELECT sum(totalCanceladoSedeL) totalCanceladoSedeL from (
+                                                            SELECT COUNT(*) totalCanceladoSedeL FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 1 AND pago_estado <> 'E'
+                                                            UNION ALL
+                                                            SELECT COUNT(*) totalCanceladoSedeL FROM alumno_pago, alumno_pago_transaccion, sujeto_alumno WHERE pago_alumnoid = alumno_id 
+                                                                AND pago_id = transaccion_pagoid AND alumno_sedeid = 1 AND transaccion_estado<> 'E') AS DATOS");
 			return $pagosCanceladoSedeL;
 		}
 
 		public function obtenerPagosCanceladoSedeC(){
 			$pagosCanceladoSedeC=$this->ejecutarConsulta("SELECT COUNT(*) totalCanceladoSedeC FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 2 AND pago_estado='C';");
 			return $pagosCanceladoSedeC;
+		}
+
+        public function obtenerPagosCanceladoSedeV(){
+			$pagosCanceladoSedeV=$this->ejecutarConsulta("SELECT COUNT(*) totalCanceladoSedeV FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 3 AND pago_estado='C';");
+			return $pagosCanceladoSedeV;
 		}
 
 		/*----------  Obtener total pagos pendientes  ----------*/
@@ -91,6 +110,10 @@ FROM (
 		public function obtenerPagosPendienteSedeC(){
 			$pagosPendienteSedeC=$this->ejecutarConsulta("SELECT COUNT(*) totalPendienteSedeC FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 2 AND pago_estado='P';");
 			return $pagosPendienteSedeC;
+		}
+		public function obtenerPagosPendienteSedeV(){
+			$pagosPendienteSedeV=$this->ejecutarConsulta("SELECT COUNT(*) totalPendienteSedeV FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 3 AND pago_estado='P';");
+			return $pagosPendienteSedeV;
 		}
 	}
 
