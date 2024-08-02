@@ -14,7 +14,6 @@
 			$profesor_correo			= $this->limpiarCadena($_POST['profesor_correo']);		    		    
 			$profesor_celular			= $this->limpiarCadena($_POST['profesor_celular']);
 			$profesor_direccion			= $this->limpiarCadena($_POST['profesor_direccion']);
-			$profesor_especialidadid	= $this->limpiarCadena($_POST['profesor_especialidadid']);
 			$profesor_fechaingreso		= $this->limpiarCadena($_POST['profesor_fechaingreso']);
 			$profesor_genero 			= $this->limpiarCadena($_POST['profesor_genero']);
 			$profesor_sueldo			= $this->limpiarCadena($_POST['profesor_sueldo']);			
@@ -180,11 +179,6 @@
 					"campo_nombre"=>"profesor_direccion",
 					"campo_marcador"=>":Direccion",
 					"campo_valor"=>$profesor_direccion
-				],
-				[
-					"campo_nombre"=>"profesor_especialidadid",
-					"campo_marcador"=>":Cargo",
-					"campo_valor"=>$profesor_especialidadid
 				],			
 				[
 					"campo_nombre"=>"profesor_fechaingreso",
@@ -319,8 +313,8 @@
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
 							</form>
 
-							<a href="'.APP_URL.'profesorUpdate/'.$rows['profesor_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
-							<a href="'.APP_URL.'profesorProfile/'.$rows['profesor_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
+							<a href="'.APP_URL.'profesorList/'.$rows['profesor_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Editar</a>
+							<a href="'.APP_URL.'profesorList/'.$rows['profesor_id'].'/0/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Ver</a>
 						</td>
 					</tr>';	
 			}
@@ -394,7 +388,6 @@
 			$profesor_correo			= $this->limpiarCadena($_POST['profesor_correo']);		    		    
 			$profesor_celular			= $this->limpiarCadena($_POST['profesor_celular']);
 			$profesor_direccion			= $this->limpiarCadena($_POST['profesor_direccion']);
-			$profesor_especialidadid	= $this->limpiarCadena($_POST['profesor_especialidadid']);
 			$profesor_fechaingreso		= $this->limpiarCadena($_POST['profesor_fechaingreso']);
 			$profesor_sueldo			= $this->limpiarCadena($_POST['profesor_sueldo']);
 			$profesor_genero 			= $this->limpiarCadena($_POST['profesor_genero']);
@@ -442,12 +435,7 @@
 					"campo_nombre"=>"profesor_direccion",
 					"campo_marcador"=>":Direccion",
 					"campo_valor"=>$profesor_direccion
-				],
-				[
-					"campo_nombre"=>"profesor_especialidadid",
-					"campo_marcador"=>":Especialidad",
-					"campo_valor"=>$profesor_especialidadid
-				],			
+				],		
 				[
 					"campo_nombre"=>"profesor_fechaingreso",
 					"campo_marcador"=>":Fechaingreso",
