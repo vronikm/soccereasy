@@ -133,4 +133,22 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
+
+        public function registrarPosicion($equipo_id){		
+            /*---------------Variables para el registro de los jugadores configurados----------------*/
+            $alumno_repreid 			= $this->limpiarCadena($_POST['alumno_repreid']);
+            $alumno_repreid 			= $this->limpiarCadena($_POST['alumno_repreid']);
+            
+			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, equipo_categoria, equipo_foto,
+								CASE WHEN equipo_estado = 'A' THEN 'Activo' 
+									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
+									 ELSE equipo_estado 
+								END AS ESTADO 
+							 FROM torneo_equipo
+							 WHERE equipo_estado IN ('A','I')
+							 	AND equipo_id =".$equipo_id);	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
     }
