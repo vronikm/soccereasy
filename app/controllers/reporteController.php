@@ -23,7 +23,7 @@
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
 								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
 								FROM alumno_pago_transaccion PT
-								WHERE PT.transaccion_estado <> 'E'
+								WHERE PT.transaccion_estado = 'C'
 								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
@@ -51,7 +51,8 @@
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-			foreach($datos as $rows){				
+			foreach($datos as $rows){
+				
 				$tabla.='
 					<tr>
 						<td>'.$rows['IDENTIFICACION'].'</td>
@@ -82,31 +83,33 @@
 			$NUM_PENSION = 0;
 			$PENSION = 0;
 			$consulta_datos="SELECT 
-								alumno_id, 
-								alumno_identificacion, 
-								CONCAT_WS(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) AS NOMBRES,  
-								IFNULL(P.TOTAL,0) AS NUM_SALDO, 
-								IFNULL(P.SALDO,0) AS SALDO, 
-								IFNULL(PEN.PENSIONES,0) AS NUM_PENSION, 
-								IFNULL(PEN.TOTAL,0) AS PENSION, 
-								PEN.FECHA
-							FROM sujeto_alumno A
-							LEFT JOIN (
-								SELECT 
+									alumno_id, 
+									alumno_identificacion, 
+									CONCAT_WS(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) AS NOMBRES,  
+									IFNULL(P.TOTAL,0) AS NUM_SALDO, 
+									IFNULL(P.SALDO,0) AS SALDO, 
+									IFNULL(PEN.PENSIONES,0) AS NUM_PENSION, 
+									IFNULL(PEN.TOTAL,0) AS PENSION, 
+									PEN.FECHA
+								FROM sujeto_alumno A
+								LEFT JOIN (
+									SELECT 
 									pago_alumnoid, 
 									COUNT(pago_saldo) AS TOTAL, 
 									SUM(pago_saldo) AS SALDO
-								FROM alumno_pago
-								WHERE pago_estado = 'P' AND pago_saldo > 0
-								GROUP BY pago_alumnoid
-							) P ON P.pago_alumnoid = A.alumno_id
-							LEFT JOIN (
-								SELECT 
+									FROM alumno_pago
+									WHERE pago_estado = 'P' AND pago_saldo > 0
+									GROUP BY pago_alumnoid
+								) P ON P.pago_alumnoid = A.alumno_id
+								LEFT JOIN (
+									SELECT 
 									BASE.FECHA,
 									BASE.pago_alumnoid,
-									GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) AS PENSIONES,
-									GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.escuela_pension) AS TOTAL
-								FROM (
+									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
+										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) END AS PENSIONES,
+									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
+										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.escuela_pension) END AS TOTAL
+									FROM (
 									SELECT 
 										MAX(pago_fecha) AS FECHA, 
 										pago_alumnoid, 
@@ -120,10 +123,10 @@
 									WHERE pago_rubroid = 'RPE'
 									GROUP BY 
 										pago_alumnoid
-								) BASE
-							) PEN ON PEN.pago_alumnoid = A.alumno_id
-							WHERE PEN.TOTAL > 0 OR P.SALDO > 0;
-							";	
+									) BASE
+								) PEN ON PEN.pago_alumnoid = A.alumno_id
+								WHERE PEN.TOTAL > 0 OR P.SALDO > 0
+								";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
