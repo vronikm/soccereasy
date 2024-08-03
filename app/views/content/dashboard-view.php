@@ -10,13 +10,13 @@
 	$alumnosInactivosSedeC=$insDashboard->obtenerAlumnosInactivosSedeC();
 	$alumnosInactivosSedeV=$insDashboard->obtenerAlumnosInactivosSedeV();
 
-	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCanceladoSedeL();	
-	$pagosCanceladoSedeC=$insDashboard->obtenerPagosCanceladoSedeC();
-	$pagosCanceladoSedeV=$insDashboard->obtenerPagosCanceladoSedeV();
+	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCanceladoSedeL(1);	
+	$pagosCanceladoSedeC=$insDashboard->obtenerPagosCanceladoSedeL(2);
+	$pagosCanceladoSedeV=$insDashboard->obtenerPagosCanceladoSedeL(3);
 
-	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendienteSedeL();	
-	$pagosPendienteSedeC=$insDashboard->obtenerPagosPendienteSedeC();
-	$pagosPendienteSedeV=$insDashboard->obtenerPagosPendienteSedeV();
+	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendienteSedeL(1);	
+	$pagosPendienteSedeC=$insDashboard->obtenerPagosPendienteSedeL(2);
+	$pagosPendienteSedeV=$insDashboard->obtenerPagosPendienteSedeL(3);
 
 	
 	if($alumnosActivosSedeL->rowCount()>0){
@@ -70,14 +70,14 @@
 
 	if($pagosCanceladoSedeC->rowCount()>0){
 		$pagosCanceladoSedeC=$pagosCanceladoSedeC->fetch();
-		$totalCanceladoSedeC=$pagosCanceladoSedeC["totalCanceladoSedeC"];
+		$totalCanceladoSedeC=$pagosCanceladoSedeC["totalCanceladoSedeL"];
 	}else{
 		$totalCanceladoSedeC= 0;
 	}
 
 	if($pagosCanceladoSedeV->rowCount()>0){
 		$pagosCanceladoSedeV=$pagosCanceladoSedeV->fetch();
-		$totalCanceladoSedeV=$pagosCanceladoSedeV["totalCanceladoSedeV"];
+		$totalCanceladoSedeV=$pagosCanceladoSedeV["totalCanceladoSedeL"];
 	}else{
 		$totalCanceladoSedeV= 0;
 	}
@@ -91,14 +91,14 @@
 
 	if($pagosPendienteSedeC->rowCount()>0){
 		$pagosPendienteSedeC=$pagosPendienteSedeC->fetch();
-		$totalPendienteSedeC=$pagosPendienteSedeC["totalPendienteSedeC"];
+		$totalPendienteSedeC=isset($pagosPendienteSedeC["totalPendienteSedeL"]) ? $$pagosPendienteSedeC["totalPendienteSedeL"] : 0;
 	}else{
 		$totalPendienteSedeC= 0;
 	}
 
 	if($pagosPendienteSedeV->rowCount()>0){
 		$pagosPendienteSedeV=$pagosPendienteSedeV->fetch();
-		$totalPendienteSedeV=$pagosPendienteSedeV["totalPendienteSedeV"];
+		$totalPendienteSedeV=$pagosPendienteSedeV["totalPendienteSedeL"];
 	}else{
 		$totalPendienteSedeV= 0;
 	}
@@ -214,7 +214,7 @@
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>reportePagos/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePagos/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 							</div>
 							<!-- ./col -->
@@ -244,7 +244,7 @@
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>reportePendientes/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePendientes/1" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							
 							</div>
 							</div>
@@ -286,12 +286,12 @@
 								<div class="inner">
 								<h3><?php echo $totalCanceladoSedeC; ?></h3>
 
-								<p>Pagos completos</p>
+								<p>Pagos receptados</p>
 								</div>
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>pagosList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePagos/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 							</div>
 							<!-- ./col -->
@@ -321,7 +321,7 @@
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>pagosList/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePendientes/2" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 							</div>
 							<!-- ./col -->
@@ -367,7 +367,7 @@
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>reportePagos/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePagos/3" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							</div>
 							</div>
 							<!-- ./col -->
@@ -397,7 +397,7 @@
 								<div class="icon">
 								<i class="ion ion-cash"></i>
 								</div>
-								<a href="<?php echo APP_URL;?>reportePendientes/" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								<a href="<?php echo APP_URL;?>reportePendientes/3" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
 							
 							</div>
 							</div>

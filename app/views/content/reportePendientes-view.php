@@ -1,6 +1,8 @@
 <?php
 	use app\controllers\reporteController;
-	$insPendientes = new reporteController();		
+	$insPendientes = new reporteController();	
+	
+	$sede_id 	= ($url[1] != "") ? $url[1] : 0;
 ?>
 
 
@@ -88,7 +90,7 @@
 									</thead>
 									<tbody>
 										<?php 
-											echo $insPendientes->valoresPendientes(); 
+											echo $insPendientes->valoresPendientes($sede_id); 
 										?>
 									</tbody>
 								</table>

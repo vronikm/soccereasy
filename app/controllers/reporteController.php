@@ -5,7 +5,7 @@
 
 	class reporteController extends mainModel{
 	
-		public function listarPagos($fecha_inicio, $fecha_fin){
+		public function listarPagos($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$consulta_datos="SELECT A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
@@ -27,6 +27,7 @@
 								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
 								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
 							where pago_estado <> 'E'
+								and alumno_sedeid = ".$sede_id."
 								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 							
 							union all 
@@ -47,6 +48,7 @@
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
 								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
 							where transaccion_estado <> 'E'
+								and alumno_sedeid = ".$sede_id."
 								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -76,7 +78,7 @@
 			return $fecha_maxima;
 		}
 
-		public function valoresPendientes(){		
+		public function valoresPendientes($sedeid){		
 			$tabla="";
 			$NUM_SALDO = 0;
 			$SALDO = 0;
@@ -98,7 +100,8 @@
 									COUNT(pago_saldo) AS TOTAL, 
 									SUM(pago_saldo) AS SALDO
 									FROM alumno_pago
-									WHERE pago_estado = 'P' AND pago_saldo > 0
+										INNER JOIN sujeto_alumno ON alumno_id = pago_alumnoid
+									WHERE pago_estado = 'P' AND pago_saldo > 0 AND alumno_sedeid = ".$sedeid." 
 									GROUP BY pago_alumnoid
 								) P ON P.pago_alumnoid = A.alumno_id
 								LEFT JOIN (
@@ -120,7 +123,7 @@
 										LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
 										LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
 										LEFT JOIN general_escuela ON escuela_id = 1
-									WHERE pago_rubroid = 'RPE'
+									WHERE pago_rubroid = 'RPE' AND alumno_sedeid = ".$sedeid." 
 									GROUP BY 
 										pago_alumnoid
 									) BASE

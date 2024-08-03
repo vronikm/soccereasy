@@ -1,6 +1,7 @@
 <?php
 	use app\controllers\reporteController;
 	$insRecibidos = new reporteController();
+	$sede_id 	  = ($url[1] != "") ? $url[1] : 0;
 
 	if(isset($_POST['pago_fecha_inicio'])){
 		$fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
@@ -16,7 +17,15 @@
 		$fecha_fin = $insRecibidos->fechaPagosReceptados();
 		$fecha_fin = $fecha_fin->fetch(); 
 		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
-	}		
+	}	
+
+	$datos=$insRecibidos->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
+	if($datos->rowCount()==1){
+		$datos=$datos->fetch();
+		$sede_nombre		= $datos['sede_nombre'];
+	}else{
+		$sede_nombre = "";
+	}
 ?>
 
 
@@ -66,7 +75,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de pagos realizados</h1>
+				<h1 class="m-0">Búsqueda de pagos realizados <?php echo $sede_nombre; ?></h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -163,7 +172,7 @@
 							</thead>
 							<tbody>
 								<?php 
-									echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin); 
+									echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin, $sede_id); 
 								?>								
 							</tbody>
 						</table>	
