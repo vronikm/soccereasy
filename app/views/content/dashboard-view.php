@@ -98,7 +98,7 @@
 
 	if($pagosPendienteSedeV->rowCount()>0){
 		$pagosPendienteSedeV=$pagosPendienteSedeV->fetch();
-		$totalPendienteSedeV=$pagosPendienteSedeV["totalPendienteSedeL"];
+		$totalPendienteSedeV=$isset($pagosPendienteSedeV["totalPendienteSedeL"]) ? $$pagosPendienteSedeV["totalPendienteSedeL"] : 0;
 	}else{
 		$totalPendienteSedeV= 0;
 	}
