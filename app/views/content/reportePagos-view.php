@@ -172,7 +172,13 @@
 							</thead>
 							<tbody>
 								<?php 
-									echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin, $sede_id); 
+									if($sede_id!=0){
+										echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin, $sede_id); 
+									}else{
+										echo $insRecibidos->listarPagosConsolidado($fecha_inicio, $fecha_fin); 
+									}
+
+									
 								?>								
 							</tbody>
 						</table>	

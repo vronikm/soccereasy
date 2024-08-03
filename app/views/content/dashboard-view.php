@@ -91,14 +91,14 @@
 
 	if($pagosPendienteSedeC->rowCount()>0){
 		$pagosPendienteSedeC=$pagosPendienteSedeC->fetch();
-		$totalPendienteSedeC=isset($pagosPendienteSedeC["totalPendienteSedeL"]) ? $$pagosPendienteSedeC["totalPendienteSedeL"] : 0;
+		$totalPendienteSedeC=isset($pagosPendienteSedeC["totalPendienteSedeL"]) ? $pagosPendienteSedeC["totalPendienteSedeL"] : 0;
 	}else{
 		$totalPendienteSedeC= 0;
 	}
 
 	if($pagosPendienteSedeV->rowCount()>0){
 		$pagosPendienteSedeV=$pagosPendienteSedeV->fetch();
-		$totalPendienteSedeV=$isset($pagosPendienteSedeV["totalPendienteSedeL"]) ? $$pagosPendienteSedeV["totalPendienteSedeL"] : 0;
+		$totalPendienteSedeV=isset($pagosPendienteSedeV["totalPendienteSedeL"]) ? $pagosPendienteSedeV["totalPendienteSedeL"] : 0;
 	}else{
 		$totalPendienteSedeV= 0;
 	}
