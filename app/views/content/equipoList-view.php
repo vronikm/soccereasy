@@ -163,7 +163,7 @@
 												
 												<div class="col-md-12">						
 													<button type="submit" class="btn btn-success btn-xs">Guardar</button>
-													<a href="<?php echo APP_URL; ?>equipoList/" class="btn btn-info btn-xs">Cancelar</a>
+													<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-info btn-xs">Cancelar</a>
 													<button type="reset" class="btn btn-dark btn-xs">Limpiar</button>						
 												</div>	
 											</div>

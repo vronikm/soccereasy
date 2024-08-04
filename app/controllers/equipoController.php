@@ -212,8 +212,8 @@
 							</form>
 
 							<a href="'.APP_URL.'equipoList/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>							
-							<a href="'.APP_URL.'jugadorLista/'.$rows['equipo_id'].'/'.$equipo_torneoid.'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Lista</a>
-							<a href="'.APP_URL.'jugadorNew/'.$rows['equipo_id'].''.$equipo_torneoid.'/" class="btn float-right btn-warning btn-xs" style="margin-right: 3px;">Asignar</a>
+							<a href="'.APP_URL.'jugadorLista/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Lista</a>
+							<a href="'.APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 3px;">Asignar</a>
 						</td>
 					</tr>';	
 			}

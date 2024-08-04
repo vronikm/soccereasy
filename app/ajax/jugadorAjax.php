@@ -14,6 +14,10 @@
 			echo $insjugador->guardarListaJugadores();
 		}
 
+		if($_POST['modulo_jugador']=="agregar"){
+			echo $insjugador->agregarJugador();
+		}
+
 		if($_POST['modulo_jugador']=="actualizar"){
 			echo $insjugador->actualizarListaJugadores();
 		}

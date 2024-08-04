@@ -214,15 +214,15 @@
 									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 										<thead>
 											<tr>
-												<th style="width: 130px;">Nombre</th>
+												<th style="width: 100px;">Nombre</th>
 												<th>Ciudad</th>
 												<th>Lugar</th>
-												<th style="width: 80px;">Fecha inicio</th>
+												<th style="width: 60px;">F. inicio</th>
 												<th style="width: 60px;">Fecha fin</th>
 												<th>Organizador</th>
-												<th style="width: 240px;">Descripción</th>
+												<th>Descripción</th>
 												<th>Estado</th>
-												<th style="width: 215px;">Opciones</th>
+												<th style="width: 200px;">Opciones</th>
 											</tr>
 										</thead>
 										<tbody>

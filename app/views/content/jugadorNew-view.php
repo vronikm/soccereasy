@@ -2,7 +2,9 @@
 	use app\controllers\jugadorController;
 	$insJugador = new jugadorController();	
 
-	$equipo_id 		= ($url[1] != "") ? $url[1] : 0;
+	$equipo_torneoid = ($url[1] != "") ? $url[1] : 0;
+	$equipo_id 		 = ($url[2] != "") ? $url[2] : 0;
+	
 	$modulo_equipo	= '';
 
 	if($equipo_id != 0){
@@ -92,7 +94,7 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h1 class="m-0">Asignación de jugadores para el equipo <?php echo $equipo_nombre; ?></h1>
+								<h4 class="m-0">Asignación jugadores Equipo <?php echo $equipo_nombre; ?></h4>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
@@ -109,7 +111,7 @@
 				<section class="content">
 					
 					<div class="container-fluid">
-						<form action="<?php echo APP_URL."jugadorList/".$equipo_id ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+						<form action="<?php echo APP_URL."jugadorNew/".$equipo_torneoid."/".$equipo_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
 					
 							<div class="card card-default">
 								<div class="card-header">
@@ -186,36 +188,30 @@
 										<i class="fas fa-minus"></i>
 									</button>
 								</div>
-							</div>
-							
-							<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/jugadorAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-								<input type="hidden" name="modulo_jugador" value="registrar">
-								<input type="hidden" name="equipo_id" value="<?php echo $equipo_id;?>">
+							</div>							
 						
-								<div class="card-body">
-									<table id="example1" class="table table-bordered table-striped table-sm">
-										<thead>
-											<tr>
-												<th>Identificación</th>
-												<th>Nombres y Apellidos</th>
-												<th>Año</th>		
-												<th>Posición de juego</th>							
-												<th>Tipo</th>
-												<th>Seleccionado</th>	
-											</tr>
-										</thead>
-										<tbody>
-											<?php 
-												echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 
-											?>								
-										</tbody>
-									</table>	
-								</div>
-								<div class="card-footer">						
-									<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-									<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
-								</div>
-							</form>
+							<div class="card-body">
+								<table id="example1" class="table table-bordered table-striped table-sm">
+									<thead>
+										<tr>
+											<th>Identificación</th>
+											<th>Nombres y Apellidos</th>
+											<th>Año</th>		
+											<th>Posición de juego</th>							
+											<th>Tipo</th>
+											<th></th>	
+										</tr>
+									</thead>
+									<tbody>
+										<?php 												
+											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 												
+										?>								
+									</tbody>
+								</table>	
+							</div>
+							<div class="card-footer">		
+								<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Cancelar</a>														
+							</div>				
 							
 						</div>	
 
@@ -237,17 +233,6 @@
 			
 		<!-- fin -->
 
-		  	
-
-			
-
-				
-			
-			
-
-	
-
-		
 		<!-- ./wrapper -->
 		<!-- jQuery -->
 		<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
