@@ -182,7 +182,7 @@
 												<th>Equipo</th>
 												<th>Categoría</th>
 												<th>Estado</th>
-												<th style="width: 215px;">Opciones</th>
+												<th style="width: 255px;">Opciones</th>
 											</tr>
 										</thead>
 										<tbody>
