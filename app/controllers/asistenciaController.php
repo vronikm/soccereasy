@@ -297,11 +297,17 @@
 		public function listarOptionProfesor($lugar_sedeid, $profesorid){
 			
 			$option="";
+			/*
 			$consulta_datos="SELECT profesor_id, profesor_nombre 
 							FROM sujeto_profesor
 							INNER JOIN seguridad_usuario ON usuario_identificacion = profesor_identificacion
 							INNER JOIN seguridad_usuario_sede ON usuariosede_usuarioid = usuario_id 
 							WHERE profesor_estado = 'A' AND usuariosede_sedeid =".$lugar_sedeid;
+			*/
+
+			$consulta_datos="SELECT profesor_id, profesor_nombre 
+				FROM sujeto_profesor
+				WHERE profesor_estado = 'A'";
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

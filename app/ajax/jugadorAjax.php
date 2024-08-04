@@ -8,22 +8,18 @@
 
 	if(isset($_POST['modulo_jugador'])){
 
-		$insEquipo = new jugadorController();
+		$insjugador = new jugadorController();
 
 		if($_POST['modulo_jugador']=="registrar"){
-			echo $insEquipo->registrarEquipoControlador();
+			echo $insjugador->guardarListaJugadores();
 		}
 
 		if($_POST['modulo_jugador']=="actualizar"){
-			echo $insEquipo->actualizarEquipoControlador();
+			echo $insjugador->actualizarListaJugadores();
 		}
 
-		if($_POST['modulo_jugador']=="actualizarestado"){
-			echo $insEquipo->actualizarEstadoEquipoControlador();
-		}		
-
 		if($_POST['modulo_jugador']=="eliminar"){
-			echo $insEquipo->eliminarEquipoControlador();
+			echo $insjugador->eliminarListaJugadores();
 		}		
 	}else{
 		session_destroy();

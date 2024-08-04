@@ -2,8 +2,8 @@
 	use app\controllers\jugadorController;
 	$insJugador = new jugadorController();	
 
-	$equipo_id 	= ($url[1] != "") ? $url[1] : 0;
-	$modulo_equipo		= '';
+	$equipo_id 		= ($url[1] != "") ? $url[1] : 0;
+	$modulo_equipo	= '';
 
 	if($equipo_id != 0){
 		$nombreEquipo=$insJugador->BuscarEquipo($equipo_id);		
@@ -108,8 +108,9 @@
 				<!-- Section listado de alumnos -->
 				<section class="content">
 					
-					<form action="<?php echo APP_URL."jugadorList/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-						<div class="container-fluid">
+					<div class="container-fluid">
+						<form action="<?php echo APP_URL."jugadorList/".$equipo_id ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+					
 							<div class="card card-default">
 								<div class="card-header">
 									<h3 class="card-title">Búsqueda de alumnos</h3>
@@ -175,11 +176,8 @@
 									</div>					
 								</div>
 							</div>
-						</div>  
-					</form>
+						</form>
 
-					<div class="container-fluid">
-					<!-- Small boxes (Stat box) -->
 						<div class="card card-default">
 							<div class="card-header">
 								<h3 class="card-title">Resultado de la búsqueda</h3>
@@ -189,36 +187,44 @@
 									</button>
 								</div>
 							</div>
-
-							<div class="card-body">
-								<table id="example1" class="table table-bordered table-striped table-sm">
-									<thead>
-										<tr>
-											<th>Identificación</th>
-											<th>Nombres y Apellidos</th>
-											<th>Año</th>		
-											<th>Posición de juego</th>							
-											<th>Tipo</th>
-											<th>Seleccionado</th>	
-										</tr>
-									</thead>
-									<tbody>
-										<?php 
-											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 
-										?>								
-									</tbody>
-								</table>	
-							</div>
 							
-						</div>
-					<!-- /.row -->
-					</div><!-- /.container-fluid -->
+							<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/jugadorAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+								<input type="hidden" name="modulo_jugador" value="registrar">
+								<input type="hidden" name="equipo_id" value="<?php echo $equipo_id;?>">
+						
+								<div class="card-body">
+									<table id="example1" class="table table-bordered table-striped table-sm">
+										<thead>
+											<tr>
+												<th>Identificación</th>
+												<th>Nombres y Apellidos</th>
+												<th>Año</th>		
+												<th>Posición de juego</th>							
+												<th>Tipo</th>
+												<th>Seleccionado</th>	
+											</tr>
+										</thead>
+										<tbody>
+											<?php 
+												echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 
+											?>								
+										</tbody>
+									</table>	
+								</div>
+								<div class="card-footer">						
+									<button type="submit" class="btn btn-success btn-sm">Guardar</button>
+									<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+								</div>
+							</form>
+							
+						</div>	
 
+					</div>					
 				</section>
-				<!-- /.section -->
-				<!-- /.vista -->				
-			</div>
-			
+				
+			</div><!-- /.container-fluid -->
+
+
 			<?php require_once "app/views/inc/footer.php"; ?>
 
 			<!-- Control Sidebar -->
@@ -228,6 +234,18 @@
 			<!-- /.control-sidebar -->
 
 		</div>
+			
+		<!-- fin -->
+
+		  	
+
+			
+
+				
+			
+			
+
+	
 
 		
 		<!-- ./wrapper -->
