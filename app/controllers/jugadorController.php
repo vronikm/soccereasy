@@ -229,7 +229,6 @@
 				];
 			}
 			return json_encode($alerta);
-			
 		}
         			
 		public function listarCatalogoPosicion(){
