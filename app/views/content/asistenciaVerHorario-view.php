@@ -191,14 +191,16 @@
 																				
 									</div>
 									<!-- accepted payments column -->
-									<div class="col-4">										
+									<div class="col-5">										
 									</div>
 
-									<div class="col-4">										
+									<div class="col-3">										
 										<?php
+											/*
 											('Content-Type: image/svg+xml');
 											$svg = $generator->render_svg($symbology,"Horario ".$horario_nombre." | "."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 
-											echo $svg;  
+											echo $svg;
+											*/  
 										?>								
 									</div>
 									<!-- /.col -->
@@ -216,15 +218,13 @@
 										</button>
 										<button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
 											<i class="fas fa-download"></i> Descargar recibo
-										</button-->
-										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$horario_id.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar horario</a>
-
+										</button-->										
 
 										<a href="<?php echo APP_URL.'asistenciaHorarioPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver horario</a>
 
 										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i>Imprimir recibo</button-->
-										
-										<?php include "./app/views/inc/btn_back.php";?>
+																				
+										<button class="btn btn-dark btn-back btn-sm" onclick="cerrarPestana()">Regresar</button>
 
 									</div>
 								</div>
@@ -284,10 +284,9 @@
 	<!-- fileinput -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
     
-	<script>
-        // Esta función se llama cuando el botón es clickeado
-        function printPage() {
-            window.addEventListener("load", window.print());
+	<script type="text/javascript">
+        function cerrarPestana() {
+            window.close();
         }
     </script>
 	

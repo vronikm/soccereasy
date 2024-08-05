@@ -18,13 +18,15 @@
 			echo $insjugador->agregarJugador();
 		}
 
+		if($_POST['modulo_jugador']=="eliminar"){
+			echo $insjugador->eliminarJugador();
+		}	
+
 		if($_POST['modulo_jugador']=="actualizar"){
 			echo $insjugador->actualizarListaJugadores();
 		}
 
-		if($_POST['modulo_jugador']=="eliminar"){
-			echo $insjugador->eliminarListaJugadores();
-		}		
+			
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");

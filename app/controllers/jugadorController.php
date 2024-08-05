@@ -70,13 +70,14 @@
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-            $posicion = "<select class='form-control' id='posicion' name='posicion[]'>".$this->listarCatalogoPosicion()."</select>";
-            $tipo = "<select class='form-control' id='tipo' name='tipo[]'>".$this->listarCatalogoTipo()."</select>";
+            $posicion = "<select class='form-control' id='posicion' name='posicion'>".$this->listarCatalogoPosicion()."</select>";
+            $tipo = "<select class='form-control' id='tipo' name='tipo'>".$this->listarCatalogoTipo()."</select>";
 			foreach($datos as $rows){
 				$tabla.='
-					<form class="FormularioAjax" action="'.APP_URL.'app/ajax/alumnoAjax.php" method="POST" autocomplete="off" >
+					
 					<tr>
-						<td><input type="hidden" name="alumno_id[]" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/jugadorAjax.php" method="POST" autocomplete="off" >
+						<td><input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
                         <td>'.$posicion.'</td>
@@ -86,10 +87,149 @@
 							<input type="hidden" name="equipo_id" value="'.$equipo_id.'">						
 							<button type="submit" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;"">Agregar</button>					
 						</td>
+						</form>
 					</tr>
-					</form>';
+					';
 			}
 			return $tabla;			
+		}
+
+		public function listarjugadores($equipo_id){
+			
+			$tabla="";
+			$consulta_datos = "SELECT jugador_alumnoid, jugador_equipoid,   
+									alumno_identificacion, CONCAT(alumno_primernombre, ' ',alumno_segundonombre) AS NOMBRES,  
+									CONCAT(alumno_apellidopaterno, ' ',alumno_apellidomaterno) AS APELLIDOS,
+									YEAR(alumno_fechanacimiento) AS CATEGORIA,
+										P.catalogo_descripcion AS POSICION, T.catalogo_descripcion AS TIPO
+								FROM torneo_jugador 
+									INNER JOIN sujeto_alumno ON alumno_id = jugador_alumnoid
+									INNER JOIN torneo_equipo ON equipo_id = jugador_equipoid
+									INNER JOIN general_tabla_catalogo P ON P.catalogo_valor = jugador_posicioncod
+									INNER JOIN general_tabla_catalogo T ON T.catalogo_valor = jugador_tipocod
+								WHERE jugador_equipoid = $equipo_id";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='					
+					<tr>
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/jugadorAjax.php" method="POST" autocomplete="off" >
+						<td><input type="hidden" name="jugador_alumnoid" value="'.$rows['jugador_alumnoid'].'">'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['APELLIDOS'].'</td>
+						<td>'.$rows['CATEGORIA'].'</td>
+                      	<td>'.$rows['POSICION'].'</td>
+					  	<td>'.$rows['TIPO'].'</td>
+						<td>												
+							<input type="hidden" name="modulo_jugador" value="eliminar">												
+							<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>					
+						</td>
+						</form>
+					</tr>
+					';
+			}
+			return $tabla;			
+		}
+
+		public function agregarJugador(){					
+
+			# Almacenando datos 			
+			$equipo_id = $this->limpiarCadena($_POST['equipo_id']);
+			$alumno_id = $_POST['alumno_id'];
+			$posicion_id = $_POST['posicion'];
+			$tipo_id = $_POST['tipo'];
+			
+			# Verificando campos obligatorios #
+			if($equipo_id=="" || $alumno_id== ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No tenemos información del equipo",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			
+			$torneo_jugador_reg = [
+				[
+					"campo_nombre" => "jugador_alumnoid",
+					"campo_marcador" => ":Alumnoid",
+					"campo_valor" => $alumno_id
+				],
+				[
+					"campo_nombre" => "jugador_equipoid",
+					"campo_marcador" => ":Equipoid",
+					"campo_valor" => $equipo_id
+				],
+				[
+					"campo_nombre" => "jugador_posicioncod",
+					"campo_marcador" => ":Posicioncod",
+					"campo_valor" => $posicion_id
+				],
+				[
+					"campo_nombre" => "jugador_tipocod",
+					"campo_marcador" => ":Tipocod",
+					"campo_valor" => $tipo_id
+				]
+			];
+			
+			$agregar_jugador=$this->guardarDatos("torneo_jugador",$torneo_jugador_reg);
+			
+			if($agregar_jugador->rowCount()==1){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Registro horario",
+					"texto"=> "Se agreagaron jugadores del equipo: $equipo_id correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"No se pudo agregar el jugador",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+			
+		}
+
+		public function eliminarJugador(){					
+
+			# Almacenando datos
+			$jugador_alumnoid = $_POST['jugador_alumnoid'];
+					
+			# Verificando campos obligatorios #
+			if($jugador_alumnoid == ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No tenemos información del jugador",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			
+			$eliminar_jugador = $this->eliminarRegistro("torneo_jugador","jugador_alumnoid",$jugador_alumnoid);
+			
+			if($eliminar_jugador->rowCount()==1){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Eliminar jugador",
+					"texto"=> "Se elimino el jugadores correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"No se pudo eliminar el jugador",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+			
 		}
         			
 		public function listarCatalogoPosicion(){
@@ -156,81 +296,7 @@
 			return $datos;
 		}
 
-		public function agregarJugador(){					
-
-			# Almacenando datos 			
-			$equipo_id = $this->limpiarCadena($_POST['equipo_id']);
-			$alumno_id = $_POST['alumno_id'];
-			$posicion_id = $_POST['posicion'];
-			$tipo_id = $_POST['tipo'];
-			$selected = $_POST['jugador_selected'];
-
-			
-			# Verificando campos obligatorios #
-			if($equipo_id=="" || $alumno_id== ""){
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error inesperado",
-					"texto"=>"No tenemos información del equipo",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);       
-		    }	
-			
-			/*
-			$detalle=$this->ejecutarConsulta("SELECT jugador_alumnoid FROM torneo_jugador WHERE jugador_equipoid='$equipo_id'");
-			if($detalle->rowCount()>0){
-				$this->eliminarRegistro("torneo_jugador","jugador_equipoid",$equipo_id);					
-			}
-			*/
-
-			$alerta=[
-				"tipo"=>"simple",
-				"titulo"=>"TOTAL REGISTROS",
-				"texto"=>"Registros".count($alumno_id),
-				"icono"=>"error"
-			];
-			return json_encode($alerta);     
-
-			for ($i = 0; $i < count($alumno_id); $i++) { 
-				if (isset($selected[$i])) {
-					$torneo_jugador_reg = [
-						[
-							"campo_nombre" => "jugador_alumnoid",
-							"campo_marcador" => ":Alumnoid",
-							"campo_valor" => $alumno_id[$i]
-						],
-						[
-							"campo_nombre" => "jugador_equipoid",
-							"campo_marcador" => ":Equipoid",
-							"campo_valor" => $equipo_id
-						],
-						[
-							"campo_nombre" => "jugador_posicioncod",
-							"campo_marcador" => ":Posicioncod",
-							"campo_valor" => $posicion_id[$i]
-						],
-						[
-							"campo_nombre" => "jugador_tipocod",
-							"campo_marcador" => ":Tipocod",
-							"campo_valor" => $tipo_id[$i]
-						]
-					];
-			
-					$this->guardarDatos("torneo_jugador",$torneo_jugador_reg);
-				}
-			}
-
-			$alerta=[
-				"tipo"=>"recargar",
-				"titulo"=>"Registro horario",
-				"texto"=>"Se agreagaron jugadores del equipo: ".$equipo_id." correctamente",
-				"icono"=>"success"
-			];
-			return json_encode($alerta);
-			
-		}
-		
+				
 		public function guardarListaJugadores(){					
 
 			# Almacenando datos 			

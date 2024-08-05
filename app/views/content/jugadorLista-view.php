@@ -1,8 +1,9 @@
 <?php
 	use app\controllers\jugadorController;
-	$insUsuario = new jugadorController();	
+	$insJugador = new jugadorController();	
 
-	$equipo_id 		= ($url[1] != "") ? $url[1] : 0;
+	$equipo_torneoid = ($url[1] != "") ? $url[1] : 0;
+	$equipo_id 		 = ($url[2] != "") ? $url[2] : 0;
 
 	if($equipo_id != 0){
 		$nombreEquipo=$insJugador->BuscarEquipo($equipo_id);		
@@ -13,7 +14,6 @@
 	}else{
 		$equipo_nombre = '';
 	}
-
 	
 ?>
 
@@ -62,17 +62,17 @@
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
-			<div class="row mb-2">
-				<div class="col-sm-6">
-				<h1 class="m-0">Usuarios</h1>
-				</div><!-- /.col -->
-				<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
-					<li class="breadcrumb-item active">Dashboard v1</li>
-				</ol>
-				</div><!-- /.col -->
-			</div><!-- /.row -->
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h4 class="m-0">Equipo <?php echo $equipo_nombre; ?></h4>
+					</div><!-- /.col -->
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
+							<li class="breadcrumb-item active">Dashboard v1</li>
+						</ol>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content-header -->
@@ -83,9 +83,9 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Listado de usuarios</h3>
-						<div class="card-tools">
-							<a href="<?php echo APP_URL; ?>userNew/" class="btn btn-primary btn-sm" >Nuevo Usuario</a>
+						<h3 class="card-title">Listado de jugadores</h3>
+						<div class="card-tools">	
+							<a href="<?php echo APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$equipo_id.'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
@@ -96,21 +96,24 @@
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
-									<th>Usuario</th>
-									<th>Nombre</th>
-									<th>Rol</th>
-									<th>Creación</th>
-									<th>Modificación</th>
-									<th>Estado</th>
-									<th style="width: 220px;">Opciones</th>
+									<th>Identificación</th>
+									<th>Nombres</th>
+									<th>Apellidos</th> 
+									<th>Año</th>		
+									<th>Posición</th>							
+									<th>Tipo</th>
+									<th></th>	
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-									echo $insUsuario->listarUsuarios(); 
-								?>							
+								<?php 												
+									echo $insJugador->listarjugadores($equipo_id); 												
+								?>								
 							</tbody>	
 						</table>	
+					</div>
+					<div class="card-footer">		
+						<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Cancelar</a>														
 					</div>
 				</div>
 			<!-- /.row -->
