@@ -324,14 +324,8 @@
 			}
 			*/
 
-			$alerta=[
-				"tipo"=>"simple",
-				"titulo"=>"TOTAL REGISTROS",
-				"texto"=>"Registros".count($alumno_id),
-				"icono"=>"error"
-			];
-			return json_encode($alerta);     
-
+		
+		
 			for ($i = 0; $i < count($alumno_id); $i++) { 
 				if (isset($selected[$i])) {
 					$torneo_jugador_reg = [
