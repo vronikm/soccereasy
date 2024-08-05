@@ -20,6 +20,14 @@
 		$horario_detalle	= "";
 		$horario_estado		= "";
 	}
+
+	$sede=$insHorario->seleccionarDatos("Unico","general_sede","sede_id",$lugar_sedeid);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch();
+		$sede_nombre = $sede['sede_nombre'];		
+	}else{		
+		$sede_nombre = "";
+	}
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +91,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Configuración de Horarios</h4>
+							<h4 class="m-0">Configuración horario sede <?php echo $sede_nombre; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">

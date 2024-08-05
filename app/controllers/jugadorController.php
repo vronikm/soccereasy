@@ -213,7 +213,7 @@
 			
 			$eliminar_jugador = $this->eliminarRegistro("torneo_jugador","jugador_alumnoid",$jugador_alumnoid);
 			
-			if($eliminar_jugador->rowCount()==1){
+			if($eliminar_jugador->rowCount()>0){
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Eliminar jugador",

@@ -875,14 +875,6 @@
 			$horario_nombre		= $this->limpiarCadena($_POST['horario_nombre']);
 			$horario_detalle	= $this->limpiarCadena($_POST['horario_detalle']);
 
-			/*
-			$detalle_horarioid 	= $this->limpiarCadena($_POST['hora_inicio']);
-			$detalle_lugarid	= $this->limpiarCadena($_POST['lugar']);
-			$detalle_horaid		= $this->limpiarCadena($_POST['hora']);
-			$detalle_profesorid	= $this->limpiarCadena($_POST['profesor']);
-			$detalle_dia		= $this->limpiarCadena($_POST['dia']);
-			*/
-			
 			# Verificando campos obligatorios #
 		    if($lugar_sedeid=="" || $horario_nombre=="" ){
 		    	$alerta=[
@@ -927,7 +919,50 @@
 					"texto"=>"El horario se registró correctamente",
 					"icono"=>"success"
 				];	
+
+				$detalle=$this->ejecutarConsulta("SELECT horario_id FROM asistencia_horario WHERE horario_nombre='$horario_nombre'");
+				if($detalle->rowCount()>0){
+					$detalle=$detalle->fetch();
+					$horario_id=$detalle['horario_id'];
+
+					$dias = $_POST['dia'];
+					$lugares = $_POST['lugar'];
+					$horas = $_POST['hora'];
+					$profesores = $_POST['profesor'];
 			
+					for ($i = 0; $i < count($dias); $i++) { 
+
+						$horario_detalle_reg = [
+							[
+								"campo_nombre" => "detalle_horarioid",
+								"campo_marcador" => ":Horarioid",
+								"campo_valor" => $horario_id
+							],
+							[
+								"campo_nombre" => "detalle_lugarid",
+								"campo_marcador" => ":Lugarid",
+								"campo_valor" => $lugares[$i]
+							],
+							[
+								"campo_nombre" => "detalle_horaid",
+								"campo_marcador" => ":Horaid",
+								"campo_valor" => $horas[$i]
+							],
+							[
+								"campo_nombre" => "detalle_profesorid",
+								"campo_marcador" => ":Profesorid",
+								"campo_valor" => $profesores[$i]
+							],
+							[
+								"campo_nombre" => "detalle_dia",
+								"campo_marcador" => ":Dia",
+								"campo_valor" => $dias[$i]
+							]
+						];
+				
+						$this->guardarDatos("asistencia_horario_detalle",$horario_detalle_reg);
+					}	
+				}
 			}else{				
 
 				$alerta=[
