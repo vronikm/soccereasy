@@ -277,7 +277,7 @@
 						<td>'.$rows['sede_nombre'].'</td>
 						<td>'.$rows['lugar_nombre'].'</td>
 						<td>'.$rows['lugar_direccion'].'</td>
-						<td>'.$rows['lugar_detalle'].'</td>
+						<td><a href="'.$rows['lugar_detalle'].'" target="_blank">'.$rows['lugar_detalle'].'</a></td>
 						<td>'.$rows['ESTADO'].'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
