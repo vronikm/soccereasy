@@ -668,6 +668,7 @@
 							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-xs">Eliminar</a>							
 							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Editar</a>
 							<a href="'.APP_URL.'asistenciaVerHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
+							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['equipo_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar</a>
 						</td>
 					</tr>';	
 			}
