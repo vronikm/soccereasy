@@ -163,7 +163,8 @@
 									<th>Horario</th>
 									<th>Detalle</th>
 									<th>Estado</th>																
-									<th>Opciones</th>
+									<th>Alumnos</th>
+									<th>Operaciones</th>
 								</tr>
 							</thead>
 							<tbody>
