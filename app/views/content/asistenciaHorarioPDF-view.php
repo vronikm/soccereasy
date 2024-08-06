@@ -103,7 +103,7 @@
     $pdf->Line(10, 81, 200, 81);
     $pdf->Line(10, 88, 200, 88);   
 
-    $pdf->SetXY( 15, 52 ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 20, 8, "Horario ".$horario_nombre.", ".$horario_detalle, 0, 0, 'L');
+    $pdf->SetXY( 15, 52 ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 20, 8, "Horario ".$horario_nombre.". ".$horario_detalle, 0, 0, 'L');
     $C = 27;
     $CC = 35;
     $pdf->Line($C, 60, $C, 88); $C+=$CC;

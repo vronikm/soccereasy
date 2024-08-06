@@ -109,10 +109,10 @@
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
-					<div class="card-header" class="centered" >
+					<div class="card-header" style='height: 40px;'>
 						<h4 class="card-title">Ingreso de nuevo equipo</h4>
 						<div class="card-tools">
-							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							<button type="button" style='font-size: 14px; height: 40px;' class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
@@ -125,7 +125,7 @@
 									<input type="hidden" name="modulo_equipo" value="<?php echo $modulo_equipo; ?>">
 									<input type="hidden" name="equipo_torneoid" value="<?php echo $equipo_torneoid; ?>">
 									<input type="hidden" name="equipo_id" value="<?php echo $equipo_id; ?>">
-									<div class="row" style="font-size: 13px;">
+									<div class="row" style="font-size: 13px; height: 187px;">
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="equipo_foto">Foto</label>		
@@ -147,7 +147,7 @@
 										<!-- /.form-group -->								
 										</div>
 										<div class="col-sm-10">
-											<div class="row" style="font-size: 13px;">
+											<div class="row">
 												<div class="col-md-3">
 													<div class="form-group">
 														<label for="equipo_nombre">Nombre equipo</label>

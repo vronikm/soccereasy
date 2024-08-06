@@ -113,7 +113,7 @@
 						</table>	
 					</div>
 					<div class="card-footer">		
-						<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Cancelar</a>														
+						<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Regresar</a>														
 					</div>
 				</div>
 			<!-- /.row -->

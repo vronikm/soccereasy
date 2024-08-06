@@ -88,7 +88,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Ingreso lugar de entrenamiento</h4>
+							<h4 class="m-0">Lugar de entrenamiento</h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -107,8 +107,8 @@
 				<div class="container-fluid">
 
 					<div class="card card-default">						
-						<div class="card-header">
-							<h3 class="card-title">Nuevo</h3>
+						<div class="card-header" style="font-size: 13px; height: 40px;">
+							<h3 class="card-title">Ingreso de nuevo lugar de entrenamiento</h3>
 
 							<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -120,47 +120,46 @@
 							</div>
 						</div>
 
-						<div class="card-body">						
-
+						<div class="card-body">
 							<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 								<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_lugar; ?>">
 								<input type="hidden" name="lugar_id" value="<?php echo $lugarid; ?>">											
 								
-								<div class="row">
+								<div class="row" style='font-size: 14px;'>
 									<div class="col-md-2">
-										<div class="form-group">
+										<div class="form-group" style='font-size: 13px;'>
 										<label for="lugar_sedeid">Sede</label>
 										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
-											<?php echo $insLugar->listarOptionSedebusqueda($lugar_sedeid); ?>
+											<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
 										</select>	
 										</div>
 									</div>
 
 									<div class="col-md-5">
-										<div class="form-group">
+										<div class="form-group" style='font-size: 13px; height: 15px;'>
 											<label for="lugar_nombre">Lugar de entrenamiento</label>
-											<input type="text" class="form-control" id="lugar_nombre" name="lugar_nombre" value="<?php echo $lugar_nombre; ?>">
+											<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="lugar_nombre" name="lugar_nombre" value="<?php echo $lugar_nombre; ?>">
 										</div>	
 									</div>
 
 									<div class="col-md-5">
 										<div class="form-group">
 											<label for="lugar_direccion">Dirección</label>
-											<input type="text" class="form-control" id="lugar_direccion" name="lugar_direccion" value="<?php echo $lugar_direccion; ?>">
+											<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="lugar_direccion" name="lugar_direccion" value="<?php echo $lugar_direccion; ?>">
 										</div>	
 									</div>
 
 									<div class="col-md-10">
 										<div class="form-group">
 											<label for="lugar_detalle">Ubicación</label>
-											<input type="text" class="form-control" id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
+											<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="lugar_detalle" name="lugar_detalle" value="<?php echo $lugar_detalle; ?>">
 										</div>
 									</div>
 
-									<div class="col-md-2">
+									<div class="col-md-2" style='font-size: 13px; height: 15px;'>
 										<div class="form-group">
 											<label for="estado">Estado</label>
-											<select class="form-control" id="estado" name="estado">		
+											<select class="form-control" style='font-size: 13px; height: 31px;' id="estado" name="estado">		
 												<?php 
 													if($lugar_estado == 'A'){
 														echo '<option value="A" selected>Activo</option>
@@ -176,18 +175,18 @@
 									</div>
 									
 									<div class="col-md-3">						
-										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-										<a href="<?php echo APP_URL; ?>asistenciaLugar/" class="btn btn-info btn-sm">Cancelar</a>
-										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>															
+										<button type="submit" class="btn btn-success btn-xs">Guardar</button>
+										<a href="<?php echo APP_URL; ?>asistenciaLugar/" class="btn btn-info btn-xs">Cancelar</a>
+										<button type="reset" class="btn btn-dark btn-xs">Limpiar</button>															
 									</div>
 								</div>	
 							</form>
 
 							<div class="tab-custom-content">
-								<p class="lead mb-0">Lugar de entrenamiento</p>
+								<p class="lead mb-0" style="font-size:15px; height: 23px;">Lugares de entrenamiento</p>
 							</div>
 							<div class="tab-content" id="custom-content-above-tabContent">
-								<table id="example1" class="table table-bordered table-striped table-sm">
+								<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 									<thead>
 										<tr>
 											<th>N.</th>

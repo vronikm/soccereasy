@@ -107,7 +107,7 @@
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
-					<div class="card-header" class="centered" >
+					<div class="card-header" style='height: 40px;'>
 						<h4 class="card-title">Ingreso de nuevo torneo</h4>
 						<div class="card-tools">							
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -122,7 +122,7 @@
 								<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/torneoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 									<input type="hidden" name="modulo_torneo" value="<?php echo $modulo_torneo; ?>">
 									<input type="hidden" name="torneo_id" value="<?php echo $torneoid; ?>">
-									<div class="row" style="font-size: 13px;">
+									<div class="row" style="font-size: 13px; height: 187px;">
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="torneo_foto">Foto</label>		
