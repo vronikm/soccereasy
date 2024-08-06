@@ -1,5 +1,4 @@
 <?php	
-
 	use app\controllers\asistenciaController;
 
 	include 'app/lib/barcode.php';
@@ -42,8 +41,7 @@
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">	
 	<!-- daterange picker -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
 	<!-- iCheck for checkboxes and radio inputs -->
@@ -60,26 +58,14 @@
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
 	<!-- dropzonejs -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
-	<!-- fileinput -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
-
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
-		<!-- Preloader -->
-		<!--?php require_once "app/views/inc/preloader.php"; ?-->
-		<!-- /.Preloader -->
-
 		<!-- Navbar -->
 		<?php require_once "app/views/inc/navbar.php"; ?>
 		<!-- /.navbar -->
@@ -90,7 +76,6 @@
 
 		<!-- vista -->
 		<div class="content-wrapper">
-
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
@@ -168,7 +153,7 @@
 										<table class="table table-striped table-bordered  table-sm">											
 											<tbody>
 												<tr>													
-													<th colspan="8">Horario <?php echo $horario_nombre.", ".$horario_detalle; ?></th>																							
+													<th colspan="8">Horario <?php echo $horario_nombre.". ".$horario_detalle; ?></th>																							
 												</tr>
 												<tr>		
 													<th></th>												
@@ -178,54 +163,18 @@
 													<th>JUEVES</th>
 													<th>VIERNES</th>																																		
 												</tr>													
-													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>
-																		
+													<?php echo $datos=$insHorario->generarHorario($horario_id);	?>																		
 											</tbody>
 										</table>
 									</div>
 									<!-- /.col -->
 								</div>
 								<!-- /.row -->
-								<div class="row">
-									<div class="col-4">
-																				
-									</div>
-									<!-- accepted payments column -->
-									<div class="col-5">										
-									</div>
-
-									<div class="col-3">										
-										<?php
-											/*
-											('Content-Type: image/svg+xml');
-											$svg = $generator->render_svg($symbology,"Horario ".$horario_nombre." | "."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 
-											echo $svg;
-											*/  
-										?>								
-									</div>
-									<!-- /.col -->
-									
-									<!-- /.col -->
-								</div>
-								<!-- /.row -->
-								
-
 								<!-- this row will not appear when printing -->
 								<div class="row no-print">
 									<div class="col-12">
-
-										<!--button type="button" class="btn btn-success float-right btn-sm" style="margin-right: 60px;"><i class="far fa-credit-card"></i> Enviar recibo
-										</button>
-										<button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-											<i class="fas fa-download"></i> Descargar recibo
-										</button-->										
-
-										<a href="<?php echo APP_URL.'asistenciaHorarioPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver horario</a>
-
-										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i>Imprimir recibo</button-->
-																				
+										<a href="<?php echo APP_URL.'asistenciaHorarioPDF/'.$horario_id.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a>
 										<button class="btn btn-dark btn-back btn-sm" onclick="cerrarPestana()">Regresar</button>
-
 									</div>
 								</div>
 							</div>
@@ -235,27 +184,21 @@
 						</div>
 					</div><!-- /.row -->
 				</div><!-- /.container-fluid -->
-			</section>
-      
+			</section>      
 		</div>
 		<!-- /.vista -->
-
 		<?php require_once "app/views/inc/footer.php"; ?>
-
 		<!-- Control Sidebar -->
 		<aside class="control-sidebar control-sidebar-dark">
 		<!-- Control sidebar content goes here -->
 		</aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -272,24 +215,15 @@
 	<!-- Bootstrap Switch -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>	
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="app/views/dist/js/main.js" ></script-->
-	
-	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
     
 	<script type="text/javascript">
         function cerrarPestana() {
             window.close();
         }
     </script>
-	
-
   </body>
 </html>

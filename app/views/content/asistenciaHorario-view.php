@@ -91,7 +91,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Configuración horario sede <?php echo $sede_nombre; ?></h4>
+							<h4 class="m-0">Edición de horario sede <?php echo $sede_nombre; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -111,8 +111,8 @@
 				<div class="container-fluid">
 
 					<div class="card card-default">						
-						<div class="card-header">
-							<h3 class="card-title">Horario</h3>
+						<div class="card-header" style='height: 40px;'>
+							<h3 class="card-title">Datos del horario</h3>
 
 							<div class="card-tools">
 								<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -128,35 +128,33 @@
 								<input type="hidden" name="lugar_sedeid" value="<?php echo $lugar_sedeid; ?>">	
 								<input type="hidden" name="horario_id" value="<?php echo $horario_id; ?>">										
 								
-								<div class="row">
+								<div class="row" style='font-size: 14px;'>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="horario_nombre">Horario nombre</label>
-											<input type="text" class="form-control" id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>" required >
+											<input type="text" class="form-control" style='height: 31px;' id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>" required >
 										</div>
 									</div>
 								
 									<div class="col-md-9">
 										<div class="form-group">
 											<label for="horario_detalle">Horario descripción</label>	
-											<input type="text" class="form-control" id="horario_detalle" name="horario_detalle" placeholder="Descripción" value="<?php echo $horario_detalle; ?>">
+											<input type="text" class="form-control" style='height: 31px;' id="horario_detalle" name="horario_detalle" placeholder="Descripción" value="<?php echo $horario_detalle; ?>">
 										</div>
 									</div>									
-								</div>	
-							
-
+								</div>
 								<div class="tab-custom-content">
-									<p class="lead mb-0">Horario de entrenamiento</p>
+									<p class="lead mb-0" style="font-size:15px; height: 23px;">Horario de entrenamiento</p>
 								</div>
 								<div class="tab-content" id="custom-content-above-tabContent">
-									<table id="presupuesto" name="presupuesto" class="table table-bordered table-striped table-sm">
+									<table id="presupuesto" name="presupuesto" class="table table-bordered table-striped table-sm" style='font-size: 14px;'>
 										<thead>
 											<tr>
 												<th>Día</th>
 												<th>Lugar entrenamiento</th>
 												<th>Hora</th>
 												<th>Profesor</th>
-												<th><button type="button" class="btn btn-info btn-sm float-right btn_add" id="agregar" name="agregar">Agregar</button></th>
+												<th><button type="button" class="btn btn-info btn-xs float-right btn_add" id="agregar" name="agregar">Agregar</button></th>
 											</tr>
 											<?php echo $insHorario->listarDetalleHorario($horario_id); ?>
 										</thead>
@@ -168,8 +166,7 @@
 									</table>
 								</div>
 
-								<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-								<!--a href="<?php echo APP_URL; ?>asistenciaListHorario/" class="btn btn-info btn-sm">Cancelar</a-->
+								<button type="submit" class="btn btn-success btn-sm">Guardar</button>								
 								<button onclick="cerrarPestana()" class="btn btn-info btn-sm">Cancelar</button>
 								<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>								
 							</form>	

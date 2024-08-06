@@ -7,6 +7,7 @@
 		/*----------  Controlador registrar usuario  ----------*/
 		public function registrarEquipoControlador(){
 			# Almacenando datos#
+			$equipo_id			= $this->limpiarCadena($_POST['equipo_id']);
 			$equipo_torneoid	= $this->limpiarCadena($_POST['equipo_torneoid']);
 			$equipo_nombre		= $this->limpiarCadena($_POST['equipo_nombre']);
 			$equipo_categoria	= $this->limpiarCadena($_POST['equipo_categoria']);
@@ -140,7 +141,7 @@
 			if($registrar_equipo->rowCount()==1){
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'equipoList/'.$equipo_torneoid,
+					"url"=>APP_URL.'equipoList/'.$equipo_torneoid.'/'.$equipo_id,
 					"titulo"=>"Equipo registrado",
 					"texto"=>"El equipo ".$equipo_nombre." se registró correctamente",
 					"icono"=>"success"

@@ -108,16 +108,14 @@
 				<!-- /.content-header -->
 
 				<!-- Section listado de alumnos -->
-				<section class="content">
-					
+				<section class="content">					
 					<div class="container-fluid">
-						<form action="<?php echo APP_URL."jugadorNew/".$equipo_torneoid."/".$equipo_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-					
+						<form action="<?php echo APP_URL."jugadorNew/".$equipo_torneoid."/".$equipo_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >					
 							<div class="card card-default">
-								<div class="card-header">
+								<div class="card-header" style='height: 40px;'>
 									<h3 class="card-title">Búsqueda de alumnos</h3>
 									<div class="card-tools">
-										<button type="button" class="btn btn-tool" data-card-widget="collapse">
+										<button type="button" style='height: 40px;' class="btn btn-tool" data-card-widget="collapse">
 										<i class="fas fa-minus"></i>
 										</button>
 									</div>
@@ -125,23 +123,23 @@
 
 								<!-- card-body -->                
 								<div class="card-body">
-									<div class="row">
+									<div class="row" style='font-size: 14px; height: 60px;'>
 										<div class="col-sm-2">
 											<div class="form-group">
 												<label for="alumno_identificacion">Identificación</label>                        
-												<input type="text" class="form-control" id="alumno_identificacion" name="alumno_identificacion" placeholder="Identificación" value="<?php echo $alumno_identificacion; ?>">
+												<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="alumno_identificacion" name="alumno_identificacion" placeholder="Identificación" value="<?php echo $alumno_identificacion; ?>">
 											</div>        
 										</div>
 										<div class="col-sm-2">
 											<div class="form-group">
 												<label for="alumno_apellido1">Apellido paterno</label>
-												<input type="text" class="form-control" id="alumno_apellido1" name="alumno_apellido1" placeholder="Primer apellido" value="<?php echo $alumno_apellidopaterno; ?>">
+												<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="alumno_apellido1" name="alumno_apellido1" placeholder="Primer apellido" value="<?php echo $alumno_apellidopaterno; ?>">
 											</div>         
 										</div>
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="alumno_nombre1">Primer nombre</label>
-												<input type="text" class="form-control" id="alumno_nombre1" name="alumno_nombre1" placeholder="Primer nombre" value="<?php echo $alumno_primernombre; ?>">
+												<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="alumno_nombre1" name="alumno_nombre1" placeholder="Primer nombre" value="<?php echo $alumno_primernombre; ?>">
 											</div>
 										</div>  
 
@@ -149,14 +147,14 @@
 											<div class="form-group">
 												<div class="form-group">
 													<label for="alumno_ano">Año</label>
-													<input type="text" class="form-control" id="alumno_ano" name="alumno_ano" placeholder="año" value="<?php echo $alumno_anio; ?>">
+													<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="alumno_ano" name="alumno_ano" placeholder="año" value="<?php echo $alumno_anio; ?>">
 												</div>	
 											</div>
 										</div>
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="alumno_sedeid">Sede</label>
-												<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">
+												<select class="form-control select2" style='font-size: 13px; height: 31px;' id="alumno_sedeid" name="alumno_sedeid">
 													<?php
 														if($alumno_sedeid == 0){	
 															echo "<option value='0' selected='selected'>Todas</option>";
@@ -172,7 +170,7 @@
 										<div class="col-md-2">
 											<div class="form-group">
 												<label for="alumno_sedeid">.</label>
-												<button type="submit" class="form-control btn btn-info">Buscar</button>
+												<button type="submit" style='font-size: 13px; height: 31px;' class="form-control btn btn-info">Buscar</button>
 											</div>
 										</div>
 									</div>					
@@ -181,17 +179,17 @@
 						</form>
 
 						<div class="card card-default">
-							<div class="card-header">
+							<div class="card-header" style='height: 40px;'>
 								<h3 class="card-title">Resultado de la búsqueda</h3>
 								<div class="card-tools">							
-									<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<button type="button" style='height: 40px;'class="btn btn-tool" data-card-widget="collapse">
 										<i class="fas fa-minus"></i>
 									</button>
 								</div>
 							</div>							
 						
 							<div class="card-body">
-								<table id="example1" class="table table-bordered table-striped table-sm">
+								<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 14px;">
 									<thead>
 										<tr>
 											<th>Identificación</th>
@@ -210,7 +208,7 @@
 								</table>	
 							</div>
 							<div class="card-footer">		
-								<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Cancelar</a>														
+								<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Regresar</a>														
 							</div>				
 							
 						</div>	

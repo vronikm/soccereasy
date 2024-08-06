@@ -24,7 +24,6 @@
 		$estado = 'A';
 	}	
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -32,12 +31,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo APP_NAME; ?> | Ingreso Hora</title>
-
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">	
 	<!-- daterange picker -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
 	<!-- iCheck for checkboxes and radio inputs -->
@@ -52,17 +49,11 @@
 	<!-- Bootstrap4 Duallistbox -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 	<!-- BS Stepper -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
-	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">	
 	<!-- Theme style >
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css"-->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
-
-
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	
-
-
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">	
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -81,13 +72,12 @@
 
 		<!-- vista -->
 		<div class="content-wrapper">
-
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Ingreso Horas</h4>
+							<h4 class="m-0">Horas</h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -99,15 +89,13 @@
 				</div><!-- /.container-fluid -->
 			</div>
 			<!-- /.content-header -->
-
 			<!-- Main content -->
 			<section class="content">				
 				<!-- /.container-fluid información alumno -->
 				<div class="container-fluid">
-
 					<div class="card card-default">						
-						<div class="card-header">
-							<h3 class="card-title">Horas</h3>
+						<div class="card-header" style="font-size: 13px; height: 40px;">
+							<h3 class="card-title">Ingreso de nueva hora</h3>
 							<div class="card-tools">
 								<button type="button" class="btn btn-tool" data-card-widget="collapse">
 									<i class="fas fa-minus"></i>
@@ -117,83 +105,74 @@
 								</button>
 							</div>
 						</div>
-
-
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12">
 
 								<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 									<input type="hidden" name="modulo_asistencia" value="<?php echo $modulo_hora; ?>">
-									<input type="hidden" name="hora_id" value="<?php echo $horaid; ?>">											
-									
-									<div class="row">
+									<input type="hidden" name="hora_id" value="<?php echo $horaid; ?>">
+									<div class="row" style='font-size: 14px;'>
 										<div class="col-md-2">
-											<div class="form-group">
+											<div class="form-group" style='font-size: 13px; height: 15px;'>
 												<label for="hora_inicio">Hora inicio</label>
 
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text"><i class="far fa-clock"></i></span>
 													</div>
-													<input type="text" class="form-control" id="hora_inicio" name="hora_inicio" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_inicio; ?>">
+													<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="hora_inicio" name="hora_inicio" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_inicio; ?>">
 												</div>
 												<!-- /.input group -->
 											</div>	
 										</div>
-
 										<div class="col-md-2">
-											<div class="form-group">
+											<div class="form-group" style='font-size: 13px; height: 20px;'>
 												<label for="hora_fin">Hora fin</label>
-
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text"><i class="far fa-clock"></i></spa>
 													</div>
-													<input type="text" class="form-control" id="hora_fin" name="hora_fin" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_fin; ?>">
+													<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="hora_fin" name="hora_fin" data-inputmask='"mask": "99:99:99"' data-mask value="<?php echo $hora_fin; ?>">
 												</div>
 												<!-- /.input group -->
 											</div>	
 										</div>
-
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="detalle">Detalle</label>
-												<input type="text" class="form-control" id="detalle" name="detalle" value="<?php echo $detalle; ?>">
+												<input type="text" class="form-control" style='font-size: 15px; height: 30px;' id="detalle" name="detalle" value="<?php echo $detalle; ?>">
 											</div>
 										</div>
-
 										<div class="col-md-2">
-											<div class="form-group">
+											<div class="form-group" style='font-size: 13px;'>
 												<label for="estado">Estado</label>
-												<select class="form-control" id="estado" name="estado">		
+												<select class="form-control" style='font-size: 13px; height: 31px;' id="estado" name="estado">		
 													<?php 
 														if($estado == 'A'){
 															echo '<option value="A" selected>Activo</option>
 																<option value="I" >Inactivo</option>';
 														}else{
-															echo '<option value="A" >Activo</option>
+															echo '<option value="A" >Activo</option> 
 																<option value="I" selected>Inactivo</option>';	
 														}
-													?>																				
-													
+													?>
 												</select>	
 											</div>
 										</div>
 										
 										<div class="col-md-12">						
-											<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-											<a href="<?php echo APP_URL; ?>asistenciaHora/" class="btn btn-info btn-sm">Cancelar</a>
-											<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+											<button type="submit" class="btn btn-success btn-xs">Guardar</button>
+											<a href="<?php echo APP_URL; ?>asistenciaHora/" class="btn btn-info btn-xs">Cancelar</a>
+											<button type="reset" class="btn btn-dark btn-xs">Limpiar</button>						
 										</div>
 									</div>	
 								</form>
-
 									<div class="tab-custom-content">
-										<p class="lead mb-0">Horas ingresadas</p>
+										<p class="lead mb-0" style="font-size:15px; height: 23px;">Horas ingresadas</p>
 									</div>
 									<div class="tab-content" id="custom-content-above-tabContent">
-										<table id="example1" class="table table-bordered table-striped table-sm">
+										<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 											<thead>
 												<tr>
 													<th>N.</th>
@@ -210,21 +189,16 @@
 												?>								
 											</tbody>
 										</table>
-									</div>
-
-								
-								
+									</div>							
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</section>
-			<!-- /.content -->
-      
+			<!-- /.content -->      
 		</div>
 		<!-- /.vista -->
-
 		<?php require_once "app/views/inc/footer.php"; ?>
 
 		<!-- Control Sidebar -->
@@ -233,9 +207,7 @@
 		</aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
