@@ -44,9 +44,9 @@
 								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
 							from alumno_pago P
 								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
 								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
 							where transaccion_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
 								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
@@ -109,10 +109,10 @@
 								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
 								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
 							from alumno_pago P
-								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 							
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
 								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
 							where transaccion_estado <> 'E'
 								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
 
