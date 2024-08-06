@@ -71,7 +71,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de representantes</h1>
+				<h1 class="m-0">Representantes</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -91,7 +91,7 @@
 				<div class="container-fluid">
 					<div class="card card-default">
 						<div class="card-header">
-							<h3 class="card-title">Criterios de búsqueda</h3>
+							<h3 class="card-title">Búsqueda de representantes</h3>
 							<div class="card-tools">
 								<button type="button" class="btn btn-tool" data-card-widget="collapse">
 									<i class="fas fa-minus"></i>
@@ -152,8 +152,9 @@
 								<tr>
 									<th>Identificación</th>
 									<th>Nombres</th>
-									<th>Apellidos</th>									
-									<th style="width: 420px;">Opciones</th>
+									<th>Apellidos</th>	
+									<th>Representado</th>									
+									<th>Operaciones</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -209,6 +210,30 @@
 		$(function () {
 			$("#example1").DataTable({
 			"responsive": true, "lengthChange": false, "autoWidth": false,
+			"language": {
+				"decimal": "",
+				"emptyTable": "No hay datos disponibles en la tabla",
+				"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+				"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+				"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+				"infoPostFix": "",
+				"thousands": ",",
+				"lengthMenu": "Mostrar _MENU_ entradas",
+				"loadingRecords": "Cargando...",
+				"processing": "Procesando...",
+				"search": "Buscar:",
+				"zeroRecords": "No se encontraron registros coincidentes",
+				"paginate": {
+					"first": "Primero",
+					"last": "Último",
+					"next": "Siguiente",
+					"previous": "Anterior"
+				},
+				"aria": {
+					"sortAscending": ": activar para ordenar la columna ascendente",
+					"sortDescending": ": activar para ordenar la columna descendente"
+				}
+			},
 			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');			    
 		});
 	</script>

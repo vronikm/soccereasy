@@ -200,6 +200,10 @@
 						<td>'.$rows['equipo_categoria'].'</td>
 						<td>'.$estado.'</td>
 						<td>
+							<a href="'.APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 3px;">Asignar</a>							
+							<a href="'.APP_URL.'jugadorLista/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Ver lista</a>
+						</td>
+						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/equipoAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_equipo" value="eliminar">
 								<input type="hidden" name="equipo_id" value="'.$rows['equipo_id'].'">						
@@ -213,8 +217,6 @@
 							</form>
 
 							<a href="'.APP_URL.'equipoList/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 3px;">Editar</a>							
-							<a href="'.APP_URL.'jugadorLista/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 3px;">Lista</a>
-							<a href="'.APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 3px;">Asignar</a>
 						</td>
 					</tr>';	
 			}

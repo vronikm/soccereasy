@@ -44,6 +44,10 @@
 						<td>'.$rows['repre_primernombre'].' '.$rows['repre_segundonombre'].'</td>
 						<td>'.$rows['repre_apellidopaterno'].' '.$rows['repre_apellidomaterno'].'</td>
 						<td>
+							<a href="'.APP_URL.'alumnoNew/'.$rows['repre_id'].'/" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Nuevo Alumno</a>
+							<a href="'.APP_URL.'representanteVinc/'.$rows['repre_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Vincular alumno</a>
+						</td>
+						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/representanteAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_repre" value="eliminar">
 								<input type="hidden" name="repre_id" value="'.$rows['repre_id'].'">						
@@ -51,9 +55,7 @@
 							</form>
 													
 							<a href="'.APP_URL.'representanteUpdate/'.$rows['repre_id'].'/" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Actualizar</a>							
-							<a href="'.APP_URL.'representanteProfile/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
-							<a href="'.APP_URL.'alumnoNew/'.$rows['repre_id'].'/" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Registrar representado</a>
-							<a href="'.APP_URL.'representanteVinc/'.$rows['repre_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Vincular alumno</a>							
+							<a href="'.APP_URL.'representanteProfile/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>							
 						</td>
 					</tr>';	
 			}
