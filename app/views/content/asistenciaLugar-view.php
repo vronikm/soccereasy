@@ -130,7 +130,7 @@
 										<div class="form-group" style='font-size: 13px;'>
 										<label for="lugar_sedeid">Sede</label>
 										<select class="form-control" id="lugar_sedeid" name="lugar_sedeid">																									
-											<?php echo $insLugar->listarOptionSede($lugar_sedeid); ?>
+											<?php echo $insLugar->listarOptionSedebusqueda($lugar_sedeid); ?>
 										</select>	
 										</div>
 									</div>
