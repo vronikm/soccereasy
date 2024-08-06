@@ -528,19 +528,6 @@
 			return $datos;
 		}
 
-		public function listarOptionSede(){
-			$option="";
-
-			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';
-			}
-			return $option;
-		}
-
 		public function listarOptionSedebusqueda($sedeid){
 			$option="";
 
@@ -553,8 +540,7 @@
 					$option.='<option value='.$rows['sede_id'].' selected>'.$rows['sede_nombre'].'</option>';
 				}else{
 					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
-				}
-					
+				}					
 			}
 			return $option;
 		}
