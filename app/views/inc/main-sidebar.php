@@ -106,6 +106,37 @@
               </li>
             </ul>
           </li>
+          
+          <li class="nav-header">Cobranza</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Gestión de cobranza<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."valorMora/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Notificaciones</p>
+                </a>
+
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."asistenciaLugar/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Lugar entrenamiento</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."asistenciaListHorario/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Horarios</p>
+                </a>
+              </li>
+            </ul>
+          </li>
 
           <li class="nav-header">Reportes</li>
           <li class="nav-item">
@@ -118,7 +149,7 @@
               <li class="nav-item">
                 <a href="<?php echo APP_URL."reportePagos/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Pagos diarios</p>
+                  <p>Consolidado pagos diarios</p>
                 </a>
               </li>
             </ul>
