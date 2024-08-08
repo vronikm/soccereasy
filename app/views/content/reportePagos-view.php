@@ -158,16 +158,17 @@
 						<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 							<thead>
 								<tr>
+									<th>Sede</th>
 									<th>Identificación</th>
 									<th>Nombres y apellidos</th>
 									<th>Fecha Pago</th>
-									<th>Fecha registro pago</th>									
+									<th>F. registro pago</th>									
 									<th>Periodo</th>
 									<th>Rubro</th>
-									<th>Forma Pago</th>
-									<th>Valor Pagado</th>
-									<th>Valor Pendiente</th>
-									<th>Estado pago</th>
+									<th>F. Pago</th>
+									<th>V. Pagado</th>
+									<th>V. Pendiente</th>
+									<th>Estado</th>
 								</tr>
 							</thead>
 							<tbody>

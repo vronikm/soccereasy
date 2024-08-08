@@ -7,7 +7,7 @@
 	
 		public function listarPagos($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
-			$consulta_datos="SELECT A.alumno_identificacion IDENTIFICACION,
+			$consulta_datos="SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								pago_fecha FECHA_PAGO, 
 								pago_fecharegistro FECHA_REG_SISTEMA, 
@@ -21,6 +21,7 @@
 								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join general_sede S on S.sede_id = alumno_sedeid
 								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
 								FROM alumno_pago_transaccion PT
 								WHERE PT.transaccion_estado = 'C'
@@ -32,7 +33,7 @@
 							
 							union all 
 														
-							SELECT A.alumno_identificacion IDENTIFICACION,
+							SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								transaccion_fecha FECHA_PAGO, 
 								transaccion_fecharegistro FECHA_REG_SISTEMA, 
@@ -43,10 +44,11 @@
 								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
 								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
 							from alumno_pago P
-								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
-								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
-								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 								
+								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
 								and alumno_sedeid = ".$sede_id."
 								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
@@ -57,6 +59,7 @@
 				
 				$tabla.='
 					<tr>
+						<td>'.$rows['SEDE'].'</td>
 						<td>'.$rows['IDENTIFICACION'].'</td>
 						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['FECHA_PAGO'].'</td>
@@ -74,7 +77,7 @@
 
 		public function listarPagosConsolidado($fecha_inicio, $fecha_fin){
 			$tabla="";
-			$consulta_datos="SELECT A.alumno_identificacion IDENTIFICACION,
+			$consulta_datos="SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								pago_fecha FECHA_PAGO, 
 								pago_fecharegistro FECHA_REG_SISTEMA, 
@@ -87,7 +90,8 @@
 							from alumno_pago P
 								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
-								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid
+								inner join general_sede S on S.sede_id = alumno_sedeid 
 								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
 								FROM alumno_pago_transaccion PT
 								WHERE PT.transaccion_estado = 'C'
@@ -98,7 +102,7 @@
 							
 							union all 
 														
-							SELECT A.alumno_identificacion IDENTIFICACION,
+							SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								transaccion_fecha FECHA_PAGO, 
 								transaccion_fecharegistro FECHA_REG_SISTEMA, 
@@ -111,8 +115,9 @@
 							from alumno_pago P
 								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 							
 								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
-								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id								
 								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
+								inner join general_sede S on S.sede_id = alumno_sedeid
 							where transaccion_estado <> 'E'
 								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
 
@@ -122,6 +127,7 @@
 				
 				$tabla.='
 					<tr>
+						<td>'.$rows['SEDE'].'</td>
 						<td>'.$rows['IDENTIFICACION'].'</td>
 						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['FECHA_PAGO'].'</td>
