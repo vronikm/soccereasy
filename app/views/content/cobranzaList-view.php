@@ -104,8 +104,7 @@
 									<th>Sede</th>
 									<th>Identificación</th>
 									<th>Nombres y Apellidos</th>
-									<th>Total mora</th>
-									<th>Fecha último pago</th>									
+									<th>Total mora</th>									
 									<th style="width: 220px;">Operaciones</th>
 								</tr>
 							</thead>

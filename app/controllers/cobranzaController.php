@@ -8,9 +8,8 @@
 		public function representantesValormora(){
 			$tabla="";
 			$consulta_datos = "select alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular,
-                                    SUM(SALDO) + SUM(PENSION) AS TOTAL_MORA, 
-                                    GREATEST(IFNULL(FECHA,'2023-01-01'),IFNULL(FECHASALDOS,'2023-01-01'),IFNULL(FECHATRX,'2023-01-01')) as FECHA_ULTPAGO		
-                                    FROM(
+                                    SUM(SALDO) + SUM(PENSION) AS TOTAL_MORA
+                                     FROM(
                                         SELECT 
                                                 alumno_repreid, 
                                                 repre_identificacion,
@@ -32,7 +31,7 @@
                                                 SUM(pago_saldo) AS SALDO
                                                 FROM alumno_pago
                                                     INNER JOIN sujeto_alumno ON alumno_id = pago_alumnoid
-                                                WHERE pago_estado = 'P' AND pago_saldo > 0 AND alumno_sedeid = 1
+                                                WHERE pago_estado = 'P' AND pago_saldo > 0
                                                 GROUP BY pago_alumnoid, alumno_repreid
                                             ) P ON P.pago_alumnoid = A.alumno_id
                                             LEFT JOIN (
@@ -54,7 +53,7 @@
                                                     LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
                                                     LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
                                                     LEFT JOIN general_escuela ON escuela_id = 1
-                                                WHERE pago_rubroid = 'RPE' AND alumno_sedeid = 1
+                                                WHERE pago_rubroid = 'RPE' 
                                                 GROUP BY 
                                                     pago_alumnoid
                                                 ) BASE
@@ -86,7 +85,6 @@
 						<td>'.$rows['repre_identificacion'].'</td>
 						<td>'.$rows['REPRE'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
-                        <td>'.$rows['FECHA_ULTPAGO'].'</td>
 						<td>	                        					
 							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar los pagos correspondientes." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
 						</td>
