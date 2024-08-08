@@ -116,24 +116,11 @@
             <ul class="nav nav-treeview">
 
               <li class="nav-item">
-                <a href="<?php echo APP_URL."valorMora/" ?>" class="nav-link">
+                <a href="<?php echo APP_URL."cobranzaList/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Notificaciones</p>
                 </a>
 
-              </li>
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."asistenciaLugar/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Lugar entrenamiento</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."asistenciaListHorario/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Horarios</p>
-                </a>
               </li>
             </ul>
           </li>
