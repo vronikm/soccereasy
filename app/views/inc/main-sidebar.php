@@ -149,7 +149,7 @@
               <li class="nav-item">
                 <a href="<?php echo APP_URL."reportePagos/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Consolidado pagos diarios</p>
+                  <p>Consolidado pagos</p>
                 </a>
               </li>
             </ul>
