@@ -87,7 +87,7 @@
 						<td>'.$rows['TOTAL_MORA'].'</td>
 						<td>                            
 							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar los pagos correspondientes." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
-                            <a href="'.APP_URL.'cobranzaDetalleAlumno/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
+                            <a href="'.APP_URL.'cobranzaDetalleAlumno/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Detalle</a>
 						</td>
 					</tr>';	
 			}
