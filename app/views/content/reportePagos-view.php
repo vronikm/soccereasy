@@ -6,7 +6,7 @@
 	if(isset($_POST['pago_fecha_inicio'])){
 		$fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
 	} ELSE{
-		$fecha_inicio = $insRecibidos->fechaPagosReceptados();
+		$fecha_inicio = $insRecibidos->fechaPagosReceptados($sede_id);
 		$fecha_inicio = $fecha_inicio->fetch(); 
 		$fecha_inicio = $fecha_inicio['FECHA_MAXIMA'];
 	}
@@ -14,7 +14,7 @@
 	if(isset($_POST['pago_fecha_fin'])){
 		$fecha_fin = $insRecibidos->limpiarCadena($_POST['pago_fecha_fin']);
 	} ELSE{
-		$fecha_fin = $insRecibidos->fechaPagosReceptados();
+		$fecha_fin = $insRecibidos->fechaPagosReceptados($sede_id);
 		$fecha_fin = $fecha_fin->fetch(); 
 		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
 	}	
@@ -27,7 +27,6 @@
 		$sede_nombre = "";
 	}
 ?>
-
 
 <html lang="es">
   <head>
@@ -46,19 +45,12 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
-
-
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
-      <!-- Preloader -->
-      <!--?php require_once "app/views/inc/preloader.php"; ?-->
-      <!-- /.Preloader -->
-
       <!-- Navbar -->
       <?php require_once "app/views/inc/navbar.php"; ?>
       <!-- /.navbar -->
@@ -90,19 +82,17 @@
 
 		<!-- Section listado de alumnos -->
 		<section class="content">
-			<form action="<?php echo APP_URL."reportePagos/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-			
+			<form action="<?php echo APP_URL."reportePagos/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
 			<div class="container-fluid">
 				<div class="card card-default">
 					<div class="card-header">
-					<h3 class="card-title">Criterios de búsqueda</h3>
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
-						<i class="fas fa-minus"></i>
-						</button>
-					</div>
+						<h3 class="card-title">Criterios de búsqueda</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							<i class="fas fa-minus"></i>
+							</button>
+						</div>
 					</div>  
-
 					<!-- card-body -->                
 					<div class="card-body">
 						<div class="row">
@@ -153,7 +143,6 @@
 							</button>
 						</div>
 					</div>
-
 					<div class="card-body">
 						<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 							<thead>
@@ -177,9 +166,7 @@
 										echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin, $sede_id); 
 									}else{
 										echo $insRecibidos->listarPagosConsolidado($fecha_inicio, $fecha_fin); 
-									}
-
-									
+									}	
 								?>								
 							</tbody>
 						</table>	
@@ -187,13 +174,10 @@
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
-
 		</section>
-		<!-- /.section -->
-      
+		<!-- /.section -->      
       </div>
       <!-- /.vista -->
-
       <?php require_once "app/views/inc/footer.php"; ?>
 
       <!-- Control Sidebar -->
@@ -202,9 +186,7 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
@@ -223,8 +205,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>	
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
     <!-- Page specific script -->

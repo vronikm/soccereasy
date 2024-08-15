@@ -54,16 +54,6 @@
 			return $pagosCanceladoSedeL;
 		}
 
-		public function obtenerPagosCanceladoSedeC(){
-			$pagosCanceladoSedeC=$this->ejecutarConsulta("SELECT COUNT(*) totalCanceladoSedeC FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 2 AND pago_estado='C';");
-			return $pagosCanceladoSedeC;
-		}
-
-        public function obtenerPagosCanceladoSedeV(){
-			$pagosCanceladoSedeV=$this->ejecutarConsulta("SELECT COUNT(*) totalCanceladoSedeV FROM alumno_pago, sujeto_alumno WHERE pago_alumnoid = alumno_id AND alumno_sedeid = 3 AND pago_estado='C';");
-			return $pagosCanceladoSedeV;
-		}
-
 		/*----------  Obtener total pagos pendientes  ----------*/
 		public function obtenerPagosPendienteSedeL($sedeid){
 			$pagosPendienteSedeL=$this->ejecutarConsulta("SELECT SUM(IFNULL(subconsulta.NUM_SALDO,0)) + SUM(IFNULL(subconsulta.NUM_PENSION,0)) as totalPendienteSedeL 

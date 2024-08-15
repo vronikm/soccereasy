@@ -143,8 +143,12 @@
 			return $tabla;			
 		}
 
-		public function fechaPagosReceptados(){		
-			$consulta_fecham="SELECT max(pago_fecharegistro) FECHA_MAXIMA FROM alumno_pago";
+		public function fechaPagosReceptados($sede_id){		
+			$consulta_fecham="SELECT max(pago_fecharegistro) AS FECHA_MAXIMA
+								FROM alumno_pago, sujeto_alumno
+								WHERE pago_alumnoid = alumno_id
+									AND alumno_sedeid = ".$sede_id."
+								ORDER BY pago_fecharegistro";
 			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
 			return $fecha_maxima;
 		}
