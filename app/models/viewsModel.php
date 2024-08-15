@@ -15,7 +15,7 @@
 						  ,"catalogosNew",'asistenciaListHorario',"representanteList", "representanteNew"
 						  ,"representanteProfile","representanteUpdate","representanteVinc"
 						  ,"profesorList","torneoList","equipoList","asistenciaVerHorario","asistenciaHorarioPDF"
-						  ,"jugadorLista","jugadorNew", "asistenciaHorarioJugador","cobranzaList"];
+						  ,"jugadorLista","jugadorNew", "asistenciaHorarioJugador","cobranzaList","cobranzaDetalleAlumno"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

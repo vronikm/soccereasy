@@ -85,12 +85,107 @@
 						<td>'.$rows['repre_identificacion'].'</td>
 						<td>'.$rows['REPRE'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
-						<td>	                        					
+						<td>                            
 							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar los pagos correspondientes." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
+                            <a href="'.APP_URL.'cobranzaDetalleAlumno/'.$rows['repre_id'].'/" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
 						</td>
 					</tr>';	
 			}
 			return $tabla;			
 		}
+       
+		public function valoresPendientes($repre_id){		
+			$tabla="";
+			$NUM_SALDO = 0;
+			$SALDO = 0;
+			$NUM_PENSION = 0;
+			$PENSION = 0;
+			$consulta_datos="SELECT 
+									alumno_id, 
+									alumno_identificacion,
+                                    sede_nombre, 
+									CONCAT_WS(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) AS NOMBRES,  
+									IFNULL(P.TOTAL,0) AS NUM_SALDO, 
+									IFNULL(P.SALDO,0) AS SALDO, 
+									IFNULL(PEN.PENSIONES,0) AS NUM_PENSION, 
+									IFNULL(PEN.TOTAL,0) AS PENSION, 
+									PEN.FECHA
+								FROM sujeto_alumno A
+								LEFT JOIN (
+									SELECT 
+									pago_alumnoid, 
+									COUNT(pago_saldo) AS TOTAL, 
+									SUM(pago_saldo) AS SALDO
+									FROM alumno_pago
+										INNER JOIN sujeto_alumno ON alumno_id = pago_alumnoid
+									WHERE pago_estado = 'P' AND pago_saldo > 0 AND alumno_repreid = ".$repre_id." 
+									GROUP BY pago_alumnoid
+								) P ON P.pago_alumnoid = A.alumno_id
+								LEFT JOIN (
+									SELECT 
+									BASE.FECHA,
+									BASE.pago_alumnoid,
+									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
+										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) END AS PENSIONES,
+									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
+										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.escuela_pension) END AS TOTAL
+									FROM (
+									SELECT 
+										MAX(pago_fecha) AS FECHA, 
+										pago_alumnoid, 
+										MAX(descuento_valor) AS descuento_valor, 
+										MAX(escuela_pension) AS escuela_pension  
+									FROM 
+										sujeto_alumno
+										LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
+										LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
+										LEFT JOIN general_escuela ON escuela_id = 1
+									WHERE pago_rubroid = 'RPE' AND alumno_repreid = ".$repre_id." 
+									GROUP BY 
+										pago_alumnoid
+									) BASE
+								) PEN ON PEN.pago_alumnoid = A.alumno_id
+                                 inner join general_sede on alumno_sedeid = sede_id
+								WHERE PEN.TOTAL > 0 OR P.SALDO > 0
+								ORDER BY PEN.PENSIONES DESC";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){	
+				$NUM_SALDO += $rows['NUM_SALDO'];
+				$SALDO += $rows['SALDO'];
+				$NUM_PENSION += $rows['NUM_PENSION'];
+				$PENSION += $rows['PENSION'];
+
+				$tabla.='
+					<tr data-widget="expandable-table" aria-expanded="false">
+                        <td>'.$rows['sede_nombre'].'</td>
+						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['NUM_SALDO'].'</td>
+						<td>'.$rows['SALDO'].'</td>
+						<td>'.$rows['NUM_PENSION'].'</td>
+						<td>'.$rows['PENSION'].'</td>						
+					</tr>';							
+			}
+
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan="3">SUB TOTAL</td>					
+					<td>'.$NUM_SALDO.'</td>
+					<td>'.number_format($SALDO, 2, '.',',').'</td>
+					<td>'.$NUM_PENSION.'</td>
+					<td>'.number_format($PENSION, 2, '.',',').'</td>						
+				</tr>';	
+
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan="5">TOTAL</td>				
+					<td>'.$NUM_PENSION + $NUM_SALDO.'</td>
+					<td>'.number_format($PENSION + $SALDO, 2, '.',',').'</td>						
+				</tr>';
+				
+			return $tabla;
+		}	
     }
 		

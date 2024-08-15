@@ -96,8 +96,7 @@
 						</div>
 					</div>
 					
-					<div class="card-body">
-						
+					<div class="card-body">						
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
@@ -109,12 +108,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-									echo $insMora->representantesValormora(); 
-								?>								
+								<?php echo $insMora->representantesValormora(); ?>								
 							</tbody>
 						</table>					
 					</div>
+
+
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
