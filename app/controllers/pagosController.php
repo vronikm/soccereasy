@@ -1155,7 +1155,8 @@
 		}
 
 		public function generarRecibo($pagoid){
-			$consulta_datos="SELECT  IFNULL(T.total, 0) TOTAL_PP,
+			$consulta_datos="SELECT CASE WHEN alumno_sedeid= 1 THEN 'LOJA' WHEN  alumno_sedeid=2 THEN 'CATAMAYO' WHEN  alumno_sedeid=3 THEN 'VILCABAMBA' ELSE 'LOJA' END as SEDE,
+						 IFNULL(T.total, 0) TOTAL_PP,
 						(P.pago_saldo + P.pago_valor) DEUDA_INICIAL, 
 						((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))PAGO_INICIAL, 
 						IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) SALDO_INICIAL, 
@@ -1211,6 +1212,12 @@
 
 		public function informacionEscuela(){		
 			$consulta_datos="SELECT * FROM general_escuela WHERE escuela_id  = 1";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}

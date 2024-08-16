@@ -25,9 +25,9 @@
 			$clase = '<a class="float-right">';
 		}
 	
-		$escuela=$insAlumno->informacionEscuela();
-		if($escuela->rowCount()==1){
-			$escuela=$escuela->fetch(); 
+		$sede=$insAlumno->informacionSede($datos['alumno_sedeid']);
+		if($sede->rowCount()==1){
+			$sede=$sede->fetch(); 
 		}
 
 		$mesesEnEspanol = [
@@ -74,7 +74,7 @@
 				$textodescuento ="Estudiante tiene Descuento. ";
 				$textodescripcion =$descuento["descuento_detalle"];
 				$rubro_valor = $descuento["descuento_valor"];
-				$rubro_inscripcion = $escuela['escuela_inscripcion'];
+				$rubro_inscripcion = $sede['sede_inscripcion'];
 				$alert = "alert-info";
 				$disabled = " ";
 				$alerta = "S";	
@@ -83,8 +83,8 @@
 		}else{
 			$textodescuento ="";
 			$textodescripcion ="";
-			$rubro_valor = $escuela['escuela_pension'];			
-			$rubro_inscripcion = $escuela['escuela_inscripcion'];
+			$rubro_valor = $sede['sede_pension'];			
+			$rubro_inscripcion = $sede['sede_inscripcion'];
 			$disabled = " ";
 			$alerta = "N";
 			$beca = "N";

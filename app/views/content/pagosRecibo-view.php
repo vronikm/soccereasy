@@ -18,14 +18,9 @@
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch(); 
 
-		if ($datos['pago_archivo']!=""){
-			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['pago_archivo'];
-		}else{
-			$imagen="";
-		} 
-
 		$fecha_recibo = strrev($datos["pago_recibo"]);
-		$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
+		$first12Chars = strrev(substr($datos["pago_recibo"], 0, 12));
+		$nombre_sede  = $datos["SEDE"];
 		
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -39,9 +34,9 @@
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
 	}
 
-	$escuela=$insAlumno->informacionEscuela();
-	if($escuela->rowCount()==1){
-		$escuela=$escuela->fetch(); 
+	$sede=$insAlumno->informacionSede($datos["alumno_sedeid"]);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch(); 
 	}
 	
 ?>
@@ -136,16 +131,15 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg' ?>" style="width: 200px; height: 100px;"/>										
-											<br>Dirección: <?php echo $escuela["escuela_direccion"]; ?><br>
-											Celular: <?php echo $escuela["escuela_movil"]; ?> - LOJA - ECUADOR										
+											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 200px; height: 100px;"/>										
+											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
+											Celular: <?php echo $sede["sede_telefono"]; ?> - LOJA - ECUADOR										
 										</address>
 									</div>
 									<!-- /.col -->
 									<div class="col-sm-6 invoice-col">									
 										<address class="text-center">	
-											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE LOJA</strong><br>
-											De: Luis Roberto Álvarez Granda<br><br>											
+											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE <?php echo $nombre_sede ?> </strong><br><br>										
 											<div class="row">
 												<div class="col-12 table-responsive">
 													<div class="row">
@@ -238,7 +232,7 @@
 									<div class="col-4">										
 										<?php
 											('Content-Type: image/svg+xml');
-											$svg = $generator->render_svg($symbology,"Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 
+											$svg = $generator->render_svg($symbology,"Recibo ".$datos["pago_recibo"]. "\n".$datos["pago_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"], $optionsQR); 
 											echo $svg;  
 										?>								
 									</div>

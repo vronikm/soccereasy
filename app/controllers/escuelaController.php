@@ -12,7 +12,7 @@
 			$escuela_nombre			= $this->limpiarCadena($_POST['escuela_nombre']);
 		    $escuela_direccion		= $this->limpiarCadena($_POST['escuela_direccion']);		    		    
 		    $escuela_email			= $this->limpiarCadena($_POST['escuela_email']);
-		$escuela_telefono			= $this->limpiarCadena($_POST['escuela_telefono']);
+			$escuela_telefono			= $this->limpiarCadena($_POST['escuela_telefono']);
 		    $escuela_movil			= $this->limpiarCadena($_POST['escuela_movil']);
 			$escuela_recibo			= $this->limpiarCadena($_POST['escuela_recibo']);
 			$escuela_pension		= $this->limpiarCadena($_POST['escuela_pension']);
@@ -599,15 +599,15 @@
 		public function registrarSedeControlador(){
 
 			# Almacenando datos#
-			$sede_escuelaid	= $this->limpiarCadena($_POST['sede_escuelaid']);
-			$sede_nombre	= $this->limpiarCadena($_POST['sede_nombre']);
-			$sede_direccion	= $this->limpiarCadena($_POST['sede_direccion']);		    		    
-			$sede_email		= $this->limpiarCadena($_POST['sede_email']);
-			$sede_telefono	= $this->limpiarCadena($_POST['sede_telefono']);
+			$sede_nombre		= $this->limpiarCadena($_POST['sede_nombre']);
+			$sede_direccion		= $this->limpiarCadena($_POST['sede_direccion']);		    		    
+			$sede_email			= $this->limpiarCadena($_POST['sede_email']);
+			$sede_telefono		= $this->limpiarCadena($_POST['sede_telefono']);
+			$sede_inscripcion	= $this->limpiarCadena($_POST['sede_inscripcion']);
+			$sede_pension		= $this->limpiarCadena($_POST['sede_pension']);
 			
 			# Verificando campos obligatorios #
-			if($sede_escuelaid=="" || $sede_nombre=="" || $sede_direccion=="" || $sede_email=="" || 
-				$sede_telefono==""){
+			if($sede_nombre=="" || $sede_direccion=="" || $sede_email=="" || $sede_telefono==""){
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error",
@@ -615,7 +615,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}
 
 			# Verificando integridad de los datos #
@@ -627,7 +626,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}
 
 			# Verificando email #
@@ -642,7 +640,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					}
 					}else{
 						$alerta=[
@@ -652,16 +649,88 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 				}
 			}
+			# Directorio de fotos #
+			$img_dir="../views/imagenes/fotos/sedes/";
+			$codigo=rand(0,100);
+
+			# Comprobar si se selecciono una imagen #
+			if($_FILES['sede_foto']['name']!="" && $_FILES['sede_foto']['size']>0){
+
+				# Creando directorio #
+				if(!file_exists($img_dir)){
+					if(!mkdir($img_dir,0777)){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Ocurrió un error",
+							"texto"=>"No fue posible crear el directorio",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					} 
+				}
+
+				# Verificando formato de imagenes #
+				if(mime_content_type($_FILES['sede_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['sede_foto']['tmp_name'])!="image/png"){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"La imagen que ha seleccionado es de un formato no permitido",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+
+				# Verificando peso de imagen #
+				if(($_FILES['sede_foto']['size']/1024)>4000){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+
+				# Nombre de la foto #
+				$foto=str_ireplace(" ","_",$sede_nombre);
+				$foto=$foto."_".$codigo;
+
+				# Extension de la imagen #
+				switch(mime_content_type($_FILES['sede_foto']['tmp_name'])){
+					case 'image/jpeg':
+						$foto=$foto.".jpg";
+					break;
+					case 'image/png':
+						$foto=$foto.".png";
+					break;
+				}
+				$maxWidth = 800;
+				$maxHeight = 600;
+
+				chmod($img_dir,0777);
+				$inputFile = ($_FILES['sede_foto']['tmp_name']);
+					$outputFile = $img_dir.$foto;
+
+				# Moviendo imagen al directorio #
+				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No es posible subir la imagen al sistema en este momento",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+			}else{
+    			$foto="";
+    		}
 
 			$sede_datos_reg=[
-				[
-					"campo_nombre"=>"sede_escuelaid",
-					"campo_marcador"=>":EscuelaId",
-					"campo_valor"=>$sede_escuelaid
-				],
 				[
 					"campo_nombre"=>"sede_nombre",
 					"campo_marcador"=>":Nombre",
@@ -681,6 +750,21 @@
 					"campo_nombre"=>"sede_telefono",
 					"campo_marcador"=>":Telefono",
 					"campo_valor"=>$sede_telefono
+				],				
+				[
+					"campo_nombre"=>"sede_inscripcion",
+					"campo_marcador"=>":Inscripcion",
+					"campo_valor"=>$sede_inscripcion
+				],				
+				[
+					"campo_nombre"=>"sede_pension",
+					"campo_marcador"=>":Pension",
+					"campo_valor"=>$sede_pension
+				],				
+				[
+					"campo_nombre"=>"sede_foto",
+					"campo_marcador"=>":Foto",
+					"campo_valor"=>$foto
 				]
 			];
 
@@ -688,7 +772,8 @@
 
 			if($registrar_sede->rowCount()==1){
 				$alerta=[
-					"tipo"=>"limpiar",
+					"tipo"=>"redireccionar",
+					"url"=>APP_URL.'sedeList/',
 					"titulo"=>"Sede registrada",
 					"texto"=>"La sede ".$sede_nombre." se registró correctamente",
 					"icono"=>"success"
@@ -725,8 +810,9 @@
 			$tabla="";
 			$texto = "";
 			$boton = "";
-			$consulta_datos="SELECT sede_id, sede_nombre, sede_direccion, sede_email, sede_telefono
-							 FROM general_sede";
+			$consulta_datos="SELECT sede_id, sede_nombre, sede_direccion, sede_email, sede_telefono, sede_inscripcion, sede_pension
+							 FROM general_sede
+							 ORDER BY sede_id DESC";
 							 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -737,34 +823,25 @@
 						<td>'.$rows['sede_direccion'].'</td>
 						<td>'.$rows['sede_email'].'</td>
 						<td>'.$rows['sede_telefono'].'</td>
+						<td>'.$rows['sede_inscripcion'].'</td>
+						<td>'.$rows['sede_pension'].'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/escuelaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_sede" value="eliminar">
 								<input type="hidden" name="sede_id" value="'.$rows['sede_id'].'">						
-								<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
+								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
 							</form>
-							<a href="'.APP_URL.'sedeUpdate/'.$rows['sede_id'].'/" class="btn float-right btn-success btn-sm" style="margin-right: 5px;">Actualizar</a>
-							<a href="'.APP_URL.'sedeProfile/'.$rows['sede_id'].'/" class="btn float-right btn-primary btn-sm" style="margin-right: 5px;">Ver</a>
-							
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/escuelaAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_sede" value="actualizarestado">
-								<input type="hidden" name="sede_id" value="'.$rows['sede_id'].'">						
-								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
-							</form>
-						</td>
-						
+							<a href="'.APP_URL.'sedeList/'.$rows['sede_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Editar</a>
+						</td>						
 					</tr>';	
 			}
 			return $tabla;
 		}
 
 		/*----------  Controlador ver sede  ----------*/
-		public function verSedeControlador(){
-
-			$sede=$this->limpiarCadena($_POST['sede_id']);
-
+		public function verSedeControlador($sedeid){
 			# Verificando sede #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM general_sede WHERE sede_id='$sede'");
+		    $datos=$this->ejecutarConsulta("SELECT * FROM general_sede WHERE sede_id='$sedeid'");
 		    if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
@@ -773,16 +850,9 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }else{
-		    	$datos=$datos->fetch();
+		    	return $datos;
 		    }
-
-			# Almacenando datos#
-		    $nombre=$this->limpiarCadena($_POST['sede_nombre']);			
-		    $email=$this->limpiarCadena($_POST['sede_email']);
-			$movil=$this->limpiarCadena($_POST['sede_movil']);
-			$direccion	= $this->limpiarCadena($_POST['sede_direccion']);
 		}
 				/*----------  Controlador actualizar escuela  ----------*/
 		public function actualizarSedeControlador(){
@@ -804,16 +874,16 @@
 		    	$datos=$datos->fetch();
 		    }
 
-		    # Almacenando datos#
-			$sede_escuelaid	= $this->limpiarCadena($_POST['sede_escuelaid']);
-			$sede_nombre	= $this->limpiarCadena($_POST['sede_nombre']);
-			$sede_direccion	= $this->limpiarCadena($_POST['sede_direccion']);		    		    
-			$sede_email		= $this->limpiarCadena($_POST['sede_email']);
-			$sede_telefono	= $this->limpiarCadena($_POST['sede_telefono']);
+		    # Almacenando datos#			
+			$sede_nombre		= $this->limpiarCadena($_POST['sede_nombre']);
+			$sede_direccion		= $this->limpiarCadena($_POST['sede_direccion']);		    		    
+			$sede_email			= $this->limpiarCadena($_POST['sede_email']);
+			$sede_telefono		= $this->limpiarCadena($_POST['sede_telefono']);
+			$sede_inscripcion	= $this->limpiarCadena($_POST['sede_inscripcion']);
+			$sede_pension		= $this->limpiarCadena($_POST['sede_pension']);
 
 			# Verificando campos obligatorios #
-			if($sede_escuelaid=="" || $sede_nombre=="" || $sede_direccion=="" || $sede_email=="" || 
-				$sede_telefono==""){
+			if($sede_nombre=="" || $sede_direccion=="" || $sede_email=="" || $sede_telefono==""){
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error",
@@ -821,7 +891,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}
 
 			# Verificando integridad de los datos #
@@ -833,15 +902,8 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}
-			
 			$sede_datos_upd=[
-				[
-					"campo_nombre"=>"sede_escuelaid",
-					"campo_marcador"=>":EscuelaId",
-					"campo_valor"=>$sede_escuelaid
-				],
 				[
 					"campo_nombre"=>"sede_nombre",
 					"campo_marcador"=>":Nombre",
@@ -861,9 +923,107 @@
 					"campo_nombre"=>"sede_telefono",
 					"campo_marcador"=>":Telefono",
 					"campo_valor"=>$sede_telefono
-				]	
+				],
+				[
+					"campo_nombre"=>"sede_inscripcion",
+					"campo_marcador"=>":Inscripcion",
+					"campo_valor"=>$sede_inscripcion
+				],	
+				[
+					"campo_nombre"=>"sede_pension",
+					"campo_marcador"=>":Pension",
+					"campo_valor"=>$sede_pension
+				]
 			];
 
+			# Directorio de fotos #
+			$img_dir="../views/imagenes/fotos/sedes/";
+			$codigo=rand(0,100);
+
+			# Comprobar si se selecciono una imagen #
+			if($_FILES['sede_foto']['name']!="" && $_FILES['sede_foto']['size']>0){
+
+				# Creando directorio #
+				if(!file_exists($img_dir)){
+					if(!mkdir($img_dir,0777)){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Ocurrió un error",
+							"texto"=>"No fue posible crear el directorio",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					} 
+				}
+
+				# Verificando formato de imagenes #
+				if(mime_content_type($_FILES['sede_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['sede_foto']['tmp_name'])!="image/png"){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"La imagen que ha seleccionado es de un formato no permitido",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+
+				# Verificando peso de imagen #
+				if(($_FILES['sede_foto']['size']/1024)>4000){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+
+				# Nombre de la foto #
+				$foto=str_ireplace(" ","_",$sede_nombre);
+				$foto=$foto."_".$codigo;
+
+				# Extension de la imagen #
+				switch(mime_content_type($_FILES['sede_foto']['tmp_name'])){
+					case 'image/jpeg':
+						$foto=$foto.".jpg";
+					break;
+					case 'image/png':
+						$foto=$foto.".png";
+					break;
+				}
+				$maxWidth = 800;
+				$maxHeight = 600;
+
+				chmod($img_dir,0777);
+				$inputFile = ($_FILES['sede_foto']['tmp_name']);
+					$outputFile = $img_dir.$foto;
+
+				# Moviendo imagen al directorio #
+				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No es posible subir la imagen al sistema en este momento",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+				# Eliminando imagen anterior #
+				if(is_file($img_dir.$datos['sede_foto']) && $datos['sede_foto']!=$foto){
+					chmod($img_dir.$datos['sede_foto'], 0777);
+					unlink($img_dir.$datos['sede_foto']);
+				}				
+				
+				$sede_datos_upd[] = [
+					"campo_nombre" => "sede_foto",
+					"campo_marcador" => ":Foto",
+					"campo_valor" => $foto
+				];				
+			}			
+			
 			$condicion=[
 				"condicion_campo"=>"sede_id",
 				"condicion_marcador"=>":Sede",
@@ -886,7 +1046,6 @@
 					"icono"=>"error"
 				];
 			}
-
 			return json_encode($alerta);
 		}
 
@@ -906,7 +1065,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }else{
 		    	$datos=$datos->fetch();
 		    }
@@ -920,7 +1078,6 @@
 					"texto"=>"La sede ".$datos['sede_nombre']." ha sido eliminada del sistema correctamente",
 					"icono"=>"success"
 				];
-
 		    }else{
 
 		    	$alerta=[
@@ -930,7 +1087,6 @@
 					"icono"=>"error"
 				];
 		    }
-
 		    return json_encode($alerta);
 		}
 	}

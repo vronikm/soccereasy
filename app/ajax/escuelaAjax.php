@@ -30,10 +30,6 @@
 			echo $insSede->registrarSedeControlador();
 		}
 
-		if($_POST['modulo_sede']=="ver"){
-			echo $insSede->verSedeControlador();
-		}
-
 		if($_POST['modulo_sede']=="actualizar"){
 			echo $insSede->actualizarSedeControlador();
 		}
