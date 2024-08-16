@@ -18,6 +18,7 @@
 
 		$fecha_recibo = strrev($datos["pago_recibo"]);
 		$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
+		$nombre_sede  = $datos["SEDE"];
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -28,12 +29,6 @@
 		$recibo_hora = $pairs[4].":".$pairs[2].":".$pairs[0];
 
 		 $filename .= $datos["pago_recibo"].".jpeg";
-
-		/*
-		$representante=$insAlumno->informacionRepresentante($datos["pago_alumnoid"]);
-		if($representante->rowCount()==1){
-			$representante=$representante->fetch(); 
-		}*/
 
 	}else{
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
