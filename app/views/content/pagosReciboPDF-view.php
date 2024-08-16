@@ -19,7 +19,7 @@
 
 	$fecha_recibo = strrev($datos["pago_recibo"]);
 	$first12Chars =  strrev(substr($datos["pago_recibo"], 0, 12));
-    $nombre_sede  = $datos["SEDE"];
+    $nombre_sede  = $datos["sede_nombre"];
 
 	$pairs = [];
 	$length = strlen($first12Chars);
