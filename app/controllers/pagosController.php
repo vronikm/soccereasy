@@ -1197,6 +1197,7 @@
 		public function generarReciboPendiente($transaccion_id){
 		
 			$consulta_datos="SELECT sede_nombre, R.catalogo_descripcion RUBRO, F.catalogo_descripcion FORMAPAGO, 
+					concat(E.repre_primernombre, ' ', E.repre_segundonombre, ' ', E.repre_apellidopaterno, ' ', E.repre_apellidomaterno) REPRESENTANTE,
 					E.repre_correo CORREO_REP,
 					P.*, A.*, PT.* 
 				FROM alumno_pago P	

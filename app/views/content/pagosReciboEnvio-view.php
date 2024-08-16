@@ -152,7 +152,7 @@
     
     NOTA: Este correo electrónico servirá como recibo oficial de su pago.
     
-    Escuela de Fútbol Inpendiente del Valle Loja";
+    Escuela de Fútbol Inpendiente del Valle ".$nombre_sede;
     
 	$message = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
 
