@@ -18,6 +18,7 @@
 
 		$fecha_recibo = strrev($datos["transaccion_recibo"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
+		$nombre_sede  = $datos["sede_nombre"];
 
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -29,24 +30,18 @@
 
 		 $filename .= $datos["transaccion_recibo"].".jpeg";
 
-		/*
-		$representante=$insAlumno->informacionRepresentante($datos["pago_alumnoid"]);
-		if($representante->rowCount()==1){
-			$representante=$representante->fetch(); 
-		}*/
-
 	}else{
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
 	}
 
-	$escuela=$insAlumno->informacionEscuela();
-	if($escuela->rowCount()==1){
-		$escuela=$escuela->fetch(); 
-	}
+	$sede=$insAlumno->informacionSede($datos["alumno_sedeid"]);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch(); 
+    }
 
-	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"];
-
-    	$image = $generator->render_image($symbology, $data, $optionsQR);
+	$data="Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecha"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
+	
+	$image = $generator->render_image($symbology, $data, $optionsQR);
     	imagejpeg($image, $filename);
     	imagedestroy($image);
 
@@ -62,22 +57,17 @@
 	// logo : 80 de largo por 55 de alto
         //,,ancho,
 
-        $pdf->Image(APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg', 34, 10, 47, 26);
+        $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 26);
         //$pdf->Image(APP_URL.'app/views/dist/img/Logos/login.jpg', 165, 88, 25, 25);
 
         $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;       		
 
-        $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "ESCUELA INDEPENDIENTE", 0, 0, 'C'); $y+=5;
-        $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "DEL VALLE LOJA", 0, 0, 'C'); $y+=5;
-        $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 260, 8, mb_convert_encoding("De: Luis Roberto Álvarez Granda", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');$x=15; $y+=10;
+		$pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "ESCUELA INDEPENDIENTE DEL VALLE", 0, 0, 'C'); $y+=5;
+		$pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, $nombre_sede, 0, 0, 'C'); $y+=17;
 
-	    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 8, mb_convert_encoding("Dirección:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 102, 8, mb_convert_encoding($escuela["escuela_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
-        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 8, mb_convert_encoding("Celular:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 8, mb_convert_encoding($escuela["escuela_movil"]." LOJA-ECUADOR", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
-
-        
-
+	    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 8, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
+        $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 8, mb_convert_encoding("Celular: ".$sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+		
         $pdf->SetLineWidth(0.1); $pdf->Rect(130, 35, 60, 10, "D");
         $pdf->Line(130, 38, 190, 38);
         $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 7 ); $pdf->Cell( 19, 2, mb_convert_encoding("Fecha de emisión", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
@@ -223,11 +213,5 @@
        		return json_encode($alerta);
 
     }
-/*    
-    chmod($file_path, 0777);
-	unlink($file_path);
-	header("Location: ".APP_URL."pagospendienteRecibo/".$pagoid."/");
-*/
-
      //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
    	// Envio de correo -----------------------------------

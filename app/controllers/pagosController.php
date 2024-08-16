@@ -1196,12 +1196,13 @@
 
 		public function generarReciboPendiente($transaccion_id){
 		
-			$consulta_datos="SELECT R.catalogo_descripcion RUBRO, F.catalogo_descripcion FORMAPAGO, 
+			$consulta_datos="SELECT sede_nombre, R.catalogo_descripcion RUBRO, F.catalogo_descripcion FORMAPAGO, 
 					E.repre_correo CORREO_REP,
 					P.*, A.*, PT.* 
 				FROM alumno_pago P	
 					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid 
 					INNER JOIN alumno_pago_transaccion PT ON PT.transaccion_pagoid = P.pago_id
+					INNER JOIN general_sede S on S.sede_id = A.alumno_sedeid 
 					LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
 					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = PT.transaccion_formapagoid				

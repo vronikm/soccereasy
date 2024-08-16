@@ -26,6 +26,7 @@
 		} 
 
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
+		$nombre_sede  = $datos["sede_nombre"];
 		
 		$pairs = [];
 		$length = strlen($first12Chars);
@@ -39,11 +40,10 @@
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
 	}
 
-	$escuela=$insAlumno->informacionEscuela();
-	if($escuela->rowCount()==1){
-		$escuela=$escuela->fetch(); 
+	$sede=$insAlumno->informacionSede($datos["alumno_sedeid"]);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch(); 
 	}
-	
 ?>
 
 <!DOCTYPE html>
@@ -133,16 +133,15 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg' ?>" style="width: 200px; height: 100px;"/>
-											<br>Dirección: <?php echo $escuela["escuela_direccion"]; ?><br>
-											Celular: <?php echo $escuela["escuela_movil"]; ?> - LOJA - ECUADOR										
+											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 200px; height: 100px;"/>
+											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
+											Celular: <?php echo $sede["sede_telefono"]; ?> - LOJA - ECUADOR										
 										</address>
 									</div>
 									<!-- /.col -->
 									<div class="col-sm-6 invoice-col">									
 										<address class="text-center">	
-											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE LOJA</strong><br>
-											De: Luis Roberto Álvarez Granda<br><br>											
+											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE <?php echo $nombre_sede ?> </strong><br><br>								
 											<div class="row">
 												<div class="col-12 table-responsive">
 													<div class="row">
@@ -234,7 +233,7 @@
 
 									<div class="col-4">										
 										<?php											
-											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"], $optionsQR); 											
+											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"], $optionsQR);											
 											echo $svg;  
 										?>								
 									</div>
@@ -247,15 +246,9 @@
 								<!-- this row will not appear when printing -->
 								<div class="row no-print">
 									<div class="col-12">
-                                        <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
-
-                                        
+                                        <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>                                        
 										<a href="<?php echo APP_URL.'pagospendienteReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 5px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo</a>
-
-										<!--button class="btn btn-dark float-right" style="margin-right: 5px;" onclick="printPage()" ><i class="fas fa-print"></i> Imprimir recibo</button-->
-										
 										<?php include "./app/views/inc/btn_back.php";?>
-
 									</div>
 								</div>
 							</div>
@@ -265,27 +258,21 @@
 						</div>
 					</div><!-- /.row -->
 				</div><!-- /.container-fluid -->
-			</section>
-      
+			</section>      
 		</div>
 		<!-- /.vista -->
-
 		<?php require_once "app/views/inc/footer.php"; ?>
-
 		<!-- Control Sidebar -->
 		<aside class="control-sidebar control-sidebar-dark">
 		<!-- Control sidebar content goes here -->
 		</aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>	
 	<!-- Select2 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/select2/js/select2.full.min.js"></script>
 	<!-- Bootstrap4 Duallistbox -->
@@ -305,10 +292,8 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
 	<!-- dropzonejs -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
-
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
   </body>
 </html>
