@@ -817,6 +817,18 @@
 				return json_encode($alerta);		        
 		    }			
 
+			#Verificar si el descuento ya fue ingresado
+			$check_descuento=$this->ejecutarConsulta("SELECT * FROM alumno_pago_descuento WHERE descuento_alumnoid='$descuento_alumnoid'");
+		    if($check_descuento->rowCount()>0){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"El descuento ya se encuentra registrado",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);		        
+		    }
+
 			$descuento_datos_reg=[
 				[
 					"campo_nombre"=>"descuento_rubroid",
