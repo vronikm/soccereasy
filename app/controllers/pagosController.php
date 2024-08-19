@@ -4,9 +4,7 @@
 	use app\models\mainModel;
 
 	class pagosController extends mainModel{
-
-		public function listarAlumnosPagos($identificacion, $apellidopaterno, $primernombre, $anio, $sede){
-					
+		public function listarAlumnosPagos($identificacion, $apellidopaterno, $primernombre, $anio, $sede){					
 			if($identificacion!=""){
 				$identificacion .= '%'; 
 			}
@@ -15,16 +13,12 @@
 			} 
 			if($apellidopaterno!=""){
 				$apellidopaterno .= '%';
-			} 		
-			
-
+			}
 			$tabla="";
 			$consulta_datos="SELECT * FROM sujeto_alumno 
 								WHERE (alumno_primernombre LIKE '".$primernombre."' 
 								OR alumno_identificacion LIKE '".$identificacion."' 
-								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";
-			
-			
+								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
 			if($anio!=""){
 				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
 			}
@@ -48,11 +42,9 @@
 			}	
 			
 			$consulta_datos .= " AND alumno_estado <> 'E'";
-
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				
+			foreach($datos as $rows){				
 				$consulta_descuento = "SELECT descuento_alumnoid, descuento_estado  FROM alumno_pago_descuento WHERE descuento_alumnoid = ".$rows['alumno_id'];
 				$descuento = $this->ejecutarConsulta($consulta_descuento);
 				if($descuento->rowCount()==1){
@@ -65,8 +57,7 @@
 					}								
 				}else{
 					$boton = "btn-secondary";	
-				}
-				
+				}				
 				$consulta_pagos = "SELECT pago_id FROM alumno_pago WHERE pago_alumnoid = ".$rows['alumno_id'];
 				$pagos = $this->ejecutarConsulta($consulta_pagos);
 				if($pagos->rowCount()>0){
@@ -74,13 +65,11 @@
 				}else{
 					$botonpago = "btn-secondary";
 				}
-
 				if($rows['alumno_estado']=="I"){
 					$class = 'class="text-primary"';
 				}else{
 					$class = '';
-				}
-				
+				}				
 				$tabla.='
 					<tr '.$class.'>
 						<td>'.$rows['alumno_identificacion'].'</td>
@@ -108,21 +97,18 @@
 					$option.='<option value='.$rows['sede_id'].' selected="selected">'.$rows['sede_nombre'].'</option>';
 				}else{
 					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';
-				}
-					
+				}					
 			}
 			return $option;
 		}
 
 		/* ---------------------------Freddy----------------------- */
-		public function BuscarAlumno($alumnoid){
-		
-			$consulta_datos="SELECT S.sede_nombre, P.catalogo_descripcion, Year(alumno_fechanacimiento) anio
+		public function BuscarAlumno($alumnoid){		
+			$consulta_datos="SELECT S.sede_nombre, CASE WHEN alumno_estado = 'A' THEN 'Activo' WHEN alumno_estado = 'I' THEN 'Inactivo' ELSE 'Sin definir' END estado, Year(alumno_fechanacimiento) anio
 					,CASE WHEN IFNULL(R.total, 0) > 0 THEN 1 ELSE 0 END pendiente,  IFNULL(R.total, 0) total
 					,A.* 
 					FROM sujeto_alumno A
 					LEFT JOIN general_sede S ON S.sede_id = A.alumno_sedeid
-					LEFT JOIN general_tabla_catalogo P ON P.catalogo_valor = A.alumno_posicionid
 					LEFT JOIN(
 						SELECT COUNT(RP.pago_id) total, RA.alumno_id alumno
 						FROM sujeto_alumno RA
@@ -131,51 +117,35 @@
 						GROUP BY RA.alumno_id
 					)R ON R.alumno = A.alumno_id
 				WHERE A.alumno_id = ".$alumnoid;	
-			/*
-			$consulta_datos="SELECT S.sede_nombre, P.catalogo_descripcion, Year(alumno_fechanacimiento) ann, A.* 
-				FROM sujeto_alumno A
-					LEFT JOIN general_sede S ON S.sede_id = A.alumno_sedeid
-					LEFT JOIN general_tabla_catalogo P ON P.catalogo_valor = A.alumno_posicionid
-				WHERE A.alumno_id = ".$alumnoid;	
-			*/
-
-			$datos = $this->ejecutarConsulta($consulta_datos);			
-			
+			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}
 		
-		public function BuscarAlumnoDescuento($alumnoid){
-		
-			$consulta_datos="SELECT S.sede_nombre, P.catalogo_descripcion, Year(alumno_fechanacimiento) anio
-					,A.*
+		public function BuscarAlumnoDescuento($alumnoid){		
+			$consulta_datos="SELECT S.sede_nombre, 
+								case when alumno_estado = 'A' then 'Activo' when alumno_estado = 'I' then 'Inactivo' else 'Sin definir' end estado, 
+								Year(alumno_fechanacimiento) anio,A.*
 					FROM sujeto_alumno A
-					LEFT JOIN general_sede S ON S.sede_id = A.alumno_sedeid
-					LEFT JOIN general_tabla_catalogo P ON P.catalogo_valor = A.alumno_posicionid					
-				WHERE A.alumno_id = ".$alumnoid;
-				
-			$datos = $this->ejecutarConsulta($consulta_datos);			
-			
+					LEFT JOIN general_sede S ON S.sede_id = A.alumno_sedeid					
+				WHERE A.alumno_id = ".$alumnoid;				
+			$datos = $this->ejecutarConsulta($consulta_datos);				
 			return $datos;
 		}
 		
-		public function AlumnoDescuento($alumnoid){
-		
+		public function AlumnoDescuento($alumnoid){		
 			$consulta_datos="SELECT D.* FROM alumno_pago_descuento D					
 							 INNER JOIN general_tabla_catalogo RD ON RD.catalogo_valor = D.descuento_rubroid 
 							 WHERE D.descuento_alumnoid  = ".$alumnoid ." AND D.descuento_estado = 'S' ";
 				
-			$datos = $this->ejecutarConsulta($consulta_datos);			
-			
+			$datos = $this->ejecutarConsulta($consulta_datos);				
 			return $datos;
 		}
 		
-		public function BuscarDescuento($alumnoid){
-		
+		public function BuscarDescuento($alumnoid){		
 			$consulta_datos="SELECT D.* FROM alumno_pago_descuento D 
 				WHERE D.descuento_alumnoid = ".$alumnoid;
-				
-			$datos = $this->ejecutarConsulta($consulta_datos);			
-			
+
+			$datos = $this->ejecutarConsulta($consulta_datos);					
 			return $datos;
 		}
 		
@@ -202,13 +172,12 @@
 			return $tabla;
 		}
 
-		public function pensionesPendintes($alumnoid){
+		public function pensionesPendientes($alumnoid){
 			$descuento=$this->AlumnoDescuento($alumnoid);
 			if($descuento->rowCount()==1){
 				$descuento=$descuento->fetch(); 
 				if($descuento["descuento_rubroid"] == 'DDS'){					
-					$valor_pension = $descuento["descuento_valor"];
-								
+					$valor_pension = $descuento["descuento_valor"];								
 				}
 			}else{
 				$check_pension=$this->ejecutarConsulta("SELECT escuela_pension FROM general_escuela WHERE escuela_id = 1");
@@ -271,7 +240,6 @@
 			}
 			return $tabla;
 		}
-
 		public function listarOptionPago(){
 			$option="";
 
@@ -303,14 +271,6 @@
 		}
 
 		public function registrarPagoControlador(){
-							
-			/*
-			pago_id, pago_rubroid, pago_formapagoid, pago_alumnoid, pago_valor, pago_saldo, 
-			pago_concepto, pago_fecha, pago_fecharegistro, pago_periodo, pago_estado, pago_archivo,
-			*/		
-			//if(isset($_POST['pago_alumnoid'])){ $pago_alumnoid  = $this->limpiarCadena($_POST['pago_alumnoid']); }else {$pago_alumnoid  = "";}
-			
-
 			# Almacenando datos#
 			$pago_alumnoid 		= $this->limpiarCadena($_POST['pago_alumnoid']);
 			$pago_fecha			= $this->limpiarCadena($_POST['pago_fecha']);
@@ -344,8 +304,7 @@
 				$estado = "P";
 			}else{
 				$estado = "C";
-			}
-			
+			}		
 
 			# Verificando campos obligatorios #
 		    if($pago_fecha=="" || $pago_fecharegistro=="" || $pago_periodo=="" || $pago_valor=="" || $pago_formapagoid=="" ){
@@ -355,8 +314,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }
 
 			# Directorio de imagenes #
@@ -364,7 +322,6 @@
 
 			# Comprobar si se selecciono una imagen #
     		if($_FILES['pago_archivo']['name']!="" && $_FILES['pago_archivo']['size']>0){
-
     			# Creando directorio #
 		        if(!file_exists($img_dir)){
 		            if(!mkdir($img_dir,0777)){
@@ -375,7 +332,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-		                //exit();
 		            } 
 		        }
 
@@ -388,7 +344,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
 		        }
 
 		        # Verificando peso de imagen #
@@ -400,7 +355,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-		            //exit();
 		        }
 
 		        # Nombre de la foto #
@@ -437,11 +391,9 @@
 					];
 					return json_encode($alerta);
 				}
-
     		}else{
     			$foto="";
-    		}	
-			
+    		}			
 
 			$check_recibo=$this->ejecutarConsulta("SELECT escuela_recibo FROM general_escuela WHERE escuela_id = 1");
 			//$check_recibo=$this->seleccionarDatos("Unico","general_escuela","escuela_id","1");
@@ -466,8 +418,7 @@
 
 				// Generar número de recibo con fecha y hora al revés
 				$numero_recibo = $segundo . $anio . $minuto . $mes . $hora . $dia;
-				$pago_recibo = strrev($numero_recibo)."".$num_recibo;	
-				
+				$pago_recibo = strrev($numero_recibo)."".$num_recibo;					
 			}
 			else{
 				$alerta=[
@@ -581,23 +532,9 @@
 	
 				return json_encode($alerta);
 			}
-			
-
 		}
 
-		public function registrarPagoPendiente(){		
-							
-			/*
-			tabla alumno_pago_transaccion
-
-			transaccion_id, transaccion_pagoid, transaccion_valorcalculado, transaccion_valor, transaccion_saldo,
-			transaccion_fecha, transaccion_fecharegistro, transaccion_formapagoid, transaccion_concepto,
-			transaccion_periodo, transaccion_estado, transaccion_archivo
-			
-			*/
-			
-			//if(isset($_POST['pago_alumnoid'])){ $pago_alumnoid  = $this->limpiarCadena($_POST['pago_alumnoid']); }else {$pago_alumnoid  = "";}
-			
+		public function registrarPagoPendiente(){
 			# Almacenando datos#
 			$transaccion_pagoid			= $this->limpiarCadena($_POST['pago_id']);
 			$total						= $this->limpiarCadena($_POST['pago_total']);
@@ -629,8 +566,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }
 
 			if($saldo < 0 ){
@@ -860,22 +796,13 @@
 		}
 
 		public function registrarDescuento(){
-							
-			/*
-			pago_id, pago_rubroid, pago_formapagoid, pago_alumnoid, pago_valor, pago_saldo, 
-			pago_concepto, pago_fecha, pago_fecharegistro, pago_periodo, pago_estado, pago_archivo,
-			*/		
-			//if(isset($_POST['pago_alumnoid'])){ $pago_alumnoid  = $this->limpiarCadena($_POST['pago_alumnoid']); }else {$pago_alumnoid  = "";}
-			
-
 			# Almacenando datos#
 			$descuento_alumnoid	= $this->limpiarCadena($_POST['descuento_alumnoid']);
 			$descuento_rubroid	= $this->limpiarCadena($_POST['descuento_rubroid']);
 			$descuento_valor	= $this->limpiarCadena($_POST['descuento_valor']);
 			$descuento_fecha 	= $this->limpiarCadena($_POST['descuento_fecha']);
 			$descuento_detalle 	= $this->limpiarCadena($_POST['descuento_detalle']);			
-			$descuento_estado 	= $this->limpiarCadena($_POST['descuento_estado']);	
-		
+			$descuento_estado 	= $this->limpiarCadena($_POST['descuento_estado']);			
 			
 			if ($descuento_valor =="") {$descuento_valor = 0;}
 			
@@ -887,8 +814,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }			
 
 			$descuento_datos_reg=[
@@ -933,13 +859,8 @@
 					"texto"=>"El descuento se registró correctamente",
 					"icono"=>"success"
 				];
-
-				// Actualizar numero de recibo
-				
+				// Actualizar numero de recibo				
 			}else{
-				
-				
-
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
@@ -947,13 +868,10 @@
 					"icono"=>"error"
 				];
 			}
-
 			return json_encode($alerta);
-
 		}
 
-		public function listarPagosPendientes($pagoid){
-			
+		public function listarPagosPendientes($pagoid){			
 			$tabla="";
 			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY PT.transaccion_id) AS fila_numero, PT.*, P.* 
 				FROM alumno_pago_transaccion PT
@@ -1315,8 +1233,7 @@
 		}
 
 		/*----------  Controlador actualizar pago  ----------*/
-		public function actualizarPagoControlador(){
-			
+		public function actualizarPagoControlador(){			
 			$pagoid=$this->limpiarCadena($_POST['pago_id']);
 
 			# Verificando pago #
@@ -1361,8 +1278,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }			
 		
 			# Directorio de imagenes #
@@ -1426,7 +1342,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					} 
 				}
 
@@ -1439,7 +1354,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Verificando peso de imagen #
@@ -1451,22 +1365,10 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
-				# Nombre de la foto #
-				/*
-				if($datos['usuario_imagen']==""){
-					$foto=explode(".", $datos['usuario_imagen']);
-					$foto=$foto[0];
-				}else{
-					$foto=str_ireplace(" ","_",$datos['usuario_usuario']);
-					$foto=$foto."_".rand(0,100);
-				}
-				*/
 				$foto=str_ireplace(" ","_",$datos['pago_id']);
-				$foto=$foto."_".rand(0,100);
-				
+				$foto=$foto."_".rand(0,100);			
 
 				# Extension de la imagen #
 				switch(mime_content_type($_FILES['pago_archivo']['tmp_name'])){
@@ -1559,8 +1461,7 @@
 				"condicion_campo"=>"pago_id",
 				"condicion_marcador"=>":Pagoid",
 				"condicion_valor"=>$pagoid
-			];
-			
+			];			
 
 			if($this->actualizarDatos("alumno_pago",$pago_datos_reg,$condicion)){				
 				
@@ -1580,8 +1481,7 @@
 				];
 			}
 
-			return json_encode($alerta);
-		}
+			return json_encode($alerta);		}
 
 		public function actualizarPagoPendiente(){			
 			$transaccion_id = $this->limpiarCadena($_POST['transaccion_id']);
@@ -1627,8 +1527,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }	
 			
 			if($saldo < 0 ){
@@ -1691,7 +1590,6 @@
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-						//exit();
 					} 
 				}
 
@@ -1704,7 +1602,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				# Verificando peso de imagen #
@@ -1716,7 +1613,6 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}
 
 				$foto=str_ireplace(" ","_","pagopendiente".$transaccion_id);
@@ -1798,7 +1694,6 @@
 					]
 				];
 			}
-
 			$condicion=[
 				"condicion_campo"=>"transaccion_id",
 				"condicion_marcador"=>":Pagoid",
@@ -1881,8 +1776,7 @@
 					"texto"=>"No has llenado todos los campos que son obligatorios",
 					"icono"=>"error"
 				];
-				return json_encode($alerta);
-		        
+				return json_encode($alerta);		        
 		    }			
 
 			$descuento_datos_reg=[
@@ -1922,8 +1816,7 @@
 				"condicion_campo"=>"descuento_alumnoid ",
 				"condicion_marcador"=>":Alumnoid ",
 				"condicion_valor"=>$descuento_alumnoid 
-			];
-			
+			];			
 
 			if($this->actualizarDatos("alumno_pago_descuento",$descuento_datos_reg,$condicion)){				
 				

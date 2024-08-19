@@ -91,7 +91,7 @@
 		}
 
 		if($beca != "S"){
-			$pension = $insAlumno->pensionesPendintes($alumno);
+			$pension = $insAlumno->pensionesPendientes($alumno);
 			if($pension != ""){
 				$pendiente = "Pendiente";
 				$clase = '<a class="float-right text-danger">';
@@ -233,7 +233,7 @@
 											<b>Categoría</b> <a class="float-right"><?php echo $datos['anio']; ?></a>
 										</li>
 										<li class="list-group-item">
-											<b>Posición de juego</b> <a class="float-right"><?php echo $datos['catalogo_descripcion']; ?></a>
+											<b>Estado alumno</b> <a class="float-right"><?php echo $datos['estado']; ?></a>
 										</li>
 										<li class="list-group-item">
 											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $datos['alumno_fechaingreso']; ?></a>

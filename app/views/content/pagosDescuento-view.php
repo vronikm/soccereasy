@@ -172,7 +172,7 @@
 											<b>Categoría</b> <a class="float-right"><?php echo $datos['anio']; ?></a>
 										</li>
 										<li class="list-group-item">
-											<b>Posición de juego</b> <a class="float-right"><?php echo $datos['catalogo_descripcion']; ?></a>
+											<b>Estado del alumno</b> <a class="float-right"><?php echo $datos['estado']; ?></a>
 										</li>
 										<li class="list-group-item">
 											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $datos['alumno_fechaingreso']; ?></a>
