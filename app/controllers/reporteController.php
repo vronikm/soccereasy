@@ -176,7 +176,7 @@
 									SUM(pago_saldo) AS SALDO
 									FROM alumno_pago
 										INNER JOIN sujeto_alumno ON alumno_id = pago_alumnoid
-									WHERE pago_estado = 'P' AND pago_saldo > 0 AND alumno_sedeid = 1
+									WHERE pago_estado = 'P' AND pago_saldo > 0 AND alumno_sedeid = ".$sedeid." 
 									GROUP BY pago_alumnoid
 								) P ON P.pago_alumnoid = A.alumno_id
 								LEFT JOIN (
@@ -198,7 +198,7 @@
 										LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
 										LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
 										LEFT JOIN general_sede ON sede_id = alumno_sedeid
-									WHERE pago_rubroid = 'RPE'  AND alumno_estado <> 'I' AND alumno_sedeid = 1 
+									WHERE pago_rubroid = 'RPE' AND alumno_estado <> 'I' AND alumno_sedeid = ".$sedeid." 
 									GROUP BY 
 										pago_alumnoid
 									) BASE

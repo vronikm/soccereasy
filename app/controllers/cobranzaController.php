@@ -41,19 +41,19 @@
                                                 CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
                                                     GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) END AS PENSIONES,
                                                 CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
-                                                    GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.escuela_pension) END AS TOTAL
+                                                    GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.sede_pension) END AS TOTAL
                                                 FROM (
                                                 SELECT 
                                                     MAX(pago_fecha) AS FECHA,
                                                     pago_alumnoid, 
                                                     MAX(descuento_valor) AS descuento_valor, 
-                                                    MAX(escuela_pension) AS escuela_pension  
+                                                    MAX(sede_pension) AS sede_pension  
                                                 FROM 
                                                     sujeto_alumno
                                                     LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
                                                     LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
-                                                    LEFT JOIN general_escuela ON escuela_id = 1
-                                                WHERE pago_rubroid = 'RPE' 
+                                                    LEFT JOIN general_sede ON sede_id = alumno_sedeid
+                                                WHERE pago_rubroid = 'RPE' AND alumno_estado <> 'I' 
                                                 GROUP BY 
                                                     pago_alumnoid
                                                 ) BASE
@@ -128,19 +128,19 @@
 									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
 										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) END AS PENSIONES,
 									CASE WHEN BASE.FECHA > CURDATE() THEN 0 ELSE
-										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.escuela_pension) END AS TOTAL
+										GREATEST(0, TIMESTAMPDIFF(MONTH, BASE.FECHA, CURDATE()) + (DAY(CURDATE()) < DAY(BASE.FECHA))) * COALESCE(BASE.descuento_valor, BASE.sede_pension) END AS TOTAL
 									FROM (
 									SELECT 
 										MAX(pago_fecha) AS FECHA, 
 										pago_alumnoid, 
 										MAX(descuento_valor) AS descuento_valor, 
-										MAX(escuela_pension) AS escuela_pension  
+										MAX(sede_pension) AS sede_pension  
 									FROM 
 										sujeto_alumno
 										LEFT JOIN alumno_pago ON pago_alumnoid = alumno_id 
 										LEFT JOIN alumno_pago_descuento ON descuento_alumnoid = alumno_id AND descuento_estado = 'S'
-										LEFT JOIN general_escuela ON escuela_id = 1
-									WHERE pago_rubroid = 'RPE' AND alumno_repreid = ".$repre_id." 
+										LEFT JOIN general_sede ON sede_id = alumno_sedeid
+									WHERE pago_rubroid = 'RPE' AND alumno_estado <> 'I' AND alumno_repreid = ".$repre_id." 
 									GROUP BY 
 										pago_alumnoid
 									) BASE
