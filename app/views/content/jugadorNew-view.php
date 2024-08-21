@@ -12,9 +12,11 @@
 		if($nombreEquipo->rowCount()==1){
 			$nombreEquipo	=	$nombreEquipo->fetch();				
 			$equipo_nombre	= 	$nombreEquipo['equipo_nombre'];		
+			$equipo_categoria	= $nombreEquipo['equipo_categoria'];		
 		}
 	}else{
-		$equipo_nombre = '';
+		$equipo_nombre 		= '';
+		$equipo_categoria	= '';
 	}
 	
 	if(isset($_POST['alumno_sedeid'])){
@@ -202,7 +204,7 @@
 									</thead>
 									<tbody>
 										<?php 												
-											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 												
+											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid, $equipo_categoria); 												
 										?>								
 									</tbody>
 								</table>	
