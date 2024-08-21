@@ -153,6 +153,11 @@
 					"campo_nombre"=>"torneo_foto",
 					"campo_marcador"=>":Foto",
 					"campo_valor"=>$foto
+				],
+				[
+					"campo_nombre"=>"torneo_fechaactualizado",
+					"campo_marcador"=>":Actualizado",
+					"campo_valor"=>date("Y-m-d H:i:s")
 				]
 			];
 
