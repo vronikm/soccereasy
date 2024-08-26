@@ -86,6 +86,7 @@
 						<h3 class="card-title">Listado de jugadores</h3>
 						<div class="card-tools">	
 							<a href="<?php echo APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$equipo_id.'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
+							<a href="<?php echo APP_URL.'jugadorListaPDF/'.$equipo_id.'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a>							
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
@@ -111,10 +112,11 @@
 								?>								
 							</tbody>	
 						</table>	
-					</div>
-					<div class="card-footer">		
-						<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Regresar</a>														
-					</div>
+						<div class="card-footer">
+							<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-dark btn-sm">Regresar</a>
+						</div>
+					</div>					
+
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->

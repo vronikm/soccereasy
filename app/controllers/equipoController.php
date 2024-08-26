@@ -11,6 +11,7 @@
 			$equipo_torneoid	= $this->limpiarCadena($_POST['equipo_torneoid']);
 			$equipo_nombre		= $this->limpiarCadena($_POST['equipo_nombre']);
 			$equipo_categoria	= $this->limpiarCadena($_POST['equipo_categoria']);
+			$equipo_sedeid		= $this->limpiarCadena($_POST['equipo_sedeid']);
 			$equipo_estado		= "A";
 
 			# Verificando campos obligatorios #
@@ -121,6 +122,11 @@
 					"campo_valor"=>$equipo_categoria
 				],		
 				[
+					"campo_nombre"=>"equipo_sedeid",
+					"campo_marcador"=>":Sede",
+					"campo_valor"=>$equipo_sedeid
+				],
+				[
 					"campo_nombre"=>"equipo_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=>$equipo_estado
@@ -169,13 +175,14 @@
 			$estado = "";
 			$texto = "";
 			$boton = "";
-			$consulta_datos="SELECT equipo_id, equipo_nombre, equipo_torneoid, torneo_nombre, equipo_categoria,
+			$consulta_datos="SELECT equipo_id, equipo_nombre, equipo_torneoid, torneo_nombre, equipo_categoria, sede_nombre,
 								CASE WHEN equipo_estado='A' THEN 'Activo' 
 									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
 									 ELSE equipo_estado 
 								END AS ESTADO 
-							 FROM torneo_equipo, torneo_torneo
-							 WHERE equipo_torneoid = ".$equipo_torneoid."
+							 FROM torneo_equipo, torneo_torneo, general_sede
+							 WHERE equipo_sedeid = sede_id
+							 	AND equipo_torneoid = ".$equipo_torneoid."
 							 	AND torneo_id = equipo_torneoid
 							 	AND equipo_estado IN ('A','I')
 							 ORDER BY equipo_fechaactualizado ASC";	
@@ -198,6 +205,7 @@
 						<td>'.$rows['torneo_nombre'].'</td>
 						<td>'.$rows['equipo_nombre'].'</td>
 						<td>'.$rows['equipo_categoria'].'</td>
+						<td>'.$rows['sede_nombre'].'</td>
 						<td>'.$estado.'</td>
 						<td>
 							<a href="'.APP_URL.'jugadorNew/'.$equipo_torneoid.'/'.$rows['equipo_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 3px;">Asignar</a>							
@@ -233,13 +241,14 @@
 		}
 
 		public function BuscarEquipo($equipo_id){		
-			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, equipo_categoria, equipo_foto,
+			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, sede_nombre, equipo_categoria, equipo_foto,
 								CASE WHEN equipo_estado = 'A' THEN 'Activo' 
 									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
 									 ELSE equipo_estado 
 								END AS ESTADO 
-							 FROM torneo_equipo
-							 WHERE equipo_estado IN ('A','I')
+							 FROM torneo_equipo, general_sede
+							 WHERE equipo_sedeid = sede_id
+							 	AND equipo_estado IN ('A','I')
 							 	AND equipo_id =".$equipo_id);	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
@@ -263,11 +272,13 @@
 				$equipo=$equipo->fetch();
 				$equipo_estado 		= $equipo['equipo_estado'];
 				$equipo_torneoid	= $equipo['equipo_torneoid'];
+				$equipo_sedeid		= $equipo['equipo_sedeid'];
 			}	
 			
 			# Almacenando datos#
 			$equipo_nombre		= $this->limpiarCadena($_POST['equipo_nombre']);			
 			$equipo_categoria	= $this->limpiarCadena($_POST['equipo_categoria']);
+			$equipo_sedeid		= $this->limpiarCadena($_POST['equipo_sedeid']);
 			
 			# Verificando campos obligatorios #
 			if($equipo_nombre=="" || $equipo_categoria==""){
@@ -296,6 +307,11 @@
 					"campo_marcador"=>":Categoria",
 					"campo_valor"=>$equipo_categoria
 				],		
+				[
+					"campo_nombre"=>"equipo_sedeid",
+					"campo_marcador"=>":Sede",
+					"campo_valor"=>$equipo_sedeid
+				],	
 				[
 					"campo_nombre"=>"equipo_estado",
 					"campo_marcador"=>":Estado",
@@ -531,13 +547,21 @@
 			}
 			return json_encode($alerta);
 		}
+		
+		public function listarOptionSede($sedeid){
+			$option="";
 
-		public function BuscarEquipoJugador($equipo_torneoid){		
-			$consulta_datos=("SELECT torneo_id, torneo_nombre
-							 FROM torneo_torneo
-							 WHERE torneo_id =".$equipo_torneoid);	
-
-			$datos = $this->ejecutarConsulta($consulta_datos);		
-			return $datos;
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($sedeid == $rows['sede_id']){	
+					$option.='<option value='.$rows['sede_id'].' selected="selected">'.$rows['sede_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';
+				}					
+			}
+			return $option;
 		}
     }

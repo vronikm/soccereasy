@@ -32,12 +32,14 @@
 			$modulo_equipo 	= 'actualizar';
 			$equipo_nombre		= $datosEquipo['equipo_nombre'];
 			$equipo_categoria	= $datosEquipo['equipo_categoria'];
+			$equipo_sede		= $datosEquipo['sede_nombre'];
 			$equipo_estado		= $datosEquipo['ESTADO'];			
 		}
 	}else{
 		$modulo_equipo 	= 'registrar';
 		$equipo_nombre 		= '';
-		$equipo_categoria	= '';	
+		$equipo_categoria	= '';
+		$equipo_sedeid		= '';
 		$equipo_estado 		= 'A';
 	}
 ?>
@@ -160,7 +162,14 @@
 														<input type="text" class="form-control" id="equipo_categoria" name="equipo_categoria" value="<?php echo $equipo_categoria; ?>">
 													</div>
 												</div>
-												
+												<div class="col-md-2">
+													<div class="form-group">
+														<label for="equipo_sedeid">Sede</label>
+														<select class="form-control select2" id="equipo_sedeid" name="equipo_sedeid">									
+															<?php echo $insEquipo->listarOptionSede($equipo_sedeid); ?>
+														</select>	
+													</div>
+												</div> 
 												<div class="col-md-12">						
 													<button type="submit" class="btn btn-success btn-xs">Guardar</button>
 													<a href="<?php echo APP_URL.'equipoList/'.$equipo_torneoid.'/'; ?>" class="btn btn-info btn-xs">Cancelar</a>
@@ -181,6 +190,7 @@
 												<th>Torneo</th>
 												<th>Equipo</th>
 												<th>Categoría</th>
+												<th>Sede</th>
 												<th>Estado</th>
 												<th>Jugadores</th>
 												<th style="width: 255px;">Operaciones</th>

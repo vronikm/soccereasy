@@ -2,8 +2,7 @@
 	namespace app\controllers;
 	use app\models\mainModel;
 
-	class jugadorController extends mainModel{
-        
+	class jugadorController extends mainModel{        
 		public function listarSedebusqueda($sedeid){
 			$option="";
 
@@ -89,7 +88,6 @@
 			}
 			return $tabla;			
 		}
-
 		public function listarjugadores($equipo_id){			
 			$tabla="";
 			$consulta_datos = "SELECT jugador_alumnoid, jugador_equipoid,   
@@ -220,8 +218,7 @@
 				];
 			}
 			return json_encode($alerta);
-		}
-        			
+		}        			
 		public function listarCatalogoPosicion(){
 			$option="";
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
@@ -236,7 +233,6 @@
 			}
 			return $option;
 		}
-
         public function listarCatalogoTipo(){
 			$option="";
 
@@ -251,16 +247,16 @@
 				$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
 			}
 			return $option;
-		}
-        
+		}        
 		public function BuscarEquipo($equipo_id){		
-			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, equipo_categoria, equipo_foto,
+			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, equipo_categoria, equipo_sedeid, sede_nombre, equipo_foto,
 								CASE WHEN equipo_estado = 'A' THEN 'Activo' 
 									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
 									 ELSE equipo_estado 
 								END AS ESTADO 
-							 FROM torneo_equipo
-							 WHERE equipo_estado IN ('A','I')
+							 FROM torneo_equipo, general_sede
+							 WHERE equipo_sedeid = sede_id
+							 	AND equipo_estado IN ('A','I')
 							 	AND equipo_id =".$equipo_id);	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
@@ -320,5 +316,26 @@
 				"icono"=>"success"
 			];
 			return json_encode($alerta);			
+		}
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+		public function listaJugadorPDF($equipo_id){		
+			$consulta_datos=("SELECT jugador_alumnoid, jugador_equipoid,   
+									alumno_identificacion, CONCAT(alumno_primernombre, ' ',alumno_segundonombre) AS NOMBRES,  
+									CONCAT(alumno_apellidopaterno, ' ',alumno_apellidomaterno) AS APELLIDOS,
+									alumno_fechanacimiento AS FECHANAC,
+									alumno_identificacion as CEDULA,
+									alumno_numcamiseta AS NUMCAMISETA
+								FROM torneo_jugador 
+									INNER JOIN sujeto_alumno ON alumno_id = jugador_alumnoid
+									INNER JOIN torneo_equipo ON equipo_id = jugador_equipoid
+								WHERE jugador_equipoid = $equipo_id");	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
 		}
     }
