@@ -134,8 +134,8 @@
 												<label for="sede_foto">Foto</label>		
 												<div class="input-group">											
 													<div class="fileinput fileinput-new" data-provides="fileinput">
-														<div class="fileinput-new thumbnail" style="width: 110px; height: 130px;" data-trigger="fileinput"><img src="<?php echo $foto; ?>"> </div>
-														<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 116px; max-height: 144px"></div>
+														<div class="fileinput-new thumbnail" style="width: 200px; height: 130px;" data-trigger="fileinput"><img src="<?php echo $foto; ?>"> </div>
+														<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 130px"></div>
 														<div>
 															<span class="bton bton-white bton-file" style="font-size: 13px;">
 																<span class="fileinput-new">Seleccionar Foto</span>
@@ -154,7 +154,7 @@
 												<div class="col-md-3">
 													<div class="form-group">
 														<label for="sede_nombre">Nombre sede</label>
-														<input type="text"  class="form-control select2" id="sede_nombre" name="sede_nombre" value="<?php echo $sede_nombre; ?>" required>
+														<input type="text" class="form-control select2" id="sede_nombre" name="sede_nombre" value="<?php echo $sede_nombre; ?>" required>
 													</div> 
 												</div>
 												<div class="col-md-3">
