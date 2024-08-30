@@ -180,11 +180,11 @@
 					$valor_pension = $descuento["descuento_valor"];								
 				}
 			}else{
-				$check_pension=$this->ejecutarConsulta("SELECT escuela_pension FROM general_escuela WHERE escuela_id = 1");
+				$check_pension=$this->ejecutarConsulta("SELECT sede_pension	FROM general_sede, sujeto_alumno WHERE alumno_sedeid = sede_id AND alumno_id = ".$alumnoid);
 				$valor_pension="";
 				if($check_pension->rowCount()>0){				
 					foreach($check_pension as $rows){	
-						$valor_pension = $rows["escuela_pension"]; 					
+						$valor_pension = $rows["sede_pension"]; 					
 					}
 				}
 			}
@@ -221,7 +221,7 @@
 						WHEN '10' THEN 'Octubre'
 						WHEN '11' THEN 'Noviembre'
 						WHEN '12' THEN 'Diciembre'
-					END, ' / ', DATE_FORMAT(DATE_ADD('2024-03-04', INTERVAL (units.i + tens.i * 10 + 1) MONTH), '%Y')
+					END, ' / ', DATE_FORMAT(DATE_ADD('".$ultimafecha."', INTERVAL (units.i + tens.i * 10 + 1) MONTH), '%Y')
 					) AS mes    
 				FROM ( SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 ) AS units  
 				JOIN ( SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 ) AS tens 
