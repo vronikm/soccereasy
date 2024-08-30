@@ -222,10 +222,10 @@
 						WHEN '11' THEN 'Noviembre'
 						WHEN '12' THEN 'Diciembre'
 					END, ' / ', DATE_FORMAT(DATE_ADD('".$ultimafecha."', INTERVAL (units.i + tens.i * 10 + 1) MONTH), '%Y')
-					) AS mes    
+					) AS mes, DATE_ADD('".$ultimafecha."', INTERVAL (units.i + tens.i * 10 + 1) MONTH) AS fecha_ordenar    
 				FROM ( SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 ) AS units  
 				JOIN ( SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 ) AS tens 
-				WHERE DATE_ADD('".$ultimafecha."', INTERVAL (units.i + tens.i * 10 + 1) MONTH) <= '".$ultimo_dia."' ORDER BY mes;";	
+				WHERE DATE_ADD('".$ultimafecha."', INTERVAL (units.i + tens.i * 10 + 1) MONTH) <= '".$ultimo_dia."' ORDER BY fecha_ordenar;";	
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
