@@ -21,7 +21,7 @@
 		}
 
         /*----------  Encabezado de búsqueda de alumnos para agregarlos como jugadores  ----------*/
-		public function listarAlumnos($equipo_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede, $equipo_categoria){	
+		public function listarAlumnos($equipo_torneoid, $equipo_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede, $equipo_categoria){	
 			if($identificacion!=""){
 				$identificacion .= '%'; 
 			}
@@ -60,10 +60,11 @@
 			}			
 
 			$consulta_datos .= " AND alumno_estado = 'A'";
-			/*$consulta_datos .= " AND alumno_id NOT IN (SELECT jugador_alumnoid FROM torneo_equipo, torneo_jugador 
+			$consulta_datos .= " AND alumno_id NOT IN (SELECT jugador_alumnoid FROM torneo_equipo, torneo_jugador 
 																			   WHERE equipo_id = jugador_equipoid
+																			   	AND equipo_torneoid = $equipo_torneoid
 																				AND equipo_categoria = $equipo_categoria)";
-*/
+
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
             $posicion = "<select class='form-control' style='font-size: 13px; height: 31px;' id='posicion' name='posicion'>".$this->listarCatalogoPosicion()."</select>";
