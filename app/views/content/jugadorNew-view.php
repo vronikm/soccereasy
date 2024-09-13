@@ -204,7 +204,7 @@
 									</thead>
 									<tbody>
 										<?php 												
-											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid, $equipo_categoria); 												
+											echo $insJugador->listarAlumnos($equipo_torneoid, $equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid, $equipo_categoria); 												
 										?>								
 									</tbody>
 								</table>	
