@@ -313,7 +313,6 @@
 														<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $nombreMes; ?>" <?php echo $disabled; ?> required>															
 													</div>								
 												</div>
-												
 												<div class="col-md-4">
 													<div class="form-group">
 														<label for="pago_valor">Valor</label>
@@ -575,12 +574,12 @@
 
 										<div class="tab-pane" id="uniforme">
 											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-											<input type="hidden" name="modulo_pagos" value="registrar">											
+											<input type="hidden" name="modulo_pagos" value="registraruniforme">											
 											<input type="hidden" name="pago_alumnoid" value="<?php echo $datos['alumno_id']; ?>">
 											<input type="hidden" name="pago_rubro" value="uniforme">
 																	<!-- Post -->
 												<div class="row">
-													<div class="col-md-4">
+													<div class="col-md-3">
 														<div class="form-group">
 															<label for="pago_fecha">Fecha pago uniforme</label>
 															<div class="input-group">
@@ -592,7 +591,7 @@
 															<!-- /.input group -->
 														</div>
 													</div>
-													<div class="col-md-4">
+													<div class="col-md-3">
 														<div class="form-group">
 															<label for="pago_fecharegistro">Fecha registro uniforme</label>
 															<div class="input-group">
@@ -604,11 +603,20 @@
 															<!-- /.input group -->
 														</div>								
 													</div>
-													<div class="col-md-4">
+													<div class="col-md-3">
 														<div class="form-group">
 															<label for="pago_periodo">Periodo uniforme</label>															
 															<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" required>															
 														</div>								
+													</div>
+																									
+													<div class="col-md-3">
+														<div class="form-group">
+														<label for="pago_talla">Talla</label>
+														<select class="form-control select2" id="pago_talla" name="pago_talla" required>																									
+															<?php echo $insAlumno->listarOptionTalla(""); ?>
+														</select>	
+														</div>
 													</div>
 													
 													<div class="col-md-4">

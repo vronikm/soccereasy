@@ -14,6 +14,10 @@
 			echo $insPago->registrarPagoControlador();
 		}
 
+		if($_POST['modulo_pagos']=="registraruniforme"){
+			echo $insPago->registrarPagoUniforme();
+		}
+
 		if($_POST['modulo_pagos']=="pagopendiente"){
 			echo $insPago->registrarPagoPendiente();
 		}
@@ -30,6 +34,9 @@
 		}		
 		if($_POST['modulo_pagos']=="actualizar"){
 			echo $insPago->actualizarPagoControlador();
+		}
+		if($_POST['modulo_pagos']=="actualizaruniforme"){
+			echo $insPago->actualizarPagoUniforme();
 		}
 		if($_POST['modulo_pagos']=="descuento"){
 			echo $insPago->registrarDescuento();

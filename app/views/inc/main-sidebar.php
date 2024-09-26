@@ -62,12 +62,12 @@
             </a>
           </li>
 
-          <li class="nav-item">
+          <!--li class="nav-item">
             <a href="<?php echo APP_URL."profesorList/" ?>" class="nav-link ">
               <i class="nav-icon far fa-circle text-info"></i>
               <p>Profesores</p>
             </a>
-          </li>
+          </li-->
 
           <li class="nav-item">
             <a href="<?php echo APP_URL."torneoList/" ?>" class="nav-link ">
@@ -75,7 +75,7 @@
               <p>Torneos</p>
             </a>
           </li>
-
+  
           <li class="nav-header">Horarios</li>
           <li class="nav-item">
             <a href="#" class="nav-link ">
@@ -106,7 +106,23 @@
               </li>
             </ul>
           </li>
-          
+
+          <li class="nav-header">Empleados</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Empleado<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Personal</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <li class="nav-header">Cobranza</li>
           <li class="nav-item">
             <a href="#" class="nav-link ">
@@ -114,13 +130,19 @@
               <p>Gestión de cobranza<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-
               <li class="nav-item">
-                <a href="<?php echo APP_URL."cobranzaList/" ?>" class="nav-link">
+                <a href="<?php echo APP_URL."cobranzaPension/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Notificaciones</p>
+                  <p>Pensiones</p>
                 </a>
-
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."cobranzaUniforme/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Uniformes</p>
+                </a>
               </li>
             </ul>
           </li>
@@ -137,6 +159,15 @@
                 <a href="<?php echo APP_URL."reportePagos/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Consolidado pagos</p>
+                </a>
+              </li>
+            </ul>
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."reporteRubros/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Alumnos por rubro</p>
                 </a>
               </li>
             </ul>

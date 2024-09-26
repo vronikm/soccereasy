@@ -72,7 +72,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h5 class="m-0">Detalle de valores pendientes <?php echo $repre_nombre; ?></h5>
+							<h5 class="m-0">Detalle de valores pendientes por uniformes de <?php echo $repre_nombre; ?></h5>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -119,12 +119,10 @@
 													<th>Sede</th>												
 													<th>Identificación</th>	
 													<th>Nombre</th>
-													<th>T.Pendientes</th>
-													<th>Saldos Pendientes</th>
-													<th>T. Pensiones</th>																																		
-													<th>Valor Pensiones</th>	
+													<th>Cant.Pendientes</th>
+													<th>Saldo Pendiente</th>
 												</tr>													
-													<?php echo $datos=$insDetallePendiente->valoresPendientes($repre_id);	?>																		
+													<?php echo $datos=$insDetallePendiente->uniformesPendientes($repre_id);	?>																		
 											</tbody>
 										</table>
 									</div>

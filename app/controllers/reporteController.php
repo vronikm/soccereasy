@@ -7,6 +7,8 @@
 	
 		public function listarPagos($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
+			$VALOR_PAGADO = 0;
+			$VALOR_PENDIENTE = 0;
 			$consulta_datos="SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								pago_fecha FECHA_PAGO, 
@@ -56,7 +58,8 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				
+				$VALOR_PAGADO += $rows['VALOR_PAGADO'];
+				$VALOR_PENDIENTE += $rows['VALOR_PENDIENTE'];
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
@@ -67,16 +70,26 @@
 						<td>'.$rows['PERIODO'].'</td>
 						<td>'.$rows['RUBRO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
-						<td>'.$rows['VALOR_PAGADO'].'</td>
-						<td>'.$rows['VALOR_PENDIENTE'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PENDIENTE'].'</td>
 						<td>'.$rows['ESTADO_PAGO'].'</td>
 					</tr>';	
 			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan="8">TOTAL</td>
+					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>
+					<td style="text-align: right">'.number_format($VALOR_PENDIENTE, 2, '.',',').'</td>
+					<td> </td>				
+				</tr>';	
+
 			return $tabla;			
 		}
 
 		public function listarPagosConsolidado($fecha_inicio, $fecha_fin){
 			$tabla="";
+			$VALOR_PAGADO = 0;
+			$VALOR_PENDIENTE = 0;
 			$consulta_datos="SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
 								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
 								pago_fecha FECHA_PAGO, 
@@ -124,7 +137,8 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				
+				$VALOR_PAGADO += $rows['VALOR_PAGADO'];
+				$VALOR_PENDIENTE += $rows['VALOR_PENDIENTE'];
 				$tabla.='
 					<tr>
 						<td>'.$rows['SEDE'].'</td>
@@ -135,11 +149,18 @@
 						<td>'.$rows['PERIODO'].'</td>
 						<td>'.$rows['RUBRO'].'</td>
 						<td>'.$rows['FORMA_PAGO'].'</td>
-						<td>'.$rows['VALOR_PAGADO'].'</td>
-						<td>'.$rows['VALOR_PENDIENTE'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PENDIENTE'].'</td>
 						<td>'.$rows['ESTADO_PAGO'].'</td>
 					</tr>';	
 			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan="8">TOTAL</td>
+					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>
+					<td style="text-align: right">'.number_format($VALOR_PENDIENTE, 2, '.',',').'</td>
+					<td> </td>				
+				</tr>';	
 			return $tabla;			
 		}
 
@@ -242,7 +263,75 @@
 				</tr>';
 				
 			return $tabla;
-		}		
+		}
+		
+		public function listarOptionRubro($rubro){
+			$option ='<option value=0> Seleccione el rubro</option>';
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'rubros'
+									AND T.tabla_estado = 'A'
+									AND C.catalogo_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($rubro == $rows['catalogo_valor']){	
+					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';
+				}else{		
+				$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+                }						
+			}
+			return $option;
+		}
+
+		public function listarAlumnosRubro($sede_id, $rubro){
+			$tabla="";
+			$consulta_datos="SELECT concat_ws(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) ALUMNO,
+								pago_concepto KIT, 
+								year(alumno_fechanacimiento) ANIO_NACIMIENTO, 
+								alumno_numcamiseta NUMCAMISETA, 
+								pago_talla TALLA,
+								sede_nombre SEDE
+								FROM sujeto_alumno 
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								INNER JOIN general_sede on alumno_sedeid =".$sede_id."
+								WHERE pago_estado <> 'E'
+									AND pago_rubroid =".$rubro;
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['ALUMNO'].'</td>
+						<td>'.$rows['KIT'].'</td>
+						<td>'.$rows['ANIO_NACIMIENTO'].'</td>
+						<td>'.$rows['NUMCAMISETA'].'</td>
+						<td>'.$rows['TALLA'].'</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
+
+		public function listarSedebusqueda($sedeid){
+			$option="";
+
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($sedeid == $rows['sede_id']){
+					$option.='<option value='.$rows['sede_id'].' selected>'.$rows['sede_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
+				}		
+			}
+			return $option;
+		}
 	}
 			
 											

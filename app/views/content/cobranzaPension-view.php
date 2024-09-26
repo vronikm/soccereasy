@@ -21,17 +21,14 @@
 	} ELSE{
 		$repre_apellidopaterno = "";
 	}
-
 ?>
-
 
 <html lang="es">
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Representantes</title>
-
+	<title><?php echo APP_NAME; ?>| Cobranza pensiones</title>
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -44,7 +41,6 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -69,7 +65,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Gestión de cobranza</h1>
+				<h1 class="m-0">Gestión de cobranza de pensiones</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -94,8 +90,7 @@
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
-					</div>
-					
+					</div>					
 					<div class="card-body">						
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
@@ -108,19 +103,15 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php echo $insMora->representantesValormora(); ?>								
+								<?php echo $insMora->pensionesValormora(); ?>								
 							</tbody>
 						</table>					
 					</div>
-
-
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
-
 		</section>
-		<!-- /.section -->
-      
+		<!-- /.section -->      
       </div>
       <!-- /.vista -->
 
@@ -132,9 +123,7 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->
-
-    
+    <!-- ./wrapper -->    
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
@@ -153,8 +142,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-	
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>	
 	<!-- Page specific script -->
 	<script>
 		$(function () {
@@ -187,17 +175,8 @@
 			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');			    
 		});
 	</script>
-
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
     
   </body>
 </html>
-
-
-
-
-
-
-
-
