@@ -292,13 +292,15 @@
 								pago_concepto KIT, 
 								year(alumno_fechanacimiento) ANIO_NACIMIENTO, 
 								alumno_numcamiseta NUMCAMISETA, 
-								pago_talla TALLA,
+								catalogo_descripcion TALLA,
 								sede_nombre SEDE
 								FROM sujeto_alumno 
 								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
-								INNER JOIN general_sede on alumno_sedeid =".$sede_id."
+								LEFT JOIN general_tabla_catalogo on pago_talla = catalogo_valor
+								INNER JOIN general_sede on alumno_sedeid = sede_id
 								WHERE pago_estado <> 'E'
-									AND pago_rubroid =".$rubro;
+									AND alumno_sedeid = ".$sede_id."
+									AND pago_rubroid = '".$rubro."'";								
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -316,9 +318,38 @@
 			return $tabla;			
 		}
 
-		public function listarSedebusqueda($sedeid){
-			$option="";
+		public function listarAlumnosRubroConsolidado($rubro){
+			$tabla="";
+			$consulta_datos="SELECT concat_ws(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) ALUMNO,
+								pago_concepto KIT, 
+								year(alumno_fechanacimiento) ANIO_NACIMIENTO, 
+								alumno_numcamiseta NUMCAMISETA, 
+								catalogo_descripcion TALLA,
+								sede_nombre SEDE
+								FROM sujeto_alumno 
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								INNER JOIN general_sede on alumno_sedeid = sede_id
+								LEFT JOIN general_tabla_catalogo on pago_talla = catalogo_valor
+								WHERE pago_estado <> 'E'
+									AND pago_rubroid = '".$rubro."'";
 
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['ALUMNO'].'</td>
+						<td>'.$rows['KIT'].'</td>
+						<td>'.$rows['ANIO_NACIMIENTO'].'</td>
+						<td>'.$rows['NUMCAMISETA'].'</td>
+						<td>'.$rows['TALLA'].'</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
+		public function listarSedebusqueda($sedeid){
+			$option ='<option value=0> Seleccione una sede</option>';
 			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
