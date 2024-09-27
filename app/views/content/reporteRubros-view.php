@@ -143,9 +143,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-								echo $alumno_sedeid;
-								echo $pago_rubro;
+								<?php
 									if($alumno_sedeid!=0){
 										echo $insRubros->listarAlumnosRubro($alumno_sedeid,$pago_rubro); 
 									}else{
