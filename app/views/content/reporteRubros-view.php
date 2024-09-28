@@ -1,7 +1,6 @@
 <?php
 	use app\controllers\reporteController;
 	$insRubros = new reporteController();
-	$sede_id 	  = ($url[1] != "") ? $url[1] : 0;
 
 	if(isset($_POST['alumno_sedeid'])){
 		$alumno_sedeid = $insRubros->limpiarCadena($_POST['alumno_sedeid']);
@@ -13,14 +12,6 @@
 		$pago_rubro = $insRubros->limpiarCadena($_POST['pago_rubro']);
 	} ELSE{
 		$pago_rubro = "";
-	}
-
-	$datos=$insRubros->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
-	if($datos->rowCount()==1){
-		$datos=$datos->fetch();
-		$sede_nombre = $datos['sede_nombre'];
-	}else{
-		$sede_nombre = "";
 	}
 ?>
 
@@ -63,7 +54,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Alumnos por rubro <?php echo $sede_nombre; ?></h1>
+				<h1 class="m-0">Alumnos por rubro </h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
