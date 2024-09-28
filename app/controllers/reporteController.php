@@ -363,6 +363,141 @@
 			}
 			return $option;
 		}
+
+		public function resumenPagos($fecha_inicio, $fecha_fin, $sede_id){
+			$tabla="";
+			$VALOR_PAGADO = 0;
+			$PAGOS = 0;
+			$consulta_datos="SELECT sede_nombre SEDE,
+								pago_fecharegistro FECHA_REG_SISTEMA, 
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO,
+								count(*) PAGOS, 
+								SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
+							FROM alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join general_sede S on S.sede_id = alumno_sedeid
+								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
+								FROM alumno_pago_transaccion PT
+								WHERE PT.transaccion_estado = 'C'
+								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
+								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
+							WHERE pago_estado <> 'E'
+								and alumno_sedeid = ".$sede_id."
+								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+							
+							union all 
+														
+							SELECT sede_nombre SEDE,
+								transaccion_fecharegistro FECHA_REG_SISTEMA,  
+								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO, 
+								count(*) PAGOS,
+								SUM(transaccion_valor) VALOR_PAGADO
+							FROM alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 								
+								inner join general_sede S on S.sede_id = alumno_sedeid
+							WHERE transaccion_estado <> 'E'
+								and alumno_sedeid = ".$sede_id."
+								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+							ORDER BY SEDE, RUBRO";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$VALOR_PAGADO += $rows['VALOR_PAGADO'];
+				$PAGOS += $rows['PAGOS'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['RUBRO'].'</td>
+						<td>'.$rows['FORMA_PAGO'].'</td>
+						<td style="text-align: right">'.$rows['PAGOS'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
+					</tr>';	
+			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan=4">TOTAL</td>
+					<td style="text-align: right">'.number_format($PAGOS, 0, '.',',').'</td>
+					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>				
+				</tr>';
+
+			return $tabla;			
+		}
+
+		public function resumenPagosConsolidado($fecha_inicio, $fecha_fin){
+			$tabla="";
+			$VALOR_PAGADO = 0;
+			$consulta_datos="SELECT sede_nombre SEDE,
+								pago_fecharegistro FECHA_REG_SISTEMA, 
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO,
+								count(*) PAGOS, 
+								SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
+							from alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join general_sede S on S.sede_id = alumno_sedeid
+								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
+								FROM alumno_pago_transaccion PT
+								WHERE PT.transaccion_estado = 'C'
+								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
+								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
+							where pago_estado <> 'E'
+								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+							
+							union all 
+														
+							SELECT sede_nombre SEDE,
+								transaccion_fecharegistro FECHA_REG_SISTEMA,  
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO, 
+								count(*) PAGOS,
+								SUM(transaccion_valor) VALOR_PAGADO
+							from alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 								
+								inner join general_sede S on S.sede_id = alumno_sedeid
+							where transaccion_estado <> 'E'
+								and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							GROUP BY SEDE, FECHA_REG_SISTEMA, RUBRO, FORMA_PAGO
+							ORDER BY SEDE, RUBRO";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$VALOR_PAGADO += $rows['VALOR_PAGADO'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['FECHA_REG_SISTEMA'].'</td>
+						<td>'.$rows['RUBRO'].'</td>
+						<td>'.$rows['FORMA_PAGO'].'</td>
+						<td>'.$rows['PAGOS'].'</td>
+						<td style="text-align: right">'.$rows['VALOR_PAGADO'].'</td>
+					</tr>';	
+			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td colspan="5">TOTAL</td>
+					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>			
+				</tr>';	
+
+			return $tabla;			
+		}
 	}
 			
 											

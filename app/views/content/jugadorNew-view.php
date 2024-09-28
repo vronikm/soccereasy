@@ -96,7 +96,7 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h4 class="m-0">Asignación jugadores Equipo <?php echo $equipo_nombre; ?></h4>
+								<h4 class="m-0">Asignación jugadores Equipo <?php echo $equipo_nombre .' - '.$equipo_categoria; ?></h4>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
