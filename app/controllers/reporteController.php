@@ -439,7 +439,7 @@
 			$VALOR_PAGADO = 0;
 			$consulta_datos="SELECT sede_nombre SEDE,
 								pago_fecharegistro FECHA_REG_SISTEMA, 
-								R.catalogo_descripcion RUBRO,  
+								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO,   
 								F.catalogo_descripcion FORMA_PAGO,
 								count(*) PAGOS, 
 								SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
@@ -497,6 +497,15 @@
 				</tr>';	
 
 			return $tabla;			
+		}
+
+		public function fechaPagosResumen(){		
+			$consulta_fecham="SELECT max(pago_fecharegistro) AS FECHA_MAXIMA
+								FROM alumno_pago, sujeto_alumno
+								WHERE pago_alumnoid = alumno_id
+								ORDER BY pago_fecharegistro";
+			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
+			return $fecha_maxima;
 		}
 	}
 			

@@ -12,7 +12,7 @@
 	if(isset($_POST['pago_fecha_inicio'])){
 		$fecha_inicio = $insResumen->limpiarCadena($_POST['pago_fecha_inicio']);
 	} ELSE{
-		$fecha_inicio = $insResumen->fechaPagosReceptados($sede_id);
+		$fecha_inicio = $insResumen->fechaPagosResumen();
 		$fecha_inicio = $fecha_inicio->fetch(); 
 		$fecha_inicio = $fecha_inicio['FECHA_MAXIMA'];
 	}
@@ -20,7 +20,7 @@
 	if(isset($_POST['pago_fecha_fin'])){
 		$fecha_fin = $insResumen->limpiarCadena($_POST['pago_fecha_fin']);
 	} ELSE{
-		$fecha_fin = $insResumen->fechaPagosReceptados($sede_id);
+		$fecha_fin = $insResumen->fechaPagosResumen();
 		$fecha_fin = $fecha_fin->fetch(); 
 		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
 	}	
