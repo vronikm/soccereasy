@@ -3,8 +3,7 @@
 	namespace app\controllers;
 	use app\models\mainModel;
 
-	class reporteController extends mainModel{
-	
+	class reporteController extends mainModel{	
 		public function listarPagos($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$VALOR_PAGADO = 0;
@@ -263,8 +262,7 @@
 				</tr>';
 				
 			return $tabla;
-		}
-		
+		}		
 		public function listarOptionRubro($rubro){
 			$option ='<option value=0> Seleccione el rubro</option>';
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
@@ -430,7 +428,6 @@
 					<td style="text-align: right">'.number_format($PAGOS, 0, '.',',').'</td>
 					<td style="text-align: right">'.number_format($VALOR_PAGADO, 2, '.',',').'</td>				
 				</tr>';
-
 			return $tabla;			
 		}
 
