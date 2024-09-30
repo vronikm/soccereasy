@@ -439,7 +439,7 @@
 			$VALOR_PAGADO = 0;
 			$consulta_datos="SELECT sede_nombre SEDE,
 								pago_fecharegistro FECHA_REG_SISTEMA, 
-								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO,   
+								R.catalogo_descripcion RUBRO,   
 								F.catalogo_descripcion FORMA_PAGO,
 								count(*) PAGOS, 
 								SUM(((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo))))VALOR_PAGADO
@@ -461,7 +461,7 @@
 														
 							SELECT sede_nombre SEDE,
 								transaccion_fecharegistro FECHA_REG_SISTEMA,  
-								R.catalogo_descripcion RUBRO,  
+								CONCAT_WS(' ', R.catalogo_descripcion, ' - Abono') RUBRO, 
 								F.catalogo_descripcion FORMA_PAGO, 
 								count(*) PAGOS,
 								SUM(transaccion_valor) VALOR_PAGADO
