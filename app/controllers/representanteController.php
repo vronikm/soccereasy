@@ -75,8 +75,10 @@
 			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
 			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
 			$repre_sexo 			  	= "";
+			$repre_factura 			  	= "";
 
 			if (isset($_POST['repre_sexo'])){$repre_sexo = $_POST['repre_sexo'];}	
+			if (isset($_POST['repre_factura'])){$repre_factura = $_POST['repre_factura'];}	
 
 			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
 				$repre_direccion=="" || $repre_correo=="" || $repre_celular==""){
@@ -156,6 +158,11 @@
 					"campo_nombre"=>"repre_parentesco",
 					"campo_marcador"=>":ParentescoRep",
 					"campo_valor"=>$repre_parentesco
+				],
+				[
+					"campo_nombre"=>"repre_factura",
+					"campo_marcador"=>":RepFactura",
+					"campo_valor"=>$repre_factura
 				]
 			];
 
@@ -407,6 +414,7 @@
 			$repre_celular 			  	= $this->limpiarCadena($_POST['repre_celular']);
 			$repre_parentesco 		  	= $this->limpiarCadena($_POST['repre_parentesco']);
 			$repre_sexo 			  	= "";
+			$repre_factura			  	= "";
 
 			# Verificando campos obligatorios #
 			if($repre_identificacion=="" || $repre_primernombre=="" || $repre_apellidopaterno=="" || 
@@ -427,6 +435,18 @@
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error",
 					"texto"=>"No ha completado los campos obligatorios del representante",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			if (isset($_POST['repre_factura'])) {
+				$repre_factura = $_POST['repre_factura'];
+			}else{
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"No ha completado el campo obligatorio requiere factura",
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
@@ -486,6 +506,11 @@
 						"campo_nombre"=>"repre_parentesco",
 						"campo_marcador"=>":ParentescoRep",
 						"campo_valor"=>$repre_parentesco
+					],
+					[
+						"campo_nombre"=>"repre_factura",
+						"campo_marcador"=>":RepFactura",
+						"campo_valor"=>$repre_factura
 					]
 				];
 				$condicion=[

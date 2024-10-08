@@ -6,6 +6,8 @@
 
 	$repre_sexoM 		= "";
 	$repre_sexoF 		= "";
+	$repre_facturaS		= "";
+	$repre_facturaN		= "";
 	$repre_hermanosSi	= "";
 	$repre_hermanosNo	= "";
 	$conyuge_sexoM		= "";
@@ -18,6 +20,12 @@
 			$repre_sexoM = "checked";
 		}else{
 			$repre_sexoF = "checked";
+		}
+
+		if ($datosrepresentante['repre_factura']=='S'){
+			$repre_facturaS = "checked";
+		}else{
+			$repre_facturaN = "checked";
 		}
 	
 		$repre_id					= $datosrepresentante['repre_id'];
@@ -179,22 +187,6 @@
 									<input type="hidden" name="modulo_repre" value="actualizar">	
 									<input type="hidden" name="repre_id" value="<?php echo $datosrepresentante['repre_id']; ?>">																					
 									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_identificacion">Identificación</label>                        
-												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" value="<?php echo $repre_identificacion; ?>" >
-											</div>
-										</div>                   
-										<div class="col-md-4">                        
-											<div class="form-group">
-												<label for="repre_apellidopaterno">Apellido paterno</label>
-												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" value="<?php echo $repre_apellidopaterno; ?>" >
-											</div>
-										</div>
-										<div class="col-md-4">
-											<label for="repre_apellidomaterno">Apellido materno</label>
-											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" value="<?php echo $repre_apellidomaterno; ?>" >
-										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label for="repre_tipoidentificacion">Tipo identificación</label>
@@ -202,6 +194,22 @@
 													<?php echo $insRepre->listarOptionTipoIdentificacion($repre_tipoidentificacion); ?>
 												</select>
 											</div>          
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_identificacion">Identificación</label>                        
+												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" value="<?php echo $repre_identificacion; ?>" >
+											</div>
+										</div>                   
+										<div class="col-md-3">                        
+											<div class="form-group">
+												<label for="repre_apellidopaterno">Apellido paterno</label>
+												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" value="<?php echo $repre_apellidopaterno; ?>" >
+											</div>
+										</div>
+										<div class="col-md-3">
+											<label for="repre_apellidomaterno">Apellido materno</label>
+											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" value="<?php echo $repre_apellidomaterno; ?>" >
 										</div>
 										<div class="col-md-3">                        
 											<div class="form-group">
@@ -220,6 +228,17 @@
 													<?php echo $insRepre->listarOptionParentesco($repre_parentesco); ?>
 												</select>
 											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_sexo">Sexo</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" <?php echo $repre_sexoM;?> >
+													<label class="col-sm-5 form-check-label" for="repre_sexoM" style="font-size: 14px;">Masculino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" name="repre_sexo" value="F" <?php echo $repre_sexoF;?> >
+													<label class="col-sm-4 form-check-label" for="repre_sexoF" style="font-size: 14px;">Femenino</label>
+												</div> 
+											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
@@ -241,12 +260,12 @@
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
+												<label for="repre_factura">Requiere factura</label>
 												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" <?php echo $repre_sexoM;?> >
-													<label class="col-sm-5 form-check-label" for="repre_sexoM">Masculino</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" name="repre_sexo" value="F" <?php echo $repre_sexoF;?> >
-													<label class="col-sm-4 form-check-label" for="repre_sexoF">Femenino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaS" value="S" name="repre_factura" <?php echo $repre_facturaS;?>>
+													<label class="col-sm-5 form-check-label" for="repre_facturaS">Si</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaN" value="N" name="repre_factura" <?php echo $repre_facturaN;?>>
+													<label class="col-sm-4 form-check-label" for="repre_facturaN">No</label>
 												</div> 
 											</div>
 										</div>

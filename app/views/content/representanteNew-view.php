@@ -117,22 +117,6 @@
 									<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/representanteAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">
 									<input type="hidden" name="modulo_repre" value="registrar">																						
 									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<label for="repre_identificacion">Identificación</label>                        
-												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" placeholder="Identificación" required>
-											</div>
-										</div>                   
-										<div class="col-md-4">                        
-											<div class="form-group">
-												<label for="repre_apellidopaterno">Apellido paterno</label>
-												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" placeholder="Primer apellido" required>
-											</div>
-										</div>
-										<div class="col-md-4">
-											<label for="repre_apellidomaterno">Apellido materno</label>
-											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" placeholder="Segundo apellido" >
-										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label for="repre_tipoidentificacion">Tipo identificación</label>
@@ -140,6 +124,22 @@
 													<?php echo $insRepre->listarCatalogoTipoDocumento(); ?>
 												</select>
 											</div>          
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_identificacion">Identificación</label>                        
+												<input type="text" class="form-control" id="repre_identificacion" name="repre_identificacion" placeholder="Identificación" required>
+											</div>
+										</div>                   
+										<div class="col-md-3">                        
+											<div class="form-group">
+												<label for="repre_apellidopaterno">Apellido paterno</label>
+												<input type="text" class="form-control" id="repre_apellidopaterno" name="repre_apellidopaterno" placeholder="Primer apellido" required>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<label for="repre_apellidomaterno">Apellido materno</label>
+											<input type="text" class="form-control" id="repre_apellidomaterno" name="repre_apellidomaterno" placeholder="Segundo apellido" >
 										</div>
 										<div class="col-md-3">                        
 											<div class="form-group">
@@ -158,6 +158,17 @@
 													<?php echo $insRepre->listarCatalogoParentesco(); ?>
 												</select>
 											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_sexo">Sexo</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" value="M" name="repre_sexo" required>
+													<label class="col-sm-5 form-check-label" for="repre_sexoM" style="font-size: 14px;">Masculino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" value="F" name="repre_sexo" >
+													<label class="col-sm-4 form-check-label" for="repre_sexoF" style="font-size: 14px;">Femenino</label>
+												</div> 
+											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
@@ -179,12 +190,12 @@
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
+												<label for="repre_factura">Requiere factura</label>
 												<div class="form-check">
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" value="M" name="repre_sexo" required>
-													<label class="col-sm-5 form-check-label" for="repre_sexoM">Masculino</label>
-													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoF" value="F" name="repre_sexo" >
-													<label class="col-sm-4 form-check-label" for="repre_sexoF">Femenino</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaS" value="S" name="repre_factura" required>
+													<label class="col-sm-5 form-check-label" for="repre_facturaS">Si</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaN" value="N" name="repre_factura" >
+													<label class="col-sm-4 form-check-label" for="repre_facturaN">No</label>
 												</div> 
 											</div>
 										</div>
