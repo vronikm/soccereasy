@@ -274,17 +274,17 @@
 		}
 		public function listarOptionProfesor($lugar_sedeid, $profesorid){			
 			$option="";
-			$consulta_datos="SELECT profesor_id, profesor_nombre 
-				FROM sujeto_profesor
-				WHERE profesor_estado = 'A'";
+			$consulta_datos="SELECT empleado_id, empleado_nombre 
+				FROM sujeto_empleado
+				WHERE empleado_estado = 'A'";
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
-				if($profesorid == $rows["profesor_id"]){
-					$option.='<option value='.$rows['profesor_id'].' selected>'.$rows['profesor_nombre'].'</option>';	
+				if($profesorid == $rows["empleado_id"]){
+					$option.='<option value='.$rows['empleado_id'].' selected>'.$rows['empleado_nombre'].'</option>';	
 				}else{
-					$option.='<option value='.$rows['profesor_id'].'>'.$rows['profesor_nombre'].'</option>';	
+					$option.='<option value='.$rows['empleado_id'].'>'.$rows['empleado_nombre'].'</option>';	
 				}			
 			}
 			return $option;
@@ -292,11 +292,11 @@
 
 		public function listarDetalleHorario($horario_id){			
 			$option="";
-			$consulta_datos="SELECT  lugar_id, lugar_sedeid, detalle_horaid, profesor_id, detalle_dia	  
+			$consulta_datos="SELECT  lugar_id, lugar_sedeid, detalle_horaid, empleado_id, detalle_dia	  
 							FROM asistencia_horario_detalle
 							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
 							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
-							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							LEFT JOIN sujeto_empleado ON empleado_id = detalle_profesorid	 
 							WHERE detalle_horarioid = ".$horario_id
 							.' ORDER BY detalle_dia';
 							
@@ -362,7 +362,7 @@
 				$column3 = "<select class='form-control' id='hora' name='hora[]'>".$this->listarOptionHora($rows['detalle_horaid'])."</select>";
 				
 				// Columna 4: Profesores con PHP
-				$column4 = "<select class='form-control' id='profesor' name='profesor[]'>".$this->listarOptionProfesor($rows['lugar_sedeid'], $rows['profesor_id'])."</select>";
+				$column4 = "<select class='form-control' id='profesor' name='profesor[]'>".$this->listarOptionProfesor($rows['lugar_sedeid'], $rows['empleado_id'])."</select>";
 				
 				$option.=		
 					"<tr><td>".$column1."</td>
@@ -413,14 +413,14 @@
 							
 							SELECT 
 								'Profesor' AS Categoria,
-								MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
-								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
-								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
-								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
-								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes
+								MAX(CASE WHEN detalle_dia = 1 THEN empleado_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN empleado_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN empleado_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN empleado_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN empleado_nombre END) AS Viernes
 							FROM asistencia_horario 
 							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
-							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							LEFT JOIN sujeto_empleado ON empleado_id = detalle_profesorid	 
 							WHERE horario_id = ".$horario_id."
 							GROUP BY Categoria";
 		
@@ -477,14 +477,14 @@
 		public function ProfesorPDF($horario_id){			
 			$consulta_datos = "SELECT 
 								'Profesor' AS Categoria,
-								MAX(CASE WHEN detalle_dia = 1 THEN profesor_nombre END) AS Lunes,
-								MAX(CASE WHEN detalle_dia = 2 THEN profesor_nombre END) AS Martes,
-								MAX(CASE WHEN detalle_dia = 3 THEN profesor_nombre END) AS Miercoles,
-								MAX(CASE WHEN detalle_dia = 4 THEN profesor_nombre END) AS Jueves,
-								MAX(CASE WHEN detalle_dia = 5 THEN profesor_nombre END) AS Viernes
+								MAX(CASE WHEN detalle_dia = 1 THEN empleado_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN empleado_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN empleado_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN empleado_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN empleado_nombre END) AS Viernes
 							FROM asistencia_horario 
 							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
-							LEFT JOIN sujeto_profesor ON profesor_id = detalle_profesorid	 
+							LEFT JOIN sujeto_empleado ON empleado_id = detalle_profesorid	 
 							WHERE horario_id = ".$horario_id;		
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);	
@@ -1005,6 +1005,140 @@
 			}
 			return json_encode($alerta);
 		}
-		
+		//-------------------------------------------------Asignar alumnos--------------------------------------
+		public function listarAlumnos($horario_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede){	
+			if($identificacion!=""){
+				$identificacion .= '%'; 
+			}
+			if($primernombre!=""){
+				$primernombre .= '%';
+			} 
+			if($apellidopaterno!=""){
+				$apellidopaterno .= '%';
+			} 			
+
+			$tabla="";
+			$consulta_datos="SELECT * FROM sujeto_alumno 
+								WHERE (alumno_primernombre LIKE '".$primernombre."' 
+								OR alumno_identificacion LIKE '".$identificacion."' 
+								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
+			if($anio!=""){
+				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
+			}
+
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
+				$consulta_datos="SELECT * FROM sujeto_alumno WHERE YEAR(alumno_fechanacimiento) = '".$anio."'";
+			}
+			
+			if($identificacion=="" && $primernombre=="" && $apellidopaterno=="" && $anio == ""){
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre <> '' ";
+			}
+
+			if($sede!=""){
+				if($sede == 0){
+					$consulta_datos .= " and alumno_sedeid <> '$sede'"; 
+				}else{
+					$consulta_datos .= " and alumno_sedeid = '$sede'"; 
+				}
+			}else{
+				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
+			}			
+
+			$consulta_datos .= " AND alumno_estado = 'A'";
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+
+			foreach($datos as $rows){
+				$tabla.='					
+					<tr>
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+						<td>'.$sede.'</td>
+						<td><input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>												
+							<input type="hidden" name="modulo_asistencia" value="asignar_alumno">	
+							<input type="hidden" name="horario_id" value="'.$horario_id.'">					
+							<button type="submit" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;"">Agregar</button>					
+						</td>
+						</form>
+					</tr>
+					';
+			}
+			return $tabla;			
+		}
+
+		public function buscarHorario($horario_id){
+			$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_id = ".$horario_id;	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function listarSedebusqueda($sedeid){
+			$option="";
+
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($sedeid == $rows['sede_id']){
+					$option.='<option value='.$rows['sede_id'].' selected>'.$rows['sede_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
+				}		
+			}
+			return $option;
+		}
+
+		public function asignarAlumno(){	
+			# Almacenando datos 			
+			$horario_id = $this->limpiarCadena($_POST['horario_id']);
+			$alumno_id = $_POST['alumno_id'];
+
+			
+			# Verificando campos obligatorios #
+			if($horario_id=="" || $alumno_id== ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No existe información de la asignación de horario al alumno",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			$asignacion_horario_reg = [
+				[
+					"campo_nombre" => "asignahorario_horarioid",
+					"campo_marcador" => ":Horarioid",
+					"campo_valor" => $horario_id
+				],
+				[
+					"campo_nombre" => "asignahorario_alumnoid",
+					"campo_marcador" => ":Alumnoid",
+					"campo_valor" => $alumno_id
+				]
+			];
+			
+			$asignar_horario=$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
+			
+			if($asignar_horario->rowCount()==1){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Alumno agregado",
+					"texto"=>"El alumno fue agregado correctamente al horario seleccionado",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No fue posible agregar el alumno asignar_horario",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);			
+		}
 	}
 			

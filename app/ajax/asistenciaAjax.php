@@ -33,6 +33,9 @@
 		}
 		if($_POST['modulo_asistencia']=="actualizar_horario"){
 			echo $insPago->actualizarHorario();
+		}
+		if($_POST['modulo_asistencia']=="asignar_alumno"){
+			echo $insPago->asignarAlumno();
 		}		
 
 	}else{

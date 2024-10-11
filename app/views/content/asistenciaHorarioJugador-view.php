@@ -1,48 +1,49 @@
 <?php
-	use app\controllers\jugadorController;
-	$insJugador = new jugadorController();	
+	use app\controllers\asistenciaController;
+	$insAsignar = new asistenciaController();	
 
-	$equipo_torneoid = ($url[1] != "") ? $url[1] : 0;
-	$equipo_id 		 = ($url[2] != "") ? $url[2] : 0;
+	$horario_id = ($url[1] != "") ? $url[1] : 0;
 	
-	$modulo_equipo	= '';
+	$modulo_asistencia	= '';
 
-	if($equipo_id != 0){
-		$nombreEquipo=$insJugador->BuscarEquipo($equipo_id);		
-		if($nombreEquipo->rowCount()==1){
-			$nombreEquipo	=	$nombreEquipo->fetch();				
-			$equipo_nombre	= 	$nombreEquipo['equipo_nombre'];		
+	if($horario_id != 0){
+		$nombreHorario=$insAsignar->buscarHorario($horario_id);		
+		if($nombreHorario->rowCount()==1){
+			$nombreHorario		=	$nombreHorario->fetch();				
+			$horario_nombre		= 	$nombreHorario['horario_nombre'];		
+			$horario_detalle	= 	$nombreHorario['horario_detalle'];		
 		}
 	}else{
-		$equipo_nombre = '';
+		$horario_nombre 		= '';
+		$horario_detalle	= '';
 	}
 	
 	if(isset($_POST['alumno_sedeid'])){
-		$alumno_sedeid = $insJugador->limpiarCadena($_POST['alumno_sedeid']);
+		$alumno_sedeid = $insAsignar->limpiarCadena($_POST['alumno_sedeid']);
 	} ELSE{
 		$alumno_sedeid = "";
 	}
 
 	if(isset($_POST['alumno_identificacion'])){
-		$alumno_identificacion = $insJugador->limpiarCadena($_POST['alumno_identificacion']);
+		$alumno_identificacion = $insAsignar->limpiarCadena($_POST['alumno_identificacion']);
 	} ELSE{
 		$alumno_identificacion = "";
 	}
 
 	if(isset($_POST['alumno_nombre1'])){
-		$alumno_primernombre = $insJugador->limpiarCadena($_POST['alumno_nombre1']);
+		$alumno_primernombre = $insAsignar->limpiarCadena($_POST['alumno_nombre1']);
 	} ELSE{
 		$alumno_primernombre = "";
 	}
 
 	if(isset($_POST['alumno_apellido1'])){
-		$alumno_apellidopaterno = $insJugador->limpiarCadena($_POST['alumno_apellido1']);
+		$alumno_apellidopaterno = $insAsignar->limpiarCadena($_POST['alumno_apellido1']);
 	} ELSE{
 		$alumno_apellidopaterno = "";
 	}
 	
 	if(isset($_POST['alumno_ano'])){
-		$alumno_anio = $insJugador->limpiarCadena($_POST['alumno_ano']);
+		$alumno_anio = $insAsignar->limpiarCadena($_POST['alumno_ano']);
 	} ELSE{
 		$alumno_anio = "";
 	}	
@@ -54,7 +55,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title><?php echo APP_NAME; ?>| Jugadores</title>
+		<title><?php echo APP_NAME; ?>| Asignación horario</title>
 
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -94,7 +95,7 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h4 class="m-0">Asignación alumnos horario <?php echo $equipo_nombre; ?></h4>
+								<h4 class="m-0">Asignación Horario <?php echo $horario_nombre .' - '.$horario_detalle; ?></h4>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
@@ -110,7 +111,7 @@
 				<!-- Section listado de alumnos -->
 				<section class="content">					
 					<div class="container-fluid">
-						<form action="<?php echo APP_URL."jugadorNew/".$equipo_torneoid."/".$equipo_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >					
+						<form action="<?php echo APP_URL."asistenciaHorarioJugador/".$horario_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >					
 							<div class="card card-default">
 								<div class="card-header" style='height: 40px;'>
 									<h3 class="card-title">Búsqueda de alumnos</h3>
@@ -162,7 +163,7 @@
 															echo "<option value='0'>Todas</option>";	
 														}
 													?>																		
-													<?php echo $insJugador->listarSedebusqueda($alumno_sedeid); ?>
+													<?php echo $insAsignar->listarSedebusqueda($alumno_sedeid); ?>
 												</select>	
 											</div>
 										</div>
@@ -192,32 +193,27 @@
 								<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 14px;">
 									<thead>
 										<tr>
+											<th>Sede</th>	
 											<th>Identificación</th>
 											<th>Nombres y Apellidos</th>
-											<th>Año</th>		
-											<th>Posición de juego</th>							
-											<th>Tipo</th>
+											<th>Año</th>
 											<th></th>	
 										</tr>
 									</thead>
 									<tbody>
 										<?php 												
-											echo $insJugador->listarAlumnos($equipo_id, $alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 												
+											echo $insAsignar->listarAlumnos($horario_id,$alumno_identificacion,$alumno_apellidopaterno, $alumno_primernombre, $alumno_anio, $alumno_sedeid); 												
 										?>								
 									</tbody>
 								</table>	
 							</div>
-							<div class="card-footer">	
-								<button onclick="cerrarPestana()" class="btn btn-dark btn-sm">Regresar</button>																							
-							</div>				
-							
-						</div>	
-
-					</div>					
-				</section>
-				
+							<div class="card-footer">		
+								<a href="<?php echo APP_URL.'asistenciaListHorario/'; ?>" class="btn btn-dark btn-sm">Regresar</a>														
+							</div>	
+						</div>
+					</div>				
+				</section>				
 			</div><!-- /.container-fluid -->
-
 
 			<?php require_once "app/views/inc/footer.php"; ?>
 
@@ -255,18 +251,36 @@
 			$(function () {
 				$("#example1").DataTable({
 				"responsive": true, "lengthChange": false, "autoWidth": false,
+				"language": {
+					"decimal": "",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+					"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+					"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+					"infoPostFix": "",
+					"thousands": ",",
+					"lengthMenu": "Mostrar _MENU_ entradas",
+					"loadingRecords": "Cargando...",
+					"processing": "Procesando...",
+					"search": "Buscar:",
+					"zeroRecords": "No se encontraron registros coincidentes",
+					"paginate": {
+						"first": "Primero",
+						"last": "Último",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					},
+					"aria": {
+						"sortAscending": ": activar para ordenar la columna ascendente",
+						"sortDescending": ": activar para ordenar la columna descendente"
+					}
+				},
 				}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');			    
 			});
 		</script>
 
 		<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 		<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
-
-		<script type="text/javascript">
-			function cerrarPestana() {
-				window.close();
-			}
-		</script>
 
 	</body>
 </html>
