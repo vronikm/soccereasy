@@ -123,6 +123,30 @@
             </ul>
           </li>
 
+          <li class="nav-header">Balance General</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Balance general<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."ingresoList/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Ingresos</p>
+                </a>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Egresos</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <li class="nav-header">Cobranza</li>
           <li class="nav-item">
             <a href="#" class="nav-link ">
@@ -177,6 +201,15 @@
                 <a href="<?php echo APP_URL."reportePagosReceptadosResumen/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Resumen pagos</p>
+                </a>
+              </li>
+            </ul>
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."reporteRepresentanteFactura/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Facturación</p>
                 </a>
               </li>
             </ul>

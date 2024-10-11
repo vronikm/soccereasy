@@ -18,7 +18,8 @@
 						  ,"jugadorLista","jugadorNew", "asistenciaHorarioJugador","cobranzaPension"
 						  ,"cobranzaUniforme","cobranzaDetallePension","cobranzaDetalleUniforme"
 						  ,"jugadorListaPDF", "empleadoIE", "empleadoDescargaEgreso","pagosUniformeUpdate"
-						  ,"reporteRubros","reportePagosReceptadosResumen","alumnoListaPDF"];
+						  ,"reporteRubros","reportePagosReceptadosResumen","alumnoListaPDF","ingresoList"
+						  ,"reporteRepresentanteFactura"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

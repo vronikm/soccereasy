@@ -504,6 +504,52 @@
 			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
 			return $fecha_maxima;
 		}
+
+		public function fechaPagosCompletos(){		
+			$consulta_fecham="SELECT max(pago_fecharegistro) AS FECHA_MAXIMA
+								FROM alumno_pago, sujeto_alumno
+								WHERE pago_alumnoid = alumno_id
+									AND pago_estado = 'C'
+								ORDER BY pago_fecharegistro";
+			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
+			return $fecha_maxima;
+		}
+
+		public function  pagosFacturacion($fecha_inicio, $fecha_fin){
+			$tabla="";
+			$consulta_datos="SELECT sede_nombre AS SEDE, repre_identificacion AS IDENTIFICACION, 
+								concat_ws(' ', repre_primernombre, repre_segundonombre, repre_apellidopaterno, repre_apellidomaterno) as REPRESENTANTE,
+								repre_direccion DIRECCION, repre_correo CORREO, repre_celular CELULAR,
+								concat_ws(' ', alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) AS ALUMNO,
+								catalogo_descripcion AS RUBRO, pago_valor AS VALOR, pago_fecharegistro AS FECHA_REGISTRO
+							from alumno_representante, sujeto_alumno, alumno_pago, general_tabla_catalogo, general_sede
+							where alumno_repreid = repre_id
+								and alumno_id = pago_alumnoid 
+								and pago_rubroid = catalogo_valor
+								and alumno_sedeid = sede_id
+								and repre_factura = 'S'
+								and pago_estado = 'C'
+								and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['IDENTIFICACION'].'</td>
+						<td>'.$rows['REPRESENTANTE'].'</td>
+						<td>'.$rows['DIRECCION'].'</td>
+						<td>'.$rows['CORREO'].'</td>
+						<td>'.$rows['CELULAR'].'</td>
+						<td>'.$rows['ALUMNO'].'</td>
+						<td>'.$rows['RUBRO'].'</td>
+						<td>'.$rows['VALOR'].'</td>
+						<td>'.$rows['FECHA_REGISTRO'].'</td>
+					</tr>';	
+			}
+			return $tabla;
+		}
 	}
 			
 											

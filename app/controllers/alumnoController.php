@@ -731,24 +731,25 @@
 		}
 
 		/*----------  Obtener la posición de juego guardada  ----------*/
-		public function listarOptionPosicionJuego($alumno_posicionid){
-			$option="";
+		public function listarAlumnosPDF($categoriaid,$sedeid){		
+			$consulta_datos=("SELECT sede_nombre, alumno_identificacion, alumno_primernombre, alumno_segundonombre, 
+									alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento
+								FROM sujeto_alumno, general_sede
+								WHERE alumno_estado = 'A'
+									AND alumno_sedeid = sede_id");	
 
-			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
-								FROM general_tabla_catalogo C
-								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
-								WHERE T.tabla_nombre = 'posicion_juego'";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				if($alumno_posicionid == $rows['catalogo_valor']){
-					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';	
-				}else{
-					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
-				}
+			if($categoriaid!=0){
+				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = ".$categoriaid; 
 			}
-			return $option;
+
+			if($sedeid!=0){
+				$consulta_datos .= " and alumno_sedeid = ".$sedeid; 
+			}
+
+			$consulta_datos.= " ORDER BY alumno_fechanacimiento";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
 		}
 
 		public function listarOptionParentesco($cemer_parentesco){
@@ -1929,4 +1930,10 @@
 			}
 			return $option;
 		}		
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
 	}
