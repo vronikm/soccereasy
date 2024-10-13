@@ -1470,6 +1470,7 @@
             $egreso_fechaegreso 	= $this->limpiarCadena($_POST['egreso_fechaegreso']);
             $egreso_fecharegistro	= $this->limpiarCadena($_POST['egreso_fecharegistro']);
             $egreso_periodo 		= $this->limpiarCadena($_POST['egreso_periodo']);
+			$egreso_descargado     	= 0;
             $egreso_estado          = "P";
            
             if ($egreso_valor =="") {$egreso_valor = 0;}
@@ -1509,6 +1510,11 @@
 					"campo_nombre"=>"egreso_pendiente",
 					"campo_marcador"=>":Saldo",
 					"campo_valor"=>$egreso_pendiente
+				],	
+				[
+					"campo_nombre"=>"egreso_descargado",
+					"campo_marcador"=>":Saldo",
+					"campo_valor"=>$egreso_descargado
 				],	
 				[
 					"campo_nombre"=>"egreso_concepto",
