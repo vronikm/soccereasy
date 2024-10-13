@@ -733,7 +733,10 @@
         public function listarOptionPago($ingreso_formapagoid){
 			$option="";
 
-			$consulta_datos="SELECT * FROM general_tabla_catalogo WHERE catalogo_tablaid = 6 AND catalogo_estado = 'A'";	
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'forma_pago' AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -750,7 +753,10 @@
         public function listarTipoIngreso($ingreso_tipoingresoid){
 			$option="";
 
-			$consulta_datos="SELECT * FROM general_tabla_catalogo WHERE catalogo_tablaid = 10 AND catalogo_estado = 'A'";	
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'tipo_ingreso' AND catalogo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1961,13 +1967,6 @@
 				</tr>';	
 			}
 			return $tabla;			
-		}
-
-		public function BuscarDescargoEgreso($egreso_id){		
-			$consulta_datos="SELECT E.* FROM empleado_egreso_trx WHERE (E.ingreso_id = ".$egreso_id;	
-
-			$datos = $this->ejecutarConsulta($consulta_datos);		
-			return $datos;
 		}
 
 		public function eliminarDescargoEgreso(){
