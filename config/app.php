@@ -1,8 +1,8 @@
 <?php
 
-	const APP_URL="https://soccereasy.digitech.com.ec/";
-	const APP_NAME="SoccerEasy";
-	const APP_SESSION_NAME="SoccerEasy";
+	const APP_URL="http://localhost/soccereasy/";
+	const APP_NAME="IDV";
+	const APP_SESSION_NAME="EasySoccer";
 
 
 	/*----------  Zona horaria  ----------*/
