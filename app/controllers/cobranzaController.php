@@ -7,11 +7,10 @@
         /*----------  Matriz de representantes con opciones Ver, Actualizar, Eliminar  ----------*/
 		public function pensionesValormora(){
 			$tabla="";
-			$consulta_datos = "select alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular,
+			$consulta_datos = "select alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular, ALUMNO,
                                     SUM(SALDO) + SUM(PENSION) AS TOTAL_MORA
                                      FROM(
-                                        SELECT 
-                                                alumno_repreid, 
+                                        SELECT  alumno_repreid, 
                                                 repre_identificacion,
                                                 CONCAT_WS(' ',repre_primernombre, repre_segundonombre, repre_apellidopaterno, repre_apellidomaterno) as REPRE,
                                                 IFNULL(P.SALDO,0) AS SALDO, 
@@ -20,7 +19,8 @@
                                                 P.FECHASALDOS,
                                                 FECHATRX.FECHATRX,
                                                 sede_nombre,
-                                                repre_celular
+                                                repre_celular,
+												CONCAT_WS(' ',alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) as ALUMNO
                                             FROM sujeto_alumno A
                                             inner join general_sede on sede_id = alumno_sedeid
                                             LEFT JOIN (
@@ -69,7 +69,7 @@
                                             ) FECHATRX on FECHATRX.pago_alumnoid = A.alumno_id
                                             WHERE PEN.TOTAL > 0 OR P.SALDO > 0
                                         ) as VALORESMORA			
-                                    group by alumno_repreid, repre_identificacion, REPRE, sede_nombre, repre_celular";
+                                    group by alumno_repreid, repre_identificacion, REPRE, sede_nombre, repre_celular, ALUMNO";
 				
 			$datos = $this->ejecutarConsulta($consulta_datos);
 		
@@ -84,6 +84,7 @@
                         <td>'.$rows['sede_nombre'].'</td>
 						<td>'.$rows['repre_identificacion'].'</td>
 						<td>'.$rows['REPRE'].'</td>
+						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
 						<td>                            
 							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente de pensiones, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										
@@ -96,7 +97,7 @@
 
 		public function uniformesValormora(){
 			$tabla="";
-			$consulta_datos = "SELECT alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular, SUM(SALDO) AS TOTAL_MORA
+			$consulta_datos = "SELECT alumno_repreid as repre_id, sede_nombre, repre_identificacion, REPRE, repre_celular, ALUMNO, SUM(SALDO) AS TOTAL_MORA
 									FROM(
 										SELECT 
 												alumno_repreid, 
@@ -106,7 +107,8 @@
 												P.FECHASALDOS,
 												FECHATRX.FECHATRX,
 												sede_nombre,
-												repre_celular
+												repre_celular,
+												CONCAT_WS(' ',alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno) as ALUMNO
 											FROM sujeto_alumno A
 											inner join general_sede on sede_id = alumno_sedeid
 											LEFT JOIN (
@@ -131,7 +133,7 @@
 													) FECHATRX on FECHATRX.pago_alumnoid = A.alumno_id
 													WHERE P.SALDO > 0
 												) as VALORESMORA			
-											group by alumno_repreid, repre_identificacion, REPRE, sede_nombre, repre_celular";
+											group by alumno_repreid, repre_identificacion, REPRE, sede_nombre, repre_celular, ALUMNO";
 				
 			$datos = $this->ejecutarConsulta($consulta_datos);
 		
@@ -146,6 +148,7 @@
                         <td>'.$rows['sede_nombre'].'</td>
 						<td>'.$rows['repre_identificacion'].'</td>
 						<td>'.$rows['REPRE'].'</td>
+						<td>'.$rows['ALUMNO'].'</td>
 						<td>'.$rows['TOTAL_MORA'].'</td>
 						<td>                            
 							<a href="https://wa.me/593'.$celular.'?text=Estimado representante, Escuela IDV Loja le recuerda que a la presente fecha usted mantiene un saldo pendiente de uniformes, por el valor de USD $'.$rows["TOTAL_MORA"].', agradecemos su gentileza en realizar el pago correspondiente." target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Notificar</a>										

@@ -1567,10 +1567,10 @@
                                 F.catalogo_descripcion as FormaEgreso, T.catalogo_descripcion as TipoEgreso, E.* 
                                 FROM empleado_egreso E
                                 LEFT JOIN (
-                                    SELECT COUNT(1)PAGOS_PENDIENTES, trxh_pagoid 
-                                    FROM empleado_ingreso_trx
-                                    GROUP BY trxh_pagoid
-                                )P ON P.trxh_pagoid = E.egreso_id
+                                    SELECT COUNT(1)PAGOS_PENDIENTES, trxegreso_egresoid 
+                                    FROM empleado_egreso_trx
+                                    GROUP BY trxegreso_egresoid
+                                )P ON P.trxegreso_egresoid = E.egreso_id
                                 LEFT JOIN general_tabla_catalogo F on F.catalogo_valor = egreso_formaegresoid 
                                 LEFT JOIN general_tabla_catalogo T on T.catalogo_valor = egreso_tipoid 
                                 WHERE (E.egreso_empleadoid = '".$empleadoid."' AND E.egreso_estado NOT IN ('E')) ORDER BY egreso_id DESC";
@@ -1618,7 +1618,7 @@
 							<input type="hidden" name="egreso_id" value="'.$rows['egreso_id'].'">						
 							<button type="submit" class="btn float-right btn-danger btn-sm " style="margin-right: 5px;" '.$eliminaregreso.'>Eliminar</button>
 						</form>
-						<a href="'.APP_URL.'empleadoIE/'.$empleadoid.'/'.$rows['egreso_id'].'/" class="btn float-right btn-success btn-sm '.$eliminaregreso.'" style="margin-right: 5px;" >Editar</a>
+						<a href="'.APP_URL.'empleadoEgresoUpdate/'.$empleadoid.'/'.$rows['egreso_id'].'/" class="btn float-right btn-success btn-sm '.$eliminaregreso.'" style="margin-right: 5px;" >Editar</a>
 						'.$btnDescargar.'
 					</td>
 				</tr>';	
@@ -1630,10 +1630,10 @@
 			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY egreso_id) AS fila_numero, IFNULL(P.PAGOS_PENDIENTES, 0)PAGOS_PENDIENTES , E.* 
 				FROM empleado_egreso E  
 				LEFT JOIN (
-					SELECT COUNT(1)PAGOS_PENDIENTES, trxh_pagoid 
-					FROM empleado_ingreso_trx
-					GROUP BY trxh_pagoid
-				)P ON P.trxh_pagoid = E.egreso_id 
+					SELECT COUNT(1)PAGOS_PENDIENTES, trxegreso_egresoid  
+					FROM empleado_egreso_trx
+					GROUP BY trxegreso_egresoid 
+				)P ON P.trxegreso_egresoid  = E.egreso_id 
 				WHERE (E.egreso_id = '".$egreso_id."' AND E.egreso_estado NOT IN ('E')) ORDER BY egreso_id DESC";		
 
 
@@ -1665,7 +1665,6 @@
                 $egreso_fechaegreso		= $egreso['egreso_fechaegreso'];
                 $egreso_fecharegistro	= $egreso['egreso_fecharegistro'];
                 $egreso_periodo 		= $egreso['egreso_periodo'];
-				$egreso_estado 			= $egreso['egreso_estado'];
 			}	
 
             # Almacenando datos#
@@ -1678,7 +1677,6 @@
             $egreso_fechaegreso   	= $this->limpiarCadena($_POST['egreso_fechaegreso']);
             $egreso_fecharegistro	= $this->limpiarCadena($_POST['egreso_fecharegistro']);
             $egreso_periodo 		= $this->limpiarCadena($_POST['egreso_periodo']);
-            $egreso_estado          = "C";
            
             if ($egreso_valor =="") {$egreso_valor = 0;}
 
@@ -1738,11 +1736,6 @@
 					"campo_nombre"=>"egreso_periodo",
 					"campo_marcador"=>":Periodo",
 					"campo_valor"=>$egreso_periodo
-				],				
-				[
-					"campo_nombre"=>"egreso_estado",
-					"campo_marcador"=>":Estado",
-					"campo_valor"=>$egreso_estado 
 				]
 			];	
 
@@ -2051,5 +2044,35 @@
                 }				
 			}
 			return $option;
+		}
+
+		public function AnticipoPendiente($empleadoid){
+			$tabla="";
+			$consulta_datos="SELECT C.catalogo_descripcion tipo_egreso, egreso_fecharegistro fecha, egreso_pendiente pendiente
+								FROM empleado_egreso 
+								INNER JOIN general_tabla_catalogo C ON C.catalogo_valor = egreso_tipoid
+								WHERE egreso_estado = 'P' AND egreso_empleadoid = ".$empleadoid;	
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){		
+				$tabla.='
+					<tr style="font-size: 14px" class="text-danger">
+						<td>'.$rows['tipo_egreso'].'</td>
+						<td>'.$rows['fecha'].'</td>
+						<td>'.$rows['pendiente'].'</td>
+						</td>
+					</tr>';						
+			}
+			return $tabla;
+		}
+
+		public function ConsolidadoAnticipo($empleadoid){		
+			$consulta_datos="SELECT SUM(egreso_valor) VALOR_ANTICIPO, SUM(egreso_pendiente) ANTICIPO_PENDIENTE
+						from empleado_egreso 
+						where egreso_empleadoid = ".$empleadoid;
+				
+			$datos = $this->ejecutarConsulta($consulta_datos);				
+			return $datos;
 		}
     }

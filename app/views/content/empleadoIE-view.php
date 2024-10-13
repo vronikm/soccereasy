@@ -45,6 +45,7 @@
 
 		$anio = $dateTime->format('Y');
 		$nombreMes = $nombreMesEspanol." / ".$anio;
+		
 	}else{
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
 	}
@@ -102,9 +103,6 @@
 		$ingreso_periodo 		= '';
 		$ingreso_estado 		= 'A';
 	}
-
-	echo $egreso_id;
-
 	if($egreso_id != 0){
 		$datosEgreso=$insEmpleado->BuscarEgreso($egreso_id);		
 		if($datosEgreso->rowCount()==1){
@@ -115,7 +113,7 @@
 			$egreso_tipoid			= $datosEgreso['egreso_tipoid'];
 			$egreso_empleadoid		= $datosEgreso['egreso_empleadoid'];
 			$egreso_valor			= $datosEgreso['egreso_valor'];
-			$egreso_saldo			= $datosEgreso['egreso_saldo'];
+			$egreso_pendiente		= $datosEgreso['egreso_pendiente'];
 			$egreso_concepto		= $datosEgreso['egreso_concepto'];
 			$egreso_fechaegreso		= $datosEgreso['egreso_fechaegreso'];
 			$egreso_fecharegistro	= $datosEgreso['egreso_fecharegistro'];
@@ -129,12 +127,30 @@
 		$egreso_tipoid		 	= '';
 		$egreso_empleadoid 		= '';		
 		$egreso_valor 			= '';
-		$egreso_saldo 			= '';
+		$egreso_pendiente		= '';
 		$egreso_concepto 		= '';
 		$egreso_fechaegreso		= '';
 		$egreso_fecharegistro	= '';
 		$egreso_periodo 		= '';
 		$egreso_estado 			= 'P';
+	}
+	
+	$consolidadoanticipo=$insEmpleado->ConsolidadoAnticipo($empleadoid);
+	if($consolidadoanticipo->rowCount()==1){
+		$consolidadoanticipo=$consolidadoanticipo->fetch();
+		if($consolidadoanticipo["ANTICIPO_PENDIENTE"] > 0){
+			$textoegreso ="Egresos pendientes";
+			$textodetalle ="Empleado tiene egresos pendientes de descargo. ";
+			$clase = '<a class="float-right text-danger">';
+			$alert = "alert-warning";
+			$alerta = "S";
+		}
+		else{
+			$textoegreso = 'Sin egresos pendientes';
+			$clase = '<a class="float-right">';
+			$clase = '<a class="float-right text-danger">';
+			$alerta = "N";
+		}
 	}
 ?>
 
@@ -222,7 +238,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">Ingresos de empleados</h1>
+							<h1 class="m-0">Honorarios de empleados</h1>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -264,6 +280,18 @@
 										<li class="list-group-item">
 											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $datos['empleado_fechaingreso']; ?></a>
 										</li>
+										<li class="list-group-item">
+											<b>Estado</b> <a class="float-right"><?php echo $clase.$textoegreso.'</a>'; ?></a>
+										</li>
+										<li class="list-group-item">
+											<b>Detalle egresos pendientes</b> 
+											<table class="table table-sm">	
+
+												<?php 
+												echo $insEmpleado->AnticipoPendiente($empleadoid); 
+												?>											
+											</table>											
+										</li>
 									</ul>
 								</div>
 								<!-- /.card-body -->
@@ -276,8 +304,7 @@
 								<div class="card-header p-2">
 									<ul class="nav nav-pills">
 										<li class="nav-item"><a class="nav-link active" href="#ingreso" data-toggle="tab">Ingresos</a></li>
-										<li class="nav-item"><a class="nav-link" href="#egreso" data-toggle="tab">Egresos</a></li>								
-										<li class="nav-item"><a class="nav-link" href="#otros" data-toggle="tab">Otros</a></li>									
+										<li class="nav-item"><a class="nav-link" href="#egreso" data-toggle="tab">Egresos</a></li>									
 									</ul>
 								</div><!-- /.card-header -->
 
@@ -389,6 +416,19 @@
 														</div>		
 													</div>											
 												</div>
+												<?php 
+													if($alerta == "S"){
+														echo '
+															<div class="col-md-12">
+																<div class="alert '.$alert.' alert-dismissible">
+																	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+																	<h5><i class="icon fas fa-info"></i> Aviso!</h5>
+																	'.$textodetalle.'
+																</div>
+															</div>
+														';
+													}
+												?>
 												<div class="card-footer">						
 													<button type="submit" class="btn btn-success btn-sm">Guardar</button>
 													<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
@@ -514,144 +554,6 @@
 													<tbody>
 														<?php 
 															echo $insEmpleado->listarEgresos($empleadoid); 
-														?>								
-													</tbody>
-												</table>
-											</div>	
-										</div>
-
-										<div class="tab-pane" id="otros"> 
-											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/empleadoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-												<input type="hidden" name="modulo_egreso" value="<?php echo $modulo_egreso; ?>">									
-												<input type="hidden" name="ingreso_id" value="<?php echo $ingreso_id; ?>">
-												<input type="hidden" name="ingreso_empleadoid" value="<?php echo $datos['empleado_id']; ?>">
-												<!-- Post -->
-												<div class="row">
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="ingreso_fechafactura">Fecha otros</label>
-															<div class="input-group">
-																<div class="input-group-prepend">
-																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-																</div>																
-																<input type="date" class="form-control" id="ingreso_fechafactura" name="ingreso_fechafactura" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $ingreso_fechafactura; ?>" required>																
-															</div>
-															<!-- /.input group -->
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="ingreso_fechapago">Fecha de registro</label>
-															<div class="input-group">
-																<div class="input-group-prepend">
-																	<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-																</div>
-																<input type="date" class="form-control" id="ingreso_fechapago" name="ingreso_fechapago" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $ingreso_fechapago; ?>" required>
-															</div>
-															<!-- /.input group -->
-														</div>								
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="ingreso_periodo">Periodo(mes/año)</label>															
-															<input type="text" class="form-control" id="ingreso_periodo" name="ingreso_periodo" placeholder="Mes/año" value="<?php echo $ingreso_periodo; ?>" required>															
-														</div>								
-													</div>
-													<div class="container-fluid">
-														<div class="row mb-2">
-															<div class="col-md-2">
-																<div class="form-group">
-																	<label for="ingreso_factura">Factura</label>		
-																	<div class="input-group">											
-																		<div class="fileinput fileinput-new" data-provides="fileinput">
-																			<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput"><img src="<?php echo $factura ?>"></div>
-																			<div class="fileinput-preview fileinput-exists thumbnail" style="width: 130px; height: 158px"></div>
-																			<div>
-																				<span class="bton bton-white bton-file">
-																					<span class="fileinput-new">Subir factura</span>
-																					<span class="fileinput-exists">Cambiar</span>
-																					<input type="file" name="ingreso_factura" id="ingreso_factura">
-																				</span>
-																				<a href="<?php echo $factura ?>" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">X</a>
-																			</div>
-																		</div>
-																	</div>		
-																</div>
-															</div><!-- /.form-group -->		
-															<div class="col-md-2">
-																<div class="form-group">
-																	<label for="ingreso_comprobante">Comprobante</label>		
-																	<div class="input-group">											
-																		<div class="fileinput fileinput-new" data-provides="fileinput">
-																			<div class="fileinput-new thumbnail" style="width: 130px; height: 158px;" data-trigger="fileinput"><img src="<?php echo $comprobante ?>"></div>
-																			<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 130px; max-height: 158px"></div>
-																			<div>
-																				<span class="bton bton-white bton-file">
-																					<span class="fileinput-new">Subir Pago</span>
-																					<span class="fileinput-exists">Cambiar</span>
-																					<input type="file" name="ingreso_comprobante" id="ingreso_comprobante">
-																				</span>
-																				<a href="<?php echo $comprobante ?>" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">X</a>
-																			</div>
-																		</div>
-																	</div>		
-																</div>
-															</div><!-- /.form-group -->		
-															<div class="col-md-5">
-																<div class="form-group">
-																	<label for="ingreso_valor">Valor</label>
-																	<input type="text" class="pull-right form-control" style="text-align:right;" id="ingreso_valor" name="ingreso_valor" placeholder="0.00" pattern="^\d+(\.\d{1,2})?$" value="<?php echo $ingreso_valor; ?>" required>
-																</div>														
-																<div class="col-md-14">	
-																	<div class="form-group">
-																		<label for="ingreso_concepto">Detalle</label>
-																		<input type="text" class="form-control" id="ingreso_concepto" name="ingreso_concepto" value="<?php echo $ingreso_concepto; ?>" required>
-																	</div>	
-																</div>
-															</div>
-															<div class="col-md-3">
-																<div class="form-group">
-																	<label for="ingreso_formapagoid">Forma de pago</label>
-																	<select class="form-control select2" id="ingreso_formapagoid" name="ingreso_formapagoid">																									
-																		<?php echo $insEmpleado->listarOptionPago($ingreso_formapagoid); ?>
-																	</select>	
-																</div>												
-																<div class="form-group">
-																	<label for="ingreso_tipoingresoid">Tipo de pago</label>
-																	<select class="form-control select2" id="ingreso_tipoingresoid" name="ingreso_tipoingresoid">																									
-																		<?php echo $insEmpleado->listarTipoIngreso($ingreso_tipoingresoid); ?>
-																	</select>	
-																</div>
-															</div>
-														</div>		
-													</div>											
-												</div>
-												<div class="card-footer">						
-													<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-													<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
-													
-													<a href="<?php echo APP_URL.'empleadoIE/'.$empleadoid.'/'; ?>" class="btn btn-info btn-sm">Cancelar</a>
-												</div>					
-											</form>
-											<div class="tab-custom-content">
-												<p class="lead mb-0">Pagos realizados</p>
-											</div>
-											<div class="tab-content" id="custom-content-above-tabContent">
-												<table id="example1" class="table table-bordered table-striped table-sm">
-													<thead>
-														<tr>
-															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
-															<th>F. Pago</th>
-															<th>T. Pago</th>
-															<th>Estado</th>															
-															<th style="width:200px;">Opciones</th>																
-														</tr>
-													</thead>
-													<tbody>
-														<?php 
-															echo $insEmpleado->listarPagosingreso($empleadoid); 
 														?>								
 													</tbody>
 												</table>
