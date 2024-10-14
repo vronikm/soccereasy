@@ -149,7 +149,7 @@
 								<div class="tab-content" id="custom-content-above-tabContent">
 									<table id="presupuesto" name="presupuesto" class="table table-bordered table-striped table-sm" style='font-size: 14px;'>
 										<thead>
-											<tr>
+											<tr style="text-align: center;">
 												<th>Día</th>
 												<th>Lugar entrenamiento</th>
 												<th>Hora</th>

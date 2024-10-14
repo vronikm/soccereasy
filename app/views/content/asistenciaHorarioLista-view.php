@@ -1,33 +1,24 @@
 <?php
 	use app\controllers\asistenciaController;
-	$insHorario = new asistenciaController();	
+	$insAlumno = new asistenciaController();
 
-	if(isset($_POST['horario_sedeid'])){
-		$horario_sedeid = $insHorario->limpiarCadena($_POST['horario_sedeid']);
-	} ELSE{
-		$horario_sedeid = 0;
+	$horario_id = ($url[1] != "") ? $url[1] : 0;
+
+	if($horario_id != 0){
+		$horarioSede=$insAlumno->BuscarHorarioSede($horario_id);		
+		if($horarioSede->rowCount()==1){
+			$horarioSede	=	$horarioSede->fetch();				
+		}
 	}
-
-	if(isset($_POST['horario_nombre'])){
-		$horario_nombre = $insHorario->limpiarCadena($_POST['horario_nombre']);
-	} ELSE{
-		$horario_nombre = "";
-	}
-
-	if(isset($_POST['horario_detalle'])){
-		$horario_detalle = $insHorario->limpiarCadena($_POST['horario_detalle']);
-	} ELSE{
-		$horario_detalle = "";
-	}		
 ?>
 
-
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Horarios</title>
+	<title><?php echo APP_NAME; ?>| Alumnos </title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -38,7 +29,7 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
 
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
@@ -66,90 +57,32 @@
 		<!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
-			<div class="row mb-2">
-				<div class="col-sm-6">
-					<h4 class="m-0">Horarios</h4>
-				</div><!-- /.col -->
-				<div class="col-sm-6">
-					<ol class="breadcrumb float-sm-right">
-						<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-						<li class="breadcrumb-item active">Ficha Alumno</li>
-					</ol>					
-				</div><!-- /.col -->
-			</div><!-- /.row -->
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<!--h4 class="m-0">Lista horario sede:  </h4-->
+						<h5 class="m-0">Asignación horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]; ?></h5>
+					</div><!-- /.col -->
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
+							<li class="breadcrumb-item active">Dashboard v1</li>
+						</ol>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
 			</div><!-- /.container-fluid -->
 		</div>
 		<!-- /.content-header -->
 
-		<!-- Section listado de alumnos -->
-		<section class="content">			
-			<div class="container-fluid">
-				<div class="card card-default" style='height: 140px;'>
-					<div class="card-header" style='height: 40px;'>
-						<h3 class="card-title">Búsqueda de horarios</h3>
-						<div class="card-tools">
-								<?php
-								if($horario_sedeid != 0){
-									echo '										
-										<form action="'.APP_URL.'asistenciaHorario/"  method="POST" autocomplete="off" target="_blank">								
-											<input type="hidden" name="horario_sedeid" value="'.$horario_sedeid.'">						
-											<button type="submit" class="btn float-right btn-ver btn-xs" >Nuevo</button>
-										</form>	
-									';
-								}
-							?>						
-						</div>	
-					</div>  
-
-					<form action="<?php echo APP_URL."asistenciaListHorario/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-					<!-- card-body -->                
-						<div class="card-body">
-							<div class="row" style='font-size: 14px; height: 60px;'>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label for="horario_nombre">Horario nombre</label>                        
-										<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="horario_nombre" name="horario_nombre" placeholder="Nombre" value="<?php echo $horario_nombre; ?>">
-									</div>        
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<label for="horario_detalle">Horario detalle</label>
-										<input type="text" class="form-control" style='font-size: 13px; height: 31px;' id="horario_detalle" name="horario_detalle" placeholder="Detalle" value="<?php echo $horario_detalle; ?>">
-									</div>         
-								</div>											
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="horario_sedeid">Sede</label>
-										<select class="form-control select2" style='font-size: 13px; height: 31px;' id="horario_sedeid" name="horario_sedeid">
-											<?php
-												if($horario_sedeid == 0){	
-													echo "<option value='0' selected='selected'>Seleccionar sede</option>";
-												}else{
-													echo "<option value='0'>Seleccionar sede</option>";	
-												}
-											?>																		
-											<?php echo $insHorario->listarOptionSedebusqueda($horario_sedeid); ?>
-										</select>	
-									</div>
-								</div>
-
-								<div class="col-md-3">
-									<div class="form-group">
-										<label for="alumno_sedeid">.</label>
-										<button type="submit" style='font-size: 13px; height: 31px;' class="form-control btn btn-info">Buscar</button>
-									</div>
-								</div>
-							</div>						
-						</div>
-					</form>
-				</div>
-            </div> 
+		<!-- Main content -->
+		<section class="content">
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
-					<div class="card-header" style='height: 40px;'>
-						<h3 class="card-title">Resultado de la búsqueda</h3>
-						<div class="card-tools">
+					<div class="card-header">
+						<h3 class="card-title">Listado de alumnos sede: <?php echo $horarioSede["sede_nombre"]; ?></h3>
+						<div class="card-tools">	
+							<a href="<?php echo APP_URL.'asistenciaHorarioJugador/'.$horarioSede["horario_id"].'/'.$horarioSede["horario_sedeid"].'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
+							<!--a href="<?php echo APP_URL.'jugadorListaPDF/'.$horarioSede["horario_id"].'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a-->							
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
@@ -157,32 +90,33 @@
 					</div>
 
 					<div class="card-body">
-						<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 14px;">
+						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
-									<th>Horario</th>
-									<th>Detalle</th>
-									<th>Estado</th>																
-									<th>Alumnos</th>
-									<th></th>
-									<th>Opciones horario</th>
+									<th>Identificación</th>
+									<th>Nombres</th>
+									<th>Apellidos</th> 
+									<th>Año</th>
+									<th></th>	
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-									if($horario_nombre !='' || $horario_detalle !='' || $horario_sedeid != 0){
-										echo $insHorario->listarHorarios($horario_nombre, $horario_detalle, $horario_sedeid); 
-									}
+								<?php 												
+									echo $insAlumno->ListaAlumnosHorario($horarioSede["horario_id"]); 												
 								?>								
-							</tbody>
+							</tbody>	
 						</table>	
-					</div>
+						<div class="card-footer">
+							<!--a href="<?php echo APP_URL.'equipoList/'.$horarioSede["horario_id"].'/'; ?>" class="btn btn-dark btn-sm">Regresar</a-->
+							<button class="btn btn-dark btn-back btn-sm" onclick="cerrarPestana()">Regresar</button>
+						</div>
+					</div>					
+
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
-
 		</section>
-		<!-- /.section -->
+		<!-- /.content -->
       
       </div>
       <!-- /.vista -->
@@ -251,8 +185,22 @@
 		});
 	</script>
 
+	<script type="text/javascript">
+		function cerrarPestana() {
+			window.close();
+		}
+    </script>
+
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
     
   </body>
 </html>
+
+
+
+
+
+
+
+

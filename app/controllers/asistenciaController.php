@@ -624,15 +624,28 @@
 			}
 			if($horario_detalle!=""){
 				$horario_detalle .= '%';
-			} 			
+			} 	
 
 			$tabla="";
-			$consulta_datos="SELECT * FROM asistencia_horario 
+			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+								FROM asistencia_horario AH
+										LEFT JOIN(
+												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+												FROM asistencia_asignahorario
+												GROUP BY asignahorario_horarioid
+										)TOTAL ON TOTAL.HORARIOID = AH.horario_id 
 								WHERE (horario_nombre LIKE '".$horario_nombre."' 
 								OR horario_detalle LIKE '".$horario_detalle."') ";			
 
 			if($horario_nombre=="" && $horario_detalle=="" ){
-				$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_nombre <> '' ";
+				$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+									FROM asistencia_horario AH
+										LEFT JOIN(
+												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+												FROM asistencia_asignahorario
+												GROUP BY asignahorario_horarioid
+										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
+									WHERE horario_nombre <> '' ";
 			}
 
 			if($horario_sedeid!=""){
@@ -642,7 +655,14 @@
 					$consulta_datos .= " and horario_sedeid  = '".$horario_sedeid."'"; 
 				}
 			}else{
-				$consulta_datos = "SELECT * FROM asistencia_horario WHERE horario_nombre = '' ";
+				$consulta_datos = "SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+									FROM asistencia_horario AH
+										LEFT JOIN(
+												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+												FROM asistencia_asignahorario
+												GROUP BY asignahorario_horarioid
+										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
+									WHERE horario_nombre = '' ";
 			}			
 
 			$consulta_datos .= " AND horario_estado <> 'E'"; 
@@ -662,10 +682,12 @@
 				$tabla.='
 					<tr '.$class.'>
 						<td>'.$rows['horario_nombre'].'</td>
-						<td>'.$rows['horario_detalle'].'</td>
+						<td>'.$rows['horario_detalle'].'</td>						
 						<td>'.$estado.'</td>
-						<td>
-							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar</a>
+						<td>'.$rows['ALUMNOS'].'</td>
+						<td>							
+							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/'.$horario_sedeid.'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar</a>
+							<a href="'.APP_URL.'asistenciaHorarioLista/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver lista</a>
 						</td>
 						<td>
 							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-xs">Eliminar</a>							
@@ -1018,33 +1040,26 @@
 			} 			
 
 			$tabla="";
-			$consulta_datos="SELECT * FROM sujeto_alumno 
-								WHERE (alumno_primernombre LIKE '".$primernombre."' 
-								OR alumno_identificacion LIKE '".$identificacion."' 
-								OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
+			$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
+								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid
+								WHERE (A.alumno_primernombre LIKE '".$primernombre."' 
+								OR A.alumno_identificacion LIKE '".$identificacion."' 
+								OR A.alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
 			if($anio!=""){
 				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
 			}
 
+
+
 			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
-				$consulta_datos="SELECT * FROM sujeto_alumno WHERE YEAR(alumno_fechanacimiento) = '".$anio."'";
-			}
-			
-			if($identificacion=="" && $primernombre=="" && $apellidopaterno=="" && $anio == ""){
-				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre <> '' ";
-			}
+				$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
+								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid WHERE YEAR(A.alumno_fechanacimiento) = '".$anio."'";
+			}	
 
-			if($sede!=""){
-				if($sede == 0){
-					$consulta_datos .= " and alumno_sedeid <> '$sede'"; 
-				}else{
-					$consulta_datos .= " and alumno_sedeid = '$sede'"; 
-				}
-			}else{
-				$consulta_datos = "SELECT * FROM sujeto_alumno WHERE alumno_primernombre = ''";
-			}			
+			$consulta_datos .= " AND A.alumno_estado = 'A' AND A.alumno_sedeid='".$sede."'";
 
-			$consulta_datos .= " AND alumno_estado = 'A'";
+			$consulta_datos .= " AND A.alumno_id NOT IN (SELECT asignahorario_alumnoid FROM asistencia_asignahorario)";
+
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 
@@ -1052,7 +1067,7 @@
 				$tabla.='					
 					<tr>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
-						<td>'.$sede.'</td>
+						<td>'.$rows['sede_nombre'].'</td>
 						<td><input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
@@ -1070,6 +1085,13 @@
 
 		public function buscarHorario($horario_id){
 			$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_id = ".$horario_id;	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function BuscarSede($sede_id){
+			$consulta_datos="SELECT sede_nombre FROM general_sede WHERE sede_id = ".$sede_id;	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
@@ -1140,5 +1162,82 @@
 			}
 			return json_encode($alerta);			
 		}
+
+		public function ListaAlumnosHorario($horarioid){			
+			$tabla="";
+			$consulta_datos = "SELECT 
+										A.alumno_identificacion, 
+										CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+										YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+								FROM asistencia_asignahorario H
+										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+								WHERE H.asignahorario_horarioid = $horarioid";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='					
+					<tr>
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['APELLIDOS'].'</td>
+						<td>'.$rows['CATEGORIA'].'</td>
+						<td>												
+							<input type="hidden" name="modulo_asistencia" value="eliminar_alumnolista">												
+							<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>					
+						</td>
+						</form>
+					</tr>
+					';
+			}
+			return $tabla;			
+		}
+
+		public function BuscarHorarioSede($horario_id){
+			$consulta_datos="SELECT S.sede_nombre, H.* 
+								FROM asistencia_horario H
+        							INNER JOIN general_sede S ON S.sede_id = H.horario_sedeid
+							WHERE H.horario_estado = 'A' AND H.horario_id = ".$horario_id;	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function eliminar_alumnolista(){	
+			# Almacenando datos
+			$alumnoid = $_POST['asignahorario_alumnoid'];
+					
+			# Verificando campos obligatorios #
+			if($alumnoid == ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No existe información del alumno",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			
+			$eliminar_jugador = $this->eliminarRegistro("asistencia_asignahorario","asignahorario_alumnoid",$alumnoid);
+			
+			if($eliminar_jugador->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Alumno eliminado de la lista",
+					"texto"=> "Lista actualizada correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No fue posible eliminar el alumno de la lista",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		} 
 	}
 			
