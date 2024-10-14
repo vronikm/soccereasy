@@ -142,14 +142,13 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Resultado de la búsqueda</h3>
+						<h3 class="card-title">Resumen de pagos por forma de pago</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
 					</div>
-					<h3 class="card-title">Resumen de pagos por forma de pago</h3>
 					<div class="card-body">
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
@@ -172,8 +171,11 @@
 							</tbody>
 						</table>	
 					</div>
-
+					
 					<div class="card-body">
+					<div class="tab-custom-content">
+						<h3 class="card-title">Detalle de pagos por forma de pago</h3><br><br>
+					</div>
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
