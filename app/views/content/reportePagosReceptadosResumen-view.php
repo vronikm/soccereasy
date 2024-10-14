@@ -101,7 +101,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -113,7 +113,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_fin;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -142,15 +142,40 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Resultado de la búsqueda</h3>
+						<h3 class="card-title">Resumen de pagos por forma de pago</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
 					</div>
-
 					<div class="card-body">
+						<table id="example1" class="table table-bordered table-striped table-sm">
+							<thead>
+								<tr>
+									<th>Sede</th>					
+									<th>F. registro pago</th>
+									<th>Forma de Pago</th>
+									<th>Pagos</th>		
+									<th>V. Pagado</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+									if($alumno_sedeid!=0){
+										echo $insResumen->resumenPagosForma($fecha_inicio, $fecha_fin,$alumno_sedeid);
+									}else{
+										echo $insResumen->resumenPagosFormaConsolidado($fecha_inicio, $fecha_fin);
+									}	
+								?>								
+							</tbody>
+						</table>	
+					</div>
+					
+					<div class="card-body">
+					<div class="tab-custom-content">
+						<h3 class="card-title">Detalle de pagos por forma de pago</h3><br><br>
+					</div>
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
@@ -214,46 +239,44 @@
 	<script>
 	$(function () {
 		$("#example1").DataTable({
-		"responsive": true, "lengthChange": false, "autoWidth": false,
-		"language": {
-			"decimal": "",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-			"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-			"infoFiltered": "(filtrado de _MAX_ entradas totales)",
-			"infoPostFix": "",
-			"thousands": ",",
-			"lengthMenu": "Mostrar _MENU_ entradas",
-			"loadingRecords": "Cargando...",
-			"processing": "Procesando...",
-			"search": "Buscar:",
-			"zeroRecords": "No se encontraron registros coincidentes",
-			"paginate": {
-				"first": "Primero",
-				"last": "Último",
-				"next": "Siguiente",
-				"previous": "Anterior"
+			"paging": true,
+			"lengthChange": false,
+			"searching": false,
+			"ordering": false,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true, 
+			"language": {
+				"decimal": "",
+				"emptyTable": "No hay datos disponibles en la tabla",
+				"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+				"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+				"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+				"infoPostFix": "",
+				"thousands": ",",
+				"lengthMenu": "Mostrar _MENU_ entradas",
+				"loadingRecords": "Cargando...",
+				"processing": "Procesando...",
+				"search": "Buscar:",
+				"zeroRecords": "No se encontraron registros coincidentes",
+				"paginate": {
+					"first": "Primero",
+					"last": "Último",
+					"next": "Siguiente",
+					"previous": "Anterior"
+				},
+				"aria": {
+					"sortAscending": ": activar para ordenar la columna ascendente",
+					"sortDescending": ": activar para ordenar la columna descendente"
+				},
+				"buttons": {
+					"copy": "Copiar",
+					"print": "Imprimir",
+					"colvis": "Visibilidad columnas"
+				}
 			},
-			"aria": {
-				"sortAscending": ": activar para ordenar la columna ascendente",
-				"sortDescending": ": activar para ordenar la columna descendente"
-			},
-			"buttons": {
-				"copy": "Copiar",
-				"print": "Imprimir"
-			}
-		},
-		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-		$('#example2').DataTable({
-		"paging": true,
-		"lengthChange": false,
-		"searching": false,
-		"ordering": true,
-		"info": true,
-		"autoWidth": false,
-		"responsive": true,
-		});
+			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 	});
 	</script>
   </body>

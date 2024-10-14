@@ -103,7 +103,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -115,7 +115,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -212,47 +212,44 @@
 	<script>
 	$(function () {
 		$("#example1").DataTable({
-		"responsive": true, "lengthChange": false, "autoWidth": false,
-		"language": {
-			"decimal": "",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-			"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-			"infoFiltered": "(filtrado de _MAX_ entradas totales)",
-			"infoPostFix": "",
-			"thousands": ",",
-			"lengthMenu": "Mostrar _MENU_ entradas",
-			"loadingRecords": "Cargando...",
-			"processing": "Procesando...",
-			"search": "Buscar:",
-			"zeroRecords": "No se encontraron registros coincidentes",
-			"paginate": {
-				"first": "Primero",
-				"last": "Último",
-				"next": "Siguiente",
-				"previous": "Anterior"
+			"paging": true,
+			"lengthChange": false,
+			"searching": false,
+			"ordering": false,
+			"info": true,
+			"autoWidth": false,
+			"responsive": true, 
+			"language": {
+				"decimal": "",
+				"emptyTable": "No hay datos disponibles en la tabla",
+				"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+				"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+				"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+				"infoPostFix": "",
+				"thousands": ",",
+				"lengthMenu": "Mostrar _MENU_ entradas",
+				"loadingRecords": "Cargando...",
+				"processing": "Procesando...",
+				"search": "Buscar:",
+				"zeroRecords": "No se encontraron registros coincidentes",
+				"paginate": {
+					"first": "Primero",
+					"last": "Último",
+					"next": "Siguiente",
+					"previous": "Anterior"
+				},
+				"aria": {
+					"sortAscending": ": activar para ordenar la columna ascendente",
+					"sortDescending": ": activar para ordenar la columna descendente"
+				},
+				"buttons": {
+					"copy": "Copiar",
+					"print": "Imprimir"
+				}
 			},
-			"aria": {
-				"sortAscending": ": activar para ordenar la columna ascendente",
-				"sortDescending": ": activar para ordenar la columna descendente"
-			},
-			"buttons": {
-				"copy": "Copiar",
-				"print": "Imprimir"
-			}
-		},
-		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-		$('#example2').DataTable({
-		"paging": true,
-		"lengthChange": false,
-		"searching": false,
-		"ordering": true,
-		"info": true,
-		"autoWidth": false,
-		"responsive": true,
+			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 		});
-	});
 	</script>
   </body>
 </html>

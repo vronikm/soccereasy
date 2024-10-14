@@ -175,7 +175,6 @@
 						<h3 class="card-title">Resultado de la búsqueda</h3>
 						<div class="card-tools">
 							<a href="<?php echo APP_URL.'alumnoListaPDF/'.$categoria.'/'.$alumno_sedeid; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a>
-							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 							<a href="<?php echo APP_URL; ?>representanteList/" class="btn btn-primary btn-sm" >Nuevo Alumno</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
