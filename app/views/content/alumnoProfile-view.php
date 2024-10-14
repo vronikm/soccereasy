@@ -8,6 +8,8 @@
 	$alumno_generoF 	= "";
 	$alumno_hermanosSi	= "";
 	$alumno_hermanosNo	= "";
+	$repre_facturaS		= "";
+	$repre_facturaN		= "";
 
 	$datos=$insAlumno->seleccionarDatos("Unico","sujeto_alumno","alumno_id",$alumnoid);
 	if($datos->rowCount()==1){
@@ -48,6 +50,15 @@
 		$repre_identificacion = $representante['IDENTIFICACION'];
 		$repre_nombre 		  = $representante['REPRESENTANTE'];
 		$repre_parentesco	  = $representante['PARENTESCO'];
+		$repre_direccion	  = $representante['repre_direccion'];
+		$repre_correo		  = $representante['repre_correo'];
+		$repre_celular	  	  = $representante['repre_celular'];
+
+		if ($representante['repre_factura']=='S'){
+			$repre_facturaS = "checked";
+		}else{
+			$repre_facturaN = "checked";
+		}
 	}
 
 	$datosmedic=$insAlumno->seleccionarDatos("Unico","alumno_infomedic","infomedic_alumnoid",$alumnoid);
@@ -360,11 +371,40 @@
 												<input type="text" class="form-control" id="repre_nombre" name="repre_nombre" value="<?php echo $repre_nombre;?>" disabled="" >
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-3">
 											<div class="form-group">
 												<label for="repre_parentesco">Parentesco</label>
 												<input type="text" class="form-control" id="repre_parentesco" name="repre_parentesco" value="<?php echo $repre_parentesco;?>" disabled="" >
 											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_celular">Celular</label>
+												<input type="text" class="form-control" id="repre_celular" name="repre_celular" value="<?php echo $repre_celular; ?>" disabled="">
+											</div> 
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="repre_direccion">Dirección</label>
+												<input type="text" class="form-control" id="repre_direccion" name="repre_direccion" value="<?php echo $repre_direccion; ?>" disabled="">
+											</div>
+										</div>              
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_correo">Correo</label>
+												<input type="text" class="form-control" id="repre_correo" name="repre_correo" value="<?php echo $repre_correo; ?>" disabled="">
+											</div> 
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="repre_factura">Requiere factura</label>
+												<div class="form-check">
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaS" value="S" name="repre_factura" <?php echo $repre_facturaS;?> disabled="">
+													<label class="col-sm-5 form-check-label" for="repre_facturaS">Si</label>
+													<input class="col-sm-1 form-check-input" type="radio" id="repre_facturaN" value="N" name="repre_factura" <?php echo $repre_facturaN;?> disabled="">
+													<label class="col-sm-4 form-check-label" for="repre_facturaN">No</label>
+												</div> 
+											</div>
 										</div>
 									</div>		
 								</div>
