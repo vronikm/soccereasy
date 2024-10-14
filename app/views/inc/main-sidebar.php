@@ -256,12 +256,6 @@
                   <p>Sedes</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="<?php echo APP_URL."roList/" ?>" class="nav-link">
-                  <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Roles</p>
-                </a>
-              </li>
 
               <li class="nav-item">
                 <a href="<?php echo APP_URL."tablasNew/" ?>" class="nav-link">
