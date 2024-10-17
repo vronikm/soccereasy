@@ -699,6 +699,44 @@
 			return $tabla;			
 		}
 
+		public function listarHorariosProfesor($profesor_id){					
+			$tabla="";
+			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+								FROM asistencia_horario AH
+										LEFT JOIN(
+												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+												FROM asistencia_asignahorario
+												GROUP BY asignahorario_horarioid
+										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
+										WHERE AH.horario_estado <> 'E'";	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if ($rows['horario_estado'] == 'A'){
+					$estado = 'Activo';
+					$class = '';
+				}elseif($rows['horario_estado'] == 'E'){
+					$estado = '<span class="badge bg-danger">ELIMINADO';
+					$class = 'class="text-danger"';
+				}elseif($rows['horario_estado'] == 'I'){
+					$estado = 'Inactivo';
+					$class = 'class="text-primary"';
+				}				
+				$tabla.='
+					<tr '.$class.'>
+						<td>Sede</td>
+						<td>Lugar entrenamiento</td>
+						<td>'.$rows['horario_nombre'].'</td>
+						<td>'.$rows['horario_detalle'].'</td>						
+						<td>'.$rows['ALUMNOS'].'</td>						
+						<td>
+							<a href="'.APP_URL.'asistenciaAlumno/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-warning btn-xs">Listado de alumnos</a>
+						</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
 		public function actualizarLugarControlador(){			
 			$lugarid =$this->limpiarCadena($_POST['lugar_id']);
 
@@ -1195,6 +1233,54 @@
 			return $tabla;			
 		}
 
+		public function ListadoAlumnos($horarioid){			
+			$tabla="";
+			$consulta_datos = "SELECT 
+										A.alumno_id, A.alumno_identificacion, 
+										CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+										YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+								FROM asistencia_asignahorario H
+										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+								WHERE H.asignahorario_horarioid = $horarioid";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='					
+					<tr>
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['NOMBRES'].'</td>
+						<td>'.$rows['APELLIDOS'].'</td>
+						<td>'.$rows['CATEGORIA'].'</td>
+						<td style="width: 220px;">							
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Justificado</button>
+							</form>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Falta</button>
+							</form>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Atraso</button>
+							</form>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
+								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Presente</button>
+							</form>
+						</td>						
+					</tr>
+					';
+			}
+			return $tabla;			
+		}
 		public function BuscarHorarioSede($horario_id){
 			$consulta_datos="SELECT S.sede_nombre, H.* 
 								FROM asistencia_horario H

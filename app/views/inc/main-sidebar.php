@@ -84,12 +84,17 @@
             </a>
             <ul class="nav nav-treeview">
 
+            <li class="nav-item">
+                <a href="<?php echo APP_URL."asistencia/" ?>" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Asistencia</p>
+                </a>
+              </li>
               <li class="nav-item">
-                <a href="<?php echo APP_URL."asistenciaHora/" ?>" class="nav-link">
+                <a href="<?php echo APP_URL."asistencia/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Ingreso Horas</p>
                 </a>
-
               </li>
               <li class="nav-item">
                 <a href="<?php echo APP_URL."asistenciaLugar/" ?>" class="nav-link">
