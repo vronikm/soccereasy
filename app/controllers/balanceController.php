@@ -14,6 +14,8 @@
             $ingreso_descripcion	= $this->limpiarCadena($_POST['ingreso_descripcion']);
 			$ingreso_estado			= "A";
 			
+			$ingreso_monto = str_replace(['$', ',', ' '], '', $ingreso_monto);
+
 			# Verificando campos obligatorios #
 		    if($ingreso_fecharecepcion=="" || $ingreso_empresa=="" || $ingreso_monto=="" ){
 		    	$alerta=[
@@ -251,7 +253,8 @@
             $ingreso_formaentrega	= $this->limpiarCadena($_POST['ingreso_formaentrega']);
             $ingreso_descripcion	= $this->limpiarCadena($_POST['ingreso_descripcion']);
 
-			
+			$ingreso_monto = str_replace(['$', ',', ' '], '', $ingreso_monto);
+
 			# Verificando campos obligatorios #
 		    if($ingreso_fecharecepcion=="" || $ingreso_empresa=="" || $ingreso_monto=="" ){
 		    	$alerta=[
@@ -509,6 +512,8 @@
 			$egreso_estado			= "A";
 			$foto					="";
 			
+			$egreso_monto = str_replace(['$', ',', ' '], '', $egreso_monto);
+
 			# Verificando campos obligatorios #
 		    if($egreso_fechapago=="" || $egreso_empresa=="" || $egreso_monto=="" ){
 		    	$alerta=[
@@ -684,6 +689,8 @@
             $egreso_monto	        = $this->limpiarCadena($_POST['egreso_monto']);
             $egreso_formaentrega	= $this->limpiarCadena($_POST['egreso_formaentrega']);
             $egreso_descripcion		= $this->limpiarCadena($_POST['egreso_descripcion']);
+
+			$egreso_monto = str_replace(['$', ',', ' '], '', $egreso_monto);
 
 			# Verificando campos obligatorios #
 		    if($egreso_fechapago=="" || $egreso_empresa=="" || $egreso_monto=="" ){
