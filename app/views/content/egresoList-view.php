@@ -198,7 +198,7 @@
 											</div>
 										</div>
 									</div>									
-								</form>		
+								</form><br>	
 								
 								<div class="tab-custom-content">
 									<h4 class="card-title">Egresos registrados</h4>
