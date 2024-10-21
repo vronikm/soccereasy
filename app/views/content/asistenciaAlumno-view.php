@@ -10,6 +10,13 @@
 			$horarioSede	=	$horarioSede->fetch();				
 		}
 	}
+	
+
+	if(isset($_POST['fecha'])){
+		$fechahoy =  $insAlumno->limpiarCadena($_POST['fecha']);		
+	} ELSE{
+		$fechahoy = date('Y-m-d');		
+	}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +37,6 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
@@ -60,7 +66,7 @@
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Asignación horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]; ?></h5>
+						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]; ?></h5>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -80,29 +86,59 @@
 				<div class="card card-default">
 					<div class="card-header">
 						<h3 class="card-title">Listado de alumnos sede: <?php echo $horarioSede["sede_nombre"]; ?></h3>
-						<div class="card-tools">	
-							<a href="<?php echo APP_URL.'asistenciaHorarioJugador/'.$horarioSede["horario_id"].'/'.$horarioSede["horario_sedeid"].'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
-							<!--a href="<?php echo APP_URL.'jugadorListaPDF/'.$horarioSede["horario_id"].'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a-->							
+						<div class="card-tools">											
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
 					</div>
 
-					<div class="card-body">
-						<table id="example1" class="table table-bordered table-striped table-sm">
+					<div class="card-body card-comments">
+						<div class="card-comment">
+							<form action="<?php echo APP_URL."asistenciaAlumno/$horario_id" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+									
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group campo">
+											<label for="pago_fecha">Fecha de registero</label>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+												</div>
+												<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $fechahoy;?>"required>
+												
+											</div>
+											<!-- /.input group -->
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="alumno_sedeid">.</label>
+											<button type="submit" class="form-control btn btn-info">Generer lista</button>
+										</div>
+									</div>									
+								</div>
+							</form>	
+						</div>
+					
+						<br/>                      
+						<table id="example1" class="table table-bordered table-striped table-sm ">
 							<thead>
 								<tr>
 									<th>Identificación</th>
 									<th>Nombres</th>
 									<th>Apellidos</th> 
 									<th>Año</th>
+									<th>Fecha</th>	
 									<th>Asistencia</th>	
 								</tr>
 							</thead>
 							<tbody>
-								<?php 												
-									echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"]); 												
+								<?php 
+									if(isset($_POST['fecha'])){												
+										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"],$fechahoy);		
+									}										
 								?>								
 							</tbody>	
 						</table>	

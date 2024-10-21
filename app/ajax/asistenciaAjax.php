@@ -40,6 +40,9 @@
 		if($_POST['modulo_asistencia']=="eliminar_alumnolista"){
 			echo $insPago->eliminar_alumnolista();
 		}
+		if($_POST['modulo_asistencia']=="asistencia"){
+			echo $insPago->registro_asistencia();
+		}
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");
