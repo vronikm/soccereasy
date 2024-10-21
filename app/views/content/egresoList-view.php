@@ -23,6 +23,7 @@
 			$egreso_empresa		= $datosEgreso['egreso_empresa'];
 			$egreso_monto		= $datosEgreso['egreso_monto'];
 			$egreso_formaentrega= $datosEgreso['egreso_formaentrega'];
+			$egreso_concepto	= $datosEgreso['egreso_concepto'];
 			$egreso_descripcion = $datosEgreso['egreso_descripcion'];
 			
 		}
@@ -32,6 +33,7 @@
 		$egreso_empresa		= '';
 		$egreso_monto		= '';
 		$egreso_formaentrega= '';
+		$egreso_concepto	= '';
 		$egreso_descripcion = '';
 			
 	}
@@ -166,17 +168,25 @@
 													</div> 
 												</div>
 																									
-												<div class="col-md-4">
+												<div class="col-md-3">
 													<div class="form-group">
-													<label for="egreso_formaentrega">Forma de pago</label>
-													<select class="form-control select2" id="egreso_formaentrega" name="egreso_formaentrega" onchange="ocultarDiv()" >																									
-														<?php echo $insEgreso->listarFormaEntregaIngreso($egreso_formaentrega); ?>
-													</select>	
+														<label for="egreso_formaentrega">Forma de pago</label>
+														<select class="form-control select2" id="egreso_formaentrega" name="egreso_formaentrega" onchange="ocultarDiv()" >																									
+															<?php echo $insEgreso->listarFormaEntregaIngreso($egreso_formaentrega); ?>
+														</select>	
 													</div>
-												</div>												
-												<div class="col-md-8">
+												</div>	
+												<div class="col-md-3">
 													<div class="form-group">
-														<label for="egreso_descripcion">Concepto</label>
+														<label for="egreso_concepto">Concepto</label>
+														<select class="form-control select2" id="egreso_concepto" name="egreso_concepto" onchange="ocultarDiv()" >																									
+															<?php echo $insEgreso->listarTipoEgreso($egreso_concepto); ?>
+														</select>	
+													</div>
+												</div>											
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="egreso_descripcion">Detalle</label>
 														<input type="text" class="form-control" id="egreso_descripcion" name="egreso_descripcion" value="<?php echo $egreso_descripcion; ?>">
 													</div>	
 												</div>	

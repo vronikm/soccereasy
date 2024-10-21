@@ -11,6 +11,7 @@
 			$ingreso_empresa	    = $this->limpiarCadena($_POST['ingreso_empresa']);
             $ingreso_monto	        = $this->limpiarCadena($_POST['ingreso_monto']);
             $ingreso_formaentrega	= $this->limpiarCadena($_POST['ingreso_formaentrega']);
+			$ingreso_concepto	= $this->limpiarCadena($_POST['ingreso_concepto']);
             $ingreso_descripcion	= $this->limpiarCadena($_POST['ingreso_descripcion']);
 			$ingreso_estado			= "A";
 			
@@ -125,6 +126,11 @@
 					"campo_valor"=>$ingreso_formaentrega
 				],				
 				[
+					"campo_nombre"=>"ingreso_concepto",
+					"campo_marcador"=>":Concepto",
+					"campo_valor"=>$ingreso_concepto
+				],				
+				[
 					"campo_nombre"=>"ingreso_descripcion",
 					"campo_marcador"=>":Descripcion",
 					"campo_valor"=>$ingreso_descripcion
@@ -170,7 +176,7 @@
 
         public function BuscarIngreso($ingresoid){		
 			$consulta_datos=("SELECT ingreso_fecharecepcion, ingreso_empresa, ingreso_monto, ingreso_formaentrega,
-                                    ingreso_descripcion, ingreso_imagenpago 
+                                    ingreso_concepto, ingreso_descripcion, ingreso_imagenpago 
 							 FROM balance_ingreso
 							 WHERE ingreso_id =".$ingresoid."
 							 	AND ingreso_estado = 'A'");	
@@ -193,6 +199,28 @@
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				if($ingreso_formaentrega == $rows['catalogo_valor']){
+					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';	
+				}else{			
+					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+				}				
+			}
+			return $option;
+		}
+
+		public function listarTipoIngreso($ingreso_concepto){
+			$option="";
+
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'balance_ingreso'
+									AND T.tabla_estado = 'A'
+									AND C.catalogo_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($ingreso_concepto == $rows['catalogo_valor']){
 					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';	
 				}else{			
 					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
@@ -251,6 +279,7 @@
 			$ingreso_empresa	    = $this->limpiarCadena($_POST['ingreso_empresa']);
             $ingreso_monto	        = $this->limpiarCadena($_POST['ingreso_monto']);
             $ingreso_formaentrega	= $this->limpiarCadena($_POST['ingreso_formaentrega']);
+			$ingreso_concepto		= $this->limpiarCadena($_POST['ingreso_concepto']);
             $ingreso_descripcion	= $this->limpiarCadena($_POST['ingreso_descripcion']);
 
 			$ingreso_monto = str_replace(['$', ',', ' '], '', $ingreso_monto);
@@ -286,6 +315,11 @@
 					"campo_nombre"=>"ingreso_formaentrega",
 					"campo_marcador"=>":FormaEntrega",
 					"campo_valor"=>$ingreso_formaentrega
+				],				
+				[
+					"campo_nombre"=>"ingreso_concepto",
+					"campo_marcador"=>":Concepto",
+					"campo_valor"=>$ingreso_concepto
 				],				
 				[
 					"campo_nombre"=>"ingreso_descripcion",
@@ -465,12 +499,34 @@
 
 		public function BuscarEgreso($egresoid){		
 			$consulta_datos=("SELECT egreso_fechapago, egreso_empresa, egreso_monto, egreso_formaentrega,
-                                    egreso_descripcion, egreso_imagenpago 
+                                     egreso_concepto, egreso_descripcion, egreso_imagenpago 
 							 FROM balance_egreso
 							 WHERE egreso_id =".$egresoid);	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
+		}
+
+		public function listarTipoEgreso($egreso_concepto){
+			$option="";
+
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'balance_egreso'
+									AND T.tabla_estado = 'A'
+									AND C.catalogo_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($egreso_concepto == $rows['catalogo_valor']){
+					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';	
+				}else{			
+					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+				}				
+			}
+			return $option;
 		}
 
 		public function listarEgresos(){
@@ -508,6 +564,7 @@
 			$egreso_empresa	    	= $this->limpiarCadena($_POST['egreso_empresa']);
             $egreso_monto	        = $this->limpiarCadena($_POST['egreso_monto']);
             $egreso_formaentrega	= $this->limpiarCadena($_POST['egreso_formaentrega']);
+			$egreso_concepto		= $this->limpiarCadena($_POST['egreso_concepto']);
             $egreso_descripcion		= $this->limpiarCadena($_POST['egreso_descripcion']);
 			$egreso_estado			= "A";
 			$foto					="";
@@ -623,6 +680,11 @@
 					"campo_valor"=>$egreso_formaentrega
 				],				
 				[
+					"campo_nombre"=>"egreso_concepto",
+					"campo_marcador"=>":Concepto",
+					"campo_valor"=>$egreso_concepto
+				],				
+				[
 					"campo_nombre"=>"egreso_descripcion",
 					"campo_marcador"=>":Descripcion",
 					"campo_valor"=>$egreso_descripcion
@@ -688,6 +750,7 @@
 			$egreso_empresa	    	= $this->limpiarCadena($_POST['egreso_empresa']);
             $egreso_monto	        = $this->limpiarCadena($_POST['egreso_monto']);
             $egreso_formaentrega	= $this->limpiarCadena($_POST['egreso_formaentrega']);
+			$egreso_concepto		= $this->limpiarCadena($_POST['egreso_concepto']);
             $egreso_descripcion		= $this->limpiarCadena($_POST['egreso_descripcion']);
 
 			$egreso_monto = str_replace(['$', ',', ' '], '', $egreso_monto);
@@ -723,6 +786,11 @@
 					"campo_nombre"=>"egreso_formaentrega",
 					"campo_marcador"=>":FormaEntrega",
 					"campo_valor"=>$egreso_formaentrega
+				],				
+				[
+					"campo_nombre"=>"egreso_concepto",
+					"campo_marcador"=>":Concepto",
+					"campo_valor"=>$egreso_concepto
 				],				
 				[
 					"campo_nombre"=>"egreso_descripcion",
