@@ -1,38 +1,38 @@
 <?php
 	use app\controllers\balanceController;
-	$insIngreso = new balanceController();
+	$insEgreso = new balanceController();
 	
-	$ingresoid = ($url[1] != "") ? $url[1] : 0;	
+	$egresoid = ($url[1] != "") ? $url[1] : 0;	
 
-	$foto = APP_URL.'app/views/imagenes/fotos/ingresos/ingreso_default.jpg';
+	$foto = APP_URL.'app/views/imagenes/fotos/egresos/egreso_default.jpg';
 
-	if($ingresoid != 0){
-		$datosIngreso=$insIngreso->BuscarIngreso($ingresoid);		
-		if($datosIngreso->rowCount()==1){
-			$datosIngreso=$datosIngreso->fetch(); 
-			if ($datosIngreso['ingreso_imagenpago']!=""){
-				$foto = APP_URL.'app/views/imagenes/fotos/ingresos/'.$datosIngreso['ingreso_imagenpago'];
+	if($egresoid != 0){
+		$datosEgreso=$insEgreso->BuscarEgreso($egresoid);		
+		if($datosEgreso->rowCount()==1){
+			$datosEgreso=$datosEgreso->fetch(); 
+			if ($datosEgreso['egreso_imagenpago']!=""){
+				$foto = APP_URL.'app/views/imagenes/fotos/egresos/'.$datosEgreso['egreso_imagenpago'];
 
-				echo $datosIngreso['ingreso_imagenpago'];
+				echo $datosEgreso['egreso_imagenpago'];
 			}else{
-				$foto = APP_URL.'app/views/dist/img/ingreso_default.jpg';
+				$foto = APP_URL.'app/views/dist/img/egreso_default.jpg';
 			}
-			$modulo_ingreso = 'actualizar';			
+			$modulo_egreso = 'actualizar';			
 
-			$ingreso_fecharecepcion	= $datosIngreso['ingreso_fecharecepcion'];
-			$ingreso_empresa		= $datosIngreso['ingreso_empresa'];
-			$ingreso_monto		 	= $datosIngreso['ingreso_monto'];
-			$ingreso_formaentrega 	= $datosIngreso['ingreso_formaentrega'];
-			$ingreso_descripcion 	= $datosIngreso['ingreso_descripcion'];
+			$egreso_fechapago 	= $datosEgreso['egreso_fechapago'];
+			$egreso_empresa		= $datosEgreso['egreso_empresa'];
+			$egreso_monto		= $datosEgreso['egreso_monto'];
+			$egreso_formaentrega= $datosEgreso['egreso_formaentrega'];
+			$egreso_descripcion = $datosEgreso['egreso_descripcion'];
 			
 		}
 	}else{
-		$modulo_ingreso 		= 'registrar';
-		$ingreso_fecharecepcion = '';
-		$ingreso_empresa		= '';
-		$ingreso_monto		 	= '';
-		$ingreso_formaentrega 	= '';
-		$ingreso_descripcion 	= '';
+		$modulo_egreso 		= 'registrar';
+		$egreso_fechapago 	= '';
+		$egreso_empresa		= '';
+		$egreso_monto		= '';
+		$egreso_formaentrega= '';
+		$egreso_descripcion = '';
 			
 	}
 ?>
@@ -43,7 +43,7 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Ingresos</title>
+	<title><?php echo APP_NAME; ?>| Egresos</title>
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -86,7 +86,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-					<h4 class="m-0">Ingresos</h4>
+					<h4 class="m-0">Egresos</h4>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 					<ol class="breadcrumb float-sm-right">
@@ -105,7 +105,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header" style='height: 40px;'>
-						<h4 class="card-title">Registro de nuevo ingreso</h4>
+						<h4 class="card-title">Registro de nuevo egreso</h4>
 						<div class="card-tools">							
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -117,12 +117,12 @@
 						<div class="row">
 							<div class="col-md-12">	
 								<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/balanceAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-									<input type="hidden" name="modulo_ingreso" value="<?php echo $modulo_ingreso; ?>">
-									<input type="hidden" name="ingreso_id" value="<?php echo $ingresoid; ?>">
+									<input type="hidden" name="modulo_egreso" value="<?php echo $modulo_egreso; ?>">
+									<input type="hidden" name="egreso_id" value="<?php echo $egresoid; ?>">
 									<div class="row" style="font-size: 13px; height: 187px;">
 										<div class="col-md-2">
 											<div class="form-group">
-												<label for="ingreso_imagenpago">Foto</label>		
+												<label for="egreso_imagenpago">Foto</label>		
 												<div class="input-group">											
 													<div class="fileinput fileinput-new" data-provides="fileinput">
 														<div class="fileinput-new thumbnail" style="width: 110px; height: 130px;" data-trigger="fileinput"><img src="<?php echo $foto; ?>"> </div>
@@ -131,7 +131,7 @@
 															<span class="bton bton-white bton-file" style="font-size: 13px;">
 																<span class="fileinput-new">Seleccionar Foto</span>
 																<span class="fileinput-exists">Cambiar</span>
-																<input type="file" name="ingreso_imagenpago" id="foto" accept="image/*">
+																<input type="file" name="egreso_imagenpago" id="foto" accept="image/*">
 															</span>
 															<a href="#" class="bton bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
 														</div>
@@ -144,45 +144,45 @@
 											<div class="row" style="font-size: 13px;">
 											<div class="col-md-3">
 													<div class="form-group">
-														<label for="ingreso_fecharecepcion">Fecha de recepción</label>
+														<label for="egreso_fechapago">Fecha de pago</label>
 														<div class="input-group">
 															<div class="input-group-prepend">
 																<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 															</div>
-															<input type="date" class="form-control" name="ingreso_fecharecepcion" id="ingreso_fecharecepcion" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask value="<?php echo $ingreso_fecharecepcion; ?>">
+															<input type="date" class="form-control" name="egreso_fechapago" id="egreso_fechapago" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask value="<?php echo $egreso_fechapago; ?>">
 														</div>
 													</div>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<label for="ingreso_empresa">Nombre empresa</label>
-														<input type="text"  class="form-control select2" id="ingreso_empresa" name="ingreso_empresa" value="<?php echo $ingreso_empresa; ?>">
+														<label for="egreso_empresa">Nombre empresa</label>
+														<input type="text"  class="form-control select2" id="egreso_empresa" name="egreso_empresa" value="<?php echo $egreso_empresa; ?>">
 													</div> 
 												</div>
 												<div class="col-md-3">
 													<div class="form-group">
-														<label for="ingreso_monto">Monto USD</label>
-														<input type="text" class="form-control" id="ingreso_monto" name="ingreso_monto" value="<?php echo $ingreso_monto; ?>" required>
+														<label for="egreso_monto">Monto USD</label>
+														<input type="text" class="form-control" id="egreso_monto" name="egreso_monto" value="<?php echo $egreso_monto; ?>" required>
 													</div> 
 												</div>
 																									
 												<div class="col-md-4">
 													<div class="form-group">
-													<label for="ingreso_formaentrega">Forma de recepción</label>
-													<select class="form-control select2" id="ingreso_formaentrega" name="ingreso_formaentrega" onchange="ocultarDiv()" >																									
-														<?php echo $insIngreso->listarFormaEntregaIngreso($ingreso_formaentrega); ?>
+													<label for="egreso_formaentrega">Forma de pago</label>
+													<select class="form-control select2" id="egreso_formaentrega" name="egreso_formaentrega" onchange="ocultarDiv()" >																									
+														<?php echo $insEgreso->listarFormaEntregaIngreso($egreso_formaentrega); ?>
 													</select>	
 													</div>
 												</div>												
 												<div class="col-md-8">
 													<div class="form-group">
-														<label for="ingreso_descripcion">Descripción</label>
-														<input type="text" class="form-control" id="ingreso_descripcion" name="ingreso_descripcion" value="<?php echo $ingreso_descripcion; ?>">
+														<label for="egreso_descripcion">Concepto</label>
+														<input type="text" class="form-control" id="egreso_descripcion" name="egreso_descripcion" value="<?php echo $egreso_descripcion; ?>">
 													</div>	
 												</div>	
 												<div class="col-md-12">						
 													<button type="submit" class="btn btn-success btn-xs">Guardar</button>
-													<a href="<?php echo APP_URL; ?>ingresoList/" class="btn btn-info btn-xs">Cancelar</a>
+													<a href="<?php echo APP_URL; ?>egresoList/" class="btn btn-info btn-xs">Cancelar</a>
 													<button type="reset" class="btn btn-dark btn-xs">Limpiar</button>						
 												</div>	
 											</div>
@@ -191,7 +191,7 @@
 								</form>		
 								
 								<div class="tab-custom-content">
-									<h4 class="card-title">Ingresos registrados</h4>
+									<h4 class="card-title">Egresos registrados</h4>
 								</div>										
 								<div class="tab-content" id="custom-content-above-tabContent" style="font-size: 13px;">	
 									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
@@ -199,13 +199,13 @@
 											<tr>
 												<th>Empresa</th>
 												<th>Monto</th>
-												<th>Fecha de recepción</th>
+												<th>Fecha de pago</th>
 												<th>Opciones</th>
 											</tr>
 										</thead>
 										<tbody>
 											<?php 
-												echo $insIngreso->listarIngresos(); 
+												echo $insEgreso->listarEgresos(); 
 											?>							
 										</tbody>	
 									</table>
@@ -254,7 +254,7 @@
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
 
@@ -269,7 +269,7 @@
                 digits: 2,
                 digitsOptional: false,
                 placeholder: "0"
-            }).mask("#ingreso_monto");
+            }).mask("#egreso_monto");
         });
     </script>    
   </body>

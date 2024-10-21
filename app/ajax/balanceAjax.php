@@ -20,7 +20,21 @@
 			echo $insIngreso->eliminarIngreso();
 		}
 
-	}else{
+	}elseif(isset($_POST['modulo_egreso'])){
+
+		$insEgreso = new balanceController();
+
+		if($_POST['modulo_egreso']=="registrar"){
+			echo $insEgreso->registrarEgreso();
+		}		
+		if($_POST['modulo_egreso']=="actualizar"){
+			echo $insEgreso->actualizarEgreso();
+		}
+		if($_POST['modulo_egreso']=="eliminar"){
+			echo $insEgreso->eliminarEgreso();
+		}
+	}
+	else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");
 	}
