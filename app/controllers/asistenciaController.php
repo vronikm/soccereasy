@@ -2,6 +2,7 @@
 
 	namespace app\controllers;
 	use app\models\mainModel;
+	use \DateTime;
 
 	class asistenciaController extends mainModel{		
 		public function registrarHoraControlador(){							
@@ -1233,15 +1234,19 @@
 			return $tabla;			
 		}
 
-		public function ListadoAlumnos($horarioid){			
+		public function ListadoAlumnos($horarioid, $fecha){			
 			$tabla="";
+			
+			$dateTime = new DateTime($fecha);
+			$fecha_formateada = $dateTime->format("d-m-Y");
+			
 			$consulta_datos = "SELECT 
-										A.alumno_id, A.alumno_identificacion, 
-										CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									A.alumno_id, A.alumno_identificacion, 
+									CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
 									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
-										YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
 								FROM asistencia_asignahorario H
-										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+									INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
 								WHERE H.asignahorario_horarioid = $horarioid";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -1254,24 +1259,33 @@
 						<td>'.$rows['NOMBRES'].'</td>
 						<td>'.$rows['APELLIDOS'].'</td>
 						<td>'.$rows['CATEGORIA'].'</td>
+						<td>'.$fecha_formateada.'</td>
 						<td style="width: 220px;">							
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="estado" value="Justificado">
+								<input type="hidden" name="fecha" value="'.$fecha.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Justificado</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="estado" value="Falta">
+								<input type="hidden" name="fecha" value="'.$fecha.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Falta</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="modulo_asistencia" value="asistencia">	
+								<input type="hidden" name="estado" value="Atraso">
+								<input type="hidden" name="fecha" value="'.$fecha.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Atraso</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_asistencia" value="asistencia">
+								<input type="hidden" name="modulo_asistencia" value="asistencia">	
+								<input type="hidden" name="estado" value="Presente">
+								<input type="hidden" name="fecha" value="'.$fecha.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Presente</button>
 							</form>
@@ -1325,5 +1339,60 @@
 			}
 			return json_encode($alerta);
 		} 
+
+		public function registro_asistencia(){
+
+			$alumno_id=$this->limpiarCadena($_POST['alumno_id']);
+
+			# Verificando usuario #
+		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id='$alumno_id'");
+		    if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"El alumno no se encuentra en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();
+		    }
+			if($datos['alumno_estado']=='A'){
+				$estadoA = 'I';
+			}else{
+				$estadoA = 'A';
+			}
+            $alumno_datos_up=[
+				[
+					"campo_nombre"=>"alumno_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=> $estadoA
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"alumno_id",
+				"condicion_marcador"=>":Alumnoid",
+				"condicion_valor"=>$alumno_id
+			];
+
+			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_up,$condicion)){
+
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Estado actualizado correctamente",
+					"texto"=>"El estado del alumno ".$datos['alumno_primernombre']." | ".$datos['alumno_apellidopaterno']." fue actualizado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar el estado del alumno ".$datos['alumno_primernombre']." ".$datos['alumno_apellidopaterno'].", por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}
+
 	}
 			

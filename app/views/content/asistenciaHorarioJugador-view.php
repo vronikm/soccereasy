@@ -275,7 +275,6 @@
 			window.close();
 		}
     </script>
-
 		<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 		<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
 
