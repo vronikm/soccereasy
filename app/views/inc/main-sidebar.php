@@ -144,7 +144,7 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link">
+                <a href="<?php echo APP_URL."egresoList/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Egresos</p>
                 </a>
