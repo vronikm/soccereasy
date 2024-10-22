@@ -12,8 +12,6 @@
 			$datosIngreso=$datosIngreso->fetch(); 
 			if ($datosIngreso['ingreso_imagenpago']!=""){
 				$foto = APP_URL.'app/views/imagenes/fotos/ingresos/'.$datosIngreso['ingreso_imagenpago'];
-
-				echo $datosIngreso['ingreso_imagenpago'];
 			}else{
 				$foto = APP_URL.'app/views/dist/img/ingreso_default.jpg';
 			}
@@ -23,6 +21,7 @@
 			$ingreso_empresa		= $datosIngreso['ingreso_empresa'];
 			$ingreso_monto		 	= $datosIngreso['ingreso_monto'];
 			$ingreso_formaentrega 	= $datosIngreso['ingreso_formaentrega'];
+			$ingreso_concepto 		= $datosIngreso['ingreso_concepto'];
 			$ingreso_descripcion 	= $datosIngreso['ingreso_descripcion'];
 			
 		}
@@ -32,6 +31,7 @@
 		$ingreso_empresa		= '';
 		$ingreso_monto		 	= '';
 		$ingreso_formaentrega 	= '';
+		$ingreso_concepto		= '';
 		$ingreso_descripcion 	= '';
 			
 	}
@@ -166,15 +166,23 @@
 													</div> 
 												</div>
 																									
-												<div class="col-md-4">
+												<div class="col-md-3">
 													<div class="form-group">
-													<label for="ingreso_formaentrega">Forma de recepción</label>
-													<select class="form-control select2" id="ingreso_formaentrega" name="ingreso_formaentrega" onchange="ocultarDiv()" >																									
-														<?php echo $insIngreso->listarFormaEntregaIngreso($ingreso_formaentrega); ?>
-													</select>	
+														<label for="ingreso_formaentrega">Forma de recepción</label>
+														<select class="form-control select2" id="ingreso_formaentrega" name="ingreso_formaentrega" onchange="ocultarDiv()" >																									
+															<?php echo $insIngreso->listarFormaEntregaIngreso($ingreso_formaentrega); ?>
+														</select>	
 													</div>
-												</div>												
-												<div class="col-md-8">
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="ingreso_concepto">Concepto</label>
+														<select class="form-control select2" id="ingreso_concepto" name="ingreso_concepto" onchange="ocultarDiv()" >																									
+															<?php echo $insIngreso->listarTipoIngreso($ingreso_concepto); ?>
+														</select>	
+													</div>
+												</div>													
+												<div class="col-md-6">
 													<div class="form-group">
 														<label for="ingreso_descripcion">Descripción</label>
 														<input type="text" class="form-control" id="ingreso_descripcion" name="ingreso_descripcion" value="<?php echo $ingreso_descripcion; ?>">
@@ -188,7 +196,7 @@
 											</div>
 										</div>
 									</div>									
-								</form>		
+								</form><br>
 								
 								<div class="tab-custom-content">
 									<h4 class="card-title">Ingresos registrados</h4>
