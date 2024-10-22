@@ -704,6 +704,252 @@
 
 			return $tabla;			
 		}
+
+		public function balanceResultado($fecha_inicio, $fecha_fin, $sede_id){
+			$tabla="";
+			$TOTAL_INGRESOS = 0;
+			$MONTO_TOTAL_INGRESO = 0;
+			$consulta_ingresos="SELECT sede_nombre SEDE, catalogo_descripcion RUBRO, count(*) TOTAL_INGRESOS, SUM(pago_valor) MONTO_TOTAL_INGRESO 
+								FROM sujeto_alumno 
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								LEFT JOIN general_tabla_catalogo on pago_rubroid = catalogo_valor
+								INNER JOIN general_sede on alumno_sedeid = sede_id
+								WHERE pago_estado <> 'E'
+									AND alumno_sedeid =".$sede_id."
+									and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion
+							
+							UNION ALL
+
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', 'ABONO') RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(transaccion_valor) MONTO_TOTAL_INGRESO 
+								from sujeto_alumno
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								INNER JOIN alumno_pago_transaccion ON pago_id = transaccion_pagoid
+								LEFT JOIN general_tabla_catalogo on pago_rubroid = catalogo_valor
+								INNER JOIN general_sede on alumno_sedeid = sede_id
+								WHERE transaccion_estado <> 'E'
+									AND alumno_sedeid =".$sede_id."
+									and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									AND alumno_sedeid =1
+								GROUP BY sede_nombre, catalogo_descripcion
+							
+							UNION ALL
+							
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', empleado_nombre) RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(egreso_valor) MONTO_TOTAL_INGRESO 
+								FROM empleado_egreso
+								INNER JOIN sujeto_empleado on empleado_id = egreso_empleadoid 
+								LEFT JOIN general_tabla_catalogo on egreso_tipoid = catalogo_valor
+								INNER JOIN general_sede on empleado_sedeid = sede_id
+								WHERE egreso_estado <> 'E'
+									AND empleado_sedeid = ".$sede_id."
+									AND egreso_fechaegreso between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion, empleado_nombre
+								
+							UNION ALL
+							
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', ingreso_empresa) RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(ingreso_monto) MONTO_TOTAL_INGRESO 
+								FROM balance_ingreso
+								LEFT JOIN general_tabla_catalogo on ingreso_concepto = catalogo_valor
+								INNER JOIN general_sede on ingreso_sedeid = sede_id
+								WHERE ingreso_estado <> 'E'
+									AND ingreso_sedeid = ".$sede_id."
+									and ingreso_fecharecepcion between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion, ingreso_empresa";
+
+			$datos = $this->ejecutarConsulta($consulta_ingresos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$TOTAL_INGRESOS += $rows['TOTAL_INGRESOS'];
+				$MONTO_TOTAL_INGRESO += $rows['MONTO_TOTAL_INGRESO'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['RUBRO'].'</td>
+						<td style="text-align: right">'.number_format($rows['TOTAL_INGRESOS'], 0, '.',',').'</td>
+						<td style="text-align: right">'.number_format($rows['MONTO_TOTAL_INGRESO'], 2, '.',',').'</td>
+						<td></td>
+					</tr>';	
+			}
+			
+			$TOTAL_EGRESOS = 0;
+			$MONTO_TOTAL_EGRESO = 0;
+			$consulta_egresos="SELECT sede_nombre SEDE, catalogo_descripcion RUBRO, count(*) TOTAL_EGRESOS, SUM(ingreso_valor) MONTO_TOTAL_EGRESO 
+									FROM empleado_ingreso
+									INNER JOIN sujeto_empleado on empleado_id = ingreso_empleadoid 
+									LEFT JOIN general_tabla_catalogo on ingreso_tipoingresoid = catalogo_valor
+									INNER JOIN general_sede on empleado_sedeid = sede_id
+									WHERE ingreso_estado <> 'E'
+										AND empleado_sedeid = ".$sede_id."
+										AND ingreso_fechapago BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									GROUP BY sede_nombre, catalogo_descripcion
+
+								UNION ALL
+
+								SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', egreso_empresa) RUBRO, count(*) TOTAL_EGRESOS, SUM(egreso_monto) MONTO_TOTAL_EGRESO 
+									FROM balance_egreso
+									LEFT JOIN general_tabla_catalogo on egreso_concepto = catalogo_valor
+									INNER JOIN general_sede on egreso_sedeid = sede_id
+									WHERE egreso_estado <> 'E'
+										AND egreso_sedeid = ".$sede_id."
+										AND egreso_fechapago between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									GROUP BY sede_nombre, catalogo_descripcion, egreso_empresa";
+
+			$datos = $this->ejecutarConsulta($consulta_egresos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$TOTAL_EGRESOS += $rows['TOTAL_EGRESOS'];
+				$MONTO_TOTAL_EGRESO += $rows['MONTO_TOTAL_EGRESO'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['RUBRO'].'</td>						
+						<td style="text-align: right">'.number_format($rows['TOTAL_EGRESOS'], 0, '.',',').'</td>
+						<td></td>
+						<td style="text-align: right">'.number_format($rows['MONTO_TOTAL_EGRESO'], 2, '.',',').'</td>
+					</tr>';	
+			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td >SUBTOTAL</td>
+					<td ></td>
+					<td ></td>
+					<td style="text-align: right">'.number_format($MONTO_TOTAL_INGRESO, 2, '.',',').'</td>
+					<td style="text-align: right">'.number_format($MONTO_TOTAL_EGRESO, 2, '.',',').'</td>
+				</tr>';
+			
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="true">
+					<td style="text-align: center; font-weight: bold;">TOTAL = Ingresos - Egresos</td>
+					<td ></td>
+					<td ></td>
+					<td style="text-align: right; font-weight: bold;">'.number_format($MONTO_TOTAL_INGRESO - $MONTO_TOTAL_EGRESO, 2, '.',',').'</td>
+					<td ></td>
+				</tr>';
+			return $tabla;			
+		}
+
+		public function balanceResultadosConsolidado($fecha_inicio, $fecha_fin){
+			$tabla="";
+			$TOTAL_INGRESOS = 0;
+			$MONTO_TOTAL_INGRESO = 0;
+			$consulta_ingresos="SELECT sede_nombre SEDE, catalogo_descripcion RUBRO, count(*) TOTAL_INGRESOS, SUM(pago_valor) MONTO_TOTAL_INGRESO 
+								FROM sujeto_alumno 
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								LEFT JOIN general_tabla_catalogo on pago_rubroid = catalogo_valor
+								INNER JOIN general_sede on alumno_sedeid = sede_id
+								WHERE pago_estado <> 'E'
+									and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion
+							
+							UNION ALL
+
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', 'ABONO') RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(transaccion_valor) MONTO_TOTAL_INGRESO 
+								from sujeto_alumno
+								INNER JOIN alumno_pago ON alumno_id = pago_alumnoid
+								INNER JOIN alumno_pago_transaccion ON pago_id = transaccion_pagoid
+								LEFT JOIN general_tabla_catalogo on pago_rubroid = catalogo_valor
+								INNER JOIN general_sede on alumno_sedeid = sede_id
+								WHERE transaccion_estado <> 'E'
+									and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									AND alumno_sedeid =1
+								GROUP BY sede_nombre, catalogo_descripcion
+							
+							UNION ALL
+							
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', empleado_nombre) RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(egreso_valor) MONTO_TOTAL_INGRESO 
+								FROM empleado_egreso
+								INNER JOIN sujeto_empleado on empleado_id = egreso_empleadoid 
+								LEFT JOIN general_tabla_catalogo on egreso_tipoid = catalogo_valor
+								INNER JOIN general_sede on empleado_sedeid = sede_id
+								WHERE egreso_estado <> 'E'
+									AND egreso_fechaegreso between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion, empleado_nombre
+								
+							UNION ALL
+							
+							SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', ingreso_empresa) RUBRO, 
+									count(*) TOTAL_INGRESOS, SUM(ingreso_monto) MONTO_TOTAL_INGRESO 
+								FROM balance_ingreso
+								LEFT JOIN general_tabla_catalogo on ingreso_concepto = catalogo_valor
+								INNER JOIN general_sede on ingreso_sedeid = sede_id
+								WHERE ingreso_estado <> 'E'
+									and ingreso_fecharecepcion between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								GROUP BY sede_nombre, catalogo_descripcion, ingreso_empresa";
+
+			$datos = $this->ejecutarConsulta($consulta_ingresos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$TOTAL_INGRESOS += $rows['TOTAL_INGRESOS'];
+				$MONTO_TOTAL_INGRESO += $rows['MONTO_TOTAL_INGRESO'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['RUBRO'].'</td>
+						<td style="text-align: right">'.number_format($rows['TOTAL_INGRESOS'], 0, '.',',').'</td>
+						<td style="text-align: right">'.number_format($rows['MONTO_TOTAL_INGRESO'], 2, '.',',').'</td>
+						<td></td>
+					</tr>';	
+			}
+			
+			$TOTAL_EGRESOS = 0;
+			$MONTO_TOTAL_EGRESO = 0;
+			$consulta_egresos="SELECT sede_nombre SEDE, catalogo_descripcion RUBRO, count(*) TOTAL_EGRESOS, SUM(ingreso_valor) MONTO_TOTAL_EGRESO 
+									FROM empleado_ingreso
+									INNER JOIN sujeto_empleado on empleado_id = ingreso_empleadoid 
+									LEFT JOIN general_tabla_catalogo on ingreso_tipoingresoid = catalogo_valor
+									INNER JOIN general_sede on empleado_sedeid = sede_id
+									WHERE ingreso_estado <> 'E'
+										AND ingreso_fechapago BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									GROUP BY sede_nombre, catalogo_descripcion
+
+								UNION ALL
+
+								SELECT sede_nombre SEDE, concat_ws(' ', catalogo_descripcion, '-', egreso_empresa) RUBRO, count(*) TOTAL_EGRESOS, SUM(egreso_monto) MONTO_TOTAL_EGRESO 
+									FROM balance_egreso
+									LEFT JOIN general_tabla_catalogo on egreso_concepto = catalogo_valor
+									INNER JOIN general_sede on egreso_sedeid = sede_id
+									WHERE egreso_estado <> 'E'
+										AND egreso_fechapago between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+									GROUP BY sede_nombre, catalogo_descripcion, egreso_empresa";
+
+			$datos = $this->ejecutarConsulta($consulta_egresos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$TOTAL_EGRESOS += $rows['TOTAL_EGRESOS'];
+				$MONTO_TOTAL_EGRESO += $rows['MONTO_TOTAL_EGRESO'];
+				$tabla.='
+					<tr>
+						<td>'.$rows['SEDE'].'</td>
+						<td>'.$rows['RUBRO'].'</td>						
+						<td style="text-align: right">'.number_format($rows['TOTAL_EGRESOS'], 0, '.',',').'</td>
+						<td></td>
+						<td style="text-align: right">'.number_format($rows['MONTO_TOTAL_EGRESO'], 2, '.',',').'</td>
+					</tr>';	
+			}
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="false">
+					<td >SUBTOTAL</td>
+					<td ></td>
+					<td ></td>
+					<td style="text-align: right">'.number_format($MONTO_TOTAL_INGRESO, 2, '.',',').'</td>
+					<td style="text-align: right">'.number_format($MONTO_TOTAL_EGRESO, 2, '.',',').'</td>
+				</tr>';
+			
+			$tabla.='
+				<tr data-widget="expandable-table" aria-expanded="true">
+					<td style="text-align: center; font-weight: bold;">TOTAL = Ingresos - Egresos</td>
+					<td ></td>
+					<td ></td>
+					<td style="text-align: right; font-weight: bold;">'.number_format($MONTO_TOTAL_INGRESO - $MONTO_TOTAL_EGRESO, 2, '.',',').'</td>
+					<td ></td>
+					</tr>';
+			return $tabla;		
+		}
 	}
 			
 											

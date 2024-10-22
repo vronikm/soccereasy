@@ -17,6 +17,7 @@
 			}
 			$modulo_ingreso = 'actualizar';			
 
+			$ingreso_sedeid			= $datosIngreso['ingreso_sedeid'];
 			$ingreso_fecharecepcion	= $datosIngreso['ingreso_fecharecepcion'];
 			$ingreso_empresa		= $datosIngreso['ingreso_empresa'];
 			$ingreso_monto		 	= $datosIngreso['ingreso_monto'];
@@ -27,6 +28,7 @@
 		}
 	}else{
 		$modulo_ingreso 		= 'registrar';
+		$ingreso_sedeid			= '';
 		$ingreso_fecharecepcion = '';
 		$ingreso_empresa		= '';
 		$ingreso_monto		 	= '';
@@ -142,7 +144,15 @@
 										</div>
 										<div class="col-sm-10">
 											<div class="row" style="font-size: 13px;">
-											<div class="col-md-3">
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="ingreso_sedeid">Sede</label>
+														<select class="form-control select2" id="ingreso_sedeid" name="ingreso_sedeid" onchange="ocultarDiv()" >																									
+															<?php echo $insIngreso->listarOptionSede($ingreso_sedeid); ?>
+														</select>	
+													</div>
+												</div>
+												<div class="col-md-3">
 													<div class="form-group">
 														<label for="ingreso_fecharecepcion">Fecha de recepción</label>
 														<div class="input-group">
@@ -153,19 +163,18 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-4">
 													<div class="form-group">
 														<label for="ingreso_empresa">Nombre empresa</label>
 														<input type="text"  class="form-control select2" id="ingreso_empresa" name="ingreso_empresa" value="<?php echo $ingreso_empresa; ?>">
 													</div> 
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-2">
 													<div class="form-group">
 														<label for="ingreso_monto">Monto USD</label>
 														<input type="text" class="form-control" id="ingreso_monto" name="ingreso_monto" value="<?php echo $ingreso_monto; ?>" required>
 													</div> 
-												</div>
-																									
+												</div>																									
 												<div class="col-md-3">
 													<div class="form-group">
 														<label for="ingreso_formaentrega">Forma de recepción</label>
@@ -205,6 +214,7 @@
 									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 										<thead>
 											<tr>
+												<th>Sede</th>
 												<th>Empresa</th>
 												<th>Monto</th>
 												<th>Fecha de recepción</th>
