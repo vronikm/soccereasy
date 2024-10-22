@@ -1239,6 +1239,10 @@
 			
 			$dateTime = new DateTime($fecha);
 			$fecha_formateada = $dateTime->format("d-m-Y");
+
+			$anio 		= date('Y', strtotime($fecha)); // Obtiene el año
+			$mes 		= date('m', strtotime($fecha));  // Obtiene el mes
+			$dia 		= date('d', strtotime($fecha)); // Obtiene el día
 			
 			$consulta_datos = "SELECT 
 									A.alumno_id, A.alumno_identificacion, 
@@ -1246,7 +1250,7 @@
 									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
 									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
 								FROM asistencia_asignahorario H
-									INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+									INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid									
 								WHERE H.asignahorario_horarioid = $horarioid";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -1263,29 +1267,29 @@
 						<td style="width: 220px;">							
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
-								<input type="hidden" name="estado" value="Justificado">
-								<input type="hidden" name="fecha" value="'.$fecha.'">
+								<input type="hidden" name="estado" value="J">
+								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Justificado</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
-								<input type="hidden" name="estado" value="Falta">
-								<input type="hidden" name="fecha" value="'.$fecha.'">
+								<input type="hidden" name="estado" value="F">
+								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Falta</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">	
-								<input type="hidden" name="estado" value="Atraso">
-								<input type="hidden" name="fecha" value="'.$fecha.'">
+								<input type="hidden" name="estado" value="A">
+								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Atraso</button>
 							</form>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">	
-								<input type="hidden" name="estado" value="Presente">
-								<input type="hidden" name="fecha" value="'.$fecha.'">
+								<input type="hidden" name="estado" value="P">
+								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right btn-dark btn-xs" style="margin-right: 5px;"">Presente</button>
 							</form>
@@ -1342,56 +1346,183 @@
 
 		public function registro_asistencia(){
 
-			$alumno_id=$this->limpiarCadena($_POST['alumno_id']);
+			$estado 	= $this->limpiarCadena($_POST['estado']);
+			$fecha		= $this->limpiarCadena($_POST['fecha']);
+			$alumno_id	= $this->limpiarCadena($_POST['alumno_id']);
+
+			$anio 		= date('Y', strtotime($fecha)); // Obtiene el año
+			$mes 		= date('m', strtotime($fecha));  // Obtiene el mes
+			$dia 		= date('d', strtotime($fecha)); // Obtiene el día
+
+			switch ($dia) {
+				case 1:
+					$dia='asistencia_D01';
+					break;
+				case 2:
+					$dia='asistencia_D02';
+					break;
+				case 3:
+					$dia='asistencia_D03';
+					break;
+				case 4:
+					$dia='asistencia_D04';
+					break;
+				case 5:
+					$dia='asistencia_D05';
+					break;
+				case 6:
+					$dia='asistencia_D06';
+					break;
+				case 7:
+					$dia='asistencia_D07';
+					break;
+				case 8:
+					$dia='asistencia_D08';
+					break;
+				case 9:
+					$dia='asistencia_D09';
+					break;
+				case 10:
+					$dia='asistencia_D10';
+					break;
+				case 11:
+					$dia='asistencia_D11';
+					break;
+				case 12:
+					$dia='asistencia_D12';
+					break;
+				case 13:
+					$dia='asistencia_D13';
+					break;
+				case 14:
+					$dia='asistencia_D14';
+					break;
+				case 15:
+					$dia='asistencia_D15';
+					break;
+				case 16:
+					$dia='asistencia_D16';
+					break;
+				case 17:
+					$dia='asistencia_D17';
+					break;
+				case 18:
+					$dia='asistencia_D18';
+					break;
+				case 19:
+					$dia='asistencia_D19';
+					break;
+				case 20:
+					$dia='asistencia_D20';
+					break;
+				case 21:
+					$dia='asistencia_D21';
+					break;
+				case 22:
+					$dia='asistencia_D22';
+					break;
+				case 23:
+					$dia='asistencia_D23';
+					break;
+				case 24:
+					$dia='asistencia_D24';
+					break;
+				case 25:
+					$dia='asistencia_D25';
+					break;
+				case 26:
+					$dia='asistencia_D26';
+					break;
+				case 27:
+					$dia='asistencia_D27';
+					break;
+				case 28:
+					$dia='asistencia_D28';
+					break;
+				case 29:
+					$dia='asistencia_D29';
+					break;
+				case 30:
+					$dia='asistencia_D30';
+					break;
+				case 31:
+					$dia='asistencia_D31';
+					break;
+			}
+
 
 			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id='$alumno_id'");
+		    $datos=$this->ejecutarConsulta("SELECT asistencia_id FROM asistencia_asistencia WHERE asistencia_alumnoid=$alumno_id AND asistencia_aniomes = '$anio$mes' ");
 		    if($datos->rowCount()<=0){
-		        $alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"El alumno no se encuentra en el sistema",
-					"icono"=>"error"
-				];
+				//insert
+
+				$asistencia_reg=[
+					[
+						"campo_nombre"=>"asistencia_alumnoid",
+						"campo_marcador"=>":Alumnoid",
+						"campo_valor"=>$alumno_id
+					],
+					[
+						"campo_nombre"=>"asistencia_aniomes",
+						"campo_marcador"=>":Aniomes",
+						"campo_valor"=> "$anio$mes"
+					],
+					[
+						"campo_nombre"=>$dia,
+						"campo_marcador"=>":Estado",
+						"campo_valor"=> $estado
+					]
+				];		
+	
+				$registrar_hora=$this->guardarDatos("asistencia_asistencia",$asistencia_reg);
+	
+				if($registrar_hora->rowCount()>0){
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Registro exitoso",
+						"texto"=>"La hora se registró correctamente",
+						"icono"=>"success"
+					];	
+				}
 				return json_encode($alerta);
+
 		    }else{
 		    	$datos=$datos->fetch();
-		    }
-			if($datos['alumno_estado']=='A'){
-				$estadoA = 'I';
-			}else{
-				$estadoA = 'A';
-			}
-            $alumno_datos_up=[
-				[
-					"campo_nombre"=>"alumno_estado",
-					"campo_marcador"=>":Estado",
-					"campo_valor"=> $estadoA
-				]
-			];
-			$condicion=[
-				"condicion_campo"=>"alumno_id",
-				"condicion_marcador"=>":Alumnoid",
-				"condicion_valor"=>$alumno_id
-			];
+				//update
 
-			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_up,$condicion)){
+				$asistencia_reg=[					
+					[
+						"campo_nombre"=>$dia,
+						"campo_marcador"=>":Estado",
+						"campo_valor"=> $estado
+					]
+				];
+				
+				$condicion=[
+					"condicion_campo"=>"asistencia_id",
+					"condicion_marcador"=>":Asistencia_id",
+					"condicion_valor"=>$datos['asistencia_id']
+				];
 
-				$alerta=[
-					"tipo"=>"recargar",
-					"titulo"=>"Estado actualizado correctamente",
-					"texto"=>"El estado del alumno ".$datos['alumno_primernombre']." | ".$datos['alumno_apellidopaterno']." fue actualizado correctamente",
-					"icono"=>"success"
-				];
-			}else{
-				$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error inesperado",
-					"texto"=>"No hemos podido actualizar el estado del alumno ".$datos['alumno_primernombre']." ".$datos['alumno_apellidopaterno'].", por favor intente nuevamente",
-					"icono"=>"error"
-				];
-			}
-			return json_encode($alerta);
+				if($this->actualizarDatos("asistencia_asistencia",$asistencia_reg,$condicion)){
+
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Estado actualizado correctamente",
+						"texto"=>"El estado del alumno  fue actualizado correctamente",
+						"icono"=>"success"
+					];
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"No hemos podido actualizar el estado del alumno, por favor intente nuevamente",
+						"icono"=>"error"
+					];
+				}
+				return json_encode($alerta);
+
+		    }		
 		}
 
 	}
