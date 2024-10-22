@@ -20,7 +20,7 @@
 						  ,"jugadorListaPDF", "empleadoIE", "empleadoDescargaEgreso","pagosUniformeUpdate"
 						  ,"reporteRubros","reportePagosReceptadosResumen","alumnoListaPDF","ingresoList"
 						  ,"reporteRepresentanteFactura","asistenciaHorarioLista","empleadoEgresoUpdate"
-						  ,"asistencia","asistenciaAlumno","ingresoList","egresoList"];
+						  ,"asistencia","asistenciaAlumno","ingresoList","egresoList","balanceResultados"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

@@ -13,12 +13,12 @@
 			if ($datosEgreso['egreso_imagenpago']!=""){
 				$foto = APP_URL.'app/views/imagenes/fotos/egresos/'.$datosEgreso['egreso_imagenpago'];
 
-				echo $datosEgreso['egreso_imagenpago'];
 			}else{
 				$foto = APP_URL.'app/views/dist/img/egreso_default.jpg';
 			}
 			$modulo_egreso = 'actualizar';			
 
+			$egreso_sedeid 		= $datosEgreso['egreso_sedeid'];
 			$egreso_fechapago 	= $datosEgreso['egreso_fechapago'];
 			$egreso_empresa		= $datosEgreso['egreso_empresa'];
 			$egreso_monto		= $datosEgreso['egreso_monto'];
@@ -29,6 +29,7 @@
 		}
 	}else{
 		$modulo_egreso 		= 'registrar';
+		$egreso_sedeid 	= '';
 		$egreso_fechapago 	= '';
 		$egreso_empresa		= '';
 		$egreso_monto		= '';
@@ -144,7 +145,15 @@
 										</div>
 										<div class="col-sm-10">
 											<div class="row" style="font-size: 13px;">
-											<div class="col-md-3">
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="egreso_sedeid">Sede</label>
+														<select class="form-control select2" id="egreso_sedeid" name="egreso_sedeid" onchange="ocultarDiv()" >																									
+															<?php echo $insEgreso->listarOptionSede($egreso_sedeid); ?>
+														</select>	
+													</div>
+												</div>
+												<div class="col-md-3">
 													<div class="form-group">
 														<label for="egreso_fechapago">Fecha de pago</label>
 														<div class="input-group">
@@ -155,13 +164,13 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-md-6">
+												<div class="col-md-4">
 													<div class="form-group">
 														<label for="egreso_empresa">Nombre empresa</label>
 														<input type="text"  class="form-control select2" id="egreso_empresa" name="egreso_empresa" value="<?php echo $egreso_empresa; ?>">
 													</div> 
 												</div>
-												<div class="col-md-3">
+												<div class="col-md-2">
 													<div class="form-group">
 														<label for="egreso_monto">Monto USD</label>
 														<input type="text" class="form-control" id="egreso_monto" name="egreso_monto" value="<?php echo $egreso_monto; ?>" required>
@@ -207,6 +216,7 @@
 									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 										<thead>
 											<tr>
+												<th>Sede</th>
 												<th>Empresa</th>
 												<th>Monto</th>
 												<th>Fecha de pago</th>

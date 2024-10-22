@@ -7,7 +7,8 @@
         public function registrarIngreso(){							
 			
 			# Almacenando datos#
-			$ingreso_fecharecepcion 	= $this->limpiarCadena($_POST['ingreso_fecharecepcion']);
+			$ingreso_sedeid			= $this->limpiarCadena($_POST['ingreso_sedeid']);
+			$ingreso_fecharecepcion = $this->limpiarCadena($_POST['ingreso_fecharecepcion']);
 			$ingreso_empresa	    = $this->limpiarCadena($_POST['ingreso_empresa']);
             $ingreso_monto	        = $this->limpiarCadena($_POST['ingreso_monto']);
             $ingreso_formaentrega	= $this->limpiarCadena($_POST['ingreso_formaentrega']);
@@ -106,6 +107,11 @@
             }
 			$ingreso_datos_reg=[
 				[
+					"campo_nombre"=>"ingreso_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$ingreso_sedeid
+				],
+				[
 					"campo_nombre"=>"ingreso_fecharecepcion",
 					"campo_marcador"=>":Fecharecepcion",
 					"campo_valor"=>$ingreso_fecharecepcion
@@ -175,7 +181,7 @@
 		}
 
         public function BuscarIngreso($ingresoid){		
-			$consulta_datos=("SELECT ingreso_fecharecepcion, ingreso_empresa, ingreso_monto, ingreso_formaentrega,
+			$consulta_datos=("SELECT ingreso_sedeid, ingreso_fecharecepcion, ingreso_empresa, ingreso_monto, ingreso_formaentrega,
                                     ingreso_concepto, ingreso_descripcion, ingreso_imagenpago 
 							 FROM balance_ingreso
 							 WHERE ingreso_id =".$ingresoid."
@@ -183,6 +189,23 @@
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
+		}
+
+		public function listarOptionSede($sedeid){
+			$option="";
+
+			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($sedeid == $rows['sede_id']){	
+					$option.='<option value='.$rows['sede_id'].' selected="selected">'.$rows['sede_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';
+				}					
+			}
+			return $option;
 		}
 
         public function listarFormaEntregaIngreso($ingreso_formaentrega){
@@ -231,16 +254,18 @@
 
         public function listarIngresos(){
 			$tabla="";
-			$consulta_datos="SELECT ingreso_id, ingreso_empresa, ingreso_monto, ingreso_fecharecepcion
-							 FROM balance_ingreso
-							 WHERE ingreso_estado = 'A'
+			$consulta_datos="SELECT ingreso_id, sede_nombre, ingreso_empresa, ingreso_monto, ingreso_fecharecepcion
+							 FROM balance_ingreso, general_sede
+							 WHERE ingreso_sedeid = sede_id
+							 	AND ingreso_estado = 'A'
 							  ORDER BY ingreso_fecharecepcion DESC";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				$tabla.='
-					<tr>						
+					<tr>	
+						<td>'.$rows['sede_nombre'].'</td>					
 						<td>'.$rows['ingreso_empresa'].'</td>
 						<td>'.$rows['ingreso_monto'].'</td>
 						<td>'.$rows['ingreso_fecharecepcion'].'</td>
@@ -276,6 +301,7 @@
 			}	
 			
 			# Almacenando datos#
+			$ingreso_sedeid			= $this->limpiarCadena($_POST['ingreso_sedeid']);
 			$ingreso_fecharecepcion = $this->limpiarCadena($_POST['ingreso_fecharecepcion']);
 			$ingreso_empresa	    = $this->limpiarCadena($_POST['ingreso_empresa']);
             $ingreso_monto	        = $this->limpiarCadena($_POST['ingreso_monto']);
@@ -297,6 +323,11 @@
 		    }		
 
 			$ingreso_datos_reg=[
+				[
+					"campo_nombre"=>"ingreso_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$ingreso_sedeid
+				],
 				[
 					"campo_nombre"=>"ingreso_fecharecepcion",
 					"campo_marcador"=>":Fechainicio",
@@ -499,7 +530,7 @@
 		}
 
 		public function BuscarEgreso($egresoid){		
-			$consulta_datos=("SELECT egreso_fechapago, egreso_empresa, egreso_monto, egreso_formaentrega,
+			$consulta_datos=("SELECT egreso_sedeid, egreso_fechapago, egreso_empresa, egreso_monto, egreso_formaentrega,
                                      egreso_concepto, egreso_descripcion, egreso_imagenpago 
 							 FROM balance_egreso
 							 WHERE egreso_id =".$egresoid);	
@@ -532,16 +563,18 @@
 
 		public function listarEgresos(){
 			$tabla="";
-			$consulta_datos="SELECT egreso_id, egreso_empresa, egreso_monto, egreso_fechapago
-							 FROM balance_egreso
-							 WHERE egreso_estado = 'A'
+			$consulta_datos="SELECT egreso_id, sede_nombre, egreso_empresa, egreso_monto, egreso_fechapago
+							 FROM balance_egreso, general_sede
+							 WHERE egreso_sedeid = sede_id
+							 	AND egreso_estado = 'A'
 							 ORDER BY egreso_fechapago DESC";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				$tabla.='
-					<tr>						
+					<tr>
+						<td>'.$rows['sede_nombre'].'</td>						
 						<td>'.$rows['egreso_empresa'].'</td>
 						<td>'.$rows['egreso_monto'].'</td>
 						<td>'.$rows['egreso_fechapago'].'</td>
@@ -562,6 +595,7 @@
 		public function registrarEgreso(){							
 			
 			# Almacenando datos#
+			$egreso_sedeid			= $this->limpiarCadena($_POST['egreso_sedeid']);
 			$egreso_fechapago 		= $this->limpiarCadena($_POST['egreso_fechapago']);
 			$egreso_empresa	    	= $this->limpiarCadena($_POST['egreso_empresa']);
             $egreso_monto	        = $this->limpiarCadena($_POST['egreso_monto']);
@@ -662,6 +696,11 @@
             }
 			$egreso_datos_reg=[
 				[
+					"campo_nombre"=>"egreso_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$egreso_sedeid
+				],
+				[
 					"campo_nombre"=>"egreso_fechapago",
 					"campo_marcador"=>":Fechainicio",
 					"campo_valor"=>$egreso_fechapago
@@ -748,6 +787,7 @@
 			}	
 			
 			# Almacenando datos#
+			$egreso_sedeid			= $this->limpiarCadena($_POST['egreso_sedeid']);
 			$egreso_fechapago 		= $this->limpiarCadena($_POST['egreso_fechapago']);
 			$egreso_empresa	    	= $this->limpiarCadena($_POST['egreso_empresa']);
             $egreso_monto	        = $this->limpiarCadena($_POST['egreso_monto']);
@@ -769,6 +809,11 @@
 		    }		
 
 			$egreso_datos_reg=[
+				[
+					"campo_nombre"=>"egreso_sedeid",
+					"campo_marcador"=>":Sedeid",
+					"campo_valor"=>$egreso_sedeid
+				],
 				[
 					"campo_nombre"=>"egreso_fechapago",
 					"campo_marcador"=>":Fechapago",
