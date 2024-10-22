@@ -163,7 +163,7 @@
 							<tbody>
 								<?php
 									if($alumno_sedeid!=0){
-										echo $insResultado->balanceResultadoIngresos($fecha_inicio, $fecha_fin,$alumno_sedeid);
+										echo $insResultado->balanceResultado($fecha_inicio, $fecha_fin,$alumno_sedeid);
 									}else{
 										echo $insResultado->balanceResultadosConsolidado($fecha_inicio, $fecha_fin);
 									}	

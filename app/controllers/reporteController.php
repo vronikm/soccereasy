@@ -705,7 +705,7 @@
 			return $tabla;			
 		}
 
-		public function balanceResultadoIngresos($fecha_inicio, $fecha_fin, $sede_id){
+		public function balanceResultado($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$TOTAL_INGRESOS = 0;
 			$MONTO_TOTAL_INGRESO = 0;
@@ -717,7 +717,7 @@
 								WHERE pago_estado <> 'E'
 									AND alumno_sedeid =".$sede_id."
 									and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY pago_rubroid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion
 							
 							UNION ALL
 
@@ -732,7 +732,7 @@
 									AND alumno_sedeid =".$sede_id."
 									and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 									AND alumno_sedeid =1
-								GROUP BY pago_rubroid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion
 							
 							UNION ALL
 							
@@ -745,7 +745,7 @@
 								WHERE egreso_estado <> 'E'
 									AND empleado_sedeid = ".$sede_id."
 									AND egreso_fechaegreso between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY egreso_tipoid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion, empleado_nombre
 								
 							UNION ALL
 							
@@ -757,7 +757,7 @@
 								WHERE ingreso_estado <> 'E'
 									AND ingreso_sedeid = ".$sede_id."
 									and ingreso_fecharecepcion between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY ingreso_concepto, catalogo_descripcion, ingreso_empresa";
+								GROUP BY sede_nombre, catalogo_descripcion, ingreso_empresa";
 
 			$datos = $this->ejecutarConsulta($consulta_ingresos);
 			$datos = $datos->fetchAll();
@@ -784,7 +784,7 @@
 									WHERE ingreso_estado <> 'E'
 										AND empleado_sedeid = ".$sede_id."
 										AND ingreso_fechapago BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-									GROUP BY catalogo_descripcion
+									GROUP BY sede_nombre, catalogo_descripcion
 
 								UNION ALL
 
@@ -795,7 +795,7 @@
 									WHERE egreso_estado <> 'E'
 										AND egreso_sedeid = ".$sede_id."
 										AND egreso_fechapago between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-									GROUP BY egreso_concepto, catalogo_descripcion, egreso_empresa";
+									GROUP BY sede_nombre, catalogo_descripcion, egreso_empresa";
 
 			$datos = $this->ejecutarConsulta($consulta_egresos);
 			$datos = $datos->fetchAll();
@@ -842,7 +842,7 @@
 								INNER JOIN general_sede on alumno_sedeid = sede_id
 								WHERE pago_estado <> 'E'
 									and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY pago_rubroid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion
 							
 							UNION ALL
 
@@ -856,7 +856,7 @@
 								WHERE transaccion_estado <> 'E'
 									and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 									AND alumno_sedeid =1
-								GROUP BY pago_rubroid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion
 							
 							UNION ALL
 							
@@ -868,7 +868,7 @@
 								INNER JOIN general_sede on empleado_sedeid = sede_id
 								WHERE egreso_estado <> 'E'
 									AND egreso_fechaegreso between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY egreso_tipoid, catalogo_descripcion
+								GROUP BY sede_nombre, catalogo_descripcion, empleado_nombre
 								
 							UNION ALL
 							
@@ -879,7 +879,7 @@
 								INNER JOIN general_sede on ingreso_sedeid = sede_id
 								WHERE ingreso_estado <> 'E'
 									and ingreso_fecharecepcion between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-								GROUP BY ingreso_concepto, catalogo_descripcion, ingreso_empresa";
+								GROUP BY sede_nombre, catalogo_descripcion, ingreso_empresa";
 
 			$datos = $this->ejecutarConsulta($consulta_ingresos);
 			$datos = $datos->fetchAll();
@@ -905,7 +905,7 @@
 									INNER JOIN general_sede on empleado_sedeid = sede_id
 									WHERE ingreso_estado <> 'E'
 										AND ingreso_fechapago BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-									GROUP BY catalogo_descripcion
+									GROUP BY sede_nombre, catalogo_descripcion
 
 								UNION ALL
 
@@ -915,7 +915,7 @@
 									INNER JOIN general_sede on egreso_sedeid = sede_id
 									WHERE egreso_estado <> 'E'
 										AND egreso_fechapago between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-									GROUP BY egreso_concepto, catalogo_descripcion, egreso_empresa";
+									GROUP BY sede_nombre, catalogo_descripcion, egreso_empresa";
 
 			$datos = $this->ejecutarConsulta($consulta_egresos);
 			$datos = $datos->fetchAll();
