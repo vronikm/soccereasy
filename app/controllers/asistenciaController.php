@@ -276,8 +276,9 @@
 		public function listarOptionProfesor($lugar_sedeid, $profesorid){			
 			$option="";
 			$consulta_datos="SELECT empleado_id, empleado_nombre 
-				FROM sujeto_empleado
-				WHERE empleado_estado = 'A'";
+								FROM sujeto_empleado
+								WHERE empleado_estado = 'A'
+									AND empleado_sedeid = ".$lugar_sedeid;
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -376,6 +377,12 @@
 		}
 		public function informacionEscuela(){		
 			$consulta_datos="SELECT * FROM general_escuela WHERE escuela_id  = 1";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
@@ -1187,7 +1194,7 @@
 			if($asignar_horario->rowCount()==1){
 				$alerta=[
 					"tipo"=>"recargar",
-					"titulo"=>"Alumno agregado",
+					"titulo"=>"Asignación correcta",
 					"texto"=>"El alumno fue agregado correctamente al horario seleccionado",
 					"icono"=>"success"
 				];
@@ -1195,7 +1202,7 @@
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
-					"texto"=>"No fue posible agregar el alumno asignar_horario",
+					"texto"=>"No fue posible agregar el alumno al horario seleccionado",
 					"icono"=>"error"
 				];
 			}

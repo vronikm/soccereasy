@@ -60,7 +60,7 @@
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Asignación horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]; ?></h5>
+						<h5 class="m-0">Horario <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"] ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h5>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -79,7 +79,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Listado de alumnos sede: <?php echo $horarioSede["sede_nombre"]; ?></h3>
+						<h3 class="card-title">Listado de alumnos para asignación a horario</h3>
 						<div class="card-tools">	
 							<a href="<?php echo APP_URL.'asistenciaHorarioJugador/'.$horarioSede["horario_id"].'/'.$horarioSede["horario_sedeid"].'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
 							<!--a href="<?php echo APP_URL.'jugadorListaPDF/'.$horarioSede["horario_id"].'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a-->							

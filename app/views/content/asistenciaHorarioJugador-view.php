@@ -100,7 +100,7 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h5 class="m-0">Asignación Horario <?php echo "$horario_nombre - $horario_detalle"; ?></h5>
+								<h5 class="m-0">Asignación Horario <?php echo "$horario_nombre - $horario_detalle - Sede $sede_nombre"; ?></h5>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
@@ -119,7 +119,7 @@
 						<form action="<?php echo APP_URL."asistenciaHorarioJugador/".$horario_id."/".$sede_id."/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >					
 							<div class="card card-default">
 								<div class="card-header" style='height: 40px;'>
-									<h3 class="card-title">Búsqueda de alumnos sede: <?php echo $sede_nombre; ?> </h3>
+									<h3 class="card-title">Búsqueda de alumnos</h3>
 									<div class="card-tools">
 										<button type="button" style='height: 40px;' class="btn btn-tool" data-card-widget="collapse">
 										<i class="fas fa-minus"></i>

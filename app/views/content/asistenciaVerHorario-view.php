@@ -24,10 +24,10 @@
 		$horario_estado		= "";
 	}
 
-	$escuela=$insHorario->informacionEscuela();
-	if($escuela->rowCount()==1){
-		$escuela=$escuela->fetch(); 
-	}	
+	$sede=$insHorario->informacionSede($lugar_sedeid);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch(); 
+    }
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +81,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Horario <?php echo $horario_nombre; ?></h4>
+							<h4 class="m-0">Horario <?php echo $horario_nombre." Sede ". $sede['sede_nombre']; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -106,16 +106,15 @@
 								<div class="row invoice-info">
 									<div class="col-sm-6 invoice-col">										
 										<address class="text-center">												
-											<img src="<?php echo APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg' ?>" style="width: 180px; height: 100px;"/>										
-											<br>Dirección: <?php echo $escuela["escuela_direccion"]; ?><br>
-											Celular: <?php echo $escuela["escuela_movil"]; ?> - LOJA - ECUADOR										
+											<img src="<?php echo APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'] ?>" style="width: 180px; height: 100px;"/>
+											<br>Dirección: <?php echo $sede["sede_direccion"]; ?><br>
+											Celular: <?php echo $sede["sede_telefono"]." - ".$sede["sede_nombre"]; ?> - ECUADOR								
 										</address>
 									</div>
 									<!-- /.col -->
 									<div class="col-sm-6 invoice-col">									
 										<address class="text-center">	
-											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE LOJA</strong><br>
-											De: Luis Roberto Álvarez Granda<br><br>											
+											<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE <?php echo $sede["sede_nombre"]; ?></strong><br>									
 											<div class="row">
 												<div class="col-12 table-responsive">
 													<div class="row">

@@ -11,7 +11,6 @@
 		}
 	}
 	
-
 	if(isset($_POST['fecha'])){
 		$fechahoy =  $insAlumno->limpiarCadena($_POST['fecha']);		
 	} ELSE{
@@ -66,7 +65,7 @@
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]; ?></h5>
+						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]  ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h5>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -100,7 +99,7 @@
 								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group campo">
-											<label for="pago_fecha">Fecha de registero</label>
+											<label for="pago_fecha">Fecha de registro</label>
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -115,7 +114,7 @@
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="alumno_sedeid">.</label>
-											<button type="submit" class="form-control btn btn-info">Generer lista</button>
+											<button type="submit" class="form-control btn btn-info">Generar lista</button>
 										</div>
 									</div>									
 								</div>

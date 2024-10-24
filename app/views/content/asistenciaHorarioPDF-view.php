@@ -28,9 +28,9 @@
 		$horario_estado		= "";
 	}
 
-    $escuela=$insHorario->informacionEscuela();
-    if($escuela->rowCount()==1){
-	    $escuela=$escuela->fetch(); 
+	$sede=$insHorario->informacionSede($lugar_sedeid);
+	if($sede->rowCount()==1){
+		$sede=$sede->fetch(); 
     }
 
     $HorarioPDF = $insHorario->HorarioPDF($horario_id);
@@ -48,7 +48,7 @@
 	    $ProfesorPDF=$ProfesorPDF->fetch(); 
     }
    											
-    $data="Horario ".$horario_nombre. " | "."\nIDV Loja\n".$escuela["escuela_movil"]."\n".$escuela["escuela_email"];
+    $data="Horario ".$horario_nombre. " | "."\nIDV Loja\n".$sede["sede_telefono"]."\n".$sede["sede_email"];
 
     $image = $generator->render_image($symbology, $data, $optionsQR);
     imagejpeg($image, $filename);
@@ -66,33 +66,32 @@
     // logo : 80 de largo por 55 de alto
     //,,ancho,
 
-    $pdf->Image(APP_URL.'app/views/dist/img/Logos/logo_recibo.jpg', 34, 10, 47, 26);
+    $pdf->Image(APP_URL.'app/views/imagenes/fotos/sedes/'.$sede['sede_foto'], 34, 10, 47, 26);
     //$pdf->Image(APP_URL.'app/views/dist/img/Logos/login.jpg', 165, 88, 25, 25);
 
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;
   
     $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "ESCUELA INDEPENDIENTE", 0, 0, 'C'); $y+=5;
-    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "DEL VALLE LOJA", 0, 0, 'C'); $y+=5;
-    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 260, 8, mb_convert_encoding("De: Luis Roberto Álvarez Granda", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');$x=15; $y+=10;
+    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 260, 8, "DEL VALLE ".$sede['sede_nombre'], 0, 0, 'C'); $y+=5;
 
-    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 8, mb_convert_encoding("Dirección:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 102, 8, mb_convert_encoding($escuela["escuela_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
-    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 8, mb_convert_encoding("Celular:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 8, mb_convert_encoding($escuela["escuela_movil"]." LOJA-ECUADOR", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
+    $pdf->SetXY( $x+8, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(16, 10, mb_convert_encoding("Dirección:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetXY( $x-10, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 135, 10, mb_convert_encoding($sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
+    $pdf->SetXY( $x, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell(35, 10, mb_convert_encoding("Celular:", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetXY( $x+10, $y+10); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 90, 10, mb_convert_encoding($sede["sede_telefono"]." ".$sede['sede_nombre']."-ECUADOR", 'ISO-8859-1', 'UTF-8'), 0, 0,'C');
 
-    $pdf->SetLineWidth(0.1); $pdf->Rect(130, 35, 60, 10, "D");
-    $pdf->Line(130, 38, 190, 38);
-    $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 7 ); $pdf->Cell( 19, 2, mb_convert_encoding("Fecha de emisión", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetXY( 130, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "DIA", 0, 0, 'C');
-    $pdf->SetXY( 150, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "MES", 0, 0, 'C');
-    $pdf->SetXY( 170, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, mb_convert_encoding("AÑO", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetLineWidth(0.1); $pdf->Rect(120, 35, 60, 10, "D");
+    $pdf->Line(120, 38, 180, 38);
+    $pdf->SetXY( 120, 32.5); $pdf->SetFont( "Arial", "", 7 ); $pdf->Cell( 19, 2, mb_convert_encoding("Fecha ", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetXY( 120, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "DIA", 0, 0, 'C');
+    $pdf->SetXY( 140, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, "MES", 0, 0, 'C');
+    $pdf->SetXY( 160, 32.5); $pdf->SetFont( "Arial", "", 5 ); $pdf->Cell( 20, 8, mb_convert_encoding("AÑO", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
     //FECHA VARIABLE
-    $pdf->SetXY( 130, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('d', strtotime(date('Y-m-d'))), 0, 0, 'C');
-    $pdf->SetXY( 150, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8,date('m', strtotime(date('Y-m-d'))), 0, 0, 'C');
-    $pdf->SetXY( 170, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('Y', strtotime(date('Y-m-d'))), 0, 0, 'C');
+    $pdf->SetXY( 120, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('d', strtotime(date('Y-m-d'))), 0, 0, 'C');
+    $pdf->SetXY( 140, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8,date('m', strtotime(date('Y-m-d'))), 0, 0, 'C');
+    $pdf->SetXY( 160, 38); $pdf->SetFont( "Arial", "", 9 ); $pdf->Cell( 20, 8, date('Y', strtotime(date('Y-m-d'))), 0, 0, 'C');
   
-    $pdf->Line(150, 35, 150, 45);
-    $pdf->Line(170, 35, 170, 45);
+    $pdf->Line(140, 35, 140, 45);
+    $pdf->Line(160, 35, 160, 45);
 
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 51, 190, 70, "D");
     //margen, alto izquierdo de separación de línea, ancho de la fila de lado a lado, alto derecho de separación de línea
@@ -103,7 +102,7 @@
     $pdf->Line(10, 81, 200, 81);
     $pdf->Line(10, 88, 200, 88);   
 
-    $pdf->SetXY( 15, 52 ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 20, 8, "Horario ".$horario_nombre.". ".$horario_detalle, 0, 0, 'L');
+    $pdf->SetXY( 15, 52 ); $pdf->SetFont( "Arial", "B", 11 ); $pdf->Cell( 20, 8, mb_convert_encoding("Horario ".$horario_nombre.". ".$horario_detalle, 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
     $C = 27;
     $CC = 35;
     $pdf->Line($C, 60, $C, 88); $C+=$CC;

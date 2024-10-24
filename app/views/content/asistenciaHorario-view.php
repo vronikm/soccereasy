@@ -91,7 +91,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Edición de horario sede <?php echo $sede_nombre; ?></h4>
+							<h4 class="m-0">Creación de horario Sede <?php echo $sede_nombre; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
