@@ -16,7 +16,7 @@
 			$equipo_estado		= "A";
 
 			# Verificando campos obligatorios #
-			if($equipo_nombre=="" || $equipo_categoria==""){
+			if($equipo_nombre=="" || $equipo_categoria=="" || $equipo_sedeid==0 || $equipo_profesorid==0){
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
@@ -290,7 +290,7 @@
 			$equipo_categoria	= $this->limpiarCadena($_POST['equipo_categoria']);
 						
 			# Verificando campos obligatorios #
-			if($equipo_nombre=="" || $equipo_categoria==""){
+			if($equipo_nombre=="" || $equipo_categoria=="" || $equipo_sedeid==0 || $equipo_profesorid==0){
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
