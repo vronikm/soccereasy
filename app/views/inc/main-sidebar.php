@@ -87,7 +87,7 @@
             <li class="nav-item">
                 <a href="<?php echo APP_URL."asistencia/" ?>" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Asistencia</p>
+                  <p>Registrar asistencia</p>
                 </a>
               </li>
               <li class="nav-item">

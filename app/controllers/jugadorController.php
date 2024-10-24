@@ -251,12 +251,12 @@
 		}        
 		public function BuscarEquipo($equipo_id){		
 			$consulta_datos=("SELECT equipo_id, equipo_nombre, equipo_torneoid, equipo_categoria, equipo_sedeid, sede_nombre, equipo_foto,
-								CASE WHEN equipo_estado = 'A' THEN 'Activo' 
-									 WHEN equipo_estado = 'I' THEN 'Inactivo' 
-									 ELSE equipo_estado 
-								END AS ESTADO 
-							 FROM torneo_equipo, general_sede
+								empleado_nombre, CASE WHEN equipo_estado = 'A' THEN 'Activo' 
+													  WHEN equipo_estado = 'I' THEN 'Inactivo' 
+													  ELSE equipo_estado END AS ESTADO 
+							 FROM torneo_equipo, general_sede, sujeto_empleado
 							 WHERE equipo_sedeid = sede_id
+							 	AND equipo_profesorid = empleado_id
 							 	AND equipo_estado IN ('A','I')
 							 	AND equipo_id =".$equipo_id);	
 
@@ -330,7 +330,7 @@
 									CONCAT(alumno_apellidopaterno, ' ',alumno_apellidomaterno) AS APELLIDOS,
 									alumno_fechanacimiento AS FECHANAC,
 									alumno_identificacion as CEDULA,
-									alumno_numcamiseta AS NUMCAMISETA
+									case when alumno_numcamiseta = 0 then null else alumno_numcamiseta end AS NUMCAMISETA
 								FROM torneo_jugador 
 									INNER JOIN sujeto_alumno ON alumno_id = jugador_alumnoid
 									INNER JOIN torneo_equipo ON equipo_id = jugador_equipoid

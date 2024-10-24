@@ -20,6 +20,7 @@
 		$equipo_categoria 	= $datos['equipo_categoria'];
         $equipo_sedeid      = $datos['equipo_sedeid'];
         $equipo_sede        = $datos['sede_nombre'];
+        $equipo_profesor    = $datos['empleado_nombre'];
 
         $filename .= "alumno.jpg";
 	}else{
@@ -27,6 +28,7 @@
 		$equipo_categoria	= "";
         $equipo_sedeid	    = "";
         $equipo_sede	    = "";
+        $equipo_profesor    = "";
 	}
 
 	$sede=$insLista->informacionSede($equipo_sedeid);
@@ -49,10 +51,11 @@
     $pdf->SetLineWidth(0.1); $pdf->Rect(10, 10, 190, 40, "D"); $x=15; $y=13;  
     $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 12 ); $pdf->Cell( 240, 10, "ESCUELA INDEPENDIENTE DEL VALLE ".$equipo_sede, 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell(240, 12, mb_convert_encoding("Dirección: ".$sede["sede_direccion"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
-    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10); $pdf->Cell(240, 12, mb_convert_encoding("Celular: ".$sede["sede_email"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
+    $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10); $pdf->Cell(240, 12, mb_convert_encoding("Correo: ".$sede["sede_email"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
     $pdf->SetXY( $x, $y); $pdf->SetFont( "Arial", "", 10); $pdf->Cell(240, 12, mb_convert_encoding("Celular: ".$sede["sede_telefono"], 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');    
-    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 12 ); $pdf->Cell( 90, 35, mb_convert_encoding("EQUIPO ".$equipo_nombre." CATEGORIA ".$equipo_categoria, 'ISO-8859-1', 'UTF-8'), 0, 0, 'C'); $y+=5;
-    
+    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 12 ); $pdf->Cell( 75, 35, mb_convert_encoding("EQUIPO ".$equipo_nombre." CATEGORIA ".$equipo_categoria, 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "B", 10 ); $pdf->Cell( 215, 35, mb_convert_encoding("PROFESOR RESPONSABLE: ", 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+    $pdf->SetXY( $x, $y ); $pdf->SetFont( "Arial", "", 10 ); $pdf->Cell( 315, 35, mb_convert_encoding($equipo_profesor, 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
     $tabla="";
     $x=10; $y=60;    
     $pdf->SetMargins(10, 10, 10);

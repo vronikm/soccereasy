@@ -30,13 +30,15 @@
 				$foto = APP_URL.'app/views/imagenes/fotos/equipos/equipo_default.jpg';
 			}
 			$modulo_equipo 	= 'actualizar';
+			$equipo_profesorid	= $datosEquipo['equipo_profesorid'];
 			$equipo_nombre		= $datosEquipo['equipo_nombre'];
 			$equipo_categoria	= $datosEquipo['equipo_categoria'];
 			$equipo_sede		= $datosEquipo['sede_nombre'];
 			$equipo_estado		= $datosEquipo['ESTADO'];			
 		}
 	}else{
-		$modulo_equipo 	= 'registrar';
+		$modulo_equipo 		= 'registrar';
+		$equipo_profesorid	= '';
 		$equipo_nombre 		= '';
 		$equipo_categoria	= '';
 		$equipo_sedeid		= '';
@@ -150,6 +152,21 @@
 										</div>
 										<div class="col-sm-10">
 											<div class="row">
+												<div class="col-md-2">
+													<div class="form-group">
+														<label for="equipo_sedeid">Sede</label>
+														<select class="form-control select2" id="equipo_sedeid" name="equipo_sedeid">									
+															<?php
+																if($equipo_sedeid == 0){	
+																	echo "<option value='0' selected='selected'>- Seleccionar sede -</option>";
+																}else{
+																	echo "<option value='0'>- Seleccionar sede -</option>";	
+																}
+															?>
+															<?php echo $insEquipo->listarOptionSede($equipo_sedeid); ?>
+														</select>	
+													</div>
+												</div>
 												<div class="col-md-3">
 													<div class="form-group">
 														<label for="equipo_nombre">Nombre equipo</label>
@@ -162,11 +179,18 @@
 														<input type="text" class="form-control" id="equipo_categoria" name="equipo_categoria" value="<?php echo $equipo_categoria; ?>">
 													</div>
 												</div>
-												<div class="col-md-2">
+												<div class="col-md-4">
 													<div class="form-group">
-														<label for="equipo_sedeid">Sede</label>
-														<select class="form-control select2" id="equipo_sedeid" name="equipo_sedeid">									
-															<?php echo $insEquipo->listarOptionSede($equipo_sedeid); ?>
+														<label for="equipo_profesorid">Profesor a cargo</label>
+														<select class="form-control select2" id="equipo_profesorid" name="equipo_profesorid">									
+															<?php
+																if($equipo_profesorid == 0){	
+																	echo "<option value='0' selected='selected'>Seleccionar un profesor</option>";
+																}else{
+																	echo "<option value='0'>- Seleccionar un profesor -</option>";	
+																}
+															?>
+															<?php echo $insEquipo->listarResponsable($equipo_profesorid); ?>
 														</select>	
 													</div>
 												</div> 
@@ -187,10 +211,11 @@
 									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
 										<thead>
 											<tr>
+												<th>Sede</th>
 												<th>Torneo</th>
 												<th>Equipo</th>
 												<th>Categoría</th>
-												<th>Sede</th>
+												<th>Profesor a cargo</th>
 												<th>Estado</th>
 												<th>Jugadores</th>
 												<th style="width: 255px;">Operaciones</th>
