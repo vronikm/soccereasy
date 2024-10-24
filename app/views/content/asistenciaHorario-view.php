@@ -6,7 +6,7 @@
 	
 	$horario_id = ($url[1] != "") ? $url[1] : 0;	
 	$modulo_horario = ($horario_id == 0) ? 'registrar_horario' : 'actualizar_horario';
-
+	
 	$datos=$insHorario->seleccionarDatos("Unico","asistencia_horario","horario_id",$horario_id);
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch();
@@ -20,6 +20,8 @@
 		$horario_detalle	= "";
 		$horario_estado		= "";
 	}
+
+	$encabezado_vista = ($modulo_horario == 'registrar_horario') ? 'Creación de horario Sede ' : 'Edición horario '.$horario_nombre.' '.$horario_detalle.' Sede ';
 
 	$sede=$insHorario->seleccionarDatos("Unico","general_sede","sede_id",$lugar_sedeid);
 	if($sede->rowCount()==1){
@@ -91,7 +93,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Creación de horario Sede <?php echo $sede_nombre; ?></h4>
+							<h4 class="m-0"> <?php echo $encabezado_vista. $sede_nombre; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">

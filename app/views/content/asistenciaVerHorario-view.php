@@ -81,7 +81,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h4 class="m-0">Horario <?php echo $horario_nombre." Sede ". $sede['sede_nombre']; ?></h4>
+							<h4 class="m-0">Horario <?php echo $horario_nombre.' '.$horario_detalle." Sede ". $sede['sede_nombre']; ?></h4>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">

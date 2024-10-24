@@ -164,8 +164,8 @@
 									<th>Detalle</th>
 									<th>Estado</th>																
 									<th>Alumnos</th>
-									<th></th>
 									<th>Opciones horario</th>
+									<th>Operaciones</th>
 								</tr>
 							</thead>
 							<tbody>

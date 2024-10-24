@@ -694,7 +694,7 @@
 						<td>'.$estado.'</td>
 						<td>'.$rows['ALUMNOS'].'</td>
 						<td>							
-							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/'.$horario_sedeid.'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar</a>
+							<a href="'.APP_URL.'asistenciaHorarioJugador/'.$rows['horario_id'].'/'.$horario_sedeid.'/" target="_blank" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Asignar alumnos</a>
 							<a href="'.APP_URL.'asistenciaHorarioLista/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver lista</a>
 						</td>
 						<td>
@@ -709,14 +709,15 @@
 
 		public function listarHorariosProfesor($profesor_id){					
 			$tabla="";
-			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre
 								FROM asistencia_horario AH
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 												FROM asistencia_asignahorario
 												GROUP BY asignahorario_horarioid
 										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
-										WHERE AH.horario_estado <> 'E'";	
+								INNER JOIN general_sede on AH.horario_sedeid = sede_id
+								WHERE AH.horario_estado <> 'E'";	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -733,7 +734,7 @@
 				}				
 				$tabla.='
 					<tr '.$class.'>
-						<td>Sede</td>
+						<td>'.$rows['sede_nombre'].'</td>
 						<td>Lugar entrenamiento</td>
 						<td>'.$rows['horario_nombre'].'</td>
 						<td>'.$rows['horario_detalle'].'</td>						
@@ -1545,7 +1546,7 @@
 					$alerta=[
 						"tipo"=>"recargar",
 						"titulo"=>"Registro exitoso",
-						"texto"=>"La hora se registró correctamente",
+						"texto"=>"Asistencia registrada correctamente",
 						"icono"=>"success"
 					];	
 				}
@@ -1573,15 +1574,15 @@
 
 					$alerta=[
 						"tipo"=>"recargar",
-						"titulo"=>"Estado actualizado correctamente",
-						"texto"=>"El estado del alumno  fue actualizado correctamente",
+						"titulo"=>"Registro actualizado",
+						"texto"=>"La asistencia fue actualizada correctamente",
 						"icono"=>"success"
 					];
 				}else{
 					$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Ocurrió un error inesperado",
-						"texto"=>"No hemos podido actualizar el estado del alumno, por favor intente nuevamente",
+						"texto"=>"No hemos podido actualizar la asistencia del alumno, por favor intente nuevamente",
 						"icono"=>"error"
 					];
 				}

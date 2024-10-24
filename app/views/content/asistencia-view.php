@@ -71,7 +71,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header" style='height: 40px;'>
-						<h3 class="card-title">Listado de Horarios</h3>
+						<h3 class="card-title">Horarios registrados</h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>

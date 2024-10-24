@@ -65,7 +65,7 @@
 				<div class="row mb-2">
 					<div class="col-sm-6">
 						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]  ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h5>
+						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]  ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h4>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -84,7 +84,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Listado de alumnos sede: <?php echo $horarioSede["sede_nombre"]; ?></h3>
+						<h3 class="card-title">Búsqueda de alumnos</h3>
 						<div class="card-tools">											
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -99,7 +99,7 @@
 								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group campo">
-											<label for="pago_fecha">Fecha de registro</label>
+											<label for="pago_fecha">Fecha para registro de asistencia</label>
 											<div class="input-group">
 												<div class="input-group-prepend">
 													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
