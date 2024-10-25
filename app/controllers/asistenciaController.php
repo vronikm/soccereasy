@@ -1019,7 +1019,7 @@
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Horario actualizado",
-					"texto"=>"El horario: ".$horario_id." se actualizó correctamente",
+					"texto"=>"El horario se actualizó correctamente",
 					"icono"=>"success"
 				];
 
