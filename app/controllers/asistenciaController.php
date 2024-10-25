@@ -709,7 +709,7 @@
 
 		public function listarHorariosProfesor($profesor_id){					
 			$tabla="";
-			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre
+			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre, lugar_nombre
 								FROM asistencia_horario AH
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
@@ -717,6 +717,7 @@
 												GROUP BY asignahorario_horarioid
 										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
 								INNER JOIN general_sede on AH.horario_sedeid = sede_id
+								INNER JOIN asistencia_lugar on AH.horario_sedeid = lugar_sedeid
 								WHERE AH.horario_estado <> 'E'";	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -735,7 +736,7 @@
 				$tabla.='
 					<tr '.$class.'>
 						<td>'.$rows['sede_nombre'].'</td>
-						<td>Lugar entrenamiento</td>
+						<td>'.$rows['lugar_nombre'].'</td>
 						<td>'.$rows['horario_nombre'].'</td>
 						<td>'.$rows['horario_detalle'].'</td>						
 						<td>'.$rows['ALUMNOS'].'</td>						

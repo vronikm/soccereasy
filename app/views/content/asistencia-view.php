@@ -87,7 +87,7 @@
 									<th>Lugar de entrenamiento</th>
 									<th>Horario</th>
 									<th>Detalle</th>																						
-									<th>Alumnos</th>								
+									<th>Alumnos en lista</th>								
 									<th>Registro de asistencia</th>
 								</tr>
 							</thead>
