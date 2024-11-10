@@ -361,7 +361,7 @@
 			return $tabla;			
 		}
 		public function listarSedebusqueda($sedeid){
-			$option ='<option value=0> Seleccione una sede</option>';
+			$option ="0";
 			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -950,6 +950,76 @@
 					</tr>';
 			return $tabla;		
 		}
+
+		/*----------  Matriz de alumnos con opciones Ver, Actualizar, Eliminar  ----------*/
+		public function listarAlumnos($apellidopaterno, $primernombre, $anio, $sede){
+			if($primernombre!=""){
+				$primernombre .= '%';
+			} 
+			if($apellidopaterno!=""){
+				$apellidopaterno .= '%';
+			} 					
+
+			$tabla="";
+			$consulta_datos="SELECT distinct alumno_id, alumno_identificacion, alumno_primernombre, alumno_segundonombre, 
+									alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento
+								FROM sujeto_alumno
+								INNER JOIN asistencia_asistencia ON asistencia_alumnoid = alumno_id
+								WHERE (alumno_primernombre LIKE '".$primernombre."' 
+										OR alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
+			if($anio!=""){
+				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
+			}
+
+			if($primernombre=="" && $apellidopaterno==""){
+				$consulta_datos="SELECT distinct alumno_id, alumno_identificacion, alumno_primernombre, alumno_segundonombre, 
+										alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento
+									FROM sujeto_alumno
+									INNER JOIN asistencia_asistencia ON asistencia_alumnoid = alumno_id
+									WHERE YEAR(alumno_fechanacimiento) = '".$anio."'";
+			}
+			
+			if($primernombre=="" && $apellidopaterno=="" && $anio == ""){
+				$consulta_datos = "SELECT distinct alumno_id, alumno_identificacion, alumno_primernombre, alumno_segundonombre, 
+											alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento
+										FROM sujeto_alumno
+										INNER JOIN asistencia_asistencia ON asistencia_alumnoid = alumno_id
+										WHERE alumno_primernombre <> '' ";
+			}
+
+			if($sede!=""){
+				if($sede == 0){
+					$consulta_datos .= " and alumno_sedeid <> '".$sede."'"; 
+				}else{
+					$consulta_datos .= " and alumno_sedeid = '".$sede."'"; 
+				}
+			}else{
+				$consulta_datos = "SELECT distinct alumno_id, alumno_identificacion, alumno_primernombre, alumno_segundonombre, 
+											alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento
+										FROM sujeto_alumno
+										INNER JOIN asistencia_asistencia ON asistencia_alumnoid = alumno_id 
+										WHERE alumno_primernombre = ''";
+			}			
+
+			$consulta_datos .= " AND alumno_estado <> 'E'"; 
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['alumno_identificacion'].'</td>
+						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
+						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
+						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>
+							<a href="'.APP_URL.'buscarAsistencia/'.$rows['alumno_id'].'/" target="_blank" class="btn float-left btn-ver btn-xs">Ver</a>
+						</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
+
 	}
 			
 											

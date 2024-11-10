@@ -277,8 +277,7 @@
 			$option="";
 			$consulta_datos="SELECT empleado_id, empleado_nombre 
 								FROM sujeto_empleado
-								WHERE empleado_estado = 'A'
-									AND empleado_sedeid = ".$lugar_sedeid;
+								WHERE empleado_estado = 'A'";
 							
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -635,8 +634,9 @@
 			} 	
 
 			$tabla="";
-			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+			$consulta_datos="SELECT distinct AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS 
 								FROM asistencia_horario AH
+									INNER JOIN asistencia_horario_detalle on detalle_horarioid = horario_id
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 												FROM asistencia_asignahorario
@@ -646,8 +646,9 @@
 								OR horario_detalle LIKE '".$horario_detalle."') ";			
 
 			if($horario_nombre=="" && $horario_detalle=="" ){
-				$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+				$consulta_datos="SELECT distinct AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
 									FROM asistencia_horario AH
+										INNER JOIN asistencia_horario_detalle on detalle_horarioid = horario_id
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 												FROM asistencia_asignahorario
@@ -663,8 +664,9 @@
 					$consulta_datos .= " and horario_sedeid  = '".$horario_sedeid."'"; 
 				}
 			}else{
-				$consulta_datos = "SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
+				$consulta_datos = "SELECT distinct AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS
 									FROM asistencia_horario AH
+										INNER JOIN asistencia_horario_detalle on detalle_horarioid = horario_id
 										LEFT JOIN(
 												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
 												FROM asistencia_asignahorario
@@ -690,7 +692,7 @@
 				$tabla.='
 					<tr '.$class.'>
 						<td>'.$rows['horario_nombre'].'</td>
-						<td>'.$rows['horario_detalle'].'</td>						
+						<td>'.$rows['horario_detalle'].'</td>	
 						<td>'.$estado.'</td>
 						<td>'.$rows['ALUMNOS'].'</td>
 						<td>							
@@ -917,10 +919,10 @@
 					"icono"=>"success"
 				];	
 
-				$detalle=$this->ejecutarConsulta("SELECT horario_id FROM asistencia_horario WHERE horario_nombre='$horario_nombre'");
+				$detalle=$this->ejecutarConsulta("SELECT max(horario_id) HORARIO FROM asistencia_horario");// WHERE horario_nombre='$horario_nombre'");
 				if($detalle->rowCount()>0){
 					$detalle=$detalle->fetch();
-					$horario_id=$detalle['horario_id'];
+					$horario_id=$detalle['HORARIO'];
 
 					$dias = $_POST['dia'];
 					$lugares = $_POST['lugar'];
@@ -1320,6 +1322,7 @@
 					break;
 				default:
 					$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
+					$rows['asistencia_dia'] = 'NR';
 					break;
 			}	
 				
@@ -1592,5 +1595,43 @@
 		    }		
 		}
 
+		public function BuscarAlumno($alumnoid){		
+			$consulta_datos="SELECT S.sede_nombre, CASE WHEN alumno_estado = 'A' THEN 'Activo' WHEN alumno_estado = 'I' THEN 'Inactivo' ELSE 'Sin definir' END estado, Year(alumno_fechanacimiento) anio
+					,CASE WHEN IFNULL(R.total, 0) > 0 THEN 1 ELSE 0 END pendiente,  IFNULL(R.total, 0) total
+					,A.* 
+					FROM sujeto_alumno A
+					LEFT JOIN general_sede S ON S.sede_id = A.alumno_sedeid
+					LEFT JOIN(
+						SELECT COUNT(RP.pago_id) total, RA.alumno_id alumno
+						FROM sujeto_alumno RA
+						INNER JOIN alumno_pago RP ON RP.pago_alumnoid = RA.alumno_id
+						WHERE RP.pago_estado = 'P'
+						GROUP BY RA.alumno_id
+					)R ON R.alumno = A.alumno_id
+				WHERE A.alumno_id = ".$alumnoid;	
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			return $datos;
+		}
+
+				
+		public function listarAnios($anioid){
+			$option ='<option value=0> Seleccione un año</option>';
+			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
+								FROM general_tabla_catalogo C
+								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
+								WHERE T.tabla_nombre = 'anio'
+									AND T.tabla_estado = 'A'
+									AND C.catalogo_estado = 'A'";					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($anioid == $rows['catalogo_descripcion']){	
+					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';
+				}else{		
+					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
+                }						
+			}
+			return $option;
+		}
 	}
 			

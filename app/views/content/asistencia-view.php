@@ -1,6 +1,10 @@
 <?php
 	use app\controllers\asistenciaController;
 	$insHorario = new asistenciaController();
+		
+	$_SESSION['menupadre']="Asistencia";
+	$_SESSION['menuhijo']="asistencia";
+
 	$profesorid	= 1;
 ?>
 

@@ -128,7 +128,7 @@
 									<th>Identificación</th>
 									<th>Nombres</th>
 									<th>Apellidos</th> 
-									<th>Año</th>
+									<th>Categoría</th>
 									<th>Fecha</th>	
 									<th>Asistencia</th>	
 								</tr>

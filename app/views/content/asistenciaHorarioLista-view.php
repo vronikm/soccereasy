@@ -97,7 +97,7 @@
 									<th>Nombres</th>
 									<th>Apellidos</th> 
 									<th>Año</th>
-									<th></th>	
+									<th>Operaciones</th>	
 								</tr>
 							</thead>
 							<tbody>
