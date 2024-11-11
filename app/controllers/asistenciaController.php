@@ -374,11 +374,6 @@
 			}
 			return $option;
 		}
-		public function informacionEscuela(){		
-			$consulta_datos="SELECT * FROM general_escuela WHERE escuela_id  = 1";
-			$datos = $this->ejecutarConsulta($consulta_datos);		
-			return $datos;
-		}
 
 		public function informacionSede($sedeid){		
 			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
@@ -700,7 +695,12 @@
 							<a href="'.APP_URL.'asistenciaHorarioLista/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver lista</a>
 						</td>
 						<td>
-							<a href="invoice-print.html" rel="noopener" class="btn float-right btn-danger btn-xs">Eliminar</a>							
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_asistencia" value="eliminar_horario">
+								<input type="hidden" name="horario_id" value="'.$rows['horario_id'].'">						
+								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
+							</form>	
+
 							<a href="'.APP_URL.'asistenciaHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;">Editar</a>
 							<a href="'.APP_URL.'asistenciaVerHorario/'.$rows['horario_id'].'/" target="_blank" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;">Ver</a>
 						</td>
@@ -1077,6 +1077,40 @@
 			}
 			return json_encode($alerta);
 		}
+
+		public function eliminarHorario(){			
+			$horarioid=$this->limpiarCadena($_POST['horario_id']);
+
+			$eliminadetalle=$this->eliminarRegistro("asistencia_horario_detalle", "detalle_horarioid", $horarioid);
+			
+			if($eliminadetalle->rowCount()>0){				
+				$eliminahorario=$this->eliminarRegistro("asistencia_horario", "horario_id", $horarioid);
+				if($eliminahorario->rowCount()>0){
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Horario eliminado",
+						"texto"=>"El horario fue eliminado correctamente",
+						"icono"=>"success"
+					];
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Error",
+						"texto"=>"No fue posible eliminar el horario, por favor intente nuevamente",
+						"icono"=>"error"
+					];
+				}
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No fue posible eliminar el detalle del horario, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}
+
 		//-------------------------------------------------Asignar alumnos--------------------------------------
 		public function listarAlumnos($horario_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede){	
 			if($identificacion!=""){
@@ -1145,23 +1179,6 @@
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
-		}
-
-		public function listarSedebusqueda($sedeid){
-			$option="";
-
-			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
-					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				if($sedeid == $rows['sede_id']){
-					$option.='<option value='.$rows['sede_id'].' selected>'.$rows['sede_nombre'].'</option>';
-				}else{
-					$option.='<option value='.$rows['sede_id'].'>'.$rows['sede_nombre'].'</option>';	
-				}		
-			}
-			return $option;
 		}
 
 		public function asignarAlumno(){	
@@ -1611,27 +1628,6 @@
 				WHERE A.alumno_id = ".$alumnoid;	
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
-		}
-
-				
-		public function listarAnios($anioid){
-			$option ='<option value=0> Seleccione un año</option>';
-			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
-								FROM general_tabla_catalogo C
-								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
-								WHERE T.tabla_nombre = 'anio'
-									AND T.tabla_estado = 'A'
-									AND C.catalogo_estado = 'A'";					
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			$datos = $datos->fetchAll();
-			foreach($datos as $rows){
-				if($anioid == $rows['catalogo_descripcion']){	
-					$option.='<option value='.$rows['catalogo_valor'].' selected="selected">'.$rows['catalogo_descripcion'].'</option>';
-				}else{		
-					$option.='<option value='.$rows['catalogo_valor'].'>'.$rows['catalogo_descripcion'].'</option>';	
-                }						
-			}
-			return $option;
 		}
 	}
 			
