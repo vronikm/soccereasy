@@ -3,7 +3,7 @@
 	namespace app\controllers;
 	use app\models\mainModel;
 	use \DateTime;
-
+	
 	class asistenciaController extends mainModel{		
 		public function registrarHoraControlador(){							
 			
@@ -1628,6 +1628,34 @@
 				WHERE A.alumno_id = ".$alumnoid;	
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
+		}
+
+		public function CalendarioEventos(){
+			// Consulta para obtener los eventos
+			$consulta_evento = "SELECT asistencia_alumnoid AS id, asistencia_D28 AS title, 
+										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d %H:%i:%s') AS start, 
+										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d %H:%i:%s') AS end
+									FROM (
+									SELECT asistencia_alumnoid, asistencia_D28, substring(asistencia_aniomes, 1, 4) Anio, substring(asistencia_aniomes, 5, 2) Mes, 28 Dia
+										FROM asistencia_asistencia
+										WHERE asistencia_D28 IS NOT null
+											and asistencia_alumnoid = 353
+									) as FECHA";
+
+			$datos = $this->ejecutarConsulta($consulta_evento);
+
+			$eventos = array();
+
+			if($datos->rowCount()>=0){
+				while ($row = $datos->fetch()) {
+					$eventos[] = $row;					
+				}
+			}
+			echo '<pre>';
+				print_r($eventos);
+			echo '</pre>';
+			
+			return json_encode($eventos);
 		}
 	}
 			
