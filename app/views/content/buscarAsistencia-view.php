@@ -214,11 +214,7 @@
 								<!-- THE CALENDAR -->
 								<div id="calendar">
 									<?php 
-										if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'CalendarioEventos') {
-											header('Content-Type: application/json');
-											echo $insAsistencia->CalendarioEventos(); 
-											exit;
-										}
+										echo $insAsistencia->CalendarioEventos($alumno);
 									?>
 								</div>
 							</div>
@@ -275,24 +271,13 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/main.js"></script>
 
      <!-- Page specific script -->
-	<script>
+	 <script>
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
-				events: 'asistenciaController.php?action=CalendarioEventos', // Cambia la ruta a la correcta
-				eventSources: [
-					{
-						url: 'asistenciaController.php?action=CalendarioEventos',
-						method: 'GET',
-						cache: true // Habilitar caché para evitar solicitudes duplicadas
-					}
-				],
-				headerToolbar: {	
-					left: 'prev,next today',
-					center: 'title',
-					right: 'dayGridMonth,timeGridWeek,timeGridDay'
-				},
+				locale: 'es', 
+				events: [<?php echo $insAsistencia->CalendarioEventos($alumno); ?>]				
 			});
 			calendar.render();
 		});

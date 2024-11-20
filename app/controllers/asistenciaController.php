@@ -1630,7 +1630,35 @@
 			return $datos;
 		}
 
-		public function CalendarioEventos(){
+		/*public function CalendarioEventos(){
+			// Consulta para obtener los eventos
+			$consulta_evento = "SELECT asistencia_D28 AS title, 
+										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d') AS start, 
+										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d') AS end
+									FROM (
+									SELECT asistencia_alumnoid, 
+											asistencia_D28, 
+											substring(asistencia_aniomes, 1, 4) AS Anio, 
+											substring(asistencia_aniomes, 5, 2) AS Mes, 
+											28 AS Dia
+										FROM asistencia_asistencia
+										WHERE asistencia_D28 IS NOT null
+											and asistencia_alumnoid = 353
+									) AS FECHA";
+
+			$datos = $this->ejecutarConsulta($consulta_evento);
+
+			// Procesar los resultados
+			$eventos = [];
+			if ($datos->rowCount() > 0) {
+				$eventos = $datos->fetchAll();
+			}
+			
+			// Retornar los datos en formato JSON
+			return json_encode($eventos);
+		}*/
+
+		public function CalendarioEventos($alumno_id){
 			// Consulta para obtener los eventos
 			$consulta_evento = "SELECT asistencia_alumnoid AS id, asistencia_D28 AS title, 
 										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d %H:%i:%s') AS start, 
@@ -1639,23 +1667,60 @@
 									SELECT asistencia_alumnoid, asistencia_D28, substring(asistencia_aniomes, 1, 4) Anio, substring(asistencia_aniomes, 5, 2) Mes, 28 Dia
 										FROM asistencia_asistencia
 										WHERE asistencia_D28 IS NOT null
-											and asistencia_alumnoid = 353
+											and asistencia_alumnoid =" .$alumno_id."
 									) as FECHA";
 
 			$datos = $this->ejecutarConsulta($consulta_evento);
 
 			$eventos = array();
-
+			$detalle = "";
+			$color 	 = "";
 			if($datos->rowCount()>=0){
 				while ($row = $datos->fetch()) {
-					$eventos[] = $row;					
-				}
-			}
-			echo '<pre>';
-				print_r($eventos);
-			echo '</pre>';
-			
+					switch ($row['title']) {
+						case 'A':
+							$detalle = 'ATRASO';
+							$color = "#ED6D0D";
+							break;
+						case 'F':
+							$detalle = 'FALTA';
+							$color = "#F20808";
+							break;
+						case 'J':
+							$detalle = 'JUSTIFICADO';
+							$color = "#2319E1";
+							break;
+						case 'P':
+							$detalle = 'PRESENTE';
+							$color = "#3BBF4B";
+							break;
+						default:
+							$row['title'] = 'No registrado';
+							break;
+					}				
+					$eventos=[
+						"title"=>"Detalle : ".$detalle,
+						"start"=>$row['start'],
+						"end"=>$row['end'],
+						"color"=>$color,
+					];	
+				}	
+			}			
 			return json_encode($eventos);
+		}
+
+		public function listaHorarioPDF($horarioid){		
+			$consulta_datos=("SELECT A.alumno_identificacion AS CEDULA, 
+									CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+									case when alumno_numcamiseta = 0 then null else alumno_numcamiseta end AS NUMCAMISETA,
+									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+								FROM asistencia_asignahorario H
+										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+								WHERE H.asignahorario_horarioid = $horarioid");	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
 		}
 	}
 			
