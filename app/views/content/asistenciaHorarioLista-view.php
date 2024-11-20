@@ -82,7 +82,7 @@
 						<h3 class="card-title">Listado de alumnos para asignación a horario</h3>
 						<div class="card-tools">	
 							<a href="<?php echo APP_URL.'asistenciaHorarioJugador/'.$horarioSede["horario_id"].'/'.$horarioSede["horario_sedeid"].'/'; ?>" class="btn btn-warning btn-sm" >Asignar</a>
-							<!--a href="<?php echo APP_URL.'jugadorListaPDF/'.$horarioSede["horario_id"].'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a-->							
+							<a href="<?php echo APP_URL.'horarioListaPDF/'.$horarioSede["horario_id"].'/'; ?> " class="btn btn-success btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Imprimir</a>							
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>

@@ -201,6 +201,12 @@
 											echo $clase.$pendiente.'</a>'; 												
 										?>
 									</li>
+									<li class="list-group-item">
+										<b>ID</b> 												
+										<?php												
+											echo $alumno.'</a>'; 												
+										?>
+									</li>
 								</ul>
 							</div>
 							<!-- /.card-body -->
@@ -216,7 +222,7 @@
 									<?php 
 										if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'CalendarioEventos') {
 											header('Content-Type: application/json');
-											echo $insAsistencia->CalendarioEventos(); 
+											echo $insAsistencia->CalendarioEventos($alumno); 
 											exit;
 										}
 									?>
@@ -281,7 +287,7 @@
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
 				locale: 'es', 
-				events: <?php echo $insAsistencia->CalendarioEventos(); ?>			
+				events: <?php echo $insAsistencia->CalendarioEventos($alumno); ?>			
 			});
 			calendar.render();
 		});
