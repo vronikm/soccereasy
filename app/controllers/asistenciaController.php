@@ -1632,15 +1632,55 @@
 
 		public function CalendarioEventos(){
 			// Consulta para obtener los eventos
-			$consulta_evento = "SELECT asistencia_alumnoid AS id, asistencia_D28 AS title, 
-										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d %H:%i:%s') AS start, 
-										STR_TO_DATE(concat(Anio,'-', Mes, '-', Dia), '%Y-%m-%d %H:%i:%s') AS end
-									FROM (
-									SELECT asistencia_alumnoid, asistencia_D28, substring(asistencia_aniomes, 1, 4) Anio, substring(asistencia_aniomes, 5, 2) Mes, 28 Dia
-										FROM asistencia_asistencia
-										WHERE asistencia_D28 IS NOT null
-											and asistencia_alumnoid = 353
-									) as FECHA";
+			$consulta_evento = " SELECT      
+									asistencia_aniomes AS anio_mes, 
+									STR_TO_DATE(CONCAT(asistencia_aniomes, LPAD(SUBSTRING_INDEX(dia, 'D', -1), 2, '0')), '%Y%m%d') AS 'start', 
+									STR_TO_DATE(CONCAT(asistencia_aniomes, LPAD(SUBSTRING_INDEX(dia, 'D', -1), 2, '0')), '%Y%m%d') AS 'end', 
+									CASE 
+										WHEN valor = 'P' THEN 'PRESENTE'
+										WHEN valor = 'A' THEN 'ATRASO'
+										WHEN valor = 'J' THEN 'JUSTIFICADO'
+										WHEN valor = 'F' THEN 'FALTA'
+									END AS title,
+									CASE 
+										WHEN valor = 'P' THEN '#007bff'
+										WHEN valor = 'A' THEN '#ffc107'
+										WHEN valor = 'J' THEN '#6c757d'
+										WHEN valor = 'F' THEN '#dc3545'
+									END AS color    
+								FROM (
+									SELECT asistencia_aniomes, 'D01' AS dia, asistencia_D01 AS valor FROM asistencia_asistencia WHERE asistencia_D01 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D02' AS dia, asistencia_D02 AS valor FROM asistencia_asistencia WHERE asistencia_D02 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D03' AS dia, asistencia_D03 AS valor FROM asistencia_asistencia WHERE asistencia_D03 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D04' AS dia, asistencia_D04 AS valor FROM asistencia_asistencia WHERE asistencia_D04 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D05' AS dia, asistencia_D05 AS valor FROM asistencia_asistencia WHERE asistencia_D05 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D06' AS dia, asistencia_D06 AS valor FROM asistencia_asistencia WHERE asistencia_D06 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D07' AS dia, asistencia_D07 AS valor FROM asistencia_asistencia WHERE asistencia_D07 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D08' AS dia, asistencia_D08 AS valor FROM asistencia_asistencia WHERE asistencia_D08 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D09' AS dia, asistencia_D09 AS valor FROM asistencia_asistencia WHERE asistencia_D09 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D10' AS dia, asistencia_D10 AS valor FROM asistencia_asistencia WHERE asistencia_D10 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D11' AS dia, asistencia_D11 AS valor FROM asistencia_asistencia WHERE asistencia_D11 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D12' AS dia, asistencia_D12 AS valor FROM asistencia_asistencia WHERE asistencia_D12 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D13' AS dia, asistencia_D13 AS valor FROM asistencia_asistencia WHERE asistencia_D13 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D14' AS dia, asistencia_D14 AS valor FROM asistencia_asistencia WHERE asistencia_D14 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D15' AS dia, asistencia_D15 AS valor FROM asistencia_asistencia WHERE asistencia_D15 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D16' AS dia, asistencia_D16 AS valor FROM asistencia_asistencia WHERE asistencia_D16 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D17' AS dia, asistencia_D17 AS valor FROM asistencia_asistencia WHERE asistencia_D17 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D18' AS dia, asistencia_D18 AS valor FROM asistencia_asistencia WHERE asistencia_D18 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D19' AS dia, asistencia_D19 AS valor FROM asistencia_asistencia WHERE asistencia_D19 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D20' AS dia, asistencia_D20 AS valor FROM asistencia_asistencia WHERE asistencia_D20 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D21' AS dia, asistencia_D21 AS valor FROM asistencia_asistencia WHERE asistencia_D21 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D22' AS dia, asistencia_D22 AS valor FROM asistencia_asistencia WHERE asistencia_D22 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D23' AS dia, asistencia_D23 AS valor FROM asistencia_asistencia WHERE asistencia_D23 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D24' AS dia, asistencia_D24 AS valor FROM asistencia_asistencia WHERE asistencia_D24 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D25' AS dia, asistencia_D25 AS valor FROM asistencia_asistencia WHERE asistencia_D25 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D26' AS dia, asistencia_D26 AS valor FROM asistencia_asistencia WHERE asistencia_D26 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D27' AS dia, asistencia_D27 AS valor FROM asistencia_asistencia WHERE asistencia_D27 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D28' AS dia, asistencia_D28 AS valor FROM asistencia_asistencia WHERE asistencia_D28 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D29' AS dia, asistencia_D29 AS valor FROM asistencia_asistencia WHERE asistencia_D29 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D30' AS dia, asistencia_D30 AS valor FROM asistencia_asistencia WHERE asistencia_D30 IS NOT NULL AND asistencia_alumnoid = 1 UNION ALL
+									SELECT asistencia_aniomes, 'D31' AS dia, asistencia_D31 AS valor FROM asistencia_asistencia WHERE asistencia_D31 IS NOT NULL AND asistencia_alumnoid = 1
+								) AS dias";
 
 			$datos = $this->ejecutarConsulta($consulta_evento);
 
@@ -1648,14 +1688,16 @@
 
 			if($datos->rowCount()>=0){
 				while ($row = $datos->fetch()) {
-					$eventos[] = $row;					
+					$eventos[]=[
+						"title"=>$row['title'],
+						"start"=>$row['start'],
+						"end"=>$row['end'],
+						"color"=>$row['color'],//"#2324ff",
+					];		
 				}
 			}
-			echo '<pre>';
-				print_r($eventos);
-			echo '</pre>';
 			
 			return json_encode($eventos);
-		}
+		} 
 	}
 			

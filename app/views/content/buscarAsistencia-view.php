@@ -280,24 +280,13 @@
 			var calendarEl = document.getElementById('calendar');
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
-				events: 'asistenciaController.php?action=CalendarioEventos', // Cambia la ruta a la correcta
-				eventSources: [
-					{
-						url: 'asistenciaController.php?action=CalendarioEventos',
-						method: 'GET',
-						cache: true // Habilitar caché para evitar solicitudes duplicadas
-					}
-				],
-				headerToolbar: {	
-					left: 'prev,next today',
-					center: 'title',
-					right: 'dayGridMonth,timeGridWeek,timeGridDay'
-				},
+				locale: 'es', 
+				events: <?php echo $insAsistencia->CalendarioEventos(); ?>			
 			});
 			calendar.render();
 		});
 	</script>
-  </body> 
+  </body>
 </html>
 
 
