@@ -149,7 +149,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Búsqueda de asistencias</h1>
+				<h1 class="m-0">Registro de asistencia</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -215,7 +215,7 @@
 					</div>
 					<!-- /.col -->
 					<div class="col-md-9">
-						<div class="card card-primary">
+						<div class="card card-primary card-outline">
 							<div class="card-body p-0">
 								<!-- THE CALENDAR -->
 								<div id="calendar">
@@ -287,6 +287,7 @@
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
 				locale: 'es', 
+				aspectRatio: 2.8, // Cambia la relación de aspecto para hacerlo más pequeño
 				events: <?php echo $insAsistencia->CalendarioEventos($alumno); ?>			
 			});
 			calendar.render();
