@@ -202,10 +202,7 @@
 										?>
 									</li>
 									<li class="list-group-item">
-										<b>ID</b> 												
-										<?php												
-											echo $alumno.'</a>'; 												
-										?>
+										<b>ID</b> <a class="float-right"><?php echo $alumno; ?></a>
 									</li>
 								</ul>
 							</div>
