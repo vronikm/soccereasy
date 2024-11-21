@@ -287,7 +287,7 @@
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
 				locale: 'es', 
-				aspectRatio: 2.8, // Cambia la relación de aspecto para hacerlo más pequeño
+				aspectRatio: 3.5, // Cambia la relación de aspecto para hacerlo más pequeño
 				events: <?php echo $insAsistencia->CalendarioEventos($alumno); ?>			
 			});
 			calendar.render();
