@@ -1396,6 +1396,19 @@
 			return $datos;
 		}
 
+		public function listaHorarioPDF($horarioid){		
+			$consulta_datos=("SELECT A.alumno_identificacion AS CEDULA, 
+									CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+									case when alumno_numcamiseta = 0 then null else alumno_numcamiseta end AS NUMCAMISETA,
+									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*
+								FROM asistencia_asignahorario H
+										INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid
+								WHERE H.asignahorario_horarioid = $horarioid");	
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
 		public function eliminar_alumnolista(){	
 			# Almacenando datos
 			$alumnoid = $_POST['asignahorario_alumnoid'];
