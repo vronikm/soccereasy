@@ -1072,10 +1072,10 @@
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_usuario" value="eliminarRol">
 								<input type="hidden" name="rol_id" value="'.$rows['rol_id'].'">						
-								<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
+								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
 							</form>							
 
-							<a href="'.APP_URL.'roList/'.$rows['rol_id'].'/" class="btn float-right btn-success btn-sm" style="margin-right: 5px;" >Editar</a>
+							<a href="'.APP_URL.'roList/'.$rows['rol_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;" >Editar</a>
 							
 						</td>
 					</tr>';	
