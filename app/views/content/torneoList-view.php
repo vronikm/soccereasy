@@ -52,8 +52,6 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-		<!-- daterange picker -->
-		<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
 	<!-- iCheck for checkboxes and radio inputs -->
 	 <!-- DataTables -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -61,9 +59,8 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	
 	<!-- Theme style -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
     <!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
   </head>
@@ -210,15 +207,15 @@
 								<div class="tab-custom-content">
 									<h4 class="card-title">Torneos ingresados</h4>
 								</div>										
-								<div class="tab-content" id="custom-content-above-tabContent" style="font-size: 13px;">	
-									<table id="example1" class="table table-bordered table-striped table-sm" style="font-size: 13px;">
+								<div class="tab-content" id="custom-content-above-tabContent">	
+									<table id="example1" class="table table-bordered table-striped table-sm">
 										<thead>
 											<tr>
-												<th style="width: 100px;">Nombre</th>
+												<th>Nombre</th>
 												<th>Ciudad</th>
 												<th>Lugar</th>
-												<th style="width: 60px;">F. inicio</th>
-												<th style="width: 60px;">Fecha fin</th>
+												<th>F. inicio</th>
+												<th>Fecha fin</th>
 												<th>Organizador</th>
 												<th>Descripción</th>
 												<th>Estado</th>
@@ -310,7 +307,7 @@
 
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
-    
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
   </body>
 </html>
 

@@ -43,28 +43,28 @@
 
           <li class="nav-item">
             <a href="<?php echo APP_URL."representanteList/" ?>" class="nav-link <?php if ($url[0]=='representanteList') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon far fa-circle text-info"></i>
+              <i class="nav-icon fas fa-diagnoses text-info"></i>
               <p>Representantes</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="<?php echo APP_URL."alumnoList/" ?>" class="nav-link <?php if ($url[0]=='alumnoList') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon far fa-circle text-info"></i>
+              <i class="nav-icon far fa-address-card text-info"></i>
               <p>Alumnos</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="<?php echo APP_URL."pagosList/" ?>" class="nav-link <?php if ($url[0]=='pagosList') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon far fa-circle text-info"></i>
+              <i class="nav-icon far fa-money-bill-alt text-info"></i>
               <p>Pagos</p>
             </a>
           </li>
 
           <li class="nav-item">
             <a href="<?php echo APP_URL."torneoList/" ?>" class="nav-link <?php if ($url[0]=='torneoList' || $url[0]=='equipoList' || $url[0]=='jugadorNew' || $url[0]=='jugadorLista') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon far fa-circle text-info"></i>
+              <i class="nav-icon far fa-futbol text-info"></i>
               <p>Torneos</p>
             </a>
           </li>
@@ -72,7 +72,7 @@
           <li class="nav-header">Asistencia</li>
           <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-book-reader"></i>
               <p>Asistencia<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
@@ -95,7 +95,7 @@
           <li class="nav-header">Horarios</li>
           <li class="nav-item <?php if ($url[0]=='asistenciaHora' || $url[0]=='asistenciaLugar' || $url[0]=='asistenciaListHorario' || $url[0]=='asistenciaVerHorario' || $url[0]=='asistenciaHorario' || $url[0]=='asistenciaHorarioLista' || $url[0]=='asistenciaHorarioJugador') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='asistenciaHora' || $url[0]=='asistenciaLugar' || $url[0]=='asistenciaListHorario' || $url[0]=='asistenciaVerHorario' || $url[0]=='asistenciaHorario' || $url[0]=='asistenciaHorarioLista' || $url[0]=='asistenciaHorarioJugador') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-clock"></i>
               <p>Horarios<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
@@ -125,7 +125,7 @@
           <li class="nav-item">    
               <li class="nav-item">
                 <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoIE') echo 'active'; else echo ''; ?>">
-                  <i class="nav-icon far fa-circle text-info"></i>
+                  <i class="nav-icon far fa-file text-info"></i>
                   <p>Nómina</p>
                 </a>
               </li>
@@ -134,13 +134,13 @@
           <li class="nav-header">Balance Mensual</li>
             <li class="nav-item <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'menu-open'; else echo ''; ?>">
               <a href="#" class="nav-link <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'active'; else echo ''; ?>">
-                <i class="nav-icon fas fa-th"></i>
+                <i class="nav-icon fas fa-balance-scale"></i>
                 <p>Balance mensual<i class="fas fa-angle-left right"></i></p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="<?php echo APP_URL."ingresoList/" ?>" class="nav-link <?php if ($url[0]=='ingresoList') echo 'active'; else echo ''; ?>">
-                    <i class="nav-icon far fa-circle text-info"></i>
+                    <i class="nav-icon fas fa-chevron-right text-info"></i>
                     <p>Ingresos</p>
                   </a>
                 </li>
@@ -148,7 +148,7 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="<?php echo APP_URL."egresoList/" ?>" class="nav-link <?php if ($url[0]=='egresoList') echo 'active'; else echo ''; ?>">
-                    <i class="nav-icon far fa-circle text-info"></i>
+                    <i class="nav-icon fas fa-chevron-left text-info"></i>
                     <p>Egresos</p>
                   </a>
                 </li>
@@ -166,7 +166,7 @@
           <li class="nav-header">Cobranza</li>
           <li class="nav-item <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaUniforme') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaUniforme') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-book"></i>
               <p>Gestión de cobranza<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
@@ -234,7 +234,7 @@
           <li class="nav-header">Seguridad</li>
           <li class="nav-item <?php if ($url[0]=='userList' || $url[0]=='roList') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='userList' || $url[0]=='roList') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon fas fa-key"></i>
               <p>Seguridad<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
@@ -256,7 +256,7 @@
           <li class="nav-header">Configuración</li>
           <li class="nav-item <?php if ($url[0]=='escuelaNew' || $url[0]=='sedeList' || $url[0]=='tablasNew' || $url[0]=='catalogosNew') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='escuelaNew' || $url[0]=='sedeList' || $url[0]=='tablasNew' || $url[0]=='catalogosNew') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-th"></i>
+              <i class="nav-icon far fa-edit"></i>
               <p>Configuración<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">

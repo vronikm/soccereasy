@@ -124,17 +124,7 @@
 	<!-- JQVMap -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/jqvmap/jqvmap.min.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.min.css">
-	<!-- overlayScrollbars -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-	<!-- Daterange picker -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.css">
-	<!-- summernote -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/summernote/summernote-bs4.min.css">
-
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-    
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -429,9 +419,7 @@
 	<!-- jQuery UI 1.11.4 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-ui/jquery-ui.min.js"></script>
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-	$.widget.bridge('uibutton', $.ui.button)
-	</script>
+
 	<!-- Bootstrap 4 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- ChartJS -->
@@ -445,13 +433,8 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-knob/jquery.knob.min.js"></script>
 	<!-- daterangepicker -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/moment/moment.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/daterangepicker/daterangepicker.js"></script>
 	<!-- Tempusdominus Bootstrap 4 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-	<!-- Summernote -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/summernote/summernote-bs4.min.js"></script>
-	<!-- overlayScrollbars -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.js"></script>
 
@@ -459,7 +442,7 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/pages/dashboard.js"></script>
 
 	<script src="<?php echo APP_URL; ?>app/views/js/ajax.js" ></script>
-	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>
-    
+	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>	
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
   </body>
 </html>
