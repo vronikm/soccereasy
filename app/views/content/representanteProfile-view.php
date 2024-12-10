@@ -277,7 +277,8 @@
 														<th>Identificación</th>
 														<th>Nombres</th>
 														<th>Apellidos</th>
-														<th>Fecha nacimiento</th>									
+														<th>Fecha nacimiento</th>
+														<th>Fecha ingreso</th>									
 														<th>Sede</th>
 													</tr>
 												</thead>
