@@ -878,15 +878,16 @@
 
 		# Consultar datos del representante para la vista vincular alumno
 		public function datosRepresentante($repreid){			
-			$consulta_repre = "SELECT repre_identificacion,
-									  concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
-									  MAX(alumno_sedeid) as SEDE	   								 
-									FROM alumno_representante 
-										LEFT JOIN (SELECT alumno_sedeid FROM sujeto_alumno
-													WHERE alumno_repreid = $repreid
-													GROUP BY alumno_sedeid
-													HAVING max(alumno_fechaingreso))SR ON  repre_id = $repreid
-									WHERE repre_id = ".$repreid;			
+			$consulta_repre = "SELECT 
+									repre_identificacion,
+									CONCAT(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
+									(SELECT alumno_sedeid 
+										FROM sujeto_alumno 
+										WHERE alumno_repreid = 385 
+										ORDER BY alumno_fechaingreso DESC 
+										LIMIT 1) AS SEDE
+								FROM alumno_representante 
+								WHERE repre_id = $repreid";				
 			$datos = $this->ejecutarConsulta($consulta_repre);		
 			return $datos;
 		}
