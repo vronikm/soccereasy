@@ -72,7 +72,7 @@
           <li class="nav-header">Asistencia</li>
           <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
             <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
-              <i class="nav-icon fas fa-book-reader"></i>
+              <i class="nav-icon fas fa-clipboard-list"></i>
               <p>Asistencia<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
@@ -122,11 +122,17 @@
           </li>
 
           <li class="nav-header">Empleados</li>
-          <li class="nav-item">    
+            <li class="nav-item">    
               <li class="nav-item">
                 <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoIE') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon far fa-file text-info"></i>
                   <p>Nómina</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."empleadoEntrada/" ?>" class="nav-link <?php if ($url[0]=='empleadoEntrada' || $url[0]=='empleadoEntrada') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon far fa-clock"></i>
+                  <p>Registrar asistencia</p>
                 </a>
               </li>
           </li>

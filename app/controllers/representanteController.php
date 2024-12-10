@@ -44,7 +44,8 @@
 						<td>'.$rows['repre_primernombre'].' '.$rows['repre_segundonombre'].'</td>
 						<td>'.$rows['repre_apellidopaterno'].' '.$rows['repre_apellidomaterno'].'</td>
 						<td>
-							<a href="'.APP_URL.'alumnoNew/'.$rows['repre_id'].'/" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Nuevo Alumno</a>
+							<a href="'.APP_URL.'representanteFLPD/'.$rows['repre_id'].'/" target="_blank" class="nav-icon far fa-file float-right" title="Formulario LPD" style="margin-right: 5px;"></a>
+							<a href="'.APP_URL.'alumnoNew/'.$rows['repre_id'].'/" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Nuevo Alumno</a>	
 							<a href="'.APP_URL.'representanteVinc/'.$rows['repre_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Vincular alumno</a>
 						</td>
 						<td>
@@ -870,9 +871,18 @@
 
 		# Consultar datos del representante para la vista vincular alumno
 		public function datosRepresentante($repreid){			
-			$consulta_repre = "SELECT concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE
-											  		   	FROM alumno_representante WHERE repre_id = ".$repreid;			
+			$consulta_repre = "SELECT repre_identificacion,
+									  concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
+	   								  (SELECT alumno_sedeid FROM sujeto_alumno WHERE alumno_repreid = $repreid HAVING max(alumno_fechaingreso)) AS SEDE
+							   	FROM alumno_representante WHERE repre_id = ".$repreid;			
 			$datos = $this->ejecutarConsulta($consulta_repre);		
 			return $datos;
 		}
+
+		public function informacionSede($sedeid){		
+			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
 	}
