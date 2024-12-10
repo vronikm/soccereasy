@@ -367,8 +367,11 @@
 		/*----------  Matriz de representados  ----------*/
 		public function listarRepresentados($repreid){
 			$tabla="";
-			$consulta_datos="SELECT * FROM sujeto_alumno WHERE alumno_estado in ('A','I')
-								AND (alumno_repreid = ".$repreid.") ";			
+			$consulta_datos="SELECT alumno_identificacion, alumno_primernombre, alumno_segundonombre, alumno_apellidopaterno, alumno_apellidomaterno, alumno_fechanacimiento, sede_nombre
+								 FROM sujeto_alumno 
+								 INNER JOIN general_sede on alumno_sedeid = sede_id
+								 WHERE alumno_estado in ('A','I')
+									AND (alumno_repreid = ".$repreid.") ";			
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -379,6 +382,7 @@
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].'</td>
 						<td>'.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
+						<td>'.$rows['sede_nombre'].'</td>
 					</tr>';	
 			}
 			return $tabla;			
@@ -874,7 +878,7 @@
 			$consulta_repre = "SELECT repre_identificacion,
 									  concat(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
 	   								  (SELECT alumno_sedeid FROM sujeto_alumno WHERE alumno_repreid = $repreid HAVING max(alumno_fechaingreso)) AS SEDE
-							   	FROM alumno_representante WHERE repre_id = ".$repreid;			
+							   FROM alumno_representante WHERE repre_id = ".$repreid;			
 			$datos = $this->ejecutarConsulta($consulta_repre);		
 			return $datos;
 		}
@@ -884,5 +888,4 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
-
 	}
