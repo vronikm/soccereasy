@@ -37,16 +37,33 @@
 				$datos = $datos->fetchAll();
 			}
 
-			foreach($datos as $rows){				
+			foreach($datos as $rows){	
+				if($rows['repre_firmado']=='S'){
+					$estado = "N";
+					$texto = "Firmado";
+					$boton = "btn-secondary";
+				}else{
+					$estado = "S";
+					$texto = "Pendiente";
+					$boton = "btn-info";
+				}
+			
 				$tabla.='				
 					<tr>
 						<td>'.$rows['repre_identificacion'].'</td>
 						<td>'.$rows['repre_primernombre'].' '.$rows['repre_segundonombre'].'</td>
 						<td>'.$rows['repre_apellidopaterno'].' '.$rows['repre_apellidomaterno'].'</td>
-						<td>
-							<a href="'.APP_URL.'representanteFLPD/'.$rows['repre_id'].'/" target="_blank" class="nav-icon far fa-file float-right" title="Formulario LPD" style="margin-right: 5px;"></a>
+						<td>							
 							<a href="'.APP_URL.'alumnoNew/'.$rows['repre_id'].'/" class="btn float-right btn-secondary btn-xs" style="margin-right: 5px;">Nuevo Alumno</a>	
 							<a href="'.APP_URL.'representanteVinc/'.$rows['repre_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;">Vincular alumno</a>
+						</td>
+						<td>
+							<a href="'.APP_URL.'representanteFLPD/'.$rows['repre_id'].'/" target="_blank" class="nav-icon far fa-file float-right" title="Formulario LPD" style="margin-right: 5px;"></a>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/representanteAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_repre" value="estadofirmado">
+								<input type="hidden" name="repre_id" value="'.$rows['repre_id'].'">						
+								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
+							</form>	
 						</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/representanteAjax.php" method="POST" autocomplete="off" >
@@ -883,7 +900,7 @@
 									CONCAT(repre_primernombre, ' ', repre_segundonombre, ' ', repre_apellidopaterno, ' ', repre_apellidomaterno) AS REPRESENTANTE,
 									(SELECT alumno_sedeid 
 										FROM sujeto_alumno 
-										WHERE alumno_repreid = 385 
+										WHERE alumno_repreid = $repreid 
 										ORDER BY alumno_fechaingreso DESC 
 										LIMIT 1) AS SEDE
 								FROM alumno_representante 
@@ -896,5 +913,58 @@
 			$consulta_datos="SELECT * FROM general_sede WHERE sede_id  = $sedeid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
+		}
+
+		public function actualizarEstadoFormulario(){
+			$repre_id=$this->limpiarCadena($_POST['repre_id']);
+
+			# Verificando usuario #
+		    $datos=$this->ejecutarConsulta("SELECT * FROM alumno_representante WHERE repre_id='$repre_id'");
+		    if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"El representante no se encuentra en el sistema",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();
+		    }
+			if($datos['repre_firmado']=='N'){
+				$estadoF = 'S';
+			}else{
+				$estadoF = 'N';
+			}
+            $firmado_datos_up=[
+				[
+					"campo_nombre"=>"repre_firmado",
+					"campo_marcador"=>":Firmado",
+					"campo_valor"=> $estadoF
+				]
+			];
+			$condicion=[
+				"condicion_campo"=>"repre_id",
+				"condicion_marcador"=>":Repreid",
+				"condicion_valor"=>$repre_id
+			];
+
+			if($this->actualizarDatos("alumno_representante",$firmado_datos_up,$condicion)){
+
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Estado actualizado correctamente",
+					"texto"=>"El estado del formulario fue actualizado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos podido actualizar el estado del formulario por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
 		}
 	}

@@ -25,6 +25,9 @@
 		if($_POST['modulo_repre']=="vincularepresentado"){
 			echo $insRepresentante->vincularRepresentado();
 		}
+		if($_POST['modulo_repre']=="estadofirmado"){
+			echo $insRepresentante->actualizarEstadoFormulario();
+		}
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");

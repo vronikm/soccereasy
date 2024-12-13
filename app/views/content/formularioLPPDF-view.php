@@ -88,7 +88,7 @@
 
     $pdf->SetFont('Arial', '', 9);
     // Lista de viñetas
-    $pdf->AddBullet('Nombre del representante: '.$datos["REPRESENTANTE"],5);
+    $pdf->AddBullet(mb_convert_encoding('Nombre del representante: '.$datos["REPRESENTANTE"], 'ISO-8859-1', 'UTF-8'),5);
     $pdf->AddBullet(mb_convert_encoding('Identificación del representante: '.$datos["repre_identificacion"], 'ISO-8859-1', 'UTF-8'),5);
 
     $pdf->SetFont('Arial', 'B', 10);
