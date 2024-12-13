@@ -125,11 +125,9 @@
 						<table id="example1" class="table table-bordered table-striped table-sm ">
 							<thead>
 								<tr>
-									<th>Identificación</th>
 									<th>Nombres</th>
 									<th>Apellidos</th> 
 									<th>Categoría</th>
-									<th>Fecha</th>	
 									<th>Asistencia</th>	
 								</tr>
 							</thead>

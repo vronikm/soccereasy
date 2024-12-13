@@ -1346,11 +1346,9 @@
 				$tabla.='					
 					<tr>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
-						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['alumno_identificacion'].'</td>
-						<td>'.$rows['NOMBRES'].'</td>
+						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['NOMBRES'].'</td>
 						<td>'.$rows['APELLIDOS'].'</td>
 						<td>'.$rows['CATEGORIA'].' - '.$rows['asistencia_dia'].'</td>
-						<td>'.$fecha_formateada.'</td>
 						<td style="width: 220px;">							
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
