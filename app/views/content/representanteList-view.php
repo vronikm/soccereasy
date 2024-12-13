@@ -153,7 +153,8 @@
 									<th>Identificación</th>
 									<th>Nombres</th>
 									<th>Apellidos</th>	
-									<th>Representado</th>									
+									<th>Representado</th>		
+									<th style width="141px">Protección de datos</th>								
 									<th>Operaciones</th>
 								</tr>
 							</thead>
