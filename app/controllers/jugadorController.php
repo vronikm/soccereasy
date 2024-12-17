@@ -63,7 +63,8 @@
 			$consulta_datos .= " AND alumno_id NOT IN (SELECT jugador_alumnoid FROM torneo_equipo, torneo_jugador 
 																			   WHERE equipo_id = jugador_equipoid
 																			   	AND equipo_torneoid = $equipo_torneoid
-																				AND equipo_categoria = $equipo_categoria)";
+																				AND equipo_categoria = $equipo_categoria
+																				AND equipo_estado <> 'E')";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
