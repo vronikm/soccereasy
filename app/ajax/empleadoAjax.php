@@ -24,7 +24,11 @@
 
 		if($_POST['modulo_empleado']=="eliminar"){
 			echo $insEmpleado->eliminarEmpleadoControlador();
-		}		
+		}
+		
+		if($_POST['modulo_empleado']=="asignarsistema"){
+			echo $insEmpleado->eliminarEmpleadoControlador();
+		}	
 	}elseif(isset($_POST['modulo_ingreso'])){
 
 		$insIngreso = new empleadoController();

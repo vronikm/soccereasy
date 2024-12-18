@@ -260,9 +260,9 @@
 												<th>Identificación</th>
 												<th>Nombre y apellido</th>
 												<th>Correo</th>
-												<th>Celular</th>
-												<th>Estado</th>
+												<th>Celular</th>												
 												<th>Honorarios</th>
+												<th>Acceso sistema</th>
 												<th style="width: 180px;">Operaciones</th>
 											</tr>
 										</thead>

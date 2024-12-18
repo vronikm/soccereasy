@@ -4,8 +4,7 @@
 
 	$usuario=$insLogin->limpiarCadena($url[1]);
 
-	$datos=$insLogin->seleccionarDatos("Unico","seguridad_usuario","usuario_id",$usuario);
-
+	$datos=$insUsuario->BuscarUsuario($usuario);
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +73,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1 class="m-0">Ver perfil de usuario</h1>
+						<h1 class="m-0">Perfil de usuario</h1>
 					</div><!-- /.col -->
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
@@ -92,8 +91,8 @@
 			if($datos->rowCount()==1){
 				$datos=$datos->fetch(); 
 				
-				if ($datos['usuario_imagen']!=""){
-					$foto = APP_URL.'app/views/imagenes/fotos/usuario/'.$datos['usuario_imagen'];
+				if ($datos['empleado_foto']!=""){
+					$foto = APP_URL.'app/views/imagenes/fotos/empleado/'.$datos['empleado_foto'];
 				  }else{
 					$foto = APP_URL.'app/views/dist/img/default.png';
 				  }
@@ -122,7 +121,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Usuario: <?php echo $datos['usuario_nombre']; ?></h3>
+						<h3 class="card-title">Empleado: <?php echo $datos['empleado_nombre']; ?></h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -136,7 +135,7 @@
 						<div class="row">	
 							<!-- foto -->
 							<div class="col-md-2">
-								<label for="usuario_foto">Foto</label>
+								<label for="empleado_foto">Foto</label>
 								<div class="text-center">								
 									<img class="profile-user-img img-fluid " style="width: 148px; height: 184px;" src="<?php echo $foto; ?>" alt="User profile picture">                        
 								</div>							
@@ -145,28 +144,34 @@
 							
 							<div class="col-md-10">
 								<div class="row">
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_identificacion">Identificación</label>                        
-											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['usuario_identificacion']; ?>" disabled="">
+											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['empleado_identificacion']; ?>" disabled="">
 										</div>
 									</div>									
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
-											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" value="<?php echo $datos['usuario_nombre']; ?>" disabled="">
+											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" value="<?php echo $datos['empleado_nombre']; ?>" disabled="">
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_email">Correo</label>
-											<input type="email" class="form-control" id="usuario_email" name="usuario_email" value="<?php echo $datos['usuario_email']; ?>"  disabled="">	
+											<input type="email" class="form-control" id="usuario_email" name="usuario_email" value="<?php echo $datos['empleado_correo']; ?>"  disabled="">	
 										</div>
 									</div>
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_movil">Teléfono</label>
-											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['usuario_movil']; ?>" disabled="">	
+											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['empleado_celular']; ?>" disabled="">	
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="usuario_movil">Sede</label>
+											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['Sede']; ?>" disabled>
 										</div>
 									</div>
 								</div>
@@ -174,17 +179,16 @@
 								<div class="row">
 									<div class="col-md-3">
 										<div class="form-group">
-										<label for="usuario_rolid">Seguridad Rol</label>
-										<select class="form-control select2" id="usuario_rolid" name="usuario_rolid" style="width: 100%;" disabled="">											
-											<option value="" selected="selected">Seleccionar rol</option>
-											<?php echo $insUsuario->listarOptionRol($datos['usuario_rolid']); ?>
-										</select>	
+											<label for="usuario_rolid">Seguridad Rol</label>
+											<select class="form-control select2" id="usuario_rolid" name="usuario_rolid" style="width: 100%;" disabled="">
+												<?php echo $insUsuario->listarOptionRol($datos['usuario_rolid']); ?>
+											</select>	
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_usuario">Usuario</label>
-											<input type="text" class="form-control" id="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>" disabled="">
+											<input type="text" class="form-control" id="usuario_usuario" value="<?php echo $datos['usuario_usuario']; ?>" disabled="">
 										</div>
 									</div>
 									<div class="col-md-3">
@@ -235,7 +239,7 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="form-group">
-									<label>Sedes</label>
+									<label>Otras sedes</label>
                         			<select multiple class="form-control" disabled>
 										<?php echo $insUsuario->listarOptionSedeUsuario($usuario); ?> 
 									</select>

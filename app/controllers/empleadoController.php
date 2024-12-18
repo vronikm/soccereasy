@@ -271,29 +271,41 @@
 
 		public function listarEmpleados(){
 			$tabla="";
-			$estado = "";
-			$texto = "";
-			$boton = "";
 			$consulta_datos="SELECT empleado_id, empleado_sedeid, sede_nombre as SEDE, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular,
-								CASE WHEN empleado_estado='A' THEN 'Activo' 
-									 WHEN empleado_estado = 'I' THEN 'Inactivo' 
-									 ELSE empleado_estado 
-								END AS ESTADO 
-							 FROM sujeto_empleado, general_sede
-							 WHERE empleado_sedeid = sede_id
-							 	AND empleado_estado IN ('A','I')";	
+									CASE WHEN empleado_estado='A' THEN 'Activo' 
+										WHEN empleado_estado = 'I' THEN 'Inactivo' 
+										ELSE empleado_estado 
+									END AS ESTADO, empleado_sistema, usuario_id, usuario_usuario, usuario_estado
+								FROM sujeto_empleado E
+									left join general_sede S on E.empleado_sedeid = sede_id
+									left join seguridad_usuario U on E.empleado_id = U.usuario_empleadoid
+								WHERE empleado_estado IN ('A','I')";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				if($rows['ESTADO']=='Activo'){
-					$estado = "Activo";
 					$texto = "Inactivar";
 					$boton = "btn-secondary";
 				}else{
-					$estado = "Inactivo";
 					$texto = "Activar";
 					$boton = "btn-info";
+				}
+
+				if($rows['empleado_sistema']=='N'){				
+					$asignarsistema = "Asignar";
+					$botonasignar = "btn-secondary";
+					$habilitado = "";
+				}
+				if($rows['usuario_estado']=='A'){				
+					$asignarsistema = "Activo";
+					$botonasignar = "btn-info";
+					$habilitado = "disabled";
+				}
+				if($rows['usuario_estado']=='I'){				
+					$asignarsistema = "Inactivo";
+					$botonasignar = "btn-danger";
+					$habilitado = "disabled";
 				}
 
 				$tabla.='
@@ -303,10 +315,12 @@
 						<td>'.$rows['empleado_nombre'].'</td>
 						<td>'.$rows['empleado_correo'].'</td>
 						<td>'.$rows['empleado_celular'].'</td>
-						<td>'.$estado.'</td>
 						<td>
-							<a href="'.APP_URL.'empleadoIE/'.$rows['empleado_id'].'/" class="btn float-right btn-warning btn-xs" style="margin-right: 5px;" target="_blank">Registrar</a>
+							<a href="'.APP_URL.'empleadoIE/'.$rows['empleado_id'].'/" class="btn float-left btn-warning btn-xs" style="margin-right: 5px;" target="_blank">Registrar</a>
 					    </td>
+						<td>
+							<a href="'.APP_URL.'userNew/'.$rows['empleado_id'].'/" class="btn float-left '.$botonasignar.' '.$habilitado.' btn-xs" style="margin-right: 5px;" target="_blank"> '.$asignarsistema.'</a>
+						</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/empleadoAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_empleado" value="eliminar">
@@ -349,8 +363,7 @@
 		}
 
 		public function OptionEspecialidad($especialidadid){
-			$option="";
-
+			$option ='<option value=0> Seleccione la especialidad</option>';
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
 								FROM general_tabla_catalogo C
 								INNER JOIN general_tabla T on T.tabla_id = C.catalogo_tablaid
@@ -2073,6 +2086,15 @@
 		}
 
 		public function ConsolidadoAnticipo($empleadoid){		
+			$consulta_datos="SELECT SUM(egreso_valor) VALOR_ANTICIPO, SUM(egreso_pendiente) ANTICIPO_PENDIENTE
+						from empleado_egreso 
+						where egreso_empleadoid = ".$empleadoid;
+				
+			$datos = $this->ejecutarConsulta($consulta_datos);				
+			return $datos;
+		}
+
+		public function identificacionAsistencia($empleadoid){		
 			$consulta_datos="SELECT SUM(egreso_valor) VALOR_ANTICIPO, SUM(egreso_pendiente) ANTICIPO_PENDIENTE
 						from empleado_egreso 
 						where egreso_empleadoid = ".$empleadoid;

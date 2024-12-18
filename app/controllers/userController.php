@@ -9,18 +9,16 @@
 		public function registrarUsuarioControlador(){
 
 			# Almacenando datos#
-			$identificacion	= $this->limpiarCadena($_POST['usuario_identificacion']);
+			$empleadoid		= $this->limpiarCadena($_POST['usuario_empleadoid']);
+			$nombre			= $this->limpiarCadena($_POST['usuario_nombre']);
 			$usuario		= $this->limpiarCadena($_POST['usuario_usuario']);
-			$rolid			= $this->limpiarCadena($_POST['usuario_rolid']);
-		    $nombre			= $this->limpiarCadena($_POST['usuario_nombre']);		    		    
-		    $email			= $this->limpiarCadena($_POST['usuario_email']);
-			$movil			= $this->limpiarCadena($_POST['usuario_movil']);
+			$rolid			= $this->limpiarCadena($_POST['usuario_rolid']);		    		    
 		    $clave1			= $this->limpiarCadena($_POST['usuario_clave']);
 		    $clave2			= $this->limpiarCadena($_POST['usuario_clave2']);
 
 
 		    # Verificando campos obligatorios #
-		    if($identificacion=="" || $nombre=="" || $usuario=="" || $clave1=="" || $clave2=="" || $rolid=="" ){
+		    if($usuario=="" || $clave1=="" || $clave2=="" || $rolid=="" ){
 		    	$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
@@ -28,25 +26,13 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		    }
-
-		    # Verificando integridad de los datos #
-		    if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}",$nombre)){
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"El nombre del usuario no coincide con el formato solicitado",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		    }
-		    
+		    }		    
 
 		    if($this->verificarDatos("[a-zA-Z0-9]{4,20}",$usuario)){
 		    	$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
-					"texto"=>"El USUARIO no coincide con el formato solicitado",
+					"texto"=>"El usuario no coincide con el formato solicitado",
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
@@ -61,45 +47,7 @@
 				];
 				return json_encode($alerta);
 		    }
-
-		    # Verificando email #
-		    if($email!=""){
-				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-					$check_email=$this->ejecutarConsulta("SELECT usuario_email FROM seguridad_usuario WHERE usuario_email='$email'");
-					if($check_email->rowCount()>0){
-						$alerta=[
-							"tipo"=>"simple",
-							"titulo"=>"Error",
-							"texto"=>"El EMAIL que acaba de ingresar ya se encuentra registrado en el sistema, por favor verifique e intente nuevamente",
-							"icono"=>"error"
-						];
-						return json_encode($alerta);
-					}
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"Ha ingresado un correo electrónico no válido",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-            }
-
-			 # Verificando celular #
-			 if($movil!=""){
-				$check_movil=$this->ejecutarConsulta("SELECT usuario_movil FROM seguridad_usuario WHERE usuario_movil='$movil'");
-				if($check_movil->rowCount()>0){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"Número de celular ya existe",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-            }
-
+			
             # Verificando claves #
             if($clave1!=$clave2){
 				$alerta=[
@@ -119,101 +67,16 @@
 		    	$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
-					"texto"=>"El USUARIO ingresado ya se encuentra registrado, por favor elija otro",
+					"texto"=>"El usuario ya se encuentra registrado, revise el estado.",
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
 		    }
-
-		    # Directorio de imagenes #
-    		$img_dir="../views/imagenes/fotos/usuario/";
-			$codigo=rand(0,100);
-
-    		# Comprobar si se selecciono una imagen #
-    		if($_FILES['usuario_foto']['name']!="" && $_FILES['usuario_foto']['size']>0){
-
-    			# Creando directorio #
-		        if(!file_exists($img_dir)){
-		            if(!mkdir($img_dir,0777)){
-		            	$alerta=[
-							"tipo"=>"simple",
-							"titulo"=>"Error",
-							"texto"=>"Error al crear el directorio",
-							"icono"=>"error"
-						];
-						return json_encode($alerta);
-		                //exit();
-		            } 
-		        }
-
-		        # Verificando formato de imagenes #
-		        if(mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/png"){
-		        	$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"Imagen tiene un formato no permitido",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-		            //exit();
-		        }
-
-		        # Verificando peso de imagen #
-		        if(($_FILES['usuario_foto']['size']/1024)>4000){
-		        	$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"Imagen seleccionada supera el peso permitido 4MB",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-		            //exit();
-		        }
-
-		        # Nombre de la foto #
-		        $foto=str_ireplace(" ","_",$usuario);
-		        $foto=$foto."_".$codigo;
-
-		        # Extension de la imagen #
-		        switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
-		            case 'image/jpeg':
-		                $foto=$foto.".jpg";
-		            break;
-		            case 'image/png':
-		                $foto=$foto.".png";
-		            break;
-		        }
-
-		        $maxWidth = 800;
-    			$maxHeight = 600;
-
-				chmod($img_dir,0777);
-				$inputFile = ($_FILES['usuario_foto']['tmp_name']);
-       			$outputFile = $img_dir.$foto;
-
-				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
-				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
-					
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
-						"texto"=>"No es posible subir la imagen al sistema en este momento",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-    		}else{
-    			$foto="";
-    		}
-
 		    $usuario_datos_reg=[
 				[
-					"campo_nombre"=>"usuario_identificacion",
-					"campo_marcador"=>":Identificacion",
-					"campo_valor"=>$identificacion
+					"campo_nombre"=>"usuario_empleadoid",
+					"campo_marcador"=>":Empleado",
+					"campo_valor"=>$empleadoid
 				],
 				[
 					"campo_nombre"=>"usuario_usuario",
@@ -229,22 +92,7 @@
 					"campo_nombre"=>"usuario_clave",
 					"campo_marcador"=>":Clave",
 					"campo_valor"=>$clave
-				],
-				[
-					"campo_nombre"=>"usuario_nombre",
-					"campo_marcador"=>":Nombre",
-					"campo_valor"=>$nombre
-				],				
-				[
-					"campo_nombre"=>"usuario_email",
-					"campo_marcador"=>":Email",
-					"campo_valor"=>$email
-				],
-				[
-					"campo_nombre"=>"usuario_movil",
-					"campo_marcador"=>":Movil",
-					"campo_valor"=>$movil
-				],				
+				],		
 				[
 					"campo_nombre"=>"usuario_fechacreacion",
 					"campo_marcador"=>":Fechacreacion",
@@ -259,11 +107,6 @@
 					"campo_nombre"=>"usuario_estado",
 					"campo_marcador"=>":Estado",
 					"campo_valor"=>'A'
-				],
-				[
-					"campo_nombre"=>"usuario_imagen",
-					"campo_marcador"=>":Foto",
-					"campo_valor"=>$foto
 				]
 			];
 
@@ -272,7 +115,7 @@
 			if($registrar_usuario->rowCount()==1){
 				$alerta=[
 					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'userList/',
+					"url"=>APP_URL.'empleadoList/',
 					"titulo"=>"Usuario registrado",
 					"texto"=>"El usuario ".$nombre." | ".$usuario." se registró correctamente",
 					"icono"=>"success"
@@ -302,15 +145,57 @@
 	
 							$this->guardarDatos("seguridad_usuario_sede",$usuario_sede_reg);
 						}
-					}									
+					}
 				}
+				//Afectar la tabla de empleado
+				# Verificando empleado #
+				$empleado=$this->ejecutarConsulta("SELECT * FROM sujeto_empleado WHERE empleado_id='$empleadoid'");
+				if($empleado->rowCount()<=0){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"El empelado no se encuentra en el sistema",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}else{
+					$empleado=$empleado->fetch();
+				}
+				if($empleado['empleado_sistema']=='N'){
+					$sistema = 'S';
+				}
+				$empleado_sistema_up=[
+					[
+						"campo_nombre"=>"empleado_sistema",
+						"campo_marcador"=>":Estado",
+						"campo_valor"=> $sistema
+					]
+				];
+				$condicion=[
+					"condicion_campo"=>"empleado_id",
+					"condicion_marcador"=>":Empleadoid",
+					"condicion_valor"=>$empleadoid
+				];
+	
+				if($this->actualizarDatos("sujeto_empleado",$empleado_sistema_up,$condicion)){
+	
+					$alerta=[
+						"tipo"=>"redireccionar",
+						"url"=>APP_URL.'empleadoList/',
+						"titulo"=>"Autorización correcta",
+						"texto"=>"El acceso al sistema para el empleado ".$nombre." fue creado correctamente",
+						"icono"=>"success"						
+					];
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"No fue posible autorizar el acceso al sistema para el empleado ".$nombre.", por favor intente nuevamente",
+						"icono"=>"error"
+					];
+				}
+				return json_encode($alerta);
 			}else{
-				
-				if(is_file($img_dir.$foto)){
-		            chmod($img_dir.$foto,0777);
-		            unlink($img_dir.$foto);
-		        }
-
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
@@ -320,7 +205,6 @@
 			}
 
 			return json_encode($alerta);
-
 		}
 
 		/* Listar todos los usuarios*/
@@ -330,9 +214,11 @@
 			$estado = "";
 			$texto = "";
 			$boton = "";
-			$consulta_datos="SELECT U.*, R.rol_nombre 
+			$consulta_datos="SELECT usuario_id, usuario_empleadoid, usuario_usuario, empleado_nombre, usuario_fechacreacion, 
+									usuario_cambiaclave, usuario_fechaactualizado, usuario_estado, R.rol_nombre  
 							 FROM seguridad_usuario U 
-							 inner join seguridad_rol R on R.rol_id = U.usuario_rolid";	
+							 inner join seguridad_rol R on R.rol_id = U.usuario_rolid
+							 inner join sujeto_empleado E on E.empleado_id = U.usuario_empleadoid";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -354,92 +240,24 @@
 				$tabla.='
 					<tr>
 						<td>'.$rows['usuario_usuario'].'</td>
-						<td>'.$rows['usuario_nombre'].'</td>
+						<td>'.$rows['empleado_nombre'].'</td>
 						<td>'.$rows['rol_nombre'].'</td>
 						<td>'.date("d-m-Y  h:i:s A",strtotime($rows['usuario_fechacreacion'])).'</td>
 						<td>'.$fechaM.'</td>
 						<td>'.$estado.'</td>
-						<td>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_usuario" value="eliminar">
-								<input type="hidden" name="usuario_id" value="'.$rows['usuario_id'].'">						
-								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
-							</form>
-							
+						<td>		
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_usuario" value="actualizarestado">
 								<input type="hidden" name="usuario_id" value="'.$rows['usuario_id'].'">						
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
 							</form>
 
-							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
-							<a href="'.APP_URL.'userProfile/'.$rows['usuario_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
+							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_empleadoid'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
+							<a href="'.APP_URL.'userProfile/'.$rows['usuario_empleadoid'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
 						</td>
 					</tr>';	
 			}
 			return $tabla;
-		}
-
-		/*----------  Controlador eliminar usuario  ----------*/
-		public function eliminarUsuarioControlador(){
-
-			$id=$this->limpiarCadena($_POST['usuario_id']);
-
-			if($id==1){
-				$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"No podemos eliminar el usuario principal del sistema",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		        //exit();
-			}
-
-			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_id ='$id'");
-		    if($datos->rowCount()<=0){
-		        $alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"No hemos encontrado el usuario en el sistema",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		        //exit();
-		    }else{
-		    	$datos=$datos->fetch();
-		    }
-
-		    $eliminarUsuario=$this->eliminarRegistro("seguridad_usuario","usuario_id",$id);
-
-		    if($eliminarUsuario->rowCount()==1){
-
-		    	/*
-				if(is_file("../views/fotos/".$datos['usuario_foto'])){
-		            chmod("../views/fotos/".$datos['usuario_foto'],0777);
-		            unlink("../views/fotos/".$datos['usuario_foto']);
-		        }
-				*/
-
-		        $alerta=[
-					"tipo"=>"recargar",
-					"titulo"=>"Usuario eliminado",
-					"texto"=>"El usuario ".$datos['usuario_nombre']." ".$datos['usuario_usuario']." ha sido eliminado del sistema correctamente",
-					"icono"=>"success"
-				];
-
-		    }else{
-
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"No hemos podido eliminar el usuario ".$datos['usuario_nombre']." ".$datos['usuario_usuario']." del sistema, por favor intente nuevamente",
-					"icono"=>"error"
-				];
-		    }
-
-		    return json_encode($alerta);
 		}
 
 		/*----------  Controlador actualizar usuario  ----------*/
@@ -448,7 +266,7 @@
 			$usuario=$this->limpiarCadena($_POST['usuario_id']);
 
 			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_id='$usuario'");
+		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_empleadoid='$usuario'");
 		    if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
@@ -461,17 +279,12 @@
 		    	$datos=$datos->fetch();
 		    }
 			# Almacenando datos#
-			$identificacion	=$this->limpiarCadena($_POST['usuario_identificacion']);
-		    $nombre			=$this->limpiarCadena($_POST['usuario_nombre']);
-			$rolid			= $this->limpiarCadena($_POST['usuario_rolid']);
-		    $email			=$this->limpiarCadena($_POST['usuario_email']);
-			$movil			=$this->limpiarCadena($_POST['usuario_movil']);
-
-		    $clave1=$this->limpiarCadena($_POST['usuario_clave']);
-		    $clave2=$this->limpiarCadena($_POST['usuario_clave2']);		
+			$rolid	= 	$this->limpiarCadena($_POST['usuario_rolid']);
+		    $clave1	=	$this->limpiarCadena($_POST['usuario_clave']);
+		    $clave2	=	$this->limpiarCadena($_POST['usuario_clave2']);		
 
 		    # Verificando campos obligatorios #
-		    if($nombre=="" || $email=="" || $usuario==""){
+		    if($usuario =="" || $clave1 =="" || $clave2 ==""){
 		        $alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
@@ -480,79 +293,6 @@
 				];
 				return json_encode($alerta);
 		    }
-
-		    # Verificando integridad de los datos #
-		    if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}",$nombre)){
-		        $alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"El NOMBRE no coincide con el formato solicitado",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		       // exit();
-		    }			
-
-		    # Verificando email #
-		    if($email!="" && $datos['usuario_email']!=$email){
-				if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-					$check_email=$this->ejecutarConsulta("SELECT usuario_email FROM seguridad_usuario WHERE usuario_email='$email'");
-					if($check_email->rowCount()>0){
-						$alerta=[
-							"tipo"=>"simple",
-							"titulo"=>"Error",
-							"texto"=>"El EMAIL que acaba de ingresar ya se encuentra registrado en el sistema, por favor verifique e intente nuevamente",
-							"icono"=>"error"
-						];
-						return json_encode($alerta);
-					}
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"Ha ingresado un correo electrónico no válido",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-            }				
-
-			 # Directorio de imagenes #
-			$img_dir="../views/imagenes/fotos/usuario/";
-			$codigorand=rand(0,100);
-
-			$usuario_datos_up=[
-				[
-					"campo_nombre"=>"usuario_identificacion",
-					"campo_marcador"=>":Identificacion",
-					"campo_valor"=>$identificacion
-				],
-				[
-					"campo_nombre"=>"usuario_nombre",
-					"campo_marcador"=>":Nombre",
-					"campo_valor"=>$nombre
-				],
-				[
-					"campo_nombre"=>"usuario_rolid",
-					"campo_marcador"=>":Rolid",
-					"campo_valor"=>$rolid
-				],
-				[
-					"campo_nombre"=>"usuario_movil",
-					"campo_marcador"=>":Movil",
-					"campo_valor"=>$movil
-				],
-				[
-					"campo_nombre"=>"usuario_email",
-					"campo_marcador"=>":Email",
-					"campo_valor"=>$email
-				],
-				[
-					"campo_nombre"=>"usuario_fechaactualizado",
-					"campo_marcador"=>":Actualizado",
-					"campo_valor"=>date("Y-m-d H:i:s")
-				]
-			];		
 			
 			if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave2)){
 				$alerta=[
@@ -562,7 +302,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-				//exit();
 			}else{
 				if($clave1!=$clave2){
 					$alerta=[
@@ -572,115 +311,46 @@
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
-					//exit();
 				}else{
 
 					$clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
 
-					$usuario_datos_up[] = [				
-						"campo_nombre"	=> "usuario_clave",
-						"campo_marcador"=> ":Clave",
-						"campo_valor"	=> $clave					
-					];	
+					$usuario_datos_up= [
+						[
+							"campo_nombre"	=> "usuario_clave",
+							"campo_marcador"=> ":Clave",
+							"campo_valor"	=> $clave					
+						],
+						[				
+							"campo_nombre"	=> "usuario_fechacambioclave",
+							"campo_marcador"=> ":FechaClave",
+							"campo_valor"	=> date("Y-m-d H:i:s")
+						],
+						[				
+							"campo_nombre"	=> "usuario_fechaactualizado",
+							"campo_marcador"=> ":FechaActualiza",
+							"campo_valor"	=> date("Y-m-d H:i:s")
+						]
+						,
+						[				
+							"campo_nombre"	=> "usuario_fechasistema",
+							"campo_marcador"=> ":FechaSistema",
+							"campo_valor"	=> date("Y-m-d H:i:s")
+						]
+					];
 				}
 			}
-
-    		# Comprobar si se selecciono una imagen #
-    		if($_FILES['usuario_foto']['name']!="" && $_FILES['usuario_foto']['size']>0){   		
-
-				# Creando directorio #
-				if(!file_exists($img_dir)){
-					if(!mkdir($img_dir,0777)){
-						$alerta=[
-							"tipo"=>"simple",
-							"titulo"=>"Error",
-							"texto"=>"Error al crear el directorio",
-							"icono"=>"error"
-						];
-						return json_encode($alerta);
-					} 
-				}				
-
-				# Verificando formato de imagenes #
-				if(mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['usuario_foto']['tmp_name'])!="image/png"){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen seleccionada es de un formato no permitido",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-				# Verificando peso de imagen #
-				if(($_FILES['usuario_foto']['size']/1024)>4000){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen seleccionada supera el peso permitido 4MB",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-					//exit();
-				}
-
-				$foto=str_ireplace(" ","_",$datos['usuario_usuario']);
-				$foto=$foto."_".$codigorand;			
-
-				# Extension de la imagen #
-				switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
-					case 'image/jpeg':
-						$foto=$foto.".jpg";
-					break;
-					case 'image/png':
-						$foto=$foto.".png";
-					break;
-				}
-
-				$maxWidth = 800;
-    			$maxHeight = 600;
-
-				chmod($img_dir,0777);
-				$inputFile = ($_FILES['usuario_foto']['tmp_name']);
-       			$outputFile = $img_dir.$foto;
-
-				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
-				
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Ocurrió un error",
-						"texto"=>"No es posible subir la imagen al sistema en este momento",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-				
-				# Eliminando imagen anterior #
-				if(is_file($img_dir.$datos['usuario_imagen']) && $datos['usuario_imagen']!=$foto){
-					chmod($img_dir.$datos['usuario_imagen'], 0777);
-					unlink($img_dir.$datos['usuario_imagen']);
-				}
-
-				$usuario_datos_up[] = [				
-					"campo_nombre"	=> "usuario_imagen",
-					"campo_marcador"=> ":Foto",
-					"campo_valor"	=> $foto					
-				];		
-			}	
-
 			$condicion=[
-				"condicion_campo"=>"usuario_id",
+				"condicion_campo"=>"usuario_empleadoid",
 				"condicion_marcador"=>":Usuarioid",
 				"condicion_valor"=>$usuario
 			];
 
-			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){				
-				
+			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){		
 				$alerta=[
 					"tipo"=>"redireccionar",
 					"url"=>APP_URL.'userList/',
-					"texto"=>"Los datos del usuario ".$datos['usuario_nombre']." | ".$datos['usuario_usuario']." se actualizaron correctamente",
+					"texto"=>"Los datos del usuario ".$datos['usuario_usuario']." se actualizaron correctamente",
 					"icono"=>"success"
 				];
 
@@ -706,18 +376,12 @@
 
 						$this->guardarDatos("seguridad_usuario_sede",$usuario_sede_reg);
 					}
-				}					
-
-			}else{
-				if(is_file($img_dir.$foto)){
-					chmod($img_dir.$foto,0777);
-					unlink($img_dir.$foto);
-				}
-				
+				}				
+			}else{			
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
-					"texto"=>"No hemos podido actualizar los datos del usuario ".$datos['usuario_nombre']." ".$datos['usuario_apellido'].", por favor intente nuevamente",
+					"texto"=>"No hemos podido actualizar los datos del usuario ".$datos['empleado_nombre'].", por favor intente nuevamente",
 					"icono"=>"error"
 				];
 			}
@@ -726,9 +390,9 @@
 		}
 
 		/*----------  Controlador actualizar estado usuario  ----------*/
-		public function actualizarUsuarioEstadoControlador(){			
-
+		public function actualizarUsuarioEstadoControlador(){
 			$estadoA = '';
+			$estadosistema = '';
 			$usuarioid=$this->limpiarCadena($_POST['usuario_id']);
 
 			if($usuarioid==1){
@@ -739,7 +403,6 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 			}
 
 			# Verificando usuario #
@@ -752,16 +415,20 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
-		        //exit();
 		    }else{
 		    	$datos=$datos->fetch();
+				$empleadoid = $datos["usuario_empleadoid"];
 		    }
-				
+
 			if($datos['usuario_estado']=='A'){
 				$estadoA = 'I';
-			}else{
-				$estadoA = 'A';
+				$estadosistema = 'N';
 			}
+			else{
+				$estadoA = 'A';
+				$estadosistema = 'S';
+			}
+
             $usuario_datos_up=[
 				[
 					"campo_nombre"=>"usuario_estado",
@@ -777,23 +444,53 @@
 			];
 
 			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){
-
 				$alerta=[
 					"tipo"=>"redireccionar",
 					"url"=>APP_URL.'userList/',
 					"titulo"=>"Usuario actualizado",
-					"texto"=>"El estado del usuario ".$datos['usuario_nombre']." | ".$datos['usuario_usuario']." se actualizó correctamente",
+					"texto"=>"El estado del usuario ".$datos['usuario_usuario']." se actualizó correctamente",
 					"icono"=>"success"
 				];
+
+				$empleado_datos_up=[
+					[
+						"campo_nombre"=>"empleado_sistema",
+						"campo_marcador"=>":EstadoSistema",
+						"campo_valor"=> $estadosistema
+					]
+				];
+	
+				$condicion=[
+					"condicion_campo"=>"empleado_id",
+					"condicion_marcador"=>":Empleadoid",
+					"condicion_valor"=>$empleadoid
+				];
+
+				if($this->actualizarDatos("sujeto_empleado",$empleado_datos_up,$condicion)){
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Empleado actualizado",
+						"texto"=>"El estado del empleado ha sido actualizado correctamente",
+						"icono"=>"success"
+					];
+					return json_encode($alerta);
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Error",
+						"texto"=>"No hemos encontrado el empleado en el sistema",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Error",
-					"texto"=>"No hemos podido actualizar los datos del usuario ".$datos['usuario_nombre']." ".$datos['usuario_apellido'].", por favor intente nuevamente",
+					"texto"=>"No hemos podido actualizar los datos del usuario ".$datos['usuario_usuario'].", por favor intente nuevamente",
 					"icono"=>"error"
 				];
 			}
-
 			return json_encode($alerta);
 		}
 
@@ -971,8 +668,7 @@
 	        }else{
 	        	$foto=str_ireplace(" ","_",$datos['usuario_nombre']);
 	        	$foto=$foto."_".rand(0,100);
-	        }
-	        
+	        } 
 
 	        # Extension de la imagen #
 	        switch(mime_content_type($_FILES['usuario_foto']['tmp_name'])){
@@ -1283,8 +979,7 @@
 					$option.='<option value='.$rows['rol_id'].' selected="selected">'.$rows['rol_nombre'].'</option>';	
 				}else{
 					$option.='<option value='.$rows['rol_id'].'>'.$rows['rol_nombre'].'</option>';	
-				}
-				
+				}	
 			}
 			return $option;
 		}
@@ -1328,5 +1023,27 @@
 				$option.='<option value="'.$rows['sede_id'].'">'.$rows['sede_nombre'].'</option>';	
 			}
 			return $option;
+		}
+
+		public function BuscarEmpleado($empleadoid){		
+			$consulta_datos="SELECT empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
+									empleado_foto, sede_nombre AS Sede
+                                FROM sujeto_empleado, general_sede
+				                WHERE empleado_sedeid = sede_id
+                                    AND empleado_id = ".$empleadoid;	
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			return $datos;
+		}
+
+		public function BuscarUsuario($empleadoid){		
+			$consulta_datos="SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
+									empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
+									usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
+                                FROM sujeto_empleado, general_sede, seguridad_usuario
+				                WHERE empleado_sedeid = sede_id
+									AND empleado_id = usuario_empleadoid
+                                    AND empleado_id = ".$empleadoid;	
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			return $datos;
 		}
 	}

@@ -4,7 +4,7 @@
 
 	$usuario=$insLogin->limpiarCadena($url[1]);
 
-	$datos=$insLogin->seleccionarDatos("Unico","seguridad_usuario","usuario_id",$usuario);
+	$datos=$insUsuario->BuscarUsuario($usuario);
 ?>
 
 <!DOCTYPE html>
@@ -86,10 +86,10 @@
 			if($datos->rowCount()==1){
 				$datos=$datos->fetch(); 
 				
-				if ($datos['usuario_imagen']!=""){
-					$foto = APP_URL.'app/views/imagenes/fotos/usuario/'.$datos['usuario_imagen'];
+				if ($datos['empleado_foto']!=""){
+					$foto = APP_URL.'app/views/imagenes/fotos/empleado/'.$datos['empleado_foto'];
 				}else{
-					$foto="";
+					$foto = APP_URL.'app/views/dist/img/default.png';
 				}
 		?>
 		<!-- Main content -->
@@ -101,7 +101,7 @@
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Usuario: <?php echo $datos['usuario_nombre']; ?></h3>
+						<h3 class="card-title">Usuario: <?php echo $datos['empleado_nombre']; ?></h3>
 						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
@@ -115,21 +115,13 @@
 						<div class="row">						
 							<div class="col-md-2">
 								<div class="form-group">
-									<label for="usuario_foto">Foto</label>		
+									<label for="empleado_foto">Foto</label>		
 									<div class="input-group">											
 										<div class="fileinput fileinput-new" data-provides="fileinput">
 											<div class="fileinput-new thumbnail" style="width: 116px; height: 144px;" data-trigger="fileinput">
 												<img src="<?php echo $foto; ?>">
 											</div>
 											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 116px; max-height: 144px"></div>
-											<div>
-												<span class="btonFoto bton-white bton-file">
-													<span class="fileinput-new">Seleccionar Foto</span>
-													<span class="fileinput-exists">Cambiar</span>
-													<input type="file" name="usuario_foto" id="usuario_foto" accept="image/*">
-												</span>
-												<a href="#" class="btonFoto bton-orange fileinput-exists" data-dismiss="fileinput">Remover</a>
-											</div>
 										</div>
 									</div>		
 								</div>
@@ -138,32 +130,44 @@
 							<!-- /.col -->
 							<div class="col-md-10">
 								<div class="row">
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_identificacion">Identificación</label>                        
-											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['usuario_identificacion']; ?>" >
+											<input type="text" class="form-control" id="usuario_identificacion" name="usuario_identificacion" value="<?php echo $datos['empleado_identificacion']; ?>" disabled>
 										</div>
 									</div>	
-									<div class="col-md-4">
+									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_nombre">Nombre</label>
-											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" placeholder="Nombre usuario" value="<?php echo $datos['usuario_nombre']; ?>">
+											<input type="text" class="form-control" id="usuario_nombre" name="usuario_nombre" value="<?php echo $datos['empleado_nombre']; ?>" disabled>
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_email">Correo</label>
-											<input type="email" class="form-control" id="usuario_email" name="usuario_email" placeholder="Correo" value="<?php echo $datos['usuario_email']; ?>">	
+											<input type="email" class="form-control" id="usuario_email" name="usuario_email" value="<?php echo $datos['empleado_correo']; ?>" disabled>	
 										</div>
 									</div>
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="usuario_movil">Teléfono</label>
-											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" placeholder="Teléfono, celular" value="<?php echo $datos['usuario_movil']; ?>">	
+											<input type="text" class="form-control" id="usuario_movil" name="usuario_movil" value="<?php echo $datos['empleado_celular']; ?>" disabled>	
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="usuario_sede">Sede</label>
+											<input type="text" class="form-control" id="usuario_sede" name="usuario_sede" value="<?php echo $datos['Sede']; ?>" disabled>
 										</div>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row">									
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="usuario_usuario">Usuario</label>
+											<input type="text" class="form-control" id="usuario_usuario" name="usuario_usuario" value="<?php echo $datos['usuario_usuario']; ?>" disabled>
+										</div>
+									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_rolid">Seguridad Rol</label>
@@ -171,12 +175,6 @@
 												<option value="" selected="selected">Seleccionar rol</option>
 												<?php echo $insUsuario->listarOptionRol($datos['usuario_rolid']); ?>
 											</select>	
-										</div>
-									</div>
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="usuario_usuario">Usuario</label>
-											<input type="text" class="form-control" id="usuario_usuario" name="usuario_usuario" placeholder="Usuario" value="<?php echo $datos['usuario_usuario']; ?>">
 										</div>
 									</div>
 									<div class="col-md-3">
@@ -195,7 +193,7 @@
 								<!-- /.form-group -->	
 								
 								<div class="form-group">
-									<label for="usuario_sedeid">Sede</label>
+									<label for="usuario_sedeid">Otras sedes</label>
 									<select class="duallistbox" id="usuario_sedeid" name="usuario_sedeid[]" multiple="multiple">
 										<?php echo $insUsuario->listarOptionSede($usuario); ?> 
 									</select>

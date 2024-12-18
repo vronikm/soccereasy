@@ -71,7 +71,6 @@
 					<div class="card-header">
 						<h3 class="card-title">Listado de usuarios</h3>
 						<div class="card-tools">
-							<a href="<?php echo APP_URL; ?>userNew/" class="btn btn-primary btn-sm" >Nuevo Usuario</a>
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
