@@ -22,7 +22,7 @@
 						  ,"reporteRepresentanteFactura","asistenciaHorarioLista","empleadoEgresoUpdate"
 						  ,"asistencia","asistenciaAlumno","ingresoList","egresoList","balanceResultados"
 						  ,"reporteAsistencia", "buscarAsistencia", "horarioListaPDF","representanteFLPD"
-						  ,"formularioLPPDF","empleadoEntrada"];
+						  ,"formularioLPPDF","empleadoEntrada", "userMenu"];
 
 			if(in_array($vista, $listaBlanca)){
 				if(is_file("./app/views/content/".$vista."-view.php")){

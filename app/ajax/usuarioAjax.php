@@ -29,7 +29,15 @@
 		if($_POST['modulo_usuario']=="eliminarRol"){
 			echo $insUsuario->eliminarRol();
 		}
+		
+		if($_POST['modulo_usuario']=="crearMenu"){
+			echo $insUsuario->crearMenu();
+		}
 
+		if($_POST['modulo_usuario']=="actualizarMenu"){
+			echo $insUsuario->actualizarMenu();
+		}
+		
 		#-----------------------------validar---------------------------
 		if($_POST['modulo_usuario']=="eliminarFoto"){
 			echo $insUsuario->eliminarFotoUsuarioControlador();

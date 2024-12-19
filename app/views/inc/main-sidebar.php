@@ -256,6 +256,12 @@
                   <p>Roles</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."userMenu/" ?>" class="nav-link <?php if ($url[0]=='userMenu') echo 'active'; else echo ''; ?>" >
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Menú</p>
+                </a>
+              </li>
             </ul>
           </li>
 

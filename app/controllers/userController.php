@@ -1046,4 +1046,242 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}
+
+		/* ==================================== Menu ==================================== */
+
+		public function listarMenu(){
+			$tabla="";
+
+			$consulta_datos="SELECT *, 
+							CASE WHEN menu_estado = 'A' THEN 'Activo' ELSE 'Inactivo' END AS estado,
+							CASE WHEN menu_hijo = 'S' THEN 'Si' ELSE 'No' END AS menu_hijo 
+							FROM seguridad_menu
+							WHERE menu_estado != 'E'";
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['menu_id'].'</td>
+						<td>'.$rows['menu_orden'].'</td>
+						<td>'.$rows['menu_padreid'].'</td>
+						<td>'.$rows['menu_hijo'].'</td>
+						<td>'.$rows['menu_nombre'].'</td>
+						<td>'.$rows['menu_vista'].'</td>
+						<td>'.$rows['menu_icono'].'</td>
+						<td>'.$rows['estado'].'</td>
+						<td>
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
+								<input type="hidden" name="modulo_usuario" value="eliminarRol">
+								<input type="hidden" name="rol_id" value="'.$rows['menu_id'].'">						
+								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
+							</form>							
+
+							<a href="'.APP_URL.'userMenu/'.$rows['menu_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;" >Editar</a>
+							
+						</td>
+					</tr>';	
+			}
+			return $tabla;
+		}
+
+		public function BuscarMenu($menuid){
+		
+			$consulta_datos="SELECT M.* 
+					FROM seguridad_menu M										
+					WHERE M.menu_id = ".$menuid;	
+
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
+
+		public function crearMenu(){		
+			
+			# Almacenando datos#
+			$menu_nombre  	= $this->limpiarCadena($_POST['menu_nombre']);
+			$menu_vista		= $this->limpiarCadena($_POST['menu_vista']);
+			$menu_icono		= $this->limpiarCadena($_POST['menu_icono']);
+			$menu_orden  	= $this->limpiarCadena($_POST['menu_orden']);
+			$menu_padreid	= $this->limpiarCadena($_POST['menu_idpadre']);
+			$menu_hijo		= $this->limpiarCadena($_POST['menu_hijo']);
+			$menu_estado  	= $this->limpiarCadena($_POST['menu_estado']);
+			
+			# Verificando campos obligatorios #
+			if($menu_nombre=="" || $menu_vista=="" || $menu_icono=="" || $menu_orden=="" || $menu_padreid=="" || $menu_hijo=="" || $menu_estado=="" ){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No has llenado los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+				
+			}			
+									
+			$menu_datos_reg=[
+				[
+					"campo_nombre"=>"menu_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$menu_nombre
+				],
+				[
+					"campo_nombre"=>"menu_orden",
+					"campo_marcador"=>":Orden",
+					"campo_valor"=>$menu_orden
+				],
+				[
+					"campo_nombre"=>"menu_padreid",
+					"campo_marcador"=>":Padreid",
+					"campo_valor"=>$menu_padreid
+				],
+				[
+					"campo_nombre"=>"menu_hijo",
+					"campo_marcador"=>":Hijo",
+					"campo_valor"=>$menu_hijo
+				],	
+				[
+					"campo_nombre"=>"menu_vista",
+					"campo_marcador"=>":Vista",
+					"campo_valor"=>$menu_vista
+				],	
+				[
+					"campo_nombre"=>"menu_icono",
+					"campo_marcador"=>":Icono",
+					"campo_valor"=>$menu_icono
+				],	
+				[
+					"campo_nombre"=>"menu_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>'A'
+				]
+			];		
+
+			$registrar_rol=$this->guardarDatos("seguridad_menu",$menu_datos_reg);
+
+			if($registrar_rol->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Menu guardado",
+					"texto"=>"Menu registrado correctamente",
+					"icono"=>"success"
+				];				
+			
+			}else{				
+
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No se pudo registrar el Menu, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}		
+
+		public function actualizarMenu(){
+			
+			$menuid = $this->limpiarCadena($_POST['menu_id']);
+
+			# Verificando pago #
+			$datos = $this->ejecutarConsulta("SELECT menu_id FROM seguridad_menu WHERE menu_id = '$menuid '");			
+			if($datos->rowCount()<=0){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurró un error inesperado",
+					"texto"=>"No hemos encontrado el Rol en el sistema: ".$menuid,
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}else{
+				$datos=$datos->fetch();				
+			}				
+
+			# Almacenando datos#
+			$menu_nombre  	= $this->limpiarCadena($_POST['menu_nombre']);
+			$menu_vista		= $this->limpiarCadena($_POST['menu_vista']);
+			$menu_icono		= $this->limpiarCadena($_POST['menu_icono']);
+			$menu_orden  	= $this->limpiarCadena($_POST['menu_orden']);
+			$menu_padreid	= $this->limpiarCadena($_POST['menu_idpadre']);
+			$menu_hijo		= $this->limpiarCadena($_POST['menu_hijo']);
+			$menu_estado  	= $this->limpiarCadena($_POST['menu_estado']);
+			
+			# Verificando campos obligatorios #
+			if($menu_nombre=="" || $menu_vista=="" || $menu_icono=="" || $menu_orden=="" || $menu_padreid=="" || $menu_hijo=="" || $menu_estado=="" ){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No has llenado los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+				
+			}				
+
+			$menu_datos_reg=[
+				[
+					"campo_nombre"=>"menu_nombre",
+					"campo_marcador"=>":Nombre",
+					"campo_valor"=>$menu_nombre
+				],
+				[
+					"campo_nombre"=>"menu_orden",
+					"campo_marcador"=>":Orden",
+					"campo_valor"=>$menu_orden
+				],
+				[
+					"campo_nombre"=>"menu_padreid",
+					"campo_marcador"=>":Padreid",
+					"campo_valor"=>$menu_padreid
+				],
+				[
+					"campo_nombre"=>"menu_hijo",
+					"campo_marcador"=>":Hijo",
+					"campo_valor"=>$menu_hijo
+				],	
+				[
+					"campo_nombre"=>"menu_vista",
+					"campo_marcador"=>":Vista",
+					"campo_valor"=>$menu_vista
+				],	
+				[
+					"campo_nombre"=>"menu_icono",
+					"campo_marcador"=>":Icono",
+					"campo_valor"=>$menu_icono
+				],	
+				[
+					"campo_nombre"=>"menu_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>$menu_estado
+				]
+			];			
+		
+			$condicion=[
+				"condicion_campo"=>"menu_id",
+				"condicion_marcador"=>":Menuid",
+				"condicion_valor"=>$menuid
+			];			
+
+			if($this->actualizarDatos("seguridad_menu",$menu_datos_reg,$condicion)){				
+				
+				$alerta=[
+					"tipo"=>"redireccionar",			
+					"url"=>APP_URL.'userMenu/',					
+					"titulo"=>"Menu actualizado",
+					"texto"=> "EL menu $menu_nombre se actualizo correctamente",
+					"icono"=>"success"	
+				];								
+
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=> "No hemos podido actualizar el menu $menuid, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+
+			return json_encode($alerta);
+		}
 	}

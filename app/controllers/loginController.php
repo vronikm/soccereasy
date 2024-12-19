@@ -45,7 +45,13 @@
 				    }else{
 
 					    # Verificando usuario #
-					    $check_usuario=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_usuario='$usuario'");
+					    $check_usuario=$this->ejecutarConsulta("SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
+																				empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
+																				usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
+																				FROM seguridad_usuario																				
+																					LEFT JOIN sujeto_empleado on empleado_id = usuario_empleadoid
+																					LEFT JOIN general_sede ON empleado_sedeid = sede_id
+																					WHERE usuario_usuario ='$usuario'");
 
 					    if($check_usuario->rowCount()==1){
 
@@ -54,9 +60,9 @@
 					    	if($check_usuario['usuario_usuario']==$usuario && password_verify($clave,$check_usuario['usuario_clave'])){
 
 								$_SESSION['usuario']=$check_usuario['usuario_usuario'];
-					            $_SESSION['nombre']=$check_usuario['usuario_nombre'];
+					            $_SESSION['nombre']=$check_usuario['empleado_nombre'];
 					            $_SESSION['rol']=$check_usuario['usuario_rolid'];					           
-					            $_SESSION['foto']=$check_usuario['usuario_imagen'];
+					            $_SESSION['foto']=$check_usuario['empleado_foto'];
 
 
 					            if(headers_sent()){
