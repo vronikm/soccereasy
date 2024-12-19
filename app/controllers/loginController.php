@@ -59,11 +59,15 @@
 
 					    	if($check_usuario['usuario_usuario']==$usuario && password_verify($clave,$check_usuario['usuario_clave'])){
 
-								$_SESSION['usuario']=$check_usuario['usuario_usuario'];
-					            $_SESSION['nombre']=$check_usuario['empleado_nombre'];
+								$_SESSION['usuario']=$check_usuario['usuario_usuario'];					           
 					            $_SESSION['rol']=$check_usuario['usuario_rolid'];					           
 					            $_SESSION['foto']=$check_usuario['empleado_foto'];
 
+								if ($check_usuario['empleado_nombre']==""){
+									$_SESSION['nombre']=$check_usuario['usuario_rolid'];
+								}else{
+									$_SESSION['nombre']=$check_usuario['empleado_nombre'];
+								}
 
 					            if(headers_sent()){
 					                echo "<script> window.location.href='".APP_URL."dashboard/'; </script>";

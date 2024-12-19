@@ -214,11 +214,12 @@
 			$estado = "";
 			$texto = "";
 			$boton = "";
+			$nombre= "";
 			$consulta_datos="SELECT usuario_id, usuario_empleadoid, usuario_usuario, empleado_nombre, usuario_fechacreacion, 
 									usuario_cambiaclave, usuario_fechaactualizado, usuario_estado, R.rol_nombre  
 							 FROM seguridad_usuario U 
-							 inner join seguridad_rol R on R.rol_id = U.usuario_rolid
-							 inner join sujeto_empleado E on E.empleado_id = U.usuario_empleadoid";	
+							 	LEFT JOIN seguridad_rol R on R.rol_id = U.usuario_rolid
+							 	LEFT JOIN sujeto_empleado E on E.empleado_id = U.usuario_empleadoid";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -226,7 +227,8 @@
 				if($rows['usuario_fechaactualizado']!='0000-00-00 00:00:00'){
 					$fechaM = date("d-m-Y  h:i:s A",strtotime($rows['usuario_fechaactualizado']));
 				}else{
-					$fechaM = "";				}
+					$fechaM = "";				
+				}
 
 				if($rows['usuario_estado']=='A'){
 					$estado = "Activo";
@@ -235,12 +237,19 @@
 				}else{
 					$estado = "Inactivo";
 					$texto = "Activar";
-					$boton = "btn-info";				}
+					$boton = "btn-info";				
+				}
+
+				if ($rows['empleado_nombre']==""){
+					$nombre=$rows['rol_nombre'];
+				}else{
+					$nombre=$rows['empleado_nombre'];
+				}
 
 				$tabla.='
 					<tr>
 						<td>'.$rows['usuario_usuario'].'</td>
-						<td>'.$rows['empleado_nombre'].'</td>
+						<td>'.$nombre.'</td>
 						<td>'.$rows['rol_nombre'].'</td>
 						<td>'.date("d-m-Y  h:i:s A",strtotime($rows['usuario_fechacreacion'])).'</td>
 						<td>'.$fechaM.'</td>
