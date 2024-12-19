@@ -261,8 +261,8 @@
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
 							</form>
 
-							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_empleadoid'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
-							<a href="'.APP_URL.'userProfile/'.$rows['usuario_empleadoid'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
+							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
+							<a href="'.APP_URL.'userProfile/'.$rows['usuario_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
 						</td>
 					</tr>';	
 			}
@@ -275,7 +275,7 @@
 			$usuario=$this->limpiarCadena($_POST['usuario_id']);
 
 			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_empleadoid='$usuario'");
+		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_id='$usuario'");
 		    if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
@@ -326,6 +326,11 @@
 
 					$usuario_datos_up= [
 						[
+							"campo_nombre"=>"usuario_rolid",
+							"campo_marcador"=>":Rolid",
+							"campo_valor"=>$rolid
+						],
+						[
 							"campo_nombre"	=> "usuario_clave",
 							"campo_marcador"=> ":Clave",
 							"campo_valor"	=> $clave					
@@ -347,13 +352,13 @@
 							"campo_valor"	=> date("Y-m-d H:i:s")
 						]
 					];
+					$condicion=[
+						"condicion_campo"=>"usuario_id",
+						"condicion_marcador"=>":Usuarioid",
+						"condicion_valor"=>$usuario
+					];		
 				}
 			}
-			$condicion=[
-				"condicion_campo"=>"usuario_empleadoid",
-				"condicion_marcador"=>":Usuarioid",
-				"condicion_valor"=>$usuario
-			];
 
 			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){		
 				$alerta=[
@@ -1044,14 +1049,14 @@
 			return $datos;
 		}
 
-		public function BuscarUsuario($empleadoid){		
+		public function BuscarUsuario($usuarioid){		
 			$consulta_datos="SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
 									empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
 									usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
                                 FROM seguridad_usuario
 								LEFT JOIN sujeto_empleado on empleado_id = usuario_empleadoid
 								LEFT JOIN general_sede ON empleado_sedeid = sede_id
-				                WHERE usuario_empleadoid = ".$empleadoid;	
+				                WHERE usuario_id = ".$usuarioid;	
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}
