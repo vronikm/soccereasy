@@ -1037,9 +1037,9 @@
 		public function BuscarEmpleado($empleadoid){		
 			$consulta_datos="SELECT empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
 									empleado_foto, sede_nombre AS Sede
-                                FROM sujeto_empleado, general_sede
-				                WHERE empleado_sedeid = sede_id
-                                    AND empleado_id = ".$empleadoid;	
+                                FROM sujeto_empleado
+								LEFT JOIN general_sede ON empleado_sedeid = sede_id
+				                WHERE empleado_id = ".$empleadoid;	
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}
@@ -1048,10 +1048,10 @@
 			$consulta_datos="SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
 									empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
 									usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
-                                FROM sujeto_empleado, general_sede, seguridad_usuario
-				                WHERE empleado_sedeid = sede_id
-									AND empleado_id = usuario_empleadoid
-                                    AND empleado_id = ".$empleadoid;	
+                                FROM seguridad_usuario
+								LEFT JOIN sujeto_empleado on empleado_id = usuario_empleadoid
+								LEFT JOIN general_sede ON empleado_sedeid = sede_id
+				                WHERE usuario_empleadoid = ".$empleadoid;	
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			return $datos;
 		}
