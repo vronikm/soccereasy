@@ -103,7 +103,7 @@
 							</thead>
 							<tbody>
 								<?php 												
-									echo $insPermiso->listarRol($rol_id); 												
+									echo $insPermiso->listarPermiso($rol_id); 												
 								?>								
 							</tbody>	
 						</table>	

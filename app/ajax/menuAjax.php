@@ -18,9 +18,17 @@
 			echo $insMenu->actualizarMenu();
 		}
 
-        if($_POST['modulo_menu']=="asignar"){
-			echo $insMenu->asignarPermiso();
+        if($_POST['modulo_menu']=="eliminarMenu"){
+			echo $insMenu->eliminarMenu();
 		}
+
+        if($_POST['modulo_menu']=="asignarpermiso"){
+			echo $insMenu->registrarPermiso();
+		}
+        if($_POST['modulo_menu']=="eliminarpermiso"){
+			echo $insMenu->eliminarPermiso();
+		}
+
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");

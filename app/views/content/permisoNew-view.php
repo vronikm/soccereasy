@@ -89,20 +89,16 @@
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
-									<th>Número</th>
-									<th>Orden</th>
-									<th>Padre</th>
-									<th>Items</th>
-									<th>Nombre</th>
-									<th>Vista</th>
-									<th>Icono</th>
-									<th>Estado</th>
-									<th>Operación</th>
+									<th>ID</th>
+									<th>MENÚ</th>
+									<th>VISTA</th>
+									<th>ICONO</th>
+									<th>OPERACIÓN</th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php 
-									echo $insAsignar->AsignarMenu($rol_id); 
+									echo $insAsignar->MenuPermiso($rol_id); 
 								?>							
 							</tbody>							
 						</table>	

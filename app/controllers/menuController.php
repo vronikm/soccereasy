@@ -28,8 +28,8 @@
 						<td>'.$rows['estado'].'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/menuAjax.php" method="POST" autocomplete="off" >
-								<input type="hidden" name="modulo_menu" value="eliminarRol">
-								<input type="hidden" name="rol_id" value="'.$rows['menu_id'].'">						
+								<input type="hidden" name="modulo_menu" value="eliminarMenu">
+								<input type="hidden" name="menu_id" value="'.$rows['menu_id'].'">						
 								<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>
 							</form>							
 
@@ -239,6 +239,41 @@
 			return json_encode($alerta);
 		}
 
+        public function eliminarMenu(){	
+			# Almacenando datos
+			$menu_id = $_POST['menu_id'];
+					
+			# Verificando campos obligatorios #
+			if($menu_id == ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"El menú no se encuentra asignado",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			
+			$eliminar_menu = $this->eliminarRegistro("seguridad_menu","menu_id",$menu_id);
+			
+			if($eliminar_menu->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Permiso eliminado",
+					"texto"=> "El menú fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No fue posible eliminar el menú",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}  
+
         public function BuscarRol($rolid){
 		
 			$consulta_rol="SELECT * FROM seguridad_rol WHERE rol_id = ".$rolid;	
@@ -247,7 +282,7 @@
 			return $rol;
 		}
 
-        public function listarRol($rol_id){			
+        public function listarPermiso($rol_id){			
 			$tabla="";
 			$consulta_datos = "SELECT permiso_id, rol_nombre, menu_nombre, permiso_estado
                                     FROM seguridad_permiso P
@@ -262,30 +297,32 @@
 				$tabla.='					
 					<tr>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/menuAjax.php" method="POST" autocomplete="off" >
-						<td>'.$rows['permiso_id'].'</td>
-						<td>'.$rows['rol_nombre'].'</td>
-						<td>'.$rows['menu_nombre'].'</td>
-                      	<td>'.$rows['permiso_estado'].'</td>
-						<td>												
-							<input type="hidden" name="modulo_menu" value="eliminar">												
-							<button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>					
-						</td>
+                            <td>'.$rows['permiso_id'].'</td>
+                            <td>'.$rows['rol_nombre'].'</td>
+                            <td>'.$rows['menu_nombre'].'</td>
+                            <td>'.$rows['permiso_estado'].'</td>
+                            <td>												
+                                <input type="hidden" name="modulo_menu" value="eliminarpermiso">
+                                <input type="hidden" name="permiso_id" value="'.$rows['permiso_id'].'">										
+                                <button type="submit" class="btn float-right btn-danger btn-xs" style="margin-right: 5px;">Eliminar</button>					
+                            </td>
 						</form>
 					</tr>
-					';
+				';
 			}
-			return $tabla;			
+			return $tabla;
 		}
 
-        public function AsignarMenu($rol_id){
+        public function MenuPermiso($rol_id){
 			$tabla="";
 
-			$consulta_datos="SELECT *, 
-							CASE WHEN menu_estado = 'A' THEN 'Activo' ELSE 'Inactivo' END AS estado,
-							CASE WHEN menu_hijo = 'S' THEN 'Si' ELSE 'No' END AS menu_hijo 
-							FROM seguridad_menu
-							WHERE menu_estado != 'E'
-                                AND menu_id not in (select permiso_menuid from seguridad_permiso where permiso_rolid = $rol_id)";
+			$consulta_datos="SELECT M.menu_id, CASE WHEN M.menu_padreid = 0 THEN M.menu_nombre ELSE concat(P.menu_nombre, ' | ', M.menu_nombre) END MENU,
+                                    M.menu_vista, M.menu_icono
+                                FROM seguridad_menu M
+                                LEFT JOIN seguridad_menu P ON P.menu_id = M.menu_padreid 
+                                WHERE M.menu_hijo <> 'S'
+                                    AND M.menu_estado = 'A'
+                                    AND M.menu_id NOT IN (select permiso_menuid from seguridad_permiso where permiso_rolid = $rol_id)";
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -293,26 +330,23 @@
 				$tabla.='
 					<tr>
                         <form class="FormularioAjax" action="'.APP_URL.'app/ajax/menuAjax.php" method="POST" autocomplete="off" >
-						<td>'.$rows['menu_id'].'</td>
-						<td>'.$rows['menu_orden'].'</td>
-						<td>'.$rows['menu_padreid'].'</td>
-						<td>'.$rows['menu_hijo'].'</td>
-						<td>'.$rows['menu_nombre'].'</td>
-						<td>'.$rows['menu_vista'].'</td>
-						<td>'.$rows['menu_icono'].'</td>
-						<td>'.$rows['estado'].'</td>
-                        <td>	
-                             <input type="hidden" name="modulo_menu" value="asignar">
-							 <input type="hidden" name="menu_id" value="'.$rows['menu_id'].'">
-                             <input type="hidden" name="rolid" value="'.$rol_id.'">                          
-                             <button type="submit" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;"">Asignar</button>                             
-						</td>
+                            <td>'.$rows['menu_id'].'</td>
+                            <td>'.$rows['MENU'].'</td>
+                            <td>'.$rows['menu_vista'].'</td>
+                            <td>'.$rows['menu_icono'].'</td>
+                            <td>	
+                                <input type="hidden" name="modulo_menu" value="asignarpermiso">
+                                <input type="hidden" name="menu_id" value="'.$rows['menu_id'].'">
+                                <input type="hidden" name="rolid" value="'.$rol_id.'">                          
+                                <button type="submit" class="btn float-right btn-actualizar btn-xs" style="margin-right: 5px;"">Asignar</button>                             
+                            </td>
+                        </form>
 					</tr>';	
 			}
 			return $tabla;
 		}
 
-        public function asignarPermiso(){	
+        public function registrarPermiso(){	
 			# Almacenando datos
             $permiso_menuid = intval($_POST['menu_id']);		
 			$permiso_rolid  = $_POST['rolid'];
@@ -354,4 +388,39 @@
 			}
 			return json_encode($alerta);			
 		}
+
+        public function eliminarPermiso(){	
+			# Almacenando datos
+			$permiso_id = $_POST['permiso_id'];
+					
+			# Verificando campos obligatorios #
+			if($permiso_id == ""){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"El permiso no se encuentra asignado",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);       
+		    }				
+			
+			$eliminar_permiso = $this->eliminarRegistro("seguridad_permiso","permiso_id",$permiso_id);
+			
+			if($eliminar_permiso->rowCount()>0){
+				$alerta=[
+					"tipo"=>"recargar",
+					"titulo"=>"Permiso eliminado",
+					"texto"=> "El permiso fue eliminado correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No fue posible eliminar el permiso",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}   
     }

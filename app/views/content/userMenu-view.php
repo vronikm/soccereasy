@@ -109,7 +109,7 @@
 					</div>
 
 					<div class="card-body">
-						<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+						<form class="FormularioAjax" id="quickForm" action="<?php echo APP_URL; ?>app/ajax/menuAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 							<input type="hidden" name="modulo_menu" value="<?php echo $modulo_usuario; ?>">
 							<input type="hidden" name="menu_id" value="<?php echo $menuid; ?>">											
 									
@@ -206,7 +206,7 @@
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
-									<th>Número</th>
+									<th>ID</th>
 									<th>Orden</th>
 									<th>Padre</th>
 									<th>Items</th>
@@ -263,6 +263,8 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
 	
 	<!-- Page specific script -->
 	<script>
@@ -304,11 +306,7 @@
 			"responsive": true,
 			});
 		});
-	</script>
-
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
-    
+	</script>    
   </body>
 </html>
 
