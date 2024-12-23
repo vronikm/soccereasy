@@ -422,5 +422,35 @@
 				];
 			}
 			return json_encode($alerta);
-		}   
+		}  
+
+		public function BuscarMenuPadre(){
+			$consulta_menupadre="SELECT M.* FROM seguridad_menu M WHERE M.menu_padreid = 0 AND M.menu_estado = 'A' ORDER BY M.menu_orden";
+			$menupadre = $this->ejecutarConsulta($consulta_menupadre);		
+			return $menupadre;
+		}
+
+		public function PermisoMenu($rolid, $menuid){
+			$consulta_permisomenu="SELECT *	FROM seguridad_permiso WHERE permiso_rolid = $rolid AND permiso_menuid = $menuid";
+			$permisomenu = $this->ejecutarConsulta($consulta_permisomenu);		
+			return $permisomenu;
+		}
+
+		public function BuscarMenuHijo($menupadre){
+			$consulta_menuhijo="SELECT M.* FROM seguridad_menu M WHERE M.menu_padreid = $menupadre AND M.menu_estado = 'A' ORDER BY M.menu_orden";
+			$menuhijo = $this->ejecutarConsulta($consulta_menuhijo);		
+			return $menuhijo;
+		}
+
+		public function GenerarMenu($usuario){
+			$consulta_rol="SELECT usuario_id, usuario_usuario, usuario_rolid, permiso_menuid, M.*
+							FROM seguridad_usuario U
+							LEFT JOIN seguridad_permiso P ON P.permiso_rolid = U.usuario_rolid
+							LEFT JOIN seguridad_menu M ON M.menu_id = P.permiso_menuid 
+							WHERE M.menu_estado = 'A'
+								AND usuario_usuario = '".$usuario."'";	
+
+			$rol = $this->ejecutarConsulta($consulta_rol);		
+			return $rol;
+		}
     }

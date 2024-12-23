@@ -62,6 +62,7 @@
 								$_SESSION['usuario']=$check_usuario['usuario_usuario'];					           
 					            $_SESSION['rol']=$check_usuario['usuario_rolid'];					           
 					            $_SESSION['foto']=$check_usuario['empleado_foto'];
+								$_SESSION['sede']=$check_usuario['Sede'];
 
 								if ($check_usuario['empleado_nombre']==""){
 									$_SESSION['nombre']=$check_usuario['usuario_rolid'];

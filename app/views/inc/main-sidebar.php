@@ -1,6 +1,21 @@
 <!-- Main Sidebar Container -->
 <?php 
-    $nombre="IDV Loja";
+  use app\controllers\menuController;
+  $insGenerar = new menuController();	
+
+    $nombre= ($_SESSION['sede'] != "") ? 'IDV '.$_SESSION['sede'] : "IDV admin";
+    $rolid= $_SESSION['rol'];
+    $usuario=$_SESSION['usuario'];
+
+    if($usuario != ""){
+      $GenerarMenu=$insGenerar->GenerarMenu($usuario);		
+      if($GenerarMenu->rowCount()>0){
+        $GenerarMenu	=	$GenerarMenu->fetch();        			
+      }
+    }else{
+      session_destroy();
+		  header("Location: ".APP_URL."login/");
+    }
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -34,6 +49,17 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
               with font-awesome or any other icon font library -->
+          <?php
+          foreach($GenerarMenu as $rows){
+            echo '<li class="nav-item">
+                  <a href="'.APP_URL.'/" class="nav-link ">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>'.$rows['menu_mombre'].'</p>
+                  </a>
+                </li>';
+          }	
+          ?>
+          
           <li class="nav-item">
             <a href="<?php echo APP_URL."dashboard/" ?>" class="nav-link <?php if ($url[0]=='dashboard') echo 'active'; else echo ''; ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
