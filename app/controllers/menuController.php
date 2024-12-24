@@ -430,8 +430,8 @@
 			return $menupadre;
 		}
 
-		public function PermisoMenu($rolid, $menuid){
-			$consulta_permisomenu="SELECT *	FROM seguridad_permiso WHERE permiso_rolid = $rolid AND permiso_menuid = $menuid";
+		public function PermisoMenu($rolid){
+			$consulta_permisomenu="SELECT *	FROM seguridad_permiso WHERE permiso_rolid = $rolid";
 			$permisomenu = $this->ejecutarConsulta($consulta_permisomenu);		
 			return $permisomenu;
 		}
@@ -442,15 +442,50 @@
 			return $menuhijo;
 		}
 
-		public function GenerarMenu($usuario){
-			$consulta_rol="SELECT usuario_id, usuario_usuario, usuario_rolid, permiso_menuid, M.*
+		public function ObtenerMenu($usuario){
+			$consulta_menu="SELECT usuario_id, usuario_usuario, usuario_rolid, permiso_menuid, M.*, A.menu_nombre AS padre
 							FROM seguridad_usuario U
 							LEFT JOIN seguridad_permiso P ON P.permiso_rolid = U.usuario_rolid
 							LEFT JOIN seguridad_menu M ON M.menu_id = P.permiso_menuid 
+							LEFT JOIN seguridad_menu A ON A.menu_id = M.menu_padreid
 							WHERE M.menu_estado = 'A'
-								AND usuario_usuario = '".$usuario."'";	
+								AND usuario_usuario = '".$usuario."'
+							ORDER BY M.menu_orden";	
 
-			$rol = $this->ejecutarConsulta($consulta_rol);		
-			return $rol;
+			$menu = $this->ejecutarConsulta($consulta_menu);		
+
+			$menus = [];
+			while ($row = $menu->fetch()) {
+				$menus[] = $row;
+			}
+			return $menus;
+		}
+
+		public function ConstruirMenu($menus, $padreid = null){
+			$html = '';
+
+			 // Filtrar menús según el padre actual
+			 $filtrados = array_filter($menus, function ($menu) use ($padreid) {
+				return $menu['menu_padreid'] == $padreid;
+			});
+
+			if (count($filtrados) > 0) {
+				foreach ($filtrados as $menu) {
+					if($menu['menu_padreid']== 0 && $menu['menu_hijo']=='N'){
+						$html .= '<li class="nav-item">';
+						$html .= '<a href="' .APP_URL.$menu['menu_vista'].'/" class="nav-link">';
+						$html .= '<i class="nav-icon fas '. $menu['menu_icono'] . ' text-info"></i> <p>' . $menu['menu_nombre'].'</p>';
+						$html .= '</a>';
+						// Llamada recursiva para submenús
+						$html .= $this->construirMenu($menus, $menu['menu_id']);
+						$html .= '</li>';
+					}else{
+						$html .= '<li class="nav-header">'.$menu['padre'].'</li>';
+						
+					}
+					
+				}			
+			}
+			return $html;
 		}
     }
