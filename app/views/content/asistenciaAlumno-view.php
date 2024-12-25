@@ -104,7 +104,14 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 												</div>
-												<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="<?php echo $fechahoy;?>"required>
+												<?php 
+													if($_SESSION['rol']!= 1 && $_SESSION['rol']!= 2){
+														echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
+														echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
+													}else{
+														echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>';
+													}
+												?>
 												
 											</div>
 											<!-- /.input group -->
