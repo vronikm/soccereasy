@@ -255,14 +255,14 @@
 						<td>'.$fechaM.'</td>
 						<td>'.$estado.'</td>
 						<td>		
+
+							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
+							<a href="'.APP_URL.'userProfile/'.$rows['usuario_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 								<input type="hidden" name="modulo_usuario" value="actualizarestado">
 								<input type="hidden" name="usuario_id" value="'.$rows['usuario_id'].'">						
 								<button type="submit" class="btn float-right '.$boton.' btn-xs" style="margin-right: 5px;""> '.$texto.' </button>
 							</form>
-
-							<a href="'.APP_URL.'userUpdate/'.$rows['usuario_id'].'/" class="btn float-right btn-success btn-xs" style="margin-right: 5px;">Actualizar</a>
-							<a href="'.APP_URL.'userProfile/'.$rows['usuario_id'].'/" class="btn float-right btn-primary btn-xs" style="margin-right: 5px;">Perfil</a>
 						</td>
 					</tr>';	
 			}
@@ -272,10 +272,10 @@
 		/*----------  Controlador actualizar usuario  ----------*/
 		public function actualizarUsuarioControlador(){
 
-			$usuario=$this->limpiarCadena($_POST['usuario_id']);
+			$usuario_id=$_POST['usuario_id'];
 
 			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_id='$usuario'");
+		    $datos=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario WHERE usuario_id='$usuario_id'");
 		    if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
@@ -293,84 +293,103 @@
 		    $clave2	=	$this->limpiarCadena($_POST['usuario_clave2']);		
 
 		    # Verificando campos obligatorios #
-		    if($usuario =="" || $clave1 =="" || $clave2 ==""){
-		        $alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"No has llenado todos los campos que son obligatorios",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		    }
-			
-			if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave2)){
-				$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"Las CLAVES no coinciden con el formato solicitado",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-			}else{
-				if($clave1!=$clave2){
+			if($clave1 !="" || $clave2 !=""){		   
+
+				if($this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{7,100}",$clave2)){
 					$alerta=[
 						"tipo"=>"simple",
 						"titulo"=>"Error",
-						"texto"=>"Las contraseñas que acaba de ingresar no coinciden, por favor verifique e intente nuevamente",
+						"texto"=>"Las CLAVES no coinciden con el formato solicitado",
 						"icono"=>"error"
 					];
 					return json_encode($alerta);
 				}else{
+					if($clave1!=$clave2){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"Las contraseñas que acaba de ingresar no coinciden, por favor verifique e intente nuevamente",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}else{
 
-					$clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
+						$clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
 
-					$usuario_datos_up= [
-						[
-							"campo_nombre"=>"usuario_rolid",
-							"campo_marcador"=>":Rolid",
-							"campo_valor"=>$rolid
-						],
-						[
-							"campo_nombre"	=> "usuario_clave",
-							"campo_marcador"=> ":Clave",
-							"campo_valor"	=> $clave					
-						],
-						[				
-							"campo_nombre"	=> "usuario_fechacambioclave",
-							"campo_marcador"=> ":FechaClave",
-							"campo_valor"	=> date("Y-m-d H:i:s")
-						],
-						[				
-							"campo_nombre"	=> "usuario_fechaactualizado",
-							"campo_marcador"=> ":FechaActualiza",
-							"campo_valor"	=> date("Y-m-d H:i:s")
-						]
-						,
-						[				
-							"campo_nombre"	=> "usuario_fechasistema",
-							"campo_marcador"=> ":FechaSistema",
-							"campo_valor"	=> date("Y-m-d H:i:s")
-						]
-					];
-					$condicion=[
-						"condicion_campo"=>"usuario_id",
-						"condicion_marcador"=>":Usuarioid",
-						"condicion_valor"=>$usuario
-					];		
+						$usuario_datos_up= [
+							[
+								"campo_nombre"=>"usuario_rolid",
+								"campo_marcador"=>":Rolid",
+								"campo_valor"=>$rolid
+							],
+							[
+								"campo_nombre"	=> "usuario_clave",
+								"campo_marcador"=> ":Clave",
+								"campo_valor"	=> $clave					
+							],
+							[				
+								"campo_nombre"	=> "usuario_fechacambioclave",
+								"campo_marcador"=> ":FechaClave",
+								"campo_valor"	=> date("Y-m-d H:i:s")
+							],
+							[				
+								"campo_nombre"	=> "usuario_fechaactualizado",
+								"campo_marcador"=> ":FechaActualiza",
+								"campo_valor"	=> date("Y-m-d H:i:s")
+							]
+							,
+							[				
+								"campo_nombre"	=> "usuario_fechasistema",
+								"campo_marcador"=> ":FechaSistema",
+								"campo_valor"	=> date("Y-m-d H:i:s")
+							]
+						];							
+					}
 				}
+			}else{
+				$usuario_datos_up= [
+					[
+						"campo_nombre"=>"usuario_rolid",
+						"campo_marcador"=>":Rolid",
+						"campo_valor"=>$rolid
+					],	
+					[				
+						"campo_nombre"	=> "usuario_fechaactualizado",
+						"campo_marcador"=> ":FechaActualiza",
+						"campo_valor"	=> date("Y-m-d H:i:s")
+					]
+					,
+					[				
+						"campo_nombre"	=> "usuario_fechasistema",
+						"campo_marcador"=> ":FechaSistema",
+						"campo_valor"	=> date("Y-m-d H:i:s")
+					]
+				];	
+
 			}
+
+			$condicion=[
+				"condicion_campo"=>"usuario_id",
+				"condicion_marcador"=>":Usuarioid",
+				"condicion_valor"=>$usuario_id
+			];	
 
 			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){		
 				$alerta=[
-					"tipo"=>"redireccionar",
-					"url"=>APP_URL.'userList/',
-					"texto"=>"Los datos del usuario ".$datos['usuario_usuario']." se actualizaron correctamente",
+					//"tipo"=>"redireccionar",
+					//"url"=>APP_URL.'userList/',
+					//"texto"=>"Los datos del usuario ".$datos['usuario_usuario']." se actualizaron correctamente",
+					//"icono"=>"success"
+
+					"tipo"=>"recargar",
+					"titulo"=>"Usuario actualizado",
+					"texto"=>"El usuario ".$datos['usuario_usuario']." se actualizó correctamente",
 					"icono"=>"success"
 				];
 
-				$rolesid=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario_sede WHERE usuariosede_usuarioid='$usuario'");
+				$rolesid=$this->ejecutarConsulta("SELECT * FROM seguridad_usuario_sede WHERE usuariosede_usuarioid='$usuario_id'");
 				if($rolesid->rowCount()>0){
-					$this->eliminarRegistro("seguridad_usuario_sede","usuariosede_usuarioid",$usuario);					
+					$this->eliminarRegistro("seguridad_usuario_sede","usuariosede_usuarioid",$usuario_id);					
 				}
 
 				if(isset($_POST['usuario_sedeid'])){
@@ -379,7 +398,7 @@
 							[
 								"campo_nombre"=>"usuariosede_usuarioid",
 								"campo_marcador"=>":UsuarioId",
-								"campo_valor"=>$usuario
+								"campo_valor"=>$usuario_id
 							],
 							[
 								"campo_nombre"=>"usuariosede_sedeid",
@@ -1051,7 +1070,7 @@
 		public function BuscarUsuario($usuarioid){		
 			$consulta_datos="SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
 									empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
-									usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
+									usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave, usuario_tienebloqueo	
                                 FROM seguridad_usuario
 								LEFT JOIN sujeto_empleado on empleado_id = usuario_empleadoid
 								LEFT JOIN general_sede ON empleado_sedeid = sede_id

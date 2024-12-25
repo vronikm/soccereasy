@@ -1852,10 +1852,18 @@
 
 		/* ==================================== Roles ==================================== */
 
-		public function listarOptionSede(){
+		public function listarOptionSede($rolid = null, $usuario = null ){
 			$option="";
 
-			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+			if($rolid != 1 && $rolid != 2){
+				$consulta_datos="SELECT S.sede_id, S.sede_nombre 
+									FROM general_sede S
+									INNER JOIN seguridad_usuario_sede US ON US.usuariosede_sedeid = S.sede_id
+									INNER JOIN seguridad_usuario U ON U.usuario_id = US.usuariosede_usuarioid
+									WHERE U.usuario_usuario  = '".$usuario."'";
+			}else{
+				$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";
+			}				
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1865,10 +1873,18 @@
 			return $option;
 		}
 
-		public function listarSedebusqueda($sedeid){
+		public function listarSedebusqueda($sedeid, $rolid = null, $usuario = null){
 			$option="";
 
-			$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";	
+			if($rolid != 1 && $rolid != 2){
+				$consulta_datos="SELECT S.sede_id, S.sede_nombre 
+									FROM general_sede S
+									INNER JOIN seguridad_usuario_sede US ON US.usuariosede_sedeid = S.sede_id
+									INNER JOIN seguridad_usuario U ON U.usuario_id = US.usuariosede_usuarioid
+									WHERE U.usuario_usuario  = '".$usuario."'";
+			}else{
+				$consulta_datos="SELECT sede_id, sede_nombre FROM general_sede";
+			}						
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

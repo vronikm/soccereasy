@@ -5,12 +5,14 @@
 
     $nombre= ($_SESSION['sede'] != "") ? 'IDV '.$_SESSION['sede'] : "IDV admin";
     $rolid= $_SESSION['rol'];
-    $usuario=$_SESSION['usuario'];
+    $usuario_login=$_SESSION['usuario'];
 
-    if($usuario != ""){
-      $GenerarMenu=$insGenerar->ObtenerMenu($usuario);		
-      // Generar el menú dinámico
-      $menuHTML = $insGenerar->ConstruirMenu($GenerarMenu);
+    if($usuario_login != ""){
+      if ($rolid <> 1 && $rolid <> 2){
+        $GenerarMenu=$insGenerar->ObtenerMenu($usuario_login);		
+        // Generar el menú dinámico
+        $menuHTML = $insGenerar->ConstruirMenu($GenerarMenu);
+      }
     }else{
       session_destroy();
 		  header("Location: ".APP_URL."login/");
@@ -47,10 +49,13 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">               
               
-                    <?php echo $menuHTML; ?>
-        
-    
-
+          <?php
+            if ($rolid <> 1 && $rolid <> 2){
+              echo $menuHTML;  
+            } else{
+              require_once "app/views/inc/menu_admin.php";
+            } 
+          ?>
           
         </ul>
       </nav>

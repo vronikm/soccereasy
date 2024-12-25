@@ -284,9 +284,11 @@
 
         public function listarPermiso($rol_id){			
 			$tabla="";
-			$consulta_datos = "SELECT permiso_id, rol_nombre, menu_nombre, permiso_estado
+
+			$consulta_datos = "SELECT permiso_id, rol_nombre, CASE WHEN M.menu_padreid = 0 THEN M.menu_nombre ELSE concat(MP.menu_nombre, ' | ', M.menu_nombre) END menu_nombre, permiso_estado
                                     FROM seguridad_permiso P
                                     LEFT JOIN seguridad_menu M ON M.menu_id = P.permiso_menuid 
+									LEFT JOIN seguridad_menu MP ON MP.menu_id = M.menu_padreid 
                                     LEFT JOIN seguridad_rol R ON R.rol_id = P.permiso_rolid 
                                     WHERE permiso_estado = 'A'
                                         AND permiso_rolid = $rol_id";
@@ -450,7 +452,7 @@
 							LEFT JOIN seguridad_menu A ON A.menu_id = M.menu_padreid
 							WHERE M.menu_estado = 'A'
 								AND usuario_usuario = '".$usuario."'
-							ORDER BY M.menu_orden";	
+							 ORDER BY M.menu_padreid, M.menu_orden";	
 
 			$menu = $this->ejecutarConsulta($consulta_menu);		
 
@@ -461,31 +463,75 @@
 			return $menus;
 		}
 
-		public function ConstruirMenu($menus, $padreid = null){
+		public function ConstruirMenu($menus){
 			$html = '';
-
-			 // Filtrar menús según el padre actual
-			 $filtrados = array_filter($menus, function ($menu) use ($padreid) {
-				return $menu['menu_padreid'] == $padreid;
-			});
-
-			if (count($filtrados) > 0) {
-				foreach ($filtrados as $menu) {
-					if($menu['menu_padreid']== 0 && $menu['menu_hijo']=='N'){
+			$padreActual = null; // Variable para rastrear el padre actual
+		
+			if (count($menus) > 0) {
+				foreach ($menus as $menu) {
+					if ($menu['menu_padreid'] == 0 && $menu['menu_hijo'] == 'N') {
+						// Si había un bloque de padre abierto, ciérralo antes
+						if (!is_null($padreActual)) {
+							$html .= '</ul>';
+							$html .= '</li>';
+							$padreActual = null; // Reinicia el rastreador de padre
+						}
+		
+						// Menú principal sin hijos
 						$html .= '<li class="nav-item">';
-						$html .= '<a href="' .APP_URL.$menu['menu_vista'].'/" class="nav-link">';
-						$html .= '<i class="nav-icon fas '. $menu['menu_icono'] . ' text-info"></i> <p>' . $menu['menu_nombre'].'</p>';
+						$html .= '<a href="' . APP_URL . $menu['menu_vista'] . '/" class="nav-link">';
+						$html .= '<i class="'.$menu['menu_icono'].'"></i> <p>' . $menu['menu_nombre'] . '</p>';
 						$html .= '</a>';
-						// Llamada recursiva para submenús
-						$html .= $this->construirMenu($menus, $menu['menu_id']);
 						$html .= '</li>';
-					}else{
-						$html .= '<li class="nav-header">'.$menu['padre'].'</li>';
-						
+					} else {
+						// Menú con padre y posiblemente hijos
+						if ($padreActual !== $menu['padre']) {
+							// Si hay un padre diferente, cierra el bloque anterior
+							if (!is_null($padreActual)) {
+								$html .= '</ul>';
+								$html .= '</li>';
+							}
+		
+							// Agrega el nuevo padre
+							$html .= '<li class="nav-header">' . $menu['padre'] . '</li>';
+							$html .= '<li class="nav-item">';
+							$html .= '<a href="#" class="nav-link">';
+							$html .= '<i class="'.$menu['menu_icono'].'"></i>';
+							$html .= '<p>' . $menu['padre'] . '<i class="fas fa-angle-left right"></i></p>';
+							$html .= '</a>';
+							$html .= '<ul class="nav nav-treeview">';
+							$padreActual = $menu['padre']; // Actualiza el rastreador de padre actual
+						}
+		
+						// Agrega los hijos al menú
+						$html .= '<li class="nav-item">';
+						$html .= '<a href="' . APP_URL . $menu['menu_vista'] . '/" class="nav-link">';
+						$html .= '<i class="nav-icon far fa-circle text-info"></i>';
+						$html .= '<p>' . $menu['menu_nombre'] . '</p>';
+						$html .= '</a>';
+						$html .= '</li>';
 					}
-					
-				}			
+				}
+		
+				// Cierra cualquier bloque abierto al final
+				if (!is_null($padreActual)) {
+					$html .= '</ul>';
+					$html .= '</li>';
+				}				
 			}
+
+			$html .= '<li class="nav-header">Salir</li>';
+			$html .= '	<li class="nav-item">';
+			$html .= '	  <a href="'.APP_URL.'logOut/" class="nav-link" id="btn_exit">';
+			$html .= '		<i class="nav-icon far fa-circle text-danger"></i>';
+			$html .= '		<p class="text">Salir</p>';
+			$html .= '	  </a>';
+			$html .= '	</li>';
+			
+		
 			return $html;
 		}
+		
+		
+		
     }

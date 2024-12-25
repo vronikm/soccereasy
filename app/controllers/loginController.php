@@ -47,7 +47,7 @@
 					    # Verificando usuario #
 					    $check_usuario=$this->ejecutarConsulta("SELECT usuario_empleadoid, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
 																				empleado_foto, sede_nombre AS Sede, usuario_estado, usuario_cambiaclave, usuario_usuario, 
-																				usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave
+																				usuario_fechacreacion, usuario_fechaactualizado, usuario_rolid, usuario_clave, 	usuario_tienebloqueo
 																				FROM seguridad_usuario																				
 																					LEFT JOIN sujeto_empleado on empleado_id = usuario_empleadoid
 																					LEFT JOIN general_sede ON empleado_sedeid = sede_id
@@ -57,34 +57,53 @@
 
 					    	$check_usuario=$check_usuario->fetch();
 
-					    	if($check_usuario['usuario_usuario']==$usuario && password_verify($clave,$check_usuario['usuario_clave'])){
-
-								$_SESSION['usuario']=$check_usuario['usuario_usuario'];					           
-					            $_SESSION['rol']=$check_usuario['usuario_rolid'];					           
-					            $_SESSION['foto']=$check_usuario['empleado_foto'];
-								$_SESSION['sede']=$check_usuario['Sede'];
-
-								if ($check_usuario['empleado_nombre']==""){
-									$_SESSION['nombre']=$check_usuario['usuario_rolid'];
-								}else{
-									$_SESSION['nombre']=$check_usuario['empleado_nombre'];
-								}
-
-					            if(headers_sent()){
-					                echo "<script> window.location.href='".APP_URL."dashboard/'; </script>";
-					            }else{
-					                header("Location: ".APP_URL."dashboard/");
-					            }
-
-					    	}else{
-					    		echo "<script>
+							if($check_usuario['usuario_estado']=='I'){
+								echo "<script>
 							        Swal.fire({
 									  icon: 'error',
-									  title: 'Ocurrió un error inesperado',
-									  text: 'Usuario o clave incorrectos'
+									  title: 'Usuario inactivo',
+									  text: 'Contacte al administrador del sistema'
 									});
 								</script>";
-					    	}
+							}elseif ($check_usuario['usuario_tienebloqueo']=='S'){
+								echo "<script>
+							        Swal.fire({
+									  icon: 'error',
+									  title: 'Usuario bloqueado',
+									  text: 'Contacte al administrador del sistema'
+									});
+								</script>";
+							}else{
+
+								if($check_usuario['usuario_usuario']==$usuario && password_verify($clave,$check_usuario['usuario_clave'])){
+
+									$_SESSION['usuario']=$check_usuario['usuario_usuario'];					           
+									$_SESSION['rol']=$check_usuario['usuario_rolid'];					           
+									$_SESSION['foto']=$check_usuario['empleado_foto'];
+									$_SESSION['sede']=$check_usuario['Sede'];
+
+									if ($check_usuario['empleado_nombre']==""){
+										$_SESSION['nombre']=$check_usuario['usuario_rolid'];
+									}else{
+										$_SESSION['nombre']=$check_usuario['empleado_nombre'];
+									}
+
+									if(headers_sent()){
+										echo "<script> window.location.href='".APP_URL."dashboard/'; </script>";
+									}else{
+										header("Location: ".APP_URL."dashboard/");
+									}
+
+								}else{
+									echo "<script>
+										Swal.fire({
+										icon: 'error',
+										title: 'Ocurrió un error inesperado',
+										text: 'Usuario o clave incorrectos'
+										});
+									</script>";
+								}
+							}
 
 					    }else{
 					        echo "<script>

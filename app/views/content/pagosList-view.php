@@ -141,13 +141,15 @@
 									<label for="alumno_sedeid">Sede</label>
 									<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">		
 										<?php
-											if($alumno_sedeid == 0){	
-												echo "<option value='0' selected='selected'>Todas</option>";
-											}else{
-												echo "<option value='0'>Todas</option>";	
+											if($rolid == 1 || $rolid == 2){
+												if($alumno_sedeid == 0){	
+													echo "<option value='0' selected='selected'>Todas</option>";
+												}else{
+													echo "<option value='0'>Todas</option>";	
+												}
 											}
 										?>																		
-										<?php echo $insPago->listarOptionSede($alumno_sedeid); ?>
+										<?php echo $insPago->listarOptionSede($alumno_sedeid, $_SESSION['rol'], $_SESSION['usuario']); ?>
 									</select>	
 								</div>
 							</div>

@@ -2,9 +2,9 @@
 	use app\controllers\userController;
 	$insUsuario = new userController();	
 
-	$usuario=$insLogin->limpiarCadena($url[1]);
+	$usuario_id=$insLogin->limpiarCadena($url[1]);
 
-	$datos=$insUsuario->BuscarUsuario($usuario);
+	$datos=$insUsuario->BuscarUsuario($usuario_id);
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +103,7 @@
 					$activo = "";
 				  }
 
-				  if ($datos['usuario_estado']=='B'){
+				  if ($datos['usuario_tienebloqueo']=='S'){
 					$bloqueo = "checked";
 				  }else{
 					$bloqueo = "";
@@ -241,7 +241,7 @@
 								<div class="form-group">
 									<label>Otras sedes</label>
                         			<select multiple class="form-control" disabled>
-										<?php echo $insUsuario->listarOptionSedeUsuario($usuario); ?> 
+										<?php echo $insUsuario->listarOptionSedeUsuario($usuario_id); ?> 
 									</select>
 								</div>
 								<!-- /.form-group -->

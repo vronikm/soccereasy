@@ -231,7 +231,7 @@
 												<div class="form-group">
 													<label for="alumno_sedeid">Sede</label>
 													<select class="form-control select2" id="alumno_sedeid" name="alumno_sedeid">									
-														<?php echo $insAlumno->listarOptionSede(); ?>
+														<?php echo $insAlumno->listarOptionSede($_SESSION['rol'], $_SESSION['usuario']); ?>
 													</select>	
 												</div>
 											</div> 

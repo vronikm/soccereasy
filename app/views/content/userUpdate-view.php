@@ -2,9 +2,9 @@
 	use app\controllers\userController;
 	$insUsuario = new userController();	
 
-	$usuario=$insLogin->limpiarCadena($url[1]);
+	$usuario_id=$insLogin->limpiarCadena($url[1]);
 
-	$datos=$insUsuario->BuscarUsuario($usuario);
+	$datos=$insUsuario->BuscarUsuario($usuario_id);
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +96,7 @@
 		<section class="content">
 			<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
 			<input type="hidden" name="modulo_usuario" value="actualizar">
-			<input type="hidden" name="usuario_id" value="<?php echo $usuario?>">					
+			<input type="hidden" name="usuario_id" value="<?php echo $usuario_id?>">					
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
@@ -180,22 +180,22 @@
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_clave">Clave</label>
-											<input type="password" class="form-control" id="usuario_clave" name="usuario_clave" value="<?php echo $datos['usuario_clave']; ?>">	
+											<input type="password" class="form-control" id="usuario_clave" name="usuario_clave" value="">	
 										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="form-group">
 											<label for="usuario_clave2">Repetir clave</label>
-											<input type="password" class="form-control" id="usuario_clave2" name="usuario_clave2" value="<?php echo $datos['usuario_clave']; ?>">	
+											<input type="password" class="form-control" id="usuario_clave2" name="usuario_clave2" value="">	
 										</div>
 									</div>
 								</div>
 								<!-- /.form-group -->	
 								
 								<div class="form-group">
-									<label for="usuario_sedeid">Otras sedes</label>
+									<label for="usuario_sedeid">Sedes IDV</label>
 									<select class="duallistbox" id="usuario_sedeid" name="usuario_sedeid[]" multiple="multiple">
-										<?php echo $insUsuario->listarOptionSede($usuario); ?> 
+										<?php echo $insUsuario->listarOptionSede($usuario_id); ?> 
 									</select>
 								</div>							
 							</div>
