@@ -1,11 +1,36 @@
 /* Enviar formularios via AJAX */
-const formularios_ajax=document.querySelectorAll(".FormularioAjax");
+const formularios_ajax = document.querySelectorAll(".FormularioAjax");
 
 formularios_ajax.forEach(formularios => {
 
-    formularios.addEventListener("submit",function(e){
-        
+    formularios.addEventListener("submit", function (e) {
+
         e.preventDefault();
+
+        // Verificar si el formulario tiene el atributo para recargar directo
+        if (this.hasAttribute("data-recargar-directo")) {
+            let data = new FormData(this);
+            let method = this.getAttribute("method");
+            let action = this.getAttribute("action");
+
+            let encabezados = new Headers();
+
+            let config = {
+                method: method,
+                headers: encabezados,
+                mode: 'cors',
+                cache: 'no-cache',
+                body: data
+            };
+
+            fetch(action, config)
+                .then(respuesta => respuesta.json())
+                .then(respuesta => {
+                    return alertas_ajax(respuesta);
+                });
+
+            return; // Salir antes de mostrar la alerta
+        }
 
         Swal.fire({
             title: '¿Está seguro?',
@@ -17,15 +42,15 @@ formularios_ajax.forEach(formularios => {
             confirmButtonText: 'Si, realizar',
             cancelButtonText: 'No, cancelar'
         }).then((result) => {
-            if (result.isConfirmed){
+            if (result.isConfirmed) {
 
                 let data = new FormData(this);
-                let method=this.getAttribute("method");
-                let action=this.getAttribute("action");
+                let method = this.getAttribute("method");
+                let action = this.getAttribute("action");
 
-                let encabezados= new Headers();
+                let encabezados = new Headers();
 
-                let config={
+                let config = {
                     method: method,
                     headers: encabezados,
                     mode: 'cors',
@@ -33,11 +58,11 @@ formularios_ajax.forEach(formularios => {
                     body: data
                 };
 
-                fetch(action,config)
-                .then(respuesta => respuesta.json())
-                .then(respuesta =>{ 
-                    return alertas_ajax(respuesta);
-                });
+                fetch(action, config)
+                    .then(respuesta => respuesta.json())
+                    .then(respuesta => {
+                        return alertas_ajax(respuesta);
+                    });
             }
         });
 
@@ -46,9 +71,8 @@ formularios_ajax.forEach(formularios => {
 });
 
 
-
-function alertas_ajax(alerta){
-    if(alerta.tipo=="simple"){
+function alertas_ajax(alerta) {
+    if (alerta.tipo == "simple") {
 
         Swal.fire({
             icon: alerta.icono,
@@ -57,7 +81,7 @@ function alertas_ajax(alerta){
             confirmButtonText: 'Aceptar'
         });
 
-    }else if(alerta.tipo=="recargar"){
+    } else if (alerta.tipo == "recargar") {
 
         Swal.fire({
             icon: alerta.icono,
@@ -65,12 +89,12 @@ function alertas_ajax(alerta){
             text: alerta.texto,
             confirmButtonText: 'Aceptar'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 location.reload();
             }
         });
 
-    }else if(alerta.tipo=="limpiar"){
+    } else if (alerta.tipo == "limpiar") {
 
         Swal.fire({
             icon: alerta.icono,
@@ -78,27 +102,27 @@ function alertas_ajax(alerta){
             text: alerta.texto,
             confirmButtonText: 'Aceptar'
         }).then((result) => {
-            if(result.isConfirmed){
+            if (result.isConfirmed) {
                 document.querySelector(".FormularioAjax").reset();
             }
         });
 
-    }else if(alerta.tipo=="redireccionar"){
+    } else if (alerta.tipo == "redireccionar") {
         Swal.fire({
             icon: alerta.icono,
             title: alerta.titulo,
             text: alerta.texto,
             confirmButtonText: 'Aceptar'
         }).then((result) => {
-            if(result.isConfirmed){               
-                window.location.href=alerta.url;
+            if (result.isConfirmed) {
+                window.location.href = alerta.url;
             }
         });
-        
+
+    } else if (alerta.tipo == "recargar_directo") {
+        location.reload();
     }
 }
-
-
 
 /* Boton cerrar sesion */
 let btn_exit=document.getElementById("btn_exit");

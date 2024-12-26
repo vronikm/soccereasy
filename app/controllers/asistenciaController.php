@@ -1345,33 +1345,33 @@
 				
 				$tabla.='					
 					<tr>
-						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['NOMBRES'].'</td>
 						<td>'.$rows['APELLIDOS'].'</td>
-						<td>'.$rows['CATEGORIA'].' - '.$rows['asistencia_dia'].'</td>
+						<td>'.$rows['CATEGORIA'].'</td>
 						<td style="width: 220px;">							
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
 								<input type="hidden" name="estado" value="J">
 								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right '.$btn_j.' btn-xs" style="margin-right: 5px;"">Justificado</button>
 							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 								<input type="hidden" name="modulo_asistencia" value="asistencia">
 								<input type="hidden" name="estado" value="F">
 								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right '.$btn_f.' btn-xs" style="margin-right: 5px;"">Falta</button>
 							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 								<input type="hidden" name="modulo_asistencia" value="asistencia">	
 								<input type="hidden" name="estado" value="A">
 								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
 								<input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">						
 								<button type="submit" class="btn float-right '.$btn_a.' btn-xs" style="margin-right: 5px;"">Atraso</button>
 							</form>
-							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 								<input type="hidden" name="modulo_asistencia" value="asistencia">	
 								<input type="hidden" name="estado" value="P">
 								<input type="hidden" name="fecha" value="'.$fecha_formateada.'">
@@ -1577,10 +1577,7 @@
 	
 				if($registrar_hora->rowCount()>0){
 					$alerta=[
-						"tipo"=>"recargar",
-						"titulo"=>"Registro exitoso",
-						"texto"=>"Asistencia registrada correctamente",
-						"icono"=>"success"
+						"tipo"=>"recargar_directo"
 					];	
 				}
 				return json_encode($alerta);
@@ -1606,10 +1603,7 @@
 				if($this->actualizarDatos("asistencia_asistencia",$asistencia_reg,$condicion)){
 
 					$alerta=[
-						"tipo"=>"recargar",
-						"titulo"=>"Registro actualizado",
-						"texto"=>"La asistencia fue actualizada correctamente",
-						"icono"=>"success"
+						"tipo"=>"recargar_directo"
 					];
 				}else{
 					$alerta=[
