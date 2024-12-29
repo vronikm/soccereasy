@@ -66,6 +66,12 @@
 		if($_POST['modulo_egreso']=="eliminardescargo"){
 			echo $insEgreso->eliminarDescargoEgreso();
 		}
+	}elseif(isset($_POST['modulo_asistencia'])){
+		$insAsistencia = new empleadoController();
+
+		if($_POST['modulo_asistencia']=="coordenadas"){
+			echo $insAsistencia->AsistenciaCoordenadas();
+		}
 	}	
 	else{
 		session_destroy();

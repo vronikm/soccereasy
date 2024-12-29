@@ -2,6 +2,7 @@
 
 	namespace app\controllers;
 	use app\models\mainModel;
+	use DateTime;
 
 	class empleadoController extends mainModel{
 
@@ -2094,12 +2095,148 @@
 			return $datos;
 		}
 
-		public function identificacionAsistencia($empleadoid){		
-			$consulta_datos="SELECT SUM(egreso_valor) VALOR_ANTICIPO, SUM(egreso_pendiente) ANTICIPO_PENDIENTE
-						from empleado_egreso 
-						where egreso_empleadoid = ".$empleadoid;
+		public function BuscarUsuario($identificacion){		
+			$consulta_datos="SELECT empleado_id, empleado_identificacion, empleado_nombre, empleado_correo, empleado_celular, 
+									empleado_direccion, empleado_fechaingreso, empleado_foto, CASE WHEN empleado_estado = 'A' THEN 'Activo' WHEN empleado_estado = 'I' THEN 'Inactivo' ELSE 'Sin definir' END Estado, 
+									sede_nombre, catalogo_descripcion AS Especialidad
+								FROM sujeto_empleado
+								INNER JOIN general_sede ON sede_id = empleado_sedeid
+								INNER JOIN general_tabla_catalogo ON catalogo_valor = empleado_especialidadid
+								INNER JOIN general_tabla ON tabla_id = catalogo_tablaid
+								where empleado_estado = 'A'
+									AND empleado_identificacion = '$identificacion'";
 				
 			$datos = $this->ejecutarConsulta($consulta_datos);				
 			return $datos;
 		}
-    }
+
+		public function AsistenciaCoordenadas(){
+			// Capturar coordenadas del formulario
+			$latitude  = $this->limpiarCadena($_POST['latitude']);
+			$longitude = $this->limpiarCadena($_POST['longitude']);			
+			$empleadoid= $this->limpiarCadena($_POST['empleadoid']);
+			$estado_es = $this->limpiarCadena($_POST['estado_es']);
+
+			$fechahora = date('Y-m-d H:i:s');
+
+			$googleMapsLink = "https://www.google.com/maps?q={$latitude},{$longitude}";
+		
+			if($latitude=="" || $longitude=="" || $fechahora=="" || $empleadoid=="" || $estado_es==""){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No se han obtenido todos los campos obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}			
+
+			$empleadoasistencia_reg=[
+				[
+					"campo_nombre"=>"asistencia_empleadoid",
+					"campo_marcador"=>":Empleadoid",
+					"campo_valor"=>$empleadoid
+				],
+				[
+					"campo_nombre"=>"asistencia_hora",
+					"campo_marcador"=>":Hora",
+					"campo_valor"=>$fechahora
+				],
+				[
+					"campo_nombre"=>"asistencia_tipo",
+					"campo_marcador"=>":Tipo",
+					"campo_valor"=>$estado_es
+				],
+				[
+					"campo_nombre"=>"asistencia_latitud",
+					"campo_marcador"=>":Latitud",
+					"campo_valor"=>$latitude
+				],				
+				[
+					"campo_nombre"=>"asistencia_longitud",
+					"campo_marcador"=>":Longitud",
+					"campo_valor"=>$longitude
+				],
+				[
+					"campo_nombre"=>"asistencia_ubicacion",
+					"campo_marcador"=>":Ubicacion",
+					"campo_valor"=>$googleMapsLink
+				]
+
+			];
+
+			$registrar_asistenciaempleado=$this->guardarDatos("empleado_asistencia",$empleadoasistencia_reg);
+
+			if($registrar_asistenciaempleado->rowCount()==1){
+				$alerta=[
+					"tipo"=>"redireccionar",
+					"url"=>APP_URL.'empleadoEntrada/',
+					"titulo"=>"Empleado registrado",
+					"texto"=>"Asistencia registrada correctamente",
+					"icono"=>"success"
+				];
+			}else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"No se pudo registrar su asistencia, por favor intente nuevamente",
+					"icono"=>"error"
+				];
+			}
+			return json_encode($alerta);
+		}
+		
+		
+		public function listarMarcaciones($empleado_id, $fecha){
+			$tabla="";
+			// Convertir fecha a formato MySQL (YYYY-MM-DD) si no lo está
+			$fechaFormatoMysql = DateTime::createFromFormat('d/m/Y', $fecha);
+			$fecha = $fechaFormatoMysql->format('Y-m-d');
+
+			$consulta_datos="SELECT DATE(asistencia_hora) AS fecha,
+    								TIME(asistencia_hora) AS hora,
+									asistencia_tipo, asistencia_ubicacion
+							 FROM empleado_asistencia 
+							 WHERE asistencia_empleadoid = ".$empleado_id." 
+							 AND asistencia_hora >= '".$fecha."'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($rows['asistencia_tipo']=='E'){
+					$asistencia_tipo = "Entrada";
+				}else{
+					$asistencia_tipo = "Salida";
+				}	
+
+				$tabla.='
+					<tr>
+						<td>'.$rows['fecha'].'</td>						
+						<td>'.$rows['hora'].'</td>
+						<td>'.$asistencia_tipo.'</td>
+						<td><a href="'.$rows['asistencia_ubicacion'].'" target="_blank"> Lugar de marcación</a></td>													
+					</tr>';	
+			}
+			return $tabla;
+		}		
+		public function BuscarMarcacion($identificacion){	
+			
+			$fechaFormatoMysql = DateTime::createFromFormat('d/m/Y', date("d/m/Y"));
+			$fecha = $fechaFormatoMysql->format('Y-m-d');			
+
+			$consulta_datos="SELECT asistencia_hora, asistencia_tipo
+							FROM empleado_asistencia
+							WHERE asistencia_hora = (
+								SELECT MAX(asistencia_hora)
+								FROM empleado_asistencia
+								WHERE asistencia_empleadoid = (SELECT empleado_id FROM sujeto_empleado WHERE empleado_identificacion = '$identificacion')
+								AND asistencia_hora >= '$fecha'
+							)
+							LIMIT 1";
+				
+			$datos = $this->ejecutarConsulta($consulta_datos);				
+			return $datos;
+		}
+
+
+	}
