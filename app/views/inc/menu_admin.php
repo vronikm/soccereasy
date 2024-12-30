@@ -32,7 +32,14 @@
                   <p>Torneos</p>
                 </a>
               </li>
-              
+
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."agenda/" ?>" class="nav-link <?php if ($url[0]=='agenda') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon fa fa-sticky-note text-info"></i>
+                  <p>Agenda</p>
+                </a>
+              </li>
+
               <li class="nav-header">Asistencia</li>
               <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
@@ -88,15 +95,21 @@
               <li class="nav-header">Empleados</li>
                 <li class="nav-item">    
                   <li class="nav-item">
-                    <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoIE') echo 'active'; else echo ''; ?>">
+                    <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoIE-view') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-file text-info"></i>
                       <p>Nómina</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="<?php echo APP_URL."empleadoEntrada/" ?>" class="nav-link <?php if ($url[0]=='empleadoEntrada' || $url[0]=='empleadoEntrada') echo 'active'; else echo ''; ?>">
+                    <a href="<?php echo APP_URL."empleadoEntrada/" ?>" class="nav-link <?php if ($url[0]=='empleadoEntrada' ) echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-clock"></i>
                       <p>Registrar asistencia</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."empleadoAsistencias/" ?>" class="nav-link <?php if ($url[0]=='empleadoAsistencias') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-eye"></i>
+                      <p>Reporte asistencias</p>
                     </a>
                   </li>
               </li>

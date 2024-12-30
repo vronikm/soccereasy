@@ -33,6 +33,12 @@
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch(); 
 		$empleadoid=$datos["empleado_id"];
+		$empleado_nombre = $datos['empleado_nombre']; 
+		$empleado_identificacion = $datos['empleado_identificacion'];
+		$Especialidad = $datos['Especialidad']; 
+		$empleado_fechaingreso = $datos['empleado_fechaingreso'];
+		$sede_nombre = $datos['sede_nombre']; 
+		$estado = $datos['Estado'];
 
 		if ($datos['empleado_foto']!=""){
 			$foto = APP_URL.'app/views/imagenes/fotos/empleado/'.$datos['empleado_foto'];
@@ -40,7 +46,14 @@
 			$foto=APP_URL.'app/views/dist/img/default.jpg';
 		}	
 	}else{
-		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
+		$foto=APP_URL.'app/views/dist/img/default.jpg';
+		$empleadoid= 0 ;
+		$empleado_nombre = ''; 
+		$empleado_identificacion = '';
+		$Especialidad = ''; 
+		$empleado_fechaingreso = '';
+		$sede_nombre = ''; 
+		$estado = '';
 	}
 ?>
 
@@ -123,22 +136,22 @@
 											alt="User profile picture">
 									</div>
 
-									<h3 class="profile-username text-center"><?php echo $datos['empleado_nombre'] ; ?></h3>
+									<h3 class="profile-username text-center"><?php echo $empleado_nombre; ?></h3>
 
-									<p class="text-muted text-center"><?php echo $datos['empleado_identificacion']; ?></p>
+									<p class="text-muted text-center"><?php echo $empleado_identificacion; ?></p>
 
 									<ul class="list-group list-group-unbordered mb-3">
 										<li class="list-group-item">
-											<b>Entrenador</b> <a class="float-right"><?php echo $datos['Especialidad']; ?></a>
+											<b>Entrenador</b> <a class="float-right"><?php echo $Especialidad; ?></a>
 										</li>
 										<li class="list-group-item">
-											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $datos['empleado_fechaingreso']; ?></a>
+											<b>Fecha de ingreso</b> <a class="float-right"><?php echo $empleado_fechaingreso; ?></a>
 										</li>
 										<li class="list-group-item">
-											<b>Sede empleado</b> <a class="float-right"><?php echo $datos['sede_nombre']; ?></a>
+											<b>Sede empleado</b> <a class="float-right"><?php echo $sede_nombre; ?></a>
 										</li>
 										<li class="list-group-item">
-											<b>Estado empleado</b> <a class="float-right"><?php echo $datos['Estado']; ?></a>
+											<b>Estado empleado</b> <a class="float-right"><?php echo $estado; ?></a>
 										</li>
 									</ul>
 								</div>

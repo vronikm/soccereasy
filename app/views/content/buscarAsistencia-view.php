@@ -276,6 +276,7 @@
 	<!-- fullCalendar 2.2.5 -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/moment/moment.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/main.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/locales/es.js"></script>
 
      <!-- Page specific script -->
 	<script>
