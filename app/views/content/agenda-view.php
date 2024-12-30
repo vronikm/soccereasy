@@ -2,7 +2,6 @@
 	use app\controllers\agendaController;
 	$insAgenda = new agendaController();
 ?>
-
 <html lang="es">
   <head>
     <meta charset="UTF-8">
@@ -57,9 +56,6 @@
 
 		<!-- Section listado de alumnos -->
 		<section class="content">
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-agenda">
-				Launch Default Modal
-			</button>
 			<form action="<?php echo APP_URL."agenda/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
 			<!-- card-body -->                
 			<div class="card-body">
@@ -160,9 +156,10 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/moment/moment.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/main.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/locales/es.js"></script>
-
+	
      <!-- Page specific script -->
 	<script>
+		var calendar;
 		document.addEventListener('DOMContentLoaded', function() {
 			var calendarEl = document.getElementById('calendar');
 			var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -209,10 +206,17 @@
 					agenda_color: agendaColor
 				},
 				success: function(response) {
-					alert('Evento guardado con éxito');
+					alert('Evento guardado correctamente');
 					// Recarga los eventos del calendario si es necesario
 					calendar.refetchEvents();
 					$('#modal-agenda').modal('hide');
+
+					// Limpia los campos del formulario
+					document.getElementById('agenda_title').value = '';
+					document.getElementById('agenda_detail').value = '';
+					document.getElementById('agenda_start').value = '';
+					document.getElementById('agenda_end').value = '';
+					document.getElementById('agenda_color').value = '';
 				},
 				error: function() {
 					alert('Hubo un error al guardar el evento.');
