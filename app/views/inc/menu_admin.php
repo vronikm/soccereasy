@@ -93,7 +93,12 @@
               </li>
 
               <li class="nav-header">Empleados</li>
-                <li class="nav-item">    
+              <li class="nav-item <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoEntrada' || $url[0]=='empleadoAsistencias') echo 'menu-open'; else echo ''; ?>">  
+              <a href="#" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoEntrada' || $url[0]=='empleadoAsistencias') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon far fa-address-card"></i>
+                  <p>Empleados<i class="fas fa-angle-left right"></i></p>
+                </a>
+                <ul class="nav nav-treeview">    
                   <li class="nav-item">
                     <a href="<?php echo APP_URL."empleadoList/" ?>" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoIE-view') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-file text-info"></i>
@@ -112,6 +117,7 @@
                       <p>Reporte asistencias</p>
                     </a>
                   </li>
+                </ul>
               </li>
 
               <li class="nav-header">Balance Mensual</li>
