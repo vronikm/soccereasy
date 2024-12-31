@@ -43,10 +43,10 @@
 		if ($datos['empleado_foto']!=""){
 			$foto = APP_URL.'app/views/imagenes/fotos/empleado/'.$datos['empleado_foto'];
 		}else{
-			$foto=APP_URL.'app/views/dist/img/default.jpg';
+			$foto=APP_URL.'app/views/dist/img/default.png';
 		}	
 	}else{
-		$foto=APP_URL.'app/views/dist/img/default.jpg';
+		$foto=APP_URL.'app/views/dist/img/default.png';
 		$empleadoid= 0 ;
 		$empleado_nombre = ''; 
 		$empleado_identificacion = '';
