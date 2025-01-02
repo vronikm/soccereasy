@@ -1,25 +1,27 @@
 <?php
-	use app\controllers\cobranzaController;
-	$insMora = new cobranzaController();	
+	use app\controllers\reporteController;
+	$insAsistencia = new reporteController();
 
-	$repreid=$insMora->limpiarCadena($url[1]);
-
-	if(isset($_POST['repre_identificacion'])){
-		$repre_identificacion = $insMora->limpiarCadena($_POST['repre_identificacion']);
+	if(isset($_POST['asistencia_fecha_inicio'])){
+		$fecha_inicio = $insAsistencia->limpiarCadena($_POST['asistencia_fecha_inicio']);
 	} ELSE{
-		$repre_identificacion = "";
+		$fecha_inicio = $insAsistencia->fechaMarcacion();
+		$fecha_inicio = $fecha_inicio->fetch(); 
+		$fecha_inicio = $fecha_inicio['FECHA_MAXIMA'];
 	}
 
-	if(isset($_POST['repre_nombre1'])){
-		$repre_primernombre = $insMora->limpiarCadena($_POST['repre_nombre1']);
+	if(isset($_POST['asistencia_fecha_fin'])){
+		$fecha_fin = $insAsistencia->limpiarCadena($_POST['asistencia_fecha_fin']);
 	} ELSE{
-		$repre_primernombre = "";
-	}
+		$fecha_fin = $insAsistencia->fechaMarcacion();
+		$fecha_fin = $fecha_fin->fetch(); 
+		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
+	}	
 
-	if(isset($_POST['repre_apellido1'])){
-		$repre_apellidopaterno = $insMora->limpiarCadena($_POST['repre_apellido1']);
+	if(isset($_POST['empleado_nombre'])){
+		$empleado_nombre = $insAsistencia->limpiarCadena($_POST['empleado_nombre']);
 	} ELSE{
-		$repre_apellidopaterno = "";
+		$empleado_nombre = "";
 	}
 ?>
 
@@ -28,7 +30,8 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Cobranza pensiones</title>
+	<title><?php echo APP_NAME; ?>| Asistencia de empleados</title>
+
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -40,15 +43,10 @@
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+    
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-
-      <!-- Preloader -->
-      <!--?php require_once "app/views/inc/preloader.php"; ?-->
-      <!-- /.Preloader -->
-
       <!-- Navbar -->
       <?php require_once "app/views/inc/navbar.php"; ?>
       <!-- /.navbar -->
@@ -65,7 +63,7 @@
 			<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-				<h1 class="m-0">Asistencia empleados</h1>
+				<h1 class="m-0">Reporte de asistencia de empleados</h1>
 				</div><!-- /.col -->
 				<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
@@ -78,41 +76,98 @@
 		</div>
 		<!-- /.content-header -->
 
-		<!-- Section listado de representados -->
-		<section class="content">			
+		<!-- Section listado de alumnos -->
+		<section class="content">
+			<form action="<?php echo APP_URL."empleadoAsistencias/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
+				<div class="container-fluid">
+					<div class="card card-default">
+						<div class="card-header">
+							<h3 class="card-title">Criterios de búsqueda</h3>
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+								<i class="fas fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<!-- card-body -->                
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="empleado_nombre">Nombre empleado</label>
+										<input type="text" class="form-control" id="empleado_nombre" name="empleado_nombre" placeholder="Nombre del empleado" value="<?php echo $empleado_nombre; ?>">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group campo">
+										<label for="asistencia_fecha_inicio">Fecha inicio</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+											</div>
+											<input type="date" class="form-control" id="asistencia_fecha_inicio" name="asistencia_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
+										</div>
+										<!-- /.input group -->
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group campo">
+										<label for="asistencia_fecha_fin">Fecha fin</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+											</div>
+											<input type="date" class="form-control" id="asistencia_fecha_fin" name="asistencia_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_fin;?> data-mask required>										
+										</div>
+										<!-- /.input group -->
+									</div>
+								</div>	
+								<div class="col-md-3">
+									<div class="form-group">
+										<label for="empleado_nombre">.</label>
+										<button type="submit" class="form-control btn btn-info">Buscar</button>
+									</div>
+								</div>
+							</div>					
+						</div>
+					</div>
+				</div>  
+			</form>
+
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
 					<div class="card-header">
-						<h3 class="card-title">Asistencias</h3>
-						<div class="card-tools">							
+						<h3 class="card-title">Resultado de la búsqueda</h3>
+						<div class="card-tools">
 							<button type="button" class="btn btn-tool" data-card-widget="collapse">
 								<i class="fas fa-minus"></i>
 							</button>
 						</div>
-					</div>					
-					<div class="card-body">						
+					</div>
+
+					<div class="card-body">
 						<table id="example1" class="table table-bordered table-striped table-sm">
 							<thead>
 								<tr>
-									<th>Sede</th>
 									<th>Identificación</th>
-									<th>Representante</th>
-									<th>Alumno</th>
-									<th>Total mora</th>									
-									<th style="width: 220px;">Operaciones</th>
+									<th>Nombres</th>									
+									<th style="width: 220px;">Reporte de asistencia</<th>
 								</tr>
 							</thead>
 							<tbody>
-								<?php echo $insMora->pensionesValormora(); ?>								
+								<?php 
+									echo $insAsistencia->listarEmpleados($empleado_nombre, $fecha_inicio, $fecha_fin); 
+								?>								
 							</tbody>
-						</table>					
+						</table>	
 					</div>
 				</div>
 			<!-- /.row -->
 			</div><!-- /.container-fluid -->
+
 		</section>
-		<!-- /.section -->      
+		<!-- /.section -->
       </div>
       <!-- /.vista -->
 
@@ -124,7 +179,8 @@
       </aside>
       <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->    
+    <!-- ./wrapper -->
+
 	<!-- jQuery -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
@@ -143,56 +199,81 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>	
-	<!-- Page specific script -->
-	<script>
-		$(function () {
-			$("#example1").DataTable({
-				"responsive": true, "lengthChange": false, "autoWidth": false,
-				"language": {
-					"decimal": "",
-					"emptyTable": "No hay datos disponibles en la tabla",
-					"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-					"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-					"infoFiltered": "(filtrado de _MAX_ entradas totales)",
-					"infoPostFix": "",
-					"thousands": ",",
-					"lengthMenu": "Mostrar _MENU_ entradas",
-					"loadingRecords": "Cargando...",
-					"processing": "Procesando...",
-					"search": "Buscar:",
-					"zeroRecords": "No se encontraron registros coincidentes",
-					"paginate": {
-						"first": "Primero",
-						"last": "Último",
-						"next": "Siguiente",
-						"previous": "Anterior"
-					},
-					"aria": {
-						"sortAscending": ": activar para ordenar la columna ascendente",
-						"sortDescending": ": activar para ordenar la columna descendente"
-					},
-					"buttons": {
-						"copy": "Copiar",
-						"print": "Imprimir",
-						"colvis": "Visibilidad columna"
-					}
-				},
-				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-			$('#example2').DataTable({
-				"paging": true,
-				"lengthChange": false,
-				"searching": false,
-				"ordering": true,
-				"info": true,
-				"autoWidth": false,
-				"responsive": true,
-			});
-		});
-	</script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
-    
-  </body>
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+
+     <!-- Page specific script -->
+	<script>
+	$(function () {
+		$("#example1").DataTable({
+		"responsive": true, "lengthChange": false, "autoWidth": false,
+		"language": {
+			"decimal": "",
+			"emptyTable": "No hay datos disponibles en la tabla",
+			"info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+			"infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+			"infoFiltered": "(filtrado de _MAX_ entradas totales)",
+			"infoPostFix": "",
+			"thousands": ",",
+			"lengthMenu": "Mostrar _MENU_ entradas",
+			"loadingRecords": "Cargando...",
+			"processing": "Procesando...",
+			"search": "Buscar:",
+			"zeroRecords": "No se encontraron registros coincidentes",
+			"paginate": {
+				"first": "Primero",
+				"last": "Último",
+				"next": "Siguiente",
+				"previous": "Anterior"
+			},
+			"aria": {
+				"sortAscending": ": activar para ordenar la columna ascendente",
+				"sortDescending": ": activar para ordenar la columna descendente"
+			},
+			"buttons": {
+				"copy": "Copiar",
+				"print": "Imprimir",
+                "text": 'Imprimir Tabla',
+                "title": 'Datos de Alumnos',
+                "messageTop": 'Generado por el sistema de gestión de alumnos.',
+                "messageBottom": 'Página generada automáticamente.',
+                customize: function(win) {
+                    $(win.document.body)
+                        .css('font-family', 'Arial')
+                        .css('background-color', '#f3f3f3');
+
+                    // Cambiar el estilo de la tabla impresa
+                    $(win.document.body).find('table')
+                        .addClass('display')  // Añadir una clase CSS a la tabla impresa
+                        .css('font-size', '12pt')
+                        .css('border', '1px solid black');
+
+                    // Agregar logotipo al principio
+                    $(win.document.body).prepend(
+                        '<img src="https://example.com/logo.png" style="position:absolute; top:0; left:0; width:100px;" />'
+                    );
+
+                    // Modificar título y agregar estilos CSS adicionales
+                    $(win.document.body).find('h1')
+                        .css('text-align', 'center')
+                        .css('color', '#4CAF50');
+				}
+			}
+		},
+		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+		}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+		$('#example2').DataTable({
+		"paging": true,
+		"lengthChange": false,
+		"searching": false,
+		"ordering": true,
+		"info": true,
+		"autoWidth": false,
+		"responsive": true,
+		});
+	});
+	</script>
+  </body> 
 </html>

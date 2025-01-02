@@ -2,6 +2,7 @@
 
 	namespace app\controllers;
 	use app\models\mainModel;
+	use DateTime;
 
 	class reporteController extends mainModel{	
 		public function listarPagos($fecha_inicio, $fecha_fin, $sede_id){
@@ -375,7 +376,6 @@
 			}
 			return $option;
 		}
-
 		public function resumenPagos($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$VALOR_PAGADO = 0;
@@ -447,7 +447,6 @@
 				</tr>';
 			return $tabla;			
 		}
-
 		public function resumenPagosConsolidado($fecha_inicio, $fecha_fin){
 			$tabla="";
 			$VALOR_PAGADO = 0;
@@ -512,7 +511,6 @@
 
 			return $tabla;			
 		}
-
 		public function fechaPagosResumen(){		
 			$consulta_fecham="SELECT max(pago_fecharegistro) AS FECHA_MAXIMA
 								FROM alumno_pago, sujeto_alumno
@@ -521,7 +519,6 @@
 			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
 			return $fecha_maxima;
 		}
-
 		public function fechaPagosCompletos(){		
 			$consulta_fecham="SELECT max(pago_fecharegistro) AS FECHA_MAXIMA
 								FROM alumno_pago, sujeto_alumno
@@ -531,7 +528,6 @@
 			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
 			return $fecha_maxima;
 		}
-
 		public function  pagosFacturacion($fecha_inicio, $fecha_fin){
 			$tabla="";
 			$consulta_datos="SELECT sede_nombre AS SEDE, repre_identificacion AS IDENTIFICACION, 
@@ -567,7 +563,6 @@
 			}
 			return $tabla;
 		}
-
 		public function resumenPagosForma($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$VALOR_PAGADO = 0;
@@ -639,7 +634,6 @@
 				</tr>';
 			return $tabla;			
 		}
-
 		public function resumenPagosFormaConsolidado($fecha_inicio, $fecha_fin){
 			$tabla="";
 			$VALOR_PAGADO = 0;
@@ -704,7 +698,6 @@
 
 			return $tabla;			
 		}
-
 		public function balanceResultado($fecha_inicio, $fecha_fin, $sede_id){
 			$tabla="";
 			$TOTAL_INGRESOS = 0;
@@ -830,7 +823,6 @@
 				</tr>';
 			return $tabla;			
 		}
-
 		public function balanceResultadosConsolidado($fecha_inicio, $fecha_fin){
 			$tabla="";
 			$TOTAL_INGRESOS = 0;
@@ -1019,7 +1011,70 @@
 			}
 			return $tabla;			
 		}
+		public function listarEmpleados($empleado_nombre, $fecha_inicio, $fecha_fin){
+			$tabla="";
+			$consulta_datos="SELECT distinct empleado_id, empleado_identificacion, empleado_nombre
+								FROM sujeto_empleado
+								INNER JOIN empleado_asistencia ON asistencia_empleadoid = empleado_id
+								WHERE (empleado_nombre LIKE '%".$empleado_nombre."%')
+									OR asistencia_hora between '".$fecha_inicio."' and '".$fecha_fin."'
+									AND empleado_estado <> 'E'";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.='
+					<tr>
+						<td>'.$rows['empleado_identificacion'].'</td>
+						<td>'.$rows['empleado_nombre'].'</td>
+						<td>							
+							<form action="'.APP_URL.'empleadoAsistenciasDetalle/" method="POST" autocomplete="off" >
+								<input type="hidden" name="empleado_id" value="'.$rows['empleado_id'].'">
+								<input type="hidden" name="fecha_inicio" value="'.$fecha_inicio.'">		
+								<input type="hidden" name="fecha_fin" value="'.$fecha_fin.'">					
+								<button type="submit" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;"">Detalle</button>
+							</form>						
+						</td>
+					</tr>';	
+			}
+			return $tabla;			
+		}
 
+		public function fechaMarcacion(){		
+			$consulta_fecham="SELECT max(asistencia_hora) AS FECHA_MAXIMA FROM empleado_asistencia";
+			$fecha_maxima = $this->ejecutarConsulta($consulta_fecham);		
+			return $fecha_maxima;
+		}
+
+		public function listarMarcacionesEmpleado($empleado_id, $fecha_inicio, $fecha_fin){
+			$tabla="";
+			$consulta_datos="SELECT distinct empleado_nombre, DATE(asistencia_hora) AS fecha, TIME(asistencia_hora) AS hora, 
+									asistencia_tipo, asistencia_ubicacion 
+							FROM empleado_asistencia
+							INNER JOIN sujeto_empleado ON empleado_id=asistencia_empleadoid
+							WHERE empleado_id = $empleado_id
+								AND asistencia_hora between '".$fecha_inicio."' and '".$fecha_fin."'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($rows['asistencia_tipo']=='E'){
+					$asistencia_tipo = "Entrada";
+				}else{
+					$asistencia_tipo = "Salida";
+				}	
+
+				$tabla.='
+					<tr>
+						<td>'.$rows['empleado_nombre'].'</td>
+						<td>'.$rows['fecha'].'</td>						
+						<td>'.$rows['hora'].'</td>
+						<td>'.$asistencia_tipo.'</td>
+						<td><a href="'.$rows['asistencia_ubicacion'].'" target="_blank"> Lugar de marcación</a></td>													
+					</tr>';	
+			}
+			return $tabla;
+		}
 	}
 			
 											

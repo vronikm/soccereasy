@@ -17,7 +17,7 @@
 		$repre_nombre 		= $datosPendiente['repre_primernombre'].' '.$datosPendiente['repre_segundonombre'].' '.$datosPendiente['repre_apellidopaterno'].' '.$datosPendiente['repre_apellidomaterno'];
 	
 	}else{
-		$$repre_nombre 	= "";
+		$repre_nombre 	= "";
 	}
 ?>
 
