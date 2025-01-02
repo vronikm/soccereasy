@@ -131,7 +131,7 @@
 
 								<div class="row no-print">
 									<div class="col-12">
-										<?php include "./app/views/inc/btn_back.php";?>	
+										<button class="btn btn-dark btn-back btn-sm" onclick="cerrarPagina()">Regresar</button>
 									</div>
 								</div>
 							</div>
@@ -172,6 +172,12 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+
+	<script>
+        function cerrarPagina() {
+            window.close();
+        }
+    </script>
 
      <!-- Page specific script -->
 	 <script>
