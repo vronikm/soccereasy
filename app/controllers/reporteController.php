@@ -1028,11 +1028,11 @@
 						<td>'.$rows['empleado_identificacion'].'</td>
 						<td>'.$rows['empleado_nombre'].'</td>
 						<td>							
-							<form action="'.APP_URL.'empleadoAsistenciasDetalle/" method="POST" autocomplete="off" >
+							<form action="'.APP_URL.'empleadoAsistenciasDetalle/" method="POST" autocomplete="off" target="_blank" >
 								<input type="hidden" name="empleado_id" value="'.$rows['empleado_id'].'">
 								<input type="hidden" name="fecha_inicio" value="'.$fecha_inicio.'">		
 								<input type="hidden" name="fecha_fin" value="'.$fecha_fin.'">					
-								<button type="submit" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;" target="_blank">Detalle</button>
+								<button type="submit" class="btn float-right btn-ver btn-xs" style="margin-right: 5px;" >Detalle ver</button>
 							</form>						
 						</td>
 					</tr>';	
