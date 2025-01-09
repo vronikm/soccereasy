@@ -155,7 +155,11 @@
 				locale: 'es',
 				aspectRatio: 2.14,
 				events: <?php echo $insAgenda->obtenerEventos(); ?>,
-				
+				eventTimeFormat: { // Configura el formato de la hora
+					hour: '2-digit',
+					minute: '2-digit',
+					hour12: false // Usa formato 24 horas
+				},
 				dateClick: function (info) {
 					// Obtener la fecha seleccionada en el calendario (en UTC)
 					const selectedDate = new Date(info.dateStr);
