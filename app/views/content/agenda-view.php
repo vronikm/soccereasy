@@ -1,6 +1,9 @@
 <?php
+	date_default_timezone_set("America/Guayaquil");
+
 	use app\controllers\agendaController;
 	$insAgenda = new agendaController();
+	
 ?>
 <html lang="es">
   <head>
@@ -14,10 +17,6 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
 	  <!-- fullCalendar -->
 	  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fullcalendar/main.css">
-	<!-- DataTables -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
@@ -55,8 +54,7 @@
 		<!-- /.content-header -->
 
 		<!-- Section listado de alumnos -->
-		<section class="content">
-			<form action="<?php echo APP_URL."agenda/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
+		<section class="content">						
 			<!-- card-body -->                
 			<div class="card-body">
 				<div class="row">
@@ -72,48 +70,52 @@
 					</div>
 					<!-- /.col -->
 				</div>	
-			</div>            
-			</form>
+			</div>
 		</section>
 
 		<div class="modal fade" id="modal-agenda">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 class="modal-title">Registrar Evento</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>					
-					<div class="modal-body">							
-						<input type="hidden" name="modulo_agenda" value="registrar">	
-						<div class="form-group">
-							<label for="agenda_title">Título del Evento:</label>
-							<input type="text" id="agenda_title" name="agenda_title" class="form-control" required>
+			<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/agendaAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">		
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="modal-title">Registrar Evento</h4> <!-- Cambiará dinámicamente -->
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
-						<div class="form-group">
-							<label for="agenda_detail">Detalle del Evento:</label>
-							<textarea id="agenda_detail" name="agenda_detail" class="form-control"></textarea>
+						<div class="modal-body">
+							<div class="form-group">
+								<input type="hidden" name="modulo_agenda" id="modulo_agenda" value="registrar"> <!-- Cambiado a dinámico -->
+								<input type="hidden" name="agenda_id" id="agenda_id" value=""> <!-- Campo oculto para el ID -->
+							</div>
+								<div class="form-group">
+								<label for="agenda_title">Título del Evento:</label>
+								<input type="text" id="agenda_title" name="agenda_title" class="form-control" required>
+							</div>								
+							<div class="form-group">
+								<label for="agenda_detail">Detalle del Evento:</label>
+								<textarea id="agenda_detail" name="agenda_detail" class="form-control"></textarea>
+							</div>
+							<div class="form-group">
+								<label for="agenda_start">Fecha y Hora de Inicio:</label>
+								<input type="datetime-local" id="agenda_start" name="agenda_start" class="form-control" required>
+							</div>
+							<div class="form-group">
+								<label for="agenda_end">Fecha y Hora de Fin:</label>
+								<input type="datetime-local" id="agenda_end" name="agenda_end" class="form-control" required>
+							</div>
+							<div class="form-group">
+								<label for="agenda_color">Color del Evento:</label>
+								<input type="color" id="agenda_color" name="agenda_color" class="form-control">
+							</div>
 						</div>
-						<div class="form-group">
-							<label for="agenda_start">Fecha y Hora de Inicio:</label>
-							<input type="datetime-local" id="agenda_start" name="agenda_start" class="form-control" required>
+						<div class="modal-footer justify-content-between">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+							<button type="submit" class="btn btn-primary" id="btn-submit">Guardar</button>
 						</div>
-						<div class="form-group">
-							<label for="agenda_end">Fecha y Hora de Fin:</label>
-							<input type="datetime-local" id="agenda_end" name="agenda_end" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label for="agenda_color">Color del Evento:</label>
-							<input type="color" id="agenda_color" name="agenda_color" class="form-control">
-						</div>						
 					</div>
-					<div class="modal-footer justify-content-between">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>						
-						<button type="button" class="btn btn-primary" id="saveEvent">Guardar</button>										
-					</div>					
 				</div>
-			</div>
+			</form>
 		</div>
       <!-- /.modal -->
 		<!-- /.section -->      
@@ -134,19 +136,6 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- jQuery UI -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-ui/jquery-ui.min.js"></script>
-	<!-- DataTables  & Plugins -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jszip/jszip.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/pdfmake.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/vfs_fonts.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
@@ -159,71 +148,137 @@
 	
      <!-- Page specific script -->
 	<script>
-		var calendar;
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function () {
 			var calendarEl = document.getElementById('calendar');
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				initialView: 'dayGridMonth',
 				locale: 'es',
-				aspectRatio: 2.14, // Cambia la relación de aspecto para hacerlo más pequeño
+				aspectRatio: 2.14,
 				events: <?php echo $insAgenda->obtenerEventos(); ?>,
-				dateClick: function(info) { 
-					// Establece la fecha seleccionada en los campos de inicio y fin del modal
-					document.getElementById('agenda_start').value = info.dateStr;
-					document.getElementById('agenda_end').value = info.dateStr;
-					// Abre el modal
+				
+				dateClick: function (info) {
+					// Obtener la fecha seleccionada en el calendario (en UTC)
+					const selectedDate = new Date(info.dateStr);
+
+					// Añadir 1 día si el calendario presenta un día menos
+					selectedDate.setDate(selectedDate.getDate() + 1);
+
+					// Establecer la hora local del sistema
+					const currentTime = new Date();
+
+					// Establecer las horas y minutos de la fecha seleccionada con la hora local del sistema
+					selectedDate.setHours(currentTime.getHours());
+					selectedDate.setMinutes(currentTime.getMinutes());
+					selectedDate.setSeconds(0); // Opcional: reseteamos los segundos
+
+					// Convertir a la fecha local en el formato 'datetime-local' (YYYY-MM-DDTHH:MM)
+					function formatDateToLocalInput(date) {
+						const year = date.getFullYear();
+						const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes comienza desde 0
+						const day = String(date.getDate()).padStart(2, '0');
+						const hours = String(date.getHours()).padStart(2, '0');
+						const minutes = String(date.getMinutes()).padStart(2, '0');
+						return `${year}-${month}-${day}T${hours}:${minutes}`;
+					}
+
+					// Asignar la fecha y hora local al campo de inicio
+					document.getElementById('agenda_start').value = formatDateToLocalInput(selectedDate);
+
+					// Configurar la fecha de finalización como 1 hora después de la fecha de inicio
+					const endDate = new Date(selectedDate.getTime() + 60 * 60 * 1000); // +1 hora
+					document.getElementById('agenda_end').value = formatDateToLocalInput(endDate);
+
+					// Limpiar los campos del formulario
+					document.getElementById('agenda_id').value = "";
+					document.getElementById('agenda_title').value = "";
+					document.getElementById('agenda_detail').value = "";
+
+					// Mostrar el modal
 					$('#modal-agenda').modal('show');
+				},
+
+				eventClick: function (info) {
+					Swal.fire({
+						title: '¿Qué acción desea realizar?',
+						showDenyButton: true,
+						showCancelButton: true,
+						confirmButtonText: 'Editar',
+						denyButtonText: 'Eliminar',
+						cancelButtonText: 'Cancelar'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							// Llenar el formulario del modal con los datos del evento seleccionado
+							document.getElementById('agenda_id').value = info.event.id;
+							document.getElementById('agenda_title').value = info.event.title;
+							document.getElementById('agenda_detail').value = info.event.extendedProps.detail;
+							
+							// Ajustar el formato de las fechas para datetime-local (YYYY-MM-DDTHH:mm)
+							 // Convertir fechas de UTC a la zona horaria local
+							const start = new Date(info.event.start);
+							const end = new Date(info.event.end);
+
+							// Función para formatear una fecha en el formato requerido por datetime-local
+							function formatDateToLocalInput(date) {
+								const year = date.getFullYear();
+								const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes comienza desde 0
+								const day = String(date.getDate()).padStart(2, '0');
+								const hours = String(date.getHours()).padStart(2, '0');
+								const minutes = String(date.getMinutes()).padStart(2, '0');
+								return `${year}-${month}-${day}T${hours}:${minutes}`;
+							}
+
+							// Asignar las fechas ajustadas al modal
+							document.getElementById('modulo_agenda').value = "editar";
+							document.getElementById('modal-title').textContent = "Editar Evento";
+							document.getElementById('agenda_start').value = formatDateToLocalInput(start);
+							document.getElementById('agenda_end').value = formatDateToLocalInput(end);
+							document.getElementById('agenda_color').value = info.event.backgroundColor;
+							$('#modal-agenda').modal('show');
+						} else if (result.isDenied) {
+							// Eliminar evento
+							eliminarEvento(info.event.id);
+						}
+					});
 				}
 			});
 			calendar.render();
 		});
-	</script>
 
-	<script>
-		document.getElementById('saveEvent').addEventListener('click', function() {
-			// Obtén los datos del formulario
-			var agendaTitle = document.getElementById('agenda_title').value;
-			var agendaDetail= document.getElementById('agenda_detail').value;
-			var agendaStart = document.getElementById('agenda_start').value;
-			var agendaEnd 	= document.getElementById('agenda_end').value;
-			var agendaColor = document.getElementById('agenda_color').value;
-
-			// Validar campos obligatorios
-			if (agendaTitle.trim() === '' || agendaStart.trim() === '' || agendaEnd.trim() === '') {
-				alert('Por favor, complete los campos obligatorios.');
-				return;
-			}
-			// Enviar los datos usando AJAX
-			$.ajax({
-				url: '<?php echo APP_URL; ?>app/ajax/agendaAjax.php', // Cambia esta URL por la ruta correspondiente
-				method: 'POST',
-				data: {
-					modulo_agenda:'registrar',
-					agenda_title: agendaTitle,
-					agenda_detail: agendaDetail,
-					agenda_start: agendaStart,
-					agenda_end: agendaEnd,
-					agenda_color: agendaColor
-				},
-				success: function(response) {
-					alert('Evento guardado correctamente');
-					// Recarga los eventos del calendario si es necesario
-					calendar.refetchEvents();
-					$('#modal-agenda').modal('hide');
-
-					// Limpia los campos del formulario
-					document.getElementById('agenda_title').value = '';
-					document.getElementById('agenda_detail').value = '';
-					document.getElementById('agenda_start').value = '';
-					document.getElementById('agenda_end').value = '';
-					document.getElementById('agenda_color').value = '';
-				},
-				error: function() {
-					alert('Hubo un error al guardar el evento.');
+		function eliminarEvento(agenda_id) {
+			Swal.fire({
+				title: '¿Está seguro?',
+				text: "¡No podrá revertir esta acción!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, eliminarlo'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						url: "<?php echo APP_URL; ?>app/ajax/agendaAjax.php",
+						type: "POST",
+						data: {
+							modulo_agenda: "eliminar",
+							agenda_id: agenda_id
+						},
+						success: function (response) {
+							let res = JSON.parse(response);
+							Swal.fire(
+								res.titulo,
+								res.texto,
+								res.icono
+							).then(() => {
+								if (res.tipo === "recargar") {
+									location.reload();
+								}
+							});
+						}
+					});
 				}
 			});
-		});
-	</script>
+		}
+	</script>	
   </body>
 </html>
 

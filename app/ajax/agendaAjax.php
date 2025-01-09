@@ -16,6 +16,12 @@
         if ($_POST['modulo_agenda'] == "listar") {
             echo $insAgenda->obtenerEventos();
         }
+		if ($_POST['modulo_agenda'] == "editar") {
+			echo $insAgenda->editarEvento();
+		}
+		if ($_POST['modulo_agenda'] == "eliminar") {
+			echo $insAgenda->eliminarEvento();
+		}
 	}else{
 		session_destroy();
 		header("Location: ".APP_URL."login/");
