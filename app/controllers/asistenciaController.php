@@ -711,16 +711,34 @@
 
 		public function listarHorariosProfesor($profesor_id){					
 			$tabla="";
-			$consulta_datos="SELECT AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre, lugar_nombre
-								FROM asistencia_horario AH
-										LEFT JOIN(
-												SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
-												FROM asistencia_asignahorario
-												GROUP BY asignahorario_horarioid
-										)TOTAL ON TOTAL.HORARIOID = AH.horario_id
-								INNER JOIN general_sede on AH.horario_sedeid = sede_id
-								INNER JOIN asistencia_lugar on AH.horario_sedeid = lugar_sedeid
-								WHERE AH.horario_estado <> 'E'";	
+			if ($_SESSION['rol'] <> 1 && $_SESSION['rol'] <> 2){
+				$consulta_datos="SELECT distinct AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre, lugar_nombre
+									FROM asistencia_horario AH
+											LEFT JOIN(
+													SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+													FROM asistencia_asignahorario
+													GROUP BY asignahorario_horarioid
+											)TOTAL ON TOTAL.HORARIOID = AH.horario_id
+									INNER JOIN general_sede on AH.horario_sedeid = sede_id
+									INNER JOIN asistencia_lugar on AH.horario_sedeid = lugar_sedeid
+									INNER JOIN asistencia_horario_detalle on detalle_horarioid = AH.horario_id
+									WHERE AH.horario_estado <> 'E'
+										AND detalle_lugarid = lugar_id
+										AND detalle_profesorid =".$profesor_id;	
+			} else{
+				$consulta_datos="SELECT distinct AH.*, IFNULL(TOTAL.TOTAL,0) ALUMNOS, sede_nombre, lugar_nombre
+									FROM asistencia_horario AH
+											LEFT JOIN(
+													SELECT asignahorario_horarioid HORARIOID, count(1) TOTAL
+													FROM asistencia_asignahorario
+													GROUP BY asignahorario_horarioid
+											)TOTAL ON TOTAL.HORARIOID = AH.horario_id
+									INNER JOIN general_sede on AH.horario_sedeid = sede_id
+									INNER JOIN asistencia_lugar on AH.horario_sedeid = lugar_sedeid
+									INNER JOIN asistencia_horario_detalle on detalle_horarioid = AH.horario_id
+									WHERE AH.horario_estado <> 'E'
+										AND detalle_lugarid = lugar_id";	
+			}
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1150,7 +1168,7 @@
 			foreach($datos as $rows){
 				$tabla.='					
 					<tr>
-						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" >
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 						<td>'.$rows['sede_nombre'].'</td>
 						<td><input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
@@ -1214,11 +1232,16 @@
 			
 			if($asignar_horario->rowCount()==1){
 				$alerta=[
+					"tipo"=>"recargar_directo"
+				];
+				/*	
+				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Asignación correcta",
 					"texto"=>"El alumno fue agregado correctamente al horario seleccionado",
 					"icono"=>"success"
 				];
+				*/
 			}else{
 				$alerta=[
 					"tipo"=>"simple",

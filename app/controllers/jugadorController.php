@@ -73,7 +73,7 @@
 			foreach($datos as $rows){
 				$tabla.='					
 					<tr>
-						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/jugadorAjax.php" method="POST" autocomplete="off" >
+						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/jugadorAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 						<td><input type="hidden" name="alumno_id" value="'.$rows['alumno_id'].'">'.$rows['alumno_identificacion'].'</td>
 						<td>'.$rows['alumno_primernombre'].' '.$rows['alumno_segundonombre'].' '.$rows['alumno_apellidopaterno'].' '.$rows['alumno_apellidomaterno'].'</td>
 						<td>'.$rows['alumno_fechanacimiento'].'</td>
@@ -171,11 +171,16 @@
 			
 			if($agregar_jugador->rowCount()==1){
 				$alerta=[
+					"tipo"=>"recargar_directo"
+				];
+				/*
+				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Jugador agregado",
 					"texto"=>"El jugador fue agregado correctamente",
 					"icono"=>"success"
 				];
+				*/
 			}else{
 				$alerta=[
 					"tipo"=>"simple",

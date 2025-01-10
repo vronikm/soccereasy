@@ -40,7 +40,7 @@
                 </a>
               </li>
 
-              <li class="nav-header">Asistencia</li>
+              <li class="nav-header">Asistencia alumno</li>
               <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-clipboard-list"></i>

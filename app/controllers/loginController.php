@@ -2,7 +2,7 @@
 
 	namespace app\controllers;
 	use app\models\mainModel;
-
+	
 	class loginController extends mainModel{
 
 		/*----------  Controlador iniciar sesion  ----------*/
@@ -82,19 +82,28 @@
 									$_SESSION['foto']=$check_usuario['empleado_foto'];
 									$_SESSION['sede']=$check_usuario['Sede'];
 									$_SESSION['identificacion']=$check_usuario['empleado_identificacion'];
+									$_SESSION['usuario_id']=$check_usuario['usuario_empleadoid'];
+									
 
 									if ($check_usuario['empleado_nombre']==""){
 										$_SESSION['nombre']=$check_usuario['usuario_rolid'];
 									}else{
 										$_SESSION['nombre']=$check_usuario['empleado_nombre'];
 									}
-
-									if(headers_sent()){
-										echo "<script> window.location.href='".APP_URL."dashboard/'; </script>";
-									}else{
-										header("Location: ".APP_URL."dashboard/");
+									
+									if ($_SESSION['rol'] <> 1 && $_SESSION['rol'] <> 2){
+										if(headers_sent()){
+											echo "<script> window.location.href='".APP_URL."empleadoEntrada/'; </script>";
+										}else{
+											header("Location: ".APP_URL."empleadoEntrada/");
+										} 
+									} else{
+										if(headers_sent()){
+											echo "<script> window.location.href='".APP_URL."dashboard/'; </script>";
+										}else{
+											header("Location: ".APP_URL."dashboard/");
+										}
 									}
-
 								}else{
 									echo "<script>
 										Swal.fire({

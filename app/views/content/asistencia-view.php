@@ -5,7 +5,7 @@
 	$_SESSION['menupadre']="Asistencia";
 	$_SESSION['menuhijo']="asistencia";
 
-	$profesorid	= 1;
+	$profesorid	= $_SESSION['usuario_id'];
 ?>
 
 
@@ -96,11 +96,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php 
-									if($profesorid != 0){
-										echo $insHorario->listarHorariosProfesor($profesorid); 
-									}
-								?>								
+								<?php echo $insHorario->listarHorariosProfesor($profesorid); ?>								
 							</tbody>
 						</table>	
 					</div>

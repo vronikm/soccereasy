@@ -928,7 +928,7 @@
 			if($datos->rowCount()<=0){
 		        $alerta=[
 					"tipo"=>"simple",
-					"titulo"=>"Ocurró un error inesperado",
+					"titulo"=>"Ocurrió un error inesperado",
 					"texto"=>"No hemos encontrado el Rol en el sistema: ".$rolid,
 					"icono"=>"error"
 				];
@@ -982,7 +982,7 @@
 				$alerta=[
 					"tipo"=>"redireccionar",			
 					"url"=>APP_URL.'roList/',					
-					"titulo"=>"Lugar actualizado",
+					"titulo"=>"Rol actualizado",
 					"texto"=>"Los datos del Rol ".$rol_nombre." se actualizaron correctamente",
 					"icono"=>"success"	
 				];								

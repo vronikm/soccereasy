@@ -4,11 +4,11 @@
   $insGenerar = new menuController();	
 
     $nombre= ($_SESSION['sede'] != "") ? 'IDV '.$_SESSION['sede'] : "IDV admin";
-    $rolid= $_SESSION['rol'];
+    $session_rolid= $_SESSION['rol'];
     $usuario_login=$_SESSION['usuario'];
 
     if($usuario_login != ""){
-      if ($rolid <> 1 && $rolid <> 2){
+      if ($session_rolid <> 1 && $session_rolid <> 2){
         $GenerarMenu=$insGenerar->ObtenerMenu($usuario_login);		
         // Generar el menú dinámico
         $menuHTML = $insGenerar->ConstruirMenu($GenerarMenu);
@@ -50,7 +50,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">               
               
           <?php
-            if ($rolid <> 1 && $rolid <> 2){
+            if ($session_rolid <> 1 && $session_rolid <> 2){
               echo $menuHTML;  
             } else{
               require_once "app/views/inc/menu_admin.php";
