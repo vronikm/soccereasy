@@ -79,7 +79,7 @@ function alertas_ajax(alerta) {
             title: alerta.titulo,
             text: alerta.texto,
             confirmButtonText: 'Aceptar'
-        });
+        });  
 
     } else if (alerta.tipo == "recargar") {
 
@@ -121,7 +121,68 @@ function alertas_ajax(alerta) {
 
     } else if (alerta.tipo == "recargar_directo") {
         location.reload();
+
+    } else if (alerta.tipo == "Toast_Success") {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: false, // Muestra una barra de progreso
+            didClose: () => {
+                // Recargar la página cuando se cierra el mensaje
+                location.reload();
+            }
+        });
+    
+        Toast.fire({
+            icon: 'success',
+            title: alerta.titulo
+        });
     }
+
+   
+        
+    
+        /*
+         var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+      $('.swalDefaultSuccess').click(function() {
+        Toast.fire({
+          icon: 'success',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultInfo').click(function() {
+        Toast.fire({
+          icon: 'info',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultError').click(function() {
+        Toast.fire({
+          icon: 'error',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultWarning').click(function() {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+      $('.swalDefaultQuestion').click(function() {
+        Toast.fire({
+          icon: 'question',
+          title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+        })
+      });
+
+      */
 }
 
 /* Boton cerrar sesion */

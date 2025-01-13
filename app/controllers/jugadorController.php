@@ -171,7 +171,8 @@
 			
 			if($agregar_jugador->rowCount()==1){
 				$alerta=[
-					"tipo"=>"recargar_directo"
+					"tipo"=>"Toast_Success",
+					"titulo"=>"Jugador agregado correctamente..!!" 
 				];
 				/*
 				$alerta=[
