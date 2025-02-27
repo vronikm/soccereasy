@@ -219,7 +219,8 @@
 									usuario_cambiaclave, usuario_fechaactualizado, usuario_estado, R.rol_nombre  
 							 FROM seguridad_usuario U 
 							 	LEFT JOIN seguridad_rol R on R.rol_id = U.usuario_rolid
-							 	LEFT JOIN sujeto_empleado E on E.empleado_id = U.usuario_empleadoid";	
+							 	LEFT JOIN sujeto_empleado E on E.empleado_id = U.usuario_empleadoid
+							 ORDER BY usuario_estado";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
