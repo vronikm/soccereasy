@@ -280,7 +280,8 @@
 								FROM sujeto_empleado E
 									left join general_sede S on E.empleado_sedeid = sede_id
 									left join seguridad_usuario U on E.empleado_id = U.usuario_empleadoid
-								WHERE empleado_estado IN ('A','I')";	
+								WHERE empleado_estado IN ('A','I')
+								ORDER BY empleado_estado ASC";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
