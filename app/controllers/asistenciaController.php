@@ -1341,7 +1341,8 @@
 										FROM asistencia_asistencia 
 										WHERE asistencia_aniomes = $anio$mes
 									) E ON E.asistencia_alumnoid = H.asignahorario_alumnoid								
-								WHERE H.asignahorario_horarioid = $horarioid";
+								WHERE H.asignahorario_horarioid = $horarioid
+								ORDER BY asistencia_dia, APELLIDOS";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
@@ -1369,9 +1370,9 @@
 				$tabla.='					
 					<tr>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
-						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['NOMBRES'].'</td>
-						<td>'.$rows['APELLIDOS'].'</td>
 						<td>'.$rows['CATEGORIA'].'</td>
+						<td><input type="hidden" name="asignahorario_alumnoid" value="'.$rows['asignahorario_alumnoid'].'">'.$rows['APELLIDOS'].' '.$rows['NOMBRES'].'</td>
+											
 						<td style="width: 220px;">							
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/asistenciaAjax.php" method="POST" autocomplete="off" data-recargar-directo>
 								<input type="hidden" name="modulo_asistencia" value="asistencia">

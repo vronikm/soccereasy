@@ -44,97 +44,72 @@
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
-      <!-- Preloader -->
-      <!--?php require_once "app/views/inc/preloader.php"; ?-->
-      <!-- /.Preloader -->
+		<!-- Preloader -->
+		<!--?php require_once "app/views/inc/preloader.php"; ?-->
+		<!-- /.Preloader -->
 
-      <!-- Navbar -->
-      <?php require_once "app/views/inc/navbar.php"; ?>
-      <!-- /.navbar -->
+      	<!-- Navbar -->	
+		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			<!-- Left navbar links -->
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<h6 class="nav-link">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]  ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h6>
+				</li>
+				<form action="<?php echo APP_URL."asistenciaAlumno/$horario_id" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
+							
+				<li class="nav-item d-none d-sm-inline-block">
+					<div class="card-comment">											
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+							</div>
+							<?php 
+								if($_SESSION['rol']!= 1 && $_SESSION['rol']!= 2){
+									echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
+									echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
+								}else{
+									echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>';
+								}
+							?>							
+						</div>				
+					</div>				
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<button type="submit" class="nav-link form-control btn btn-info">Generar lista</button>											
+				</li>
+				</form>	
+			</ul>
+		</nav>
+	
+    	<!--?php require_once "app/views/inc/navbar.php"; ?-->
+      	<!-- /.navbar -->
 
-      <!-- Main Sidebar Container -->
-      <?php require_once "app/views/inc/main-sidebar.php"; ?>
-      <!-- /.Main Sidebar Container -->  
+		<!-- Main Sidebar Container -->
+		<?php require_once "app/views/inc/main-sidebar.php"; ?>
+		<!-- /.Main Sidebar Container -->  
 
       <!-- vista -->
       <div class="content-wrapper">
-
-		<!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="container-fluid">
-				<div class="row mb-2">
-					<div class="col-sm-6">
-						<!--h4 class="m-0">Lista horario sede:  </h4-->
-						<h5 class="m-0">Registro de asistencia <?php echo $horarioSede["horario_nombre"] ." - ". $horarioSede["horario_detalle"]  ." - "."Sede ". $horarioSede["sede_nombre"]; ?></h4>
-					</div><!-- /.col -->
-					<div class="col-sm-6">
-						<ol class="breadcrumb float-sm-right">
-							<li class="breadcrumb-item"><a href="#">Nuevo</a></li>
-							<li class="breadcrumb-item active">Dashboard v1</li>
-						</ol>
-					</div><!-- /.col -->
-				</div><!-- /.row -->
-			</div><!-- /.container-fluid -->
-		</div>
-		<!-- /.content-header -->
-
+		
 		<!-- Main content -->
 		<section class="content">
 			<div class="container-fluid">
 			<!-- Small boxes (Stat box) -->
 				<div class="card card-default">
-					<div class="card-header">
-						<h3 class="card-title">Búsqueda de alumnos</h3>
-						<div class="card-tools">											
-							<button type="button" class="btn btn-tool" data-card-widget="collapse">
-								<i class="fas fa-minus"></i>
-							</button>
-						</div>
-					</div>
+					
 
 					<div class="card-body card-comments">
-						<div class="card-comment">
-							<form action="<?php echo APP_URL."asistenciaAlumno/$horario_id" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >
-									
-								<div class="row">
-									<div class="col-md-3">
-										<div class="form-group campo">
-											<label for="pago_fecha">Fecha para registro de asistencia</label>
-											<div class="input-group">
-												<div class="input-group-prepend">
-													<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-												</div>
-												<?php 
-													if($_SESSION['rol']!= 1 && $_SESSION['rol']!= 2){
-														echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
-														echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
-													}else{
-														echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>';
-													}
-												?>
-												
-											</div>
-											<!-- /.input group -->
-										</div>
-									</div>
-
-									<div class="col-md-2">
-										<div class="form-group">
-											<label for="alumno_sedeid">.</label>
-											<button type="submit" class="form-control btn btn-info">Generar lista</button>
-										</div>
-									</div>									
-								</div>
-							</form>	
-						</div>
+						
 					
-						<br/>                      
+		                  
 						<table id="example1" class="table table-bordered table-striped table-sm ">
 							<thead>
 								<tr>
-									<th>Nombres</th>
-									<th>Apellidos</th> 
 									<th>Categoría</th>
+									<th>Nombres</th>									
 									<th>Asistencia</th>	
 								</tr>
 							</thead>
@@ -200,7 +175,8 @@
 				"lengthChange": false, // Deshabilitar el cambio de longitud
 				"autoWidth": false,
 				"paging": false, // Deshabilitar la paginación
-				"searching": true, // Habilitar la búsqueda
+				"searching": false, // Habilitar la búsqueda
+				"ordering": false, // Desactiva la opción de ordenar
 				"language": {
 					"decimal": "",
 					"emptyTable": "No hay datos disponibles en la tabla",
