@@ -238,7 +238,8 @@
 										pago_alumnoid
 									) BASE
 								) PEN ON PEN.pago_alumnoid = A.alumno_id
-								WHERE PEN.TOTAL > 0 OR P.SALDO > 0
+								WHERE A.alumno_estado <> 'E'
+									AND PEN.TOTAL > 0 OR P.SALDO > 0
 								ORDER BY PEN.PENSIONES DESC";
 			
 			$datos = $this->ejecutarConsulta($consulta_datos);
