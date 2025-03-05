@@ -67,7 +67,8 @@
                                                         and pago_estado = 'P'
                                                     group by pago_alumnoid, transaccion_pagoid, transaccion_estado						
                                             ) FECHATRX on FECHATRX.pago_alumnoid = A.alumno_id
-                                            WHERE PEN.TOTAL > 0 OR P.SALDO > 0
+                                            WHERE A.alumno_estado <> 'E'
+												AND PEN.TOTAL > 0 OR P.SALDO > 0
                                         ) as VALORESMORA			
                                     group by alumno_repreid, repre_identificacion, REPRE, sede_nombre, repre_celular, ALUMNO";
 				
