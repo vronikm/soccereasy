@@ -153,8 +153,8 @@
                 </li>
 
               <li class="nav-header">Cobranza</li>
-              <li class="nav-item <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaUniforme') echo 'menu-open'; else echo ''; ?>">
-                <a href="#" class="nav-link <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaUniforme') echo 'active'; else echo ''; ?>">
+              <li class="nav-item <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaPensionInactivos' || $url[0]=='cobranzaUniforme') echo 'menu-open'; else echo ''; ?>">
+                <a href="#" class="nav-link <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaPensionInactivos' || $url[0]=='cobranzaUniforme') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-book"></i>
                   <p>Gestión de cobranza<i class="fas fa-angle-left right"></i></p>
                 </a>
@@ -163,6 +163,14 @@
                     <a href="<?php echo APP_URL."cobranzaPension/" ?>" class="nav-link <?php if ($url[0]=='cobranzaPension') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-circle text-info"></i>
                       <p>Pensiones</p>
+                    </a>
+                  </li>
+                </ul>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."cobranzaPensionInactivos/" ?>" class="nav-link <?php if ($url[0]=='cobranzaPensionInactivos') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-circle text-info"></i>
+                      <p>Pensiones Inactivos</p>
                     </a>
                   </li>
                 </ul>
