@@ -125,6 +125,30 @@
 		$cemer_celular		="";
 		$cemer_parentesco	="";
 	}
+
+	$horario_id=$insAlumno->HorarioID($alumnoid);
+	if($horario_id->rowCount()==1){
+		$horario_id=$horario_id->fetch(); 
+		$horarioid = $horario_id['asignahorario_horarioid'];
+    }else{
+		$horarioid = 0;
+	}
+
+
+	$datoshorario=$insAlumno->seleccionarDatos("Unico","asistencia_horario","horario_id",$horarioid);
+	if($datoshorario->rowCount()==1){
+		$datoshorario=$datoshorario->fetch();
+		$lugar_sedeid 		= $datoshorario['horario_sedeid'];
+		$horario_nombre 	= $datoshorario['horario_nombre'];
+		$horario_detalle	= $datoshorario['horario_detalle'];
+		$horario_estado		= $datoshorario['horario_estado'];
+	}else{
+		$lugar_sedeid = isset($_POST['horario_sedeid']) ? $insHorario->limpiarCadena($_POST['horario_sedeid']) : 0;
+		$horario_nombre 	= "";
+		$horario_detalle	= "";
+		$horario_estado		= "";
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -232,6 +256,7 @@
 								<li class="nav-item"><a class="nav-link" href="#representante" data-toggle="tab">Representante</a></li>
 								<li class="nav-item"><a class="nav-link" href="#contactoem" data-toggle="tab">Contacto emergencia</a></li>											
 								<li class="nav-item"><a class="nav-link" href="#informacionm" data-toggle="tab">Información Médica</a></li>
+								<li class="nav-item"><a class="nav-link" href="#horario" data-toggle="tab">Horario</a></li>
 							</ul>
 						</div><!-- /.card-header -->
 					
@@ -538,6 +563,45 @@
 											</div>
 										</div>	
 									</div>							
+								</div>
+
+								<!-- Tab cedula del alumno -->
+								<div class="tab-pane" id="horario">
+									<div class="container-fluid">
+										<div class="row">											
+											<div class="col-12">
+												<!-- Main content -->
+												<div class="invoice p-3 mb-3">							
+													
+													<!-- Table row -->
+													<div class="row">
+														<div class="col-12 table-responsive">
+															<table class="table table-striped table-bordered  table-sm">											
+																<tbody>
+																	<tr>													
+																		<th colspan="8">Horario <?php echo $horario_nombre.". ".$horario_detalle; ?></th>																							
+																	</tr>
+																	<tr>		
+																		<th></th>												
+																		<th>LUNES</th>	
+																		<th>MARTES</th>
+																		<th>MIERCOLES</th>
+																		<th>JUEVES</th>
+																		<th>VIERNES</th>																																		
+																	</tr>													
+																		<?php echo $datos=$insAlumno->generarHorarioProfile($horarioid);	?>																		
+																</tbody>
+															</table>
+														</div>
+														<!-- /.col -->
+													</div>
+													
+												</div>
+												<!-- /.invoice -->							
+											</div><!-- /.col -->
+											
+										</div><!-- /.row -->
+									</div><!-- /.container-fluid -->
 								</div>
 								<!-- /.tab-pane -->								
 							</div>

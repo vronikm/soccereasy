@@ -1952,4 +1952,73 @@
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
 		}
+
+		//horarios
+
+		public function generarHorarioProfile($horario_id = null){			
+			$tabla="";
+			$consulta_datos = "SELECT  
+								'Horario' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN CONCAT(hora_inicio, ' - ', hora_fin) END) AS Viernes							
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_hora ON hora_id = detalle_horaid 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Cancha' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN lugar_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN lugar_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN lugar_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN lugar_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN lugar_nombre END) AS Viernes								
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN asistencia_lugar ON lugar_id = detalle_lugarid
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria
+							
+							UNION ALL
+							
+							SELECT 
+								'Profesor' AS Categoria,
+								MAX(CASE WHEN detalle_dia = 1 THEN empleado_nombre END) AS Lunes,
+								MAX(CASE WHEN detalle_dia = 2 THEN empleado_nombre END) AS Martes,
+								MAX(CASE WHEN detalle_dia = 3 THEN empleado_nombre END) AS Miercoles,
+								MAX(CASE WHEN detalle_dia = 4 THEN empleado_nombre END) AS Jueves,
+								MAX(CASE WHEN detalle_dia = 5 THEN empleado_nombre END) AS Viernes
+							FROM asistencia_horario 
+							INNER JOIN asistencia_horario_detalle ON detalle_horarioid = horario_id 
+							LEFT JOIN sujeto_empleado ON empleado_id = detalle_profesorid	 
+							WHERE horario_id = ".$horario_id."
+							GROUP BY Categoria";
+		
+							
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$tabla.="	<tr style='font-size: 14px'>					
+								<th>".$rows['Categoria']."</th>	
+								<td>".$rows['Lunes']."</td>
+								<td>".$rows['Martes']."</td>
+								<td>".$rows['Miercoles']."</td>
+								<td>".$rows['Jueves']."</td>
+								<td>".$rows['Viernes']."</td>																														
+							</tr>";
+			}
+			return $tabla;
+		}
+
+		public function HorarioID($alumnoid){		
+			$consulta_datos="SELECT asignahorario_horarioid FROM asistencia_asignahorario WHERE asignahorario_alumnoid = $alumnoid";
+			$datos = $this->ejecutarConsulta($consulta_datos);		
+			return $datos;
+		}
 	}
