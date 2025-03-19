@@ -569,6 +569,30 @@
 					$this->guardarDatos("alumno_cemergencia",$cemergencia_reg);
 				}
 			 	/*---------------Fin de registro del tab Contacto Emergencia del alumno------*/
+
+				/*---------------Actulizar horario de entrenamiento---------------------*/
+				$horario_id = $this->limpiarCadena($_POST['horarioid']);
+				
+				if($horario_id!="" || $alumnoid!=""){
+
+					$asignacion_horario_reg = [
+						[
+							"campo_nombre" => "asignahorario_horarioid",
+							"campo_marcador" => ":Horarioid",
+							"campo_valor" => $horario_id
+						],
+						[
+							"campo_nombre" => "asignahorario_alumnoid",
+							"campo_marcador" => ":Alumnoid",
+							"campo_valor" => $alumnoid						
+						]
+					];
+
+					$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
+				}
+
+				
+				/*---------------Fin de actualizacion de horariop de entrenamiento------*/
 			}else{				
 				if(is_file($img_dir.$foto)){
 					chmod($img_dir.$foto,0777);
@@ -917,7 +941,7 @@
 			$alumno_posicionid			= ""; //$this->limpiarCadena($_POST['alumno_posicionid']);					
 			$alumno_numcamiseta 		= $_POST['alumno_numcamiseta'];
 			$alumno_genero 				= "";
-			$alumno_hermanos 			= "";
+			$alumno_hermanos 			= "";			
 
 			if ($alumno_numcamiseta == ""){$alumno_numcamiseta = 0;}
 
@@ -1574,6 +1598,56 @@
 
 				}
 				/*---------------Fin de registro del tab Contacto Emergencia del alumno------*/
+
+				/*---------------Actulizar horario de entrenamiento---------------------*/
+				$horario_id = $this->limpiarCadena($_POST['horarioid']);
+
+				$cmer=$this->ejecutarConsulta("SELECT * FROM asistencia_asignahorario WHERE asignahorario_alumnoid = '$alumnoid'");
+				if($cmer->rowCount()>0){					
+									
+					$asignacion_horario_reg = [
+						[
+							"campo_nombre" => "asignahorario_horarioid",
+							"campo_marcador" => ":Horarioid",
+							"campo_valor" => $horario_id
+						],
+						[
+							"campo_nombre" => "asignahorario_alumnoid",
+							"campo_marcador" => ":Alumnoid",
+							"campo_valor" => $alumnoid						
+						]
+					];
+
+					$condicion=[
+						"condicion_campo"=>"asignahorario_alumnoid",
+						"condicion_marcador"=>":Alumnoid",
+						"condicion_valor"=>$alumnoid
+					];	
+					
+					$this->actualizarDatos("asistencia_asignahorario",$asignacion_horario_reg,$condicion);
+
+				}else{
+					if($horario_id!="" || $alumnoid!=""){
+
+						$asignacion_horario_reg = [
+							[
+								"campo_nombre" => "asignahorario_horarioid",
+								"campo_marcador" => ":Horarioid",
+								"campo_valor" => $horario_id
+							],
+							[
+								"campo_nombre" => "asignahorario_alumnoid",
+								"campo_marcador" => ":Alumnoid",
+								"campo_valor" => $alumnoid						
+							]
+						];
+
+						$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
+					}
+
+				}
+				/*---------------Fin de actualizacion de horariop de entrenamiento------*/
+
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
@@ -2020,5 +2094,53 @@
 			$consulta_datos="SELECT asignahorario_horarioid FROM asistencia_asignahorario WHERE asignahorario_alumnoid = $alumnoid";
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
+		}
+
+		public function listarhorariosProfile($horarioid = null, $sedeid = null){
+			$option="";
+
+			$consulta_datos="SELECT AH.horario_id, CONCAT(AH.horario_detalle, ' | ',HORA.hora_inicio, ' - ', HORA.hora_fin ) AS HORARIO
+								FROM asistencia_horario AH
+									INNER JOIN( 
+										SELECT detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+										FROM asistencia_horario_detalle D
+										INNER JOIN asistencia_hora H on H.hora_id = D.detalle_horaid
+										GROUP BY detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+									)HORA ON HORA.detalle_horarioid = AH.horario_id
+
+								WHERE AH.horario_estado = 'A' AND AH.horario_sedeid = $sedeid";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($horarioid == $rows['horario_id']){	
+					$option.='<option value='.$rows['horario_id'].' selected="selected">'.$rows['HORARIO'].'</option>';
+				}else{
+					$option.='<option value='.$rows['horario_id'].'>'.$rows['HORARIO'].'</option>';
+				}					
+			}
+			return $option;
+		}
+
+		public function listarhorarios(){
+			$option="";
+
+			$consulta_datos="SELECT AH.horario_id, CONCAT(AH.horario_detalle, ' | ',HORA.hora_inicio, ' - ', HORA.hora_fin ) AS HORARIO
+								FROM asistencia_horario AH
+									INNER JOIN( 
+										SELECT detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+										FROM asistencia_horario_detalle D
+										INNER JOIN asistencia_hora H on H.hora_id = D.detalle_horaid
+										GROUP BY detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+									)HORA ON HORA.detalle_horarioid = AH.horario_id
+
+								WHERE AH.horario_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){				
+				$option.='<option value='.$rows['horario_id'].'>'.$rows['HORARIO'].'</option>';									
+			}
+			return $option;
 		}
 	}

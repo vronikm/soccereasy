@@ -33,6 +33,12 @@
 		if($_POST['modulo_alumno']=="actualizarFoto"){
 			echo $insAlumno->actualizarFotoAlumnoControlador();
 		}
+
+		// Nuevo bloque para cargar horarios dinámicamente
+		//echo $datos=$insAlumno->generarHorarioProfile($horarioid);
+		if ($_POST['modulo_alumno'] == "cargarHorario" && isset($_POST['horarioid'])) {
+			echo $insAlumno->generarHorarioProfile($_POST['horarioid']);
+		}
 		
 	}else{
 		session_destroy();
