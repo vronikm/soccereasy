@@ -33,9 +33,9 @@ formularios_ajax.forEach(formularios => {
         }
 
         Swal.fire({
-            title: '¿Está seguro?',
-            text: "Desea realizar la acción solicitada",
-            icon: 'question',
+            // title: '¿Está seguro?',
+            text: "¿Desea realizar la acción solicitada?",
+            //icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3e80c1',
             cancelButtonColor: '#844c4f',
@@ -127,8 +127,8 @@ function alertas_ajax(alerta) {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: false, // Muestra una barra de progreso
+            timer: 2000,
+            timerProgressBar: true, // Muestra una barra de progreso
             didClose: () => {
                 // Recargar la página cuando se cierra el mensaje
                 location.reload();
@@ -137,6 +137,23 @@ function alertas_ajax(alerta) {
     
         Toast.fire({
             icon: 'success',
+            title: alerta.titulo
+        });
+    } else if (alerta.tipo == "mensajes_toast") {
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true, // Muestra una barra de progreso
+            didClose: () => {
+                // Recargar la página cuando se cierra el mensaje
+                location.reload();
+            }
+        });
+    
+        Toast.fire({
+            icon: alerta.icono,
             title: alerta.titulo
         });
     }
@@ -209,3 +226,71 @@ btn_exit.addEventListener("click", function(e){
     });
 
 });
+
+// Botón enviar correo
+let btn_correo = document.getElementById("btn_correo");
+
+if (btn_correo) {
+    btn_correo.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Enviar recibo',
+            text: "¿Está seguro de que desea enviar el recibo por correo?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, enviar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar el loading
+                Swal.fire({
+                    title: 'Enviando correo...',
+                    text: 'Por favor espere',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Preparar el envío
+                let url = this.getAttribute("data-url"); // usando data-url para más seguridad
+                fetch(url, {
+                    method: 'POST', // Puedes cambiar a GET si tu servidor lo espera
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(respuesta => respuesta.json())
+                .then(respuesta => {
+                    // Cerrar el loading
+                    Swal.close();
+
+                    // Mostrar el resultado
+                    Swal.fire({
+                        icon: respuesta.icono,
+                        title: respuesta.titulo,
+                        text: respuesta.texto,
+                        confirmButtonText: 'Aceptar'
+                    }).then((result) => {
+                        if (respuesta.recargar == true) {
+                            location.reload();
+                        }
+                    });
+                })
+                .catch(error => {
+                    Swal.close();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'No se pudo enviar el correo. Intente nuevamente.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                    console.error('Error enviando el correo:', error);
+                });
+            }
+        });
+    });
+}
