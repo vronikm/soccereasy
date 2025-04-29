@@ -202,31 +202,6 @@ function alertas_ajax(alerta) {
       */
 }
 
-/* Boton cerrar sesion */
-let btn_exit=document.getElementById("btn_exit");
-
-btn_exit.addEventListener("click", function(e){
-
-    e.preventDefault();
-    
-    Swal.fire({
-        title: '¿Quiere salir del sistema?',
-        text: "La sesión actual se cerrará y saldrá del sistema",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, salir',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let url=this.getAttribute("href");
-            window.location.href=url;
-        }
-    });
-
-});
-
 // Botón enviar correo
 let btn_correo = document.getElementById("btn_correo");
 
@@ -235,7 +210,7 @@ if (btn_correo) {
         e.preventDefault();
 
         Swal.fire({
-            title: 'Enviar recibo',
+            title: '¿Enviar correo?',
             text: "¿Está seguro de que desea enviar el recibo por correo?",
             icon: 'question',
             showCancelButton: true,
@@ -245,37 +220,37 @@ if (btn_correo) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Mostrar el loading
+
+                // Mostrar loading
                 Swal.fire({
-                    title: 'Enviando correo...',
-                    text: 'Por favor espere',
+                    title: 'Enviando...',
+                    text: 'Por favor espere un momento',
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();
                     }
                 });
 
-                // Preparar el envío
-                let url = this.getAttribute("data-url"); // usando data-url para más seguridad
+                // Leer URL desde href
+                let url = btn_correo.getAttribute("href");
+
                 fetch(url, {
-                    method: 'POST', // Puedes cambiar a GET si tu servidor lo espera
+                    method: 'GET', // Cambia a GET si el backend lo espera así
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(respuesta => respuesta.json())
-                .then(respuesta => {
-                    // Cerrar el loading
-                    Swal.close();
+                .then(response => response.json())
+                .then(response => {
+                    Swal.close(); // Cerrar loading
 
-                    // Mostrar el resultado
                     Swal.fire({
-                        icon: respuesta.icono,
-                        title: respuesta.titulo,
-                        text: respuesta.texto,
+                        icon: response.icono,
+                        title: response.titulo,
+                        text: response.texto,
                         confirmButtonText: 'Aceptar'
-                    }).then((result) => {
-                        if (respuesta.recargar == true) {
+                    }).then(() => {
+                        if (response.recargar === true) {
                             location.reload();
                         }
                     });
@@ -284,11 +259,11 @@ if (btn_correo) {
                     Swal.close();
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Error al enviar',
                         text: 'No se pudo enviar el correo. Intente nuevamente.',
                         confirmButtonText: 'Aceptar'
                     });
-                    console.error('Error enviando el correo:', error);
+                    console.error('Error en envío:', error);
                 });
             }
         });
