@@ -8,13 +8,12 @@
 	$symbology="qr";
 	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-10);	
 	
+	$mensaje="";
 
 	$insAlumno = new pagosController();	
 
 	$pagoid=$insLogin->limpiarCadena($url[1]);
-	$mensaje=$insLogin->limpiarCadena($url[2]);
-
-	$alerta="";
+	$mensaje=$insLogin->limpiarCadena($url[2]);	
 
 	if ($mensaje == 1) {
 		echo json_encode([
@@ -23,7 +22,7 @@
 			"texto" => "El correo se envió correctamente.",
 			"recargar" => true
 		]);
-	} else {
+	} else if($mensaje == 0){
 		echo json_encode([
 			"icono" => "error",
 			"titulo" => "Error al enviar",

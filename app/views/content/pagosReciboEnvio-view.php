@@ -194,7 +194,6 @@
 	// Enviar el correo
 	if (mail($to, $subject, $body, $headers)) {
 		$envio = 1;
-
 	}else{
         $envio = 0;
     }
