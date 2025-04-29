@@ -8,27 +8,34 @@
 	$symbology="qr";
 	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-10);	
 	
-	$mensaje="";
+
 
 	$insAlumno = new pagosController();	
 
 	$pagoid=$insLogin->limpiarCadena($url[1]);
-	$mensaje=$insLogin->limpiarCadena($url[2]);	
+	//$mensaje=$insLogin->limpiarCadena($url[2]);	
 
-	if ($mensaje == 1) {
-		echo json_encode([
-			"icono" => "success",
-			"titulo" => "Correo enviado",
-			"texto" => "El correo se envió correctamente.",
-			"recargar" => true
-		]);
-	} else if($mensaje == 0){
-		echo json_encode([
-			"icono" => "error",
-			"titulo" => "Error al enviar",
-			"texto" => "No se pudo enviar el correo.",
-			"recargar" => false
-		]);
+	$alerta = "";
+
+	// Capturamos el valor enviado en la URL
+	$envio = $url[2] ?? ""; // <---- Asegúrate que $url esté disponible. $url[2] sería 1 o 0
+
+	if($envio !== ""){
+		if($envio == "1"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Correo enviado",
+				"texto" => "El correo fue enviado exitosamente.",
+				"icono" => "success"
+			];
+		} elseif($envio == "0"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Error de envío",
+				"texto" => "No se pudo enviar el correo. Por favor, intente nuevamente.",
+				"icono" => "error"
+			];
+		}
 	}
 	
 
@@ -271,8 +278,9 @@
 										<button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
 											<i class="fas fa-download"></i> Descargar recibo
 										</button-->
-										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;" id="btn_correo"> <i class="fas fa-credit-card"></i> Enviar recibo</a>
-
+										<a href="<?php echo APP_URL.'pagosReciboEnvio/'.$pagoid.'/'; ?>" class="btn btn-success btn-sm float-right" style="margin-right: 135px;" id="btn_correo">
+											<i class="fas fa-credit-card"></i> Enviar recibo
+										</a>
 
 										<a href="<?php echo APP_URL.'pagosReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 10px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo </a>
 
@@ -344,6 +352,15 @@
             window.addEventListener("load", window.print());
         }
     </script>
+
+	<?php if($alerta): ?>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			let alerta = <?php echo json_encode($alerta); ?>;
+			alertas_ajax(alerta); // Usamos tu función de alertas que ya tienes en ajax.js
+		});
+		</script>
+	<?php endif; ?>
 
   </body>
 </html>
