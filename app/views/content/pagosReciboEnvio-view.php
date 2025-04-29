@@ -8,6 +8,7 @@
     	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-12);
     	$filename = "app/views/dist/img/temp/";
 	
+	$date_header = date('r'); // formato RFC 2822, incluye zona horaria
 	$insAlumno = new pagosController();	
 	$pagoid=$insLogin->limpiarCadena($url[1]);
 
@@ -158,6 +159,8 @@
 
 	$from = "escuelaidvloja@gmail.com";
 	$headers = "From: " . $from;
+	$headers .= "Date: " . $date_header . "\r\n";
+	$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
 	// Ruta del archivo adjunto
 	$file_path = "app/views/dist/pdf/".$datos['pago_recibo'].".pdf";
