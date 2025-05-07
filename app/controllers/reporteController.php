@@ -770,7 +770,7 @@
 			
 			$TOTAL_EGRESOS = 0;
 			$MONTO_TOTAL_EGRESO = 0;
-			$consulta_egresos="SELECT sede_nombre SEDE, catalogo_descripcion RUBRO, count(*) TOTAL_EGRESOS, SUM(ingreso_valor) MONTO_TOTAL_EGRESO 
+			$consulta_egresos="SELECT sede_nombre SEDE, concat(catalogo_descripcion, '-', ingreso_periodo, '-', empleado_nombre) RUBRO, count(*) TOTAL_EGRESOS, ingreso_valor MONTO_TOTAL_EGRESO 
 									FROM empleado_ingreso
 									INNER JOIN sujeto_empleado on empleado_id = ingreso_empleadoid 
 									LEFT JOIN general_tabla_catalogo on ingreso_tipoingresoid = catalogo_valor
@@ -778,7 +778,7 @@
 									WHERE ingreso_estado <> 'E'
 										AND empleado_sedeid = ".$sede_id."
 										AND ingreso_fechapago BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-									GROUP BY sede_nombre, catalogo_descripcion
+									GROUP BY sede_nombre, catalogo_descripcion, ingreso_periodo, empleado_nombre, ingreso_valor
 
 								UNION ALL
 
