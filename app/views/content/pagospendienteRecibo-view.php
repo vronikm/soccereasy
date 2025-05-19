@@ -4,27 +4,44 @@
 	include 'app/lib/barcode.php';
 	
 	$generator = new barcode_generator();
-	('Content-Type: image/svg+xml');
 	
 	$symbology="qr";
 	$optionsQR=array('sx'=>4,'sy'=>4,'p'=>-10);	
 
-
 	$insAlumno = new pagosController();	
 
 	$pagoid=$insLogin->limpiarCadena($url[1]);
+	//$mensaje=$insLogin->limpiarCadena($url[2]);	
+
+	$alerta = "";
+
+	// Capturamos el valor enviado en la URL
+	$envio = $url[2] ?? ""; // <---- Asegúrate que $url esté disponible. $url[2] sería 1 o 0
+
+	if($envio !== ""){
+		if($envio == "1"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Correo enviado",
+				"texto" => "El correo fue enviado exitosamente.",
+				"icono" => "success"
+			];
+		} elseif($envio == "0"){
+			$alerta = [
+				"tipo" => "simple",
+				"titulo" => "Error de envío",
+				"texto" => "No se pudo enviar el correo. Por favor, intente nuevamente.",
+				"icono" => "error"
+			];
+		}
+	}
 
 	$datos=$insAlumno->generarReciboPendiente($pagoid);
 	
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch(); 
 
-		if ($datos['transaccion_archivo']!=""){
-			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['transaccion_archivo'];
-		}else{
-			$imagen="";
-		} 
-
+		$fecha_recibo = strrev($datos["transaccion_recibo"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
 		$nombre_sede  = $datos["sede_nombre"];
 		
@@ -83,6 +100,9 @@
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+
+	<!-- fileinput -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
 
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
@@ -232,7 +252,8 @@
 									</div>
 
 									<div class="col-4">										
-										<?php											
+										<?php
+											('Content-Type: image/svg+xml');											
 											$svg = $generator->render_svg($symbology,"Recibo ".$datos["transaccion_recibo"]. "\n".$datos["transaccion_fecharegistro"]. " | ".$recibo_hora."\n".$sede['sede_nombre']."\n".$sede["sede_telefono"]."\n".$sede["sede_email"], $optionsQR);											
 											echo $svg;  
 										?>								
@@ -290,10 +311,28 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-	<!-- dropzonejs -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+
+	<!-- fileinput -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
+    
+	<script>
+        // Esta función se llama cuando el botón es clickeado
+        function printPage() {
+            window.addEventListener("load", window.print());
+        }
+    </script>
+
+	<?php if($alerta): ?>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			let alerta = <?php echo json_encode($alerta); ?>;
+			alertas_ajax(alerta); // Usamos tu función de alertas que ya tienes en ajax.js
+		});
+		</script>
+	<?php endif; ?>
+	
   </body>
 </html>
