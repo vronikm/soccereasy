@@ -16,12 +16,7 @@
 
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch(); 
-		if ($datos['transaccion_archivo']!=""){
-			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['transaccion_archivo'];
-		}else{
-			$imagen="";
-		} 
-
+                $fecha_recibo = strrev($datos["pago_recibo"]);
 		$first12Chars =  strrev(substr($datos["transaccion_recibo"], 0, 12));
                 $nombre_sede  = $datos["sede_nombre"];
 
