@@ -91,8 +91,7 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
-	<!-- dropzonejs -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/dropzone/min/dropzone.min.css">
+
 	
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
@@ -267,7 +266,7 @@
 								<!-- this row will not appear when printing -->
 								<div class="row no-print">
 									<div class="col-12">
-                                        <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;"> <i class="fas fa-credit-card"></i> Enviar recibo</a>                                        
+                                        <a href="<?php echo APP_URL.'pagospendienteReciboEnvio/'.$pagoid.'/'; ?> " class="btn btn-success btn-sm float-right" style="margin-right: 135px;" id="btn_correo"> <i class="fas fa-credit-card"></i> Enviar recibo</a>                                        
 										<a href="<?php echo APP_URL.'pagospendienteReciboPDF/'.$pagoid.'/'; ?> " class="btn btn-dark float-right btn-sm" style="margin-right: 5px;" target="_blank"> <i class="fas fa-print"></i> Ver recibo</a>
 										<?php include "./app/views/inc/btn_back.php";?>
 									</div>

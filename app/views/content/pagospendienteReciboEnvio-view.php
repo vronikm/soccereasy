@@ -203,6 +203,6 @@
 
 	chmod($file_path, 0777);
 	unlink($file_path);
-	header("Location: ".APP_URL."pagosRecibo/".$datos['pago_id']."/$envio/");
+	header("Location: ".APP_URL."pagospendienteRecibo/".$pagoid."/$envio/");
      //header("Location: ../presupuestos_from.php?idprof=".$idprof."&id=".$cliente_id);
    	// Envio de correo -----------------------------------
