@@ -5,58 +5,44 @@
 	class dashboardController extends mainModel{
 
 		/*----------  Obtener total alumnos activos  ----------*/
-		public function obtenerAlumnosActivosSedeL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeL FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 1");
-		    return $alumnosActivosSedeL;
-		}
-
-		public function obtenerAlumnosActivosSedeC(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeC FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 2");
-		    return $alumnosActivosSedeC;
-		}
-
-        public function obtenerAlumnosActivosSedeV(){
-			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalActivosSedeV FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = 3");
-		    return $alumnosActivosSedeV;
+		public function obtenerAlumnosActivos($sedeid){
+			$alumnosActivos=$this->ejecutarConsulta("SELECT count(*) totalActivos FROM sujeto_alumno WHERE alumno_estado='A' and alumno_sedeid = $sedeid");
+		    return $alumnosActivos;
 		}
 
 		/*----------  Obtener total alumnos inactivos  ----------*/
-		public function obtenerAlumnosInactivosSedeL(){
-			$alumnosActivosSedeL=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeL FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 1");
-		    return $alumnosActivosSedeL;
-		}
-
-		public function obtenerAlumnosInactivosSedeC(){
-			$alumnosActivosSedeC=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeC FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 2");
-		    return $alumnosActivosSedeC;
-		}
-
-        public function obtenerAlumnosInactivosSedeV(){
-			$alumnosActivosSedeV=$this->ejecutarConsulta("SELECT count(*) totalInactivosSedeV FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = 3");
-		    return $alumnosActivosSedeV;
+		public function obtenerAlumnosInactivos($sedeid){
+			$alumnosInactivos=$this->ejecutarConsulta("SELECT count(*) totalInactivos FROM sujeto_alumno WHERE alumno_estado='I' and alumno_sedeid = $sedeid");
+		    return $alumnosInactivos;
 		}
 
 		/*----------  Obtener total pagos cancelados  ----------*/
-		public function obtenerPagosCanceladoSedeL($sede_id){
-			$pagosCanceladoSedeL=$this->ejecutarConsulta("SELECT sum(totalCanceladoSedeL) totalCanceladoSedeL from (
-                                                            SELECT COUNT(*) totalCanceladoSedeL 
-																FROM alumno_pago, sujeto_alumno 
-																WHERE pago_alumnoid = alumno_id 
-																	AND alumno_sedeid = ".$sede_id." 
-																	AND pago_estado <> 'E'
-                                                            UNION ALL
-                                                            SELECT COUNT(*) totalCanceladoSedeL 
-																FROM alumno_pago, alumno_pago_transaccion, sujeto_alumno 
-																WHERE pago_alumnoid = alumno_id 
-                                                                	AND pago_id = transaccion_pagoid 
-																	AND alumno_sedeid = ".$sede_id." 
-																	AND transaccion_estado<> 'E') AS DATOS");
-			return $pagosCanceladoSedeL;
+		public function obtenerPagosCancelados($sede_id){
+			// Fechas dinámicas
+			$fecha_inicio = date('Y-m-01'); // Primer día del mes actual
+			$fecha_fin = date('Y-m-t');     // Último día del mes actual
+
+			$pagosCancelados=$this->ejecutarConsulta("SELECT sum(totalCancelado) totalCancelados from (
+																	SELECT COUNT(*) totalCancelado 
+																		FROM alumno_pago, sujeto_alumno 
+																		WHERE pago_alumnoid = alumno_id 
+																			AND alumno_sedeid = ".$sede_id." 
+																			AND pago_fecharegistro between '".$fecha_inicio."' and '". $fecha_fin."'
+																			AND pago_estado <> 'E'
+																	UNION ALL
+																	SELECT COUNT(*) totalCancelado
+																		FROM alumno_pago, alumno_pago_transaccion, sujeto_alumno 
+																		WHERE pago_alumnoid = alumno_id 
+																			AND pago_id = transaccion_pagoid 
+																			AND alumno_sedeid = ".$sede_id." 
+																			AND transaccion_fecharegistro between '".$fecha_inicio."' and '". $fecha_fin."'
+																			AND transaccion_estado<> 'E') AS DATOS");
+			return $pagosCancelados;
 		}
 
 		/*----------  Obtener total pagos pendientes  ----------*/
-		public function obtenerPagosPendienteSedeL($sedeid){
-			$pagosPendienteSedeL=$this->ejecutarConsulta("SELECT SUM(IFNULL(subconsulta.NUM_SALDO,0)) + SUM(IFNULL(subconsulta.NUM_PENSION,0)) as totalPendienteSedeL 
+		public function obtenerPagosPendientes($sedeid){
+			$pagosPendientes=$this->ejecutarConsulta("SELECT SUM(IFNULL(subconsulta.NUM_SALDO,0)) + SUM(IFNULL(subconsulta.NUM_PENSION,0)) as totalPendientes
 															FROM (
 																SELECT 
 																	alumno_id, 
@@ -105,7 +91,7 @@
 																WHERE A.alumno_estado <> 'E'
 																	AND PEN.TOTAL > 0 OR P.SALDO > 0 
 															) AS subconsulta;");
-			return $pagosPendienteSedeL;
+			return $pagosPendientes;
 		}
 	}
 

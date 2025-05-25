@@ -2,103 +2,103 @@
 	use app\controllers\dashboardController;
 	$insDashboard = new dashboardController();
 
-	$alumnosActivosSedeL=$insDashboard->obtenerAlumnosActivosSedeL();	
-	$alumnosActivosSedeC=$insDashboard->obtenerAlumnosActivosSedeC();
-	$alumnosActivosSedeV=$insDashboard->obtenerAlumnosActivosSedeV();
+	$alumnosActivosSedeL=$insDashboard->obtenerAlumnosActivos(1);	
+	$alumnosActivosSedeC=$insDashboard->obtenerAlumnosActivos(2);
+	$alumnosActivosSedeV=$insDashboard->obtenerAlumnosActivos(3);
 
-	$alumnosInactivosSedeL=$insDashboard->obtenerAlumnosInactivosSedeL();	
-	$alumnosInactivosSedeC=$insDashboard->obtenerAlumnosInactivosSedeC();
-	$alumnosInactivosSedeV=$insDashboard->obtenerAlumnosInactivosSedeV();
+	$alumnosInactivosSedeL=$insDashboard->obtenerAlumnosInactivos(1);	
+	$alumnosInactivosSedeC=$insDashboard->obtenerAlumnosInactivos(2);
+	$alumnosInactivosSedeV=$insDashboard->obtenerAlumnosInactivos(3);
 
-	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCanceladoSedeL(1);	
-	$pagosCanceladoSedeC=$insDashboard->obtenerPagosCanceladoSedeL(2);
-	$pagosCanceladoSedeV=$insDashboard->obtenerPagosCanceladoSedeL(3);
+	$pagosCanceladoSedeL=$insDashboard->obtenerPagosCancelados(1);	
+	$pagosCanceladoSedeC=$insDashboard->obtenerPagosCancelados(2);
+	$pagosCanceladoSedeV=$insDashboard->obtenerPagosCancelados(3);
 
-	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendienteSedeL(1);	
-	$pagosPendienteSedeC=$insDashboard->obtenerPagosPendienteSedeL(2);
-	$pagosPendienteSedeV=$insDashboard->obtenerPagosPendienteSedeL(3);
+	$pagosPendienteSedeL=$insDashboard->obtenerPagosPendientes(1);	
+	$pagosPendienteSedeC=$insDashboard->obtenerPagosPendientes(2);
+	$pagosPendienteSedeV=$insDashboard->obtenerPagosPendientes(3);
 
 	
 	if($alumnosActivosSedeL->rowCount()>0){
 		$alumnosActivosSedeL=$alumnosActivosSedeL->fetch();
-		$totalActivosSedeL=$alumnosActivosSedeL["totalActivosSedeL"];
+		$totalActivosSedeL=$alumnosActivosSedeL["totalActivos"];
 	}else{
 		$totalActivosSedeL= 0;
 	}
 
 	if($alumnosActivosSedeC->rowCount()>0){
 		$alumnosActivosSedeC=$alumnosActivosSedeC->fetch();
-		$totalActivosSedeC=$alumnosActivosSedeC["totalActivosSedeC"];
+		$totalActivosSedeC=$alumnosActivosSedeC["totalActivos"];
 	}else{
 		$totalActivosSedeC= 0;
 	}
 
 	if($alumnosActivosSedeV->rowCount()>0){
 		$alumnosActivosSedeV=$alumnosActivosSedeV->fetch();
-		$totalActivosSedeV=$alumnosActivosSedeV["totalActivosSedeV"];
+		$totalActivosSedeV=$alumnosActivosSedeV["totalActivos"];
 	}else{
 		$totalActivosSedeV= 0;
 	}
 
 	if($alumnosInactivosSedeL->rowCount()>0){
 		$alumnosInactivosSedeL=$alumnosInactivosSedeL->fetch();
-		$totalInactivosSedeL=$alumnosInactivosSedeL["totalInactivosSedeL"];
+		$totalInactivosSedeL=$alumnosInactivosSedeL["totalInactivos"];
 	}else{
 		$totalInactivosSedeL= 0;
 	}
 
 	if($alumnosInactivosSedeC->rowCount()>0){
 		$alumnosInactivosSedeC=$alumnosInactivosSedeC->fetch();
-		$totalInactivosSedeC=$alumnosInactivosSedeC["totalInactivosSedeC"];
+		$totalInactivosSedeC=$alumnosInactivosSedeC["totalInactivos"];
 	}else{
 		$totalInactivosSedeC= 0;
 	}
 
 	if($alumnosInactivosSedeV->rowCount()>0){
 		$alumnosInactivosSedeV=$alumnosInactivosSedeV->fetch();
-		$totalInactivosSedeV=$alumnosInactivosSedeV["totalInactivosSedeV"];
+		$totalInactivosSedeV=$alumnosInactivosSedeV["totalInactivos"];
 	}else{
 		$totalInactivosSedeV= 0;
 	}
 
 	if($pagosCanceladoSedeL->rowCount()>0){
 		$pagosCanceladoSedeL=$pagosCanceladoSedeL->fetch();
-		$totalCanceladoSedeL=$pagosCanceladoSedeL["totalCanceladoSedeL"];
+		$totalCanceladoSedeL=$pagosCanceladoSedeL["totalCancelados"];
 	}else{
 		$totalCanceladoSedeL= 0;
 	}
 
 	if($pagosCanceladoSedeC->rowCount()>0){
 		$pagosCanceladoSedeC=$pagosCanceladoSedeC->fetch();
-		$totalCanceladoSedeC=$pagosCanceladoSedeC["totalCanceladoSedeL"];
+		$totalCanceladoSedeC=$pagosCanceladoSedeC["totalCancelados"];
 	}else{
 		$totalCanceladoSedeC= 0;
 	}
 
 	if($pagosCanceladoSedeV->rowCount()>0){
 		$pagosCanceladoSedeV=$pagosCanceladoSedeV->fetch();
-		$totalCanceladoSedeV=$pagosCanceladoSedeV["totalCanceladoSedeL"];
+		$totalCanceladoSedeV=$pagosCanceladoSedeV["totalCancelados"];
 	}else{
 		$totalCanceladoSedeV= 0;
 	}
 	
 	if($pagosPendienteSedeL->rowCount()>0){
 		$pagosPendienteSedeL=$pagosPendienteSedeL->fetch();
-		$totalPendienteSedeL=$pagosPendienteSedeL["totalPendienteSedeL"];
+		$totalPendienteSedeL=$pagosPendienteSedeL["totalPendientes"];
 	}else{
 		$totalPendienteSedeL= 0;
 	}
 
 	if($pagosPendienteSedeC->rowCount()>0){
 		$pagosPendienteSedeC=$pagosPendienteSedeC->fetch();
-		$totalPendienteSedeC=isset($pagosPendienteSedeC["totalPendienteSedeL"]) ? $pagosPendienteSedeC["totalPendienteSedeL"] : 0;
+		$totalPendienteSedeC=isset($pagosPendienteSedeC["totalPendientes"]) ? $pagosPendienteSedeC["totalPendientes"] : 0;
 	}else{
 		$totalPendienteSedeC= 0;
 	}
 
 	if($pagosPendienteSedeV->rowCount()>0){
 		$pagosPendienteSedeV=$pagosPendienteSedeV->fetch();
-		$totalPendienteSedeV=isset($pagosPendienteSedeV["totalPendienteSedeL"]) ? $pagosPendienteSedeV["totalPendienteSedeL"] : 0;
+		$totalPendienteSedeV=isset($pagosPendienteSedeV["totalPendientes"]) ? $pagosPendienteSedeV["totalPendientes"] : 0;
 	}else{
 		$totalPendienteSedeV= 0;
 	}
@@ -199,7 +199,7 @@
 								<div class="inner">
 								<h3><?php echo $totalCanceladoSedeL; ?></h3>
 
-								<p>Pagos receptados</p>
+								<p>Pagos receptados mes</p>
 								</div>
 								<div class="icon">
 								<i class="ion ion-cash"></i>
@@ -276,7 +276,7 @@
 								<div class="inner">
 								<h3><?php echo $totalCanceladoSedeC; ?></h3>
 
-								<p>Pagos receptados</p>
+								<p>Pagos receptados mes</p>
 								</div>
 								<div class="icon">
 								<i class="ion ion-cash"></i>
@@ -352,7 +352,7 @@
 								<div class="inner">
 								<h3><?php echo $totalCanceladoSedeV; ?></h3>
 
-								<p>Pagos receptados</p>
+								<p>Pagos receptados mes</p>
 								</div>
 								<div class="icon">
 								<i class="ion ion-cash"></i>
