@@ -105,7 +105,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+< lang="es">
   <head>
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -125,8 +125,10 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/jqvmap/jqvmap.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/apexcharts.css">
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/bootstrap-icons.min.css">
   </head>
-  <body class="hold-transition sidebar-mini layout-fixed">
+  < class="hold-transition sidebar-mini layout-fixed">	
     <div class="wrapper">
 
       <!-- Preloader -->
@@ -147,7 +149,7 @@
         <!-- Content Header (Page header) -->
 		<div class="content-header">
 			<div class="container-fluid">
-			<div class="row mb-2">
+			<div class="row mb-1">
 				<div class="col-sm-6">
 				<h1 class="m-0">Dashboard</h1>
 				</div><!-- /.col -->
@@ -242,7 +244,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="card card-default">
 					<div class="card-header">
 						<h3 class="card-title">SEDE CATAMAYO</h3>
@@ -377,19 +378,19 @@
 							</div>
 							<!-- ./col -->
 							<div class="col-lg-3 col-6">
-							<!-- small box -->
-							<div class="small-box bg-danger">
-								<div class="inner">
-								<h3><?php echo $totalPendienteSedeV; ?></h3>
+								<!-- small box -->
+								<div class="small-box bg-danger">
+									<div class="inner">
+									<h3><?php echo $totalPendienteSedeV; ?></h3>
 
-								<p>Pagos pendientes</p>
+									<p>Pagos pendientes</p>
+									</div>
+									<div class="icon">
+									<i class="ion ion-cash"></i>
+									</div>
+									<a href="<?php echo APP_URL;?>reportePendientes/3" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
+								
 								</div>
-								<div class="icon">
-								<i class="ion ion-cash"></i>
-								</div>
-								<a href="<?php echo APP_URL;?>reportePendientes/3" class="small-box-footer">Ver detalle <i class="fas fa-arrow-circle-right"></i></a>
-							
-							</div>
 							</div>
 							<!-- ./col -->
 						</div>
@@ -444,5 +445,6 @@
 	<script src="<?php echo APP_URL; ?>app/views/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>	
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+	
   </body>
 </html>

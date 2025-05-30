@@ -10,18 +10,9 @@
 
 		$insDashboard = new dashboardController();
 
-		if($_POST['modulo_dashboard']=="totales"){
-			echo $insDashboard->obtenerAlumnosActivosSedeL();
-		}
-
-		if($_POST['modulo_dashboard']=="eliminar"){
-			echo $insEscuela->eliminarEscuelaControlador();
-		}
-
-		if($_POST['modulo_dashboard']=="actualizar"){
-			echo $insEscuela->actualizarEscuelaControlador();
-		}
-		
+		if($_POST['modulo_dashboard']=="estadistica"){
+			echo $insDashboard->ingresosLugarEntr();
+		}		
 	}
 	else{
 		session_destroy();

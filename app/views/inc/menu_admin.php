@@ -6,6 +6,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="<?php echo APP_URL."estadisticas/" ?>" class="nav-link <?php if ($url[0]=='estadisticas') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon fas fa-chart-bar"></i>
+                  <p>Estadísticas</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="<?php echo APP_URL."representanteList/" ?>" class="nav-link <?php if ($url[0]=='representanteList') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-diagnoses text-info"></i>
                   <p>Representantes</p>
@@ -120,10 +127,10 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Balance Mensual</li>
+              <li class="nav-header">Estado financiero</li>
                 <li class="nav-item <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'menu-open'; else echo ''; ?>">
                   <a href="#" class="nav-link <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'active'; else echo ''; ?>">
-                    <i class="nav-icon fas fa-balance-scale"></i>
+                    <i class="nav-icon fas fa-balance-scale"></i> 
                     <p>Balance mensual<i class="fas fa-angle-left right"></i></p>
                   </a>
                   <ul class="nav nav-treeview">
@@ -147,6 +154,21 @@
                       <a href="<?php echo APP_URL."balanceResultados/" ?>" class="nav-link <?php if ($url[0]=='balanceResultados') echo 'active'; else echo ''; ?>">
                         <i class="nav-icon far fa-circle text-info"></i>
                         <p>Resultados</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li class="nav-item <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'menu-open'; else echo ''; ?>">
+                  <a href="#" class="nav-link <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
+                    <i class="nav-icon fas fa-sitemap"></i>
+                    <p>Ingresos lugar entrenamiento<i class="fas fa-angle-left right"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="<?php echo APP_URL."ingresosLugarEntrenamiento/" ?>" class="nav-link <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
+                        <i class="nav-icon far fa-circle text-info"></i>
+                        <p>Resultados</p> 
                       </a>
                     </li>
                   </ul>
