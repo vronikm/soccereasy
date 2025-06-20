@@ -128,7 +128,7 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/apexcharts.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/bootstrap-icons.min.css">
   </head>
-  < class="hold-transition sidebar-mini layout-fixed">	
+	<body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
       <!-- Preloader -->
