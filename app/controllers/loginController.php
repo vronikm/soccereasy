@@ -16,18 +16,16 @@
 		 */
 		public function iniciarSesionControlador(): void
 		{
-			// Configura las cookies de sesión (antes de session_start)
-			session_set_cookie_params([
-				'lifetime' => 0, // Hasta que se cierre el navegador
-				'path' => '/',
-				'domain' => 'tudominio.com', // Cambia por tu dominio
-				'secure' => true, // Solo HTTPS
-				'httponly' => true, // Solo accesible por PHP
-				'samesite' => 'Strict'
-			]);
-
 			// Arranque de sesión
 			if (session_status() === PHP_SESSION_NONE) {
+				session_set_cookie_params([
+					'lifetime' => 3600,
+					'path' => '/',
+					'domain' => 'idvloja.digitech.com.ec',
+					'secure' => true,
+					'httponly' => true,
+					'samesite' => 'Strict'
+				]);
 				session_start();
 			}
 
