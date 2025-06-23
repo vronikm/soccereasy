@@ -35,6 +35,12 @@
 				];
 				return json_encode($alerta);
 			}
+
+			# Verificando campos obligatorios #
+			if($empleado_tipopersonalid!="TPP"){
+				$empleado_especialidadid = "";
+			}
+
 			# Verificando email #
 			if($empleado_correo!=""){
 				if(filter_var($empleado_correo, FILTER_VALIDATE_EMAIL)){
@@ -412,7 +418,6 @@
 			$empleado_celular			= $this->limpiarCadena($_POST['empleado_celular']);
 			$empleado_direccion			= $this->limpiarCadena($_POST['empleado_direccion']);
 			$empleado_tipopersonalid 	= $this->limpiarCadena($_POST['empleado_tipopersonalid']);
-			$empleado_especialidadid	= $this->limpiarCadena($_POST['empleado_especialidadid']);
 			$empleado_fechaingreso		= $this->limpiarCadena($_POST['empleado_fechaingreso']);
 			$empleado_sueldo			= $this->limpiarCadena($_POST['empleado_sueldo']);
 			$empleado_genero 			= $this->limpiarCadena($_POST['empleado_genero']);
@@ -428,6 +433,13 @@
 					"icono"=>"error"
 				];
 				return json_encode($alerta);
+			}
+
+			# Verificando campos obligatorios #
+			if($empleado_tipopersonalid!="TPP"){
+				$empleado_especialidadid = "";
+			}else{				
+				$empleado_especialidadid	= $this->limpiarCadena($_POST['empleado_especialidadid']);
 			}
 
 			$empleado_datos_reg=[

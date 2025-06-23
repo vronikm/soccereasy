@@ -1076,6 +1076,22 @@
 			}
 			return $tabla;
 		}
+
+		public function listarLugarEntrenamiento($lugarid){
+			$option ="0";
+			$consulta_datos="SELECT * FROM asistencia_lugar WHERE lugar_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				if($lugarid == $rows['lugar_id']){
+					$option.='<option value='.$rows['lugar_id'].' selected>'.$rows['lugar_nombre'].'</option>';
+				}else{
+					$option.='<option value='.$rows['lugar_id'].'>'.$rows['lugar_nombre'].'</option>';	
+				}		
+			}
+			return $option;
+		}
 	}
 			
 											
