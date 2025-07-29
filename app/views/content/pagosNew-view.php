@@ -405,7 +405,7 @@
 													<thead>
 														<tr>
 															<th>No</th>															
-															<th>Fecha</th>
+															<th>Fecha registro</th>
 															<th>Mes/Año</th>
 															<th>Valor</th>
 															<th>Saldo</th>	
