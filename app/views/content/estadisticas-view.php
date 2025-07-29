@@ -5,7 +5,8 @@
 	$ingresosLugar=$insDashboard->ingresosLugarEntr();
 	
 	foreach($ingresosLugar as $rows){
-		$labels[] = $rows['lugar_nombre'];
+		$sede[] = $rows['sede_nombre'];
+		$lugar[] = $rows['lugar_nombre'];
         $alumnos[] = (int)$rows['ALUMNOS_ENTRENAN'];
         $pagos[] = (int)$rows['PAGOSRECEPTADOS'];
         $recaudado[] = (float)$rows['TOTALRECAUDADO'];
@@ -115,6 +116,7 @@
 					<table id="tablaDatos" table border="1" cellpadding="8" cellspacing="0" style="margin-top: 30px; width: 100%; border-collapse: collapse;">
 						<thead style="background-color: #f2f2f2;">
 							<tr>
+							<th>Sede</th>
 							<th>Lugar de Entrenamiento</th>
 							<th>Total Pensiones ($)</th>
 							<th>Total Recaudado ($)</th>
@@ -125,9 +127,10 @@
 						<tbody>
 							<?php
 							$totalAlumnos = $totalPagos = $totalRecaudado = $totalPensiones = 0;
-							for ($i = 0; $i < count($labels); $i++) {
+							for ($i = 0; $i < count($lugar); $i++) {
 								echo '<tr>';
-								echo '<td>' . $labels[$i] . '</td>';
+								echo '<td>' . $sede[$i] . '</td>';
+								echo '<td>' . $lugar[$i] . '</td>';
 								echo '<td style="text-align:center;">$' . number_format($pensiones[$i], 2) . '</td>';
 								echo '<td style="text-align:center;">$' . number_format($recaudado[$i], 2) . '</td>';
 								echo '<td style="text-align:center;">' . $pagos[$i] . '</td>';
@@ -144,6 +147,7 @@
 						</tbody>
 						<tfoot style="font-weight: bold; background-color: #eef;">
 							<tr>
+							<td style="text-align: right;"></td>
 							<td style="text-align: right;">Totales:</td>
 							<td style="text-align:center;">$<?php echo number_format($totalPensiones, 2); ?></td>
 							<td style="text-align:center;">$<?php echo number_format($totalRecaudado, 2); ?></td>
@@ -210,7 +214,7 @@
 		const chart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-				labels: <?php echo json_encode($labels); ?>,
+				labels: <?php echo json_encode($lugar); ?>,
 				datasets: [
 				{
 					label: 'Total Pensiones ($)',
@@ -228,7 +232,7 @@
 					data: <?php echo json_encode($pagos); ?>
 				},
 				{
-					label: 'Alumnos Entrenan',
+					label: 'Alumnos Entrenando',
 					backgroundColor: '#3498db',
 					data: <?php echo json_encode($alumnos); ?>
 				}
@@ -274,7 +278,7 @@
 						stacked: true,
 						beginAtZero: true,
 						title: { display: true,	text: 'Cantidad / Valor ($)' },
-						ticks: { stepSize: 500 }// Ajusta según tu rango
+						ticks: { stepSize: 500 }// Ajusta según el rango
 					}
 				}
 			},

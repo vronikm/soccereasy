@@ -404,13 +404,14 @@
 												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
-															<th>No</th>
+															<th>No</th>															
+															<th>Fecha</th>
 															<th>Mes/Año</th>
 															<th>Valor</th>
 															<th>Saldo</th>	
 															<th>Recibo</th>													
 															<th>Estado</th>															
-															<th style="width:300px;">Opciones</th>																
+															<th style="width:280px;">Opciones</th>																
 														</tr>
 													</thead>
 													<tbody>

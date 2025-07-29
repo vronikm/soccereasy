@@ -1276,6 +1276,7 @@
 					$tabla.='
 						<tr '.$class.'>
 							<td>'.$rows['fila_numero'].'</td>
+							<td>'.$rows['pago_fecharegistro'].'</td>
 							<td>'.$rows['pago_periodo'].'</td>
 							<td>'.$rows['pago_valor'].'</td>
 							<td>'.$rows['pago_saldo'].'</td>
@@ -1297,6 +1298,7 @@
 					$tabla.='
 					<tr '.$class.'>
 						<td>'.$rows['fila_numero'].'</td>
+						<td>'.$rows['pago_fecharegistro'].'</td>
 						<td>'.$rows['pago_periodo'].'</td>
 						<td>'.$rows['pago_valor'].'</td>
 						<td>'.$rows['pago_saldo'].'</td>
