@@ -116,12 +116,12 @@
 					<table id="tablaDatos" table border="1" cellpadding="8" cellspacing="0" style="margin-top: 30px; width: 100%; border-collapse: collapse;">
 						<thead style="background-color: #f2f2f2;">
 							<tr>
-							<th>Sede</th>
-							<th>Lugar de Entrenamiento</th>
-							<th>Total Pensiones ($)</th>
-							<th>Total Recaudado ($)</th>
-							<th>Pagos Aceptados</th>
-							<th>Alumnos Entrenan</th>	
+								<th>Sede</th>
+								<th>Lugar de Entrenamiento</th>
+								<th>Alumnos Entrenando</th>
+								<th>Total Pensiones ($)</th>
+								<th>Valor Recaudado en el mes ($)</th>
+								<th>Pagos Receptados en el mes</th>								
 							</tr>
 						</thead>
 						<tbody>
@@ -131,10 +131,10 @@
 								echo '<tr>';
 								echo '<td>' . $sede[$i] . '</td>';
 								echo '<td>' . $lugar[$i] . '</td>';
+								echo '<td style="text-align:center;">' . $alumnos[$i] . '</td>';
 								echo '<td style="text-align:center;">$' . number_format($pensiones[$i], 2) . '</td>';
 								echo '<td style="text-align:center;">$' . number_format($recaudado[$i], 2) . '</td>';
-								echo '<td style="text-align:center;">' . $pagos[$i] . '</td>';
-								echo '<td style="text-align:center;">' . $alumnos[$i] . '</td>';	
+								echo '<td style="text-align:center;">' . $pagos[$i] . '</td>';									
 								echo '</tr>';
 
 								// Acumuladores
@@ -149,10 +149,10 @@
 							<tr>
 							<td style="text-align: right;"></td>
 							<td style="text-align: right;">Totales:</td>
+							<td style="text-align:center;"><?php echo $totalAlumnos; ?></td>
 							<td style="text-align:center;">$<?php echo number_format($totalPensiones, 2); ?></td>
 							<td style="text-align:center;">$<?php echo number_format($totalRecaudado, 2); ?></td>
-							<td style="text-align:center;"><?php echo $totalPagos; ?></td>
-							<td style="text-align:center;"><?php echo $totalAlumnos; ?></td>
+							<td style="text-align:center;"><?php echo $totalPagos; ?></td>							
 							</tr>
 						</tfoot>
 					</table>
@@ -222,7 +222,7 @@
 					data: <?php echo json_encode($pensiones); ?>
 				},
 				{
-					label: 'Total Recaudado ($)',
+					label: 'Valor Recaudado ($)',
 					backgroundColor: '#f1c40f',
 					data: <?php echo json_encode($recaudado); ?>
 				},

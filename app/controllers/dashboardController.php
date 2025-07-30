@@ -94,21 +94,7 @@
 			return $pagosPendientes;
 		}
 
-		public function ingresosLugarEntr(){
-			/*$mes = "";
-			$mes = $_POST['mes']; // formato '2025-01'
-			// Seguridad: verifica que la clave exista
-			if (!isset($_POST['mes'])) {
-				echo json_encode([
-					'error' => true,
-					'mensaje' => 'No se recibio el parametro "mes".'
-				]);
-				exit;
-			}
-			//$mes = $_POST['mes']; // formato '2025-01'
-			$fecha_inicio = $mes . '-01';
-			$fecha_fin = date("Y-m-t", strtotime($fecha_inicio)); // último día del mes*/
-			
+		public function ingresosLugarEntr(){			
 			// Fechas dinámicas
 			$fecha_inicio = date('Y-m-01'); // Primer día del mes actual
 			$fecha_fin = date('Y-m-t');     // Último día del mes actual
@@ -150,7 +136,7 @@
 																		left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid)h on h.asignahorario_alumnoid = P.pago_alumnoid
 																		where P.pago_rubroid = 'RPE' 
 																				and P.pago_estado not in ('E','J') 
-																				and P.pago_fecharegistro BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."') Pagos   
+																				and P.pago_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."') Pagos   
 												group by Pagos.sedeid, Pagos.lugarid)PA on PA.sedeid = Base.sede_id AND PA.lugarid = Base.lugar_id
 								left join (select A.alumno_sedeid as sedeid, IFNULL(h.detalle_lugarid,0) AS lugarid, sum(IFNULL(T.transaccion_valor,0)) as VALOR_PAGADO  ,Count(1) as Numero
 												from alumno_pago_transaccion T
@@ -161,54 +147,12 @@
 																left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid  
 														)h on h.asignahorario_alumnoid = P.pago_alumnoid          
 												where transaccion_estado in ('C')        
-												and transaccion_fecharegistro BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."' 
+												and transaccion_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."' 
 												group by sedeid, lugarid
 										)Abonos on Abonos.sedeid = Base.sede_id AND Abonos.lugarid = Base.lugar_id 
 							order by Base.sede_id";
 
-			$datos = $this->ejecutarConsulta($consulta_datos);
-			//$datos = $datos->fetchAll();
-
-			/*$labels = [];
-			$alumnos = [];
-			$pagos = [];
-			$recaudado = [];
-			$pensiones = [];
-
-			foreach($datos as $rows){
-				$labels[] = $rows['lugar_nombre'];
-				$alumnos[] = (int)$rows['ALUMNOS_ENTRENAN'];
-				$pagos[] = (int)$rows['PAGOSRECEPTADOS'];
-				$recaudado[] = (float)$rows['TOTALRECAUDADO'];
-				$pensiones[] = (float)$rows['TOTALPENSIONES'];
-			}
-
-			echo json_encode([
-			'labels' => $labels,
-			'alumnos' => $alumnos,
-			'pagos' => $pagos,
-			'recaudado' => $recaudado,
-			'pensiones' => $pensiones
-			]);
-
-			foreach($datos as $rows){
-				$tabla.='
-					<tr>
-						<td>'.$rows['SEDE'].'</td>
-						<td>'.$rows['lugar_nombre'].'</td>
-						<td>'.$rows['ALUMNOS_ENTRENAN'].'</td>
-						<td>'.$rows['PAGOSRECEPTADOS'].'</td>
-						<td>'.$rows['TOTALRECAUDADO'].'</td>
-						<td>'.$rows['TOTALPENSIONES'].'</td>
-					</tr>';	
-			}
-			$tabla.='
-				<tr data-widget="expandable-table" aria-expanded="false">
-					<td colspan="5">TOTAL</td>
-					<td style="text-align: right">'.number_format($VALOR_RECAUDADO, 2, '.',',').'</td>			
-				</tr>';	
-
-			return $tabla;	*/
+			$datos = $this->ejecutarConsulta($consulta_datos);			
 			return $datos;		
 		}
 	}
