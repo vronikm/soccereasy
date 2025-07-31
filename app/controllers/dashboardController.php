@@ -148,6 +148,7 @@
 														)h on h.asignahorario_alumnoid = P.pago_alumnoid          
 												where transaccion_estado in ('C')        
 												and transaccion_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."' 
+												and pago_fecha BETWEEN ' ".$fecha_inicio." ' and ' ".$fecha_fin."' 
 												group by sedeid, lugarid
 										)Abonos on Abonos.sedeid = Base.sede_id AND Abonos.lugarid = Base.lugar_id 
 							order by Base.sede_id";
