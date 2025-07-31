@@ -8,9 +8,10 @@
 		$sede[] = $rows['sede_nombre'];
 		$lugar[] = $rows['lugar_nombre'];
         $alumnos[] = (int)$rows['ALUMNOS_ENTRENAN'];
-        $pagos[] = (int)$rows['PAGOSRECEPTADOS'];
-        $recaudado[] = (float)$rows['TOTALRECAUDADO'];
-        $pensiones[] = (float)$rows['TOTALPENSIONES'];
+        $sinregpago[] = (int)$rows['ALUMNOS_SINREGPAGOS'];
+		$alumnosad[] = (int)$rows['ALUMNOS_ADEUDAN'];
+		$pensiones[] = (float)$rows['TOTALPENSIONES'];
+		$recaudado[] = (float)$rows['TOTALRECAUDADO'];        
 	}	
 ?>
 
@@ -119,27 +120,30 @@
 								<th>Sede</th>
 								<th>Lugar de Entrenamiento</th>
 								<th>Alumnos Entrenando</th>
+								<th>Alumnos adeudan mes</th>
+								<th>Alumnos sin registro pagos</th>	
 								<th>Total Pensiones ($)</th>
-								<th>Valor Recaudado en el mes ($)</th>
-								<th>Pagos Receptados en el mes</th>								
+								<th>Valor Recaudado en el mes ($)</th>															
 							</tr>
 						</thead>
 						<tbody>
 							<?php
-							$totalAlumnos = $totalPagos = $totalRecaudado = $totalPensiones = 0;
+							$totalAlumnos = $totalAlumnosAd = $totalAlSinPagos = $totalRecaudado = $totalPensiones = 0;
 							for ($i = 0; $i < count($lugar); $i++) {
 								echo '<tr>';
 								echo '<td>' . $sede[$i] . '</td>';
 								echo '<td>' . $lugar[$i] . '</td>';
 								echo '<td style="text-align:center;">' . $alumnos[$i] . '</td>';
+								echo '<td style="text-align:center;">' . $alumnosad[$i] . '</td>';								
+								echo '<td style="text-align:center;">' . $sinregpago[$i] . '</td>';									
 								echo '<td style="text-align:center;">$' . number_format($pensiones[$i], 2) . '</td>';
-								echo '<td style="text-align:center;">$' . number_format($recaudado[$i], 2) . '</td>';
-								echo '<td style="text-align:center;">' . $pagos[$i] . '</td>';									
-								echo '</tr>';
+								echo '<td style="text-align:center;">$' . number_format($recaudado[$i], 2) . '</td>';																
+								echo '</tr>'; 
 
 								// Acumuladores
 								$totalAlumnos += $alumnos[$i];
-								$totalPagos += $pagos[$i];
+								$totalAlumnosAd += $alumnosad[$i];	
+								$totalAlSinPagos += $sinregpago[$i];
 								$totalRecaudado += $recaudado[$i];
 								$totalPensiones += $pensiones[$i];
 							}
@@ -147,12 +151,13 @@
 						</tbody>
 						<tfoot style="font-weight: bold; background-color: #eef;">
 							<tr>
-							<td style="text-align: right;"></td>
-							<td style="text-align: right;">Totales:</td>
-							<td style="text-align:center;"><?php echo $totalAlumnos; ?></td>
-							<td style="text-align:center;">$<?php echo number_format($totalPensiones, 2); ?></td>
-							<td style="text-align:center;">$<?php echo number_format($totalRecaudado, 2); ?></td>
-							<td style="text-align:center;"><?php echo $totalPagos; ?></td>							
+								<td style="text-align: right;"></td>
+								<td style="text-align: right;">Totales:</td>
+								<td style="text-align:center;"><?php echo $totalAlumnos; ?></td>
+								<td style="text-align:center;"><?php echo $totalAlumnosAd; ?></td>
+								<td style="text-align:center;"><?php echo $totalAlSinPagos; ?></td>
+								<td style="text-align:center;">$<?php echo number_format($totalPensiones, 2); ?></td>
+								<td style="text-align:center;">$<?php echo number_format($totalRecaudado, 2); ?></td>					
 							</tr>
 						</tfoot>
 					</table>
@@ -227,9 +232,9 @@
 					data: <?php echo json_encode($recaudado); ?>
 				},
 				{
-					label: 'Pagos Aceptados',
+					label: 'Alumnos que adeudan',
 					backgroundColor: '#e74c3c',
-					data: <?php echo json_encode($pagos); ?>
+					data: <?php echo json_encode($alumnosad); ?>
 				},
 				{
 					label: 'Alumnos Entrenando',
