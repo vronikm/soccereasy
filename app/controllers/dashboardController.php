@@ -156,7 +156,7 @@
 																group by sedeid, lugarid
 												)Abonos on Abonos.sedeid = Base.sede_id AND Abonos.lugarid = Base.lugar_id 
 												
-								left join(select a.alumno_sedeid as sedeid, IFNULL(h.detalle_lugarid,0)  AS lugarid, count(1) as Total
+								left join(select A.alumno_sedeid as sedeid, IFNULL(h.detalle_lugarid,0)  AS lugarid, count(1) as Total
 												from(select P.pago_alumnoid, max(P.pago_fecha) fecha
 																from alumno_pago P
 																where P.pago_rubroid = 'RPE' and P.pago_estado <> 'E'
@@ -167,7 +167,7 @@
 												left join(SELECT distinct detalle_lugarid, asignahorario_alumnoid 
 																from asistencia_asignahorario
 																left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid  
-														)h on h.asignahorario_alumnoid = a.alumno_id                                   
+														)h on h.asignahorario_alumnoid = A.alumno_id                                   
 												where A.alumno_estado = 'A'
 												group by sedeid, lugarid
 										)NP on NP.sedeid = Base.sede_id AND NP.lugarid = Base.lugar_id                           
