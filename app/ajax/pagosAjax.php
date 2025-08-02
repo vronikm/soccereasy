@@ -43,7 +43,10 @@
 		}	
 		if($_POST['modulo_pagos']=="descuentoUP"){
 			echo $insPago->actualizarDescuento();
-		}	
+		}
+		if($_POST['modulo_pagos']=="registrarcampeonato"){
+			echo $insPago->registrarPagoCampeonato();
+		}
 
 	}else{
 		session_destroy();

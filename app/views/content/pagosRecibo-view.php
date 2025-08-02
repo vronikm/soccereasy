@@ -218,7 +218,7 @@
 												</tr>		
 												<tr>													
 													<th>Por Concepto de: </th>	
-													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['pago_periodo'].", ".$datos['pago_concepto']; ?></td>																										
+													<td colspan="3"><?php echo $datos['RUBRO']." ".$datos['torneo_nombre']." ".$datos['pago_periodo'].", ".$datos['pago_concepto']; ?></td>																										
 												</tr>	
 												<tr>													
 													<th>Forma de pago: </th>	

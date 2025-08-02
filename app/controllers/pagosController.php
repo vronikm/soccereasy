@@ -261,6 +261,19 @@
 			return $option;
 		}
 
+		public function listarCampeonatos(){
+			$option="";
+
+			$consulta_datos="select torneo_id, torneo_nombre from torneo_torneo where torneo_estado = 'A'";	
+					
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){			
+				$option.='<option value='.$rows['torneo_id'].'>'.$rows['torneo_nombre'].'</option>';					
+			}
+			return $option;
+		}
+
 		public function listarOptionTalla($talla){
 			$option ='<option value=0> Seleccione la talla</option>';
 			$consulta_datos="SELECT C.catalogo_valor, C.catalogo_descripcion 
@@ -325,7 +338,9 @@
 				$rubroid="RKE";				
 			}elseif($pago_rubro == "otros"){
 				$rubroid="ROT";				
-			}	
+			}elseif($pago_rubro == "campeonato"){
+				$rubroid="RPC";				
+			}
 			
 			if($pago_valor < 1 && $pago_saldo < 1){
 				$estado = "J";
@@ -504,6 +519,272 @@
 					"campo_nombre"=>"pago_periodo",
 					"campo_marcador"=>":Periodo",
 					"campo_valor"=>$pago_periodo
+				],				
+				[
+					"campo_nombre"=>"pago_recibo",
+					"campo_marcador"=>":Recibo",
+					"campo_valor"=>$pago_recibo
+				],
+				[
+					"campo_nombre"=>"pago_estado",
+					"campo_marcador"=>":Estado",
+					"campo_valor"=>$estado 
+				],
+				[
+					"campo_nombre"=>"pago_archivo",
+					"campo_marcador"=>":Imagenpago",
+					"campo_valor"=>$foto
+				]
+			];		
+
+			if($pago_fecharegistro > date(date("Y-m-d H:i:s"))){
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Error",
+					"texto"=>"La fecha de registro del pago es mayor a la fecha actual",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+
+			}else{
+				$registrar_pago=$this->guardarDatos("alumno_pago",$pago_datos_reg);
+				if($registrar_pago->rowCount()>0){
+					$alerta=[
+						"tipo"=>"recargar",
+						"titulo"=>"Pago registrado",
+						"texto"=>"El pago se registró correctamente",
+						"icono"=>"success"
+					];
+	
+					// Actualizar numero de recibo
+					$this->ejecutarConsulta("UPDATE general_escuela SET escuela_recibo = ".$num_recibo." WHERE escuela_id = 1");
+				
+				}else{
+					
+					if(is_file($img_dir.$foto)){
+						chmod($img_dir.$foto,0777);
+						unlink($img_dir.$foto);
+					}
+	
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"No se pudo registrar el pago, por favor intente nuevamente",
+						"icono"=>"error"
+					];
+				}
+	
+				return json_encode($alerta);
+			}
+		}
+
+		public function registrarPagoCampeonato(){
+			# Almacenando datos#
+			$pago_alumnoid 		= $this->limpiarCadena($_POST['pago_alumnoid']);
+			$pago_fecha			= $this->limpiarCadena($_POST['pago_fecha']);
+			$pago_fecharegistro	= $this->limpiarCadena($_POST['pago_fecharegistro']);
+			$pago_campeonatoid 	= $this->limpiarCadena($_POST['pago_campeonatoid']);	
+			$pago_valor 		= $_POST['pago_valor'];
+			$pago_saldo 		= $_POST['pago_saldo'];
+			$pago_formapagoid 	= $this->limpiarCadena($_POST['pago_formapagoid']);
+			$pago_concepto 		= $this->limpiarCadena($_POST['pago_concepto']);			
+			$pago_rubro			= $this->limpiarCadena($_POST['pago_rubro']);
+			$rubroid 			= ""; 
+			
+			if ($pago_valor =="") {$pago_valor = 0;}
+			if ($pago_saldo =="") {$pago_saldo = 0;}
+
+			if($pago_rubro == "pension"){
+				$rubroid="RPE";			
+			}elseif($pago_rubro == "inscripcion"){
+				$rubroid="RIN";				
+			} elseif($pago_rubro == "uniforme"){
+				$rubroid="RNU";				
+			}elseif($pago_rubro == "kit"){
+				$rubroid="RKE";				
+			}elseif($pago_rubro == "otros"){
+				$rubroid="ROT";				
+			}elseif($pago_rubro == "campeonato"){
+				$rubroid="RPC";				
+			}
+			
+			if($pago_valor < 1 && $pago_saldo < 1){
+				$estado = "J";
+			}elseif($pago_saldo != "" && $pago_saldo > 0){
+				$estado = "P";
+			}else{
+				$estado = "C";
+			}		
+
+			# Verificando campos obligatorios #
+		    if($pago_fecha=="" || $pago_fecharegistro=="" || $pago_campeonatoid=="" || $pago_valor=="" || $pago_formapagoid=="" ){
+		    	$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No ha completado todos los campos que son obligatorios",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);		        
+		    }
+
+			# Directorio de imagenes #
+			$img_dir="../views/imagenes/pagos/";
+
+			# Comprobar si se selecciono una imagen #
+    		if($_FILES['pago_archivo']['name']!="" && $_FILES['pago_archivo']['size']>0){
+    			# Creando directorio #
+		        if(!file_exists($img_dir)){
+		            if(!mkdir($img_dir,0777)){
+		            	$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Ocurrió un error inesperado",
+							"texto"=>"Error al crear el directorio",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+		            } 
+		        }
+
+		        # Verificando formato de imagenes #
+		        if(mime_content_type($_FILES['pago_archivo']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['pago_archivo']['tmp_name'])!="image/png"){
+		        	$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"La imagen que ha seleccionado es de un formato no permitido",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+		        }
+
+		        # Verificando peso de imagen #
+		        if(($_FILES['pago_archivo']['size']/1024)>3000){
+		        	$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"La imagen que ha seleccionado supera el peso permitido 3MB",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+		        }
+
+		        # Nombre de la foto #
+		        $foto=str_ireplace(" ","_",$pago_alumnoid);
+		        $foto=$foto."_".rand(0,100);
+
+		        # Extension de la imagen #
+		        switch(mime_content_type($_FILES['pago_archivo']['tmp_name'])){
+		            case 'image/jpeg':
+		                $foto=$foto.".jpg";
+		            break;
+		            case 'image/png':
+		                $foto=$foto.".png";
+		            break;
+		        }
+
+		        $maxWidth = 800;
+    			$maxHeight = 600;
+
+				chmod($img_dir,0777);
+				$inputFile = ($_FILES['pago_archivo']['tmp_name']);
+       			$outputFile = $img_dir.$foto;
+
+				# Moviendo imagen al directorio #
+				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					
+				}else{
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"No es posible subir la imagen al sistema en este momento",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}
+    		}else{
+    			$foto="";
+    		}			
+
+			$check_recibo=$this->ejecutarConsulta("SELECT escuela_recibo FROM general_escuela WHERE escuela_id = 1");
+			//$check_recibo=$this->seleccionarDatos("Unico","general_escuela","escuela_id","1");
+			if($check_recibo->rowCount()>0){				
+				foreach($check_recibo as $rows){	
+					$num_recibo = $rows["escuela_recibo"] + 1; 					
+				}
+				
+				// Establecer la zona horaria de Ecuador
+				date_default_timezone_set('America/Guayaquil');
+
+				// Obtener la fecha y hora actual
+				$fecha_actual = date('Y-m-d H:i:s');
+
+				// Descomponer la fecha y hora en sus componentes individuales
+				$anio = date('y');
+				$mes = date('m');
+				$dia = date('d');
+				$hora = date('H');
+				$minuto = date('i');
+				$segundo = date('s');
+
+				// Generar número de recibo con fecha y hora al revés
+				$numero_recibo = $segundo . $anio . $minuto . $mes . $hora . $dia;
+				$pago_recibo = strrev($numero_recibo)."".$num_recibo;					
+			}
+			else{
+				$alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error",
+					"texto"=>"No se puede generar el recibo en este momento",
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+			}
+
+			$pago_datos_reg=[
+				[
+					"campo_nombre"=>"pago_rubroid",
+					"campo_marcador"=>":Rubroid",
+					"campo_valor"=>$rubroid
+				],
+				[
+					"campo_nombre"=>"pago_formapagoid",
+					"campo_marcador"=>":Formapagoid",
+					"campo_valor"=>$pago_formapagoid
+				],				
+				[
+					"campo_nombre"=>"pago_alumnoid",
+					"campo_marcador"=>":Alumnoid",
+					"campo_valor"=>$pago_alumnoid
+				],				
+				[
+					"campo_nombre"=>"pago_valor",
+					"campo_marcador"=>":Valor",
+					"campo_valor"=>$pago_valor
+				],
+				[
+					"campo_nombre"=>"pago_saldo",
+					"campo_marcador"=>":Saldo",
+					"campo_valor"=>$pago_saldo
+				],		
+				[
+					"campo_nombre"=>"pago_concepto",
+					"campo_marcador"=>":Concepto",
+					"campo_valor"=>$pago_concepto
+				],
+				[
+					"campo_nombre"=>"pago_fecha",
+					"campo_marcador"=>":Fecha",
+					"campo_valor"=>$pago_fecha
+				],				
+				[
+					"campo_nombre"=>"pago_fecharegistro",
+					"campo_marcador"=>":Fecharegistro",
+					"campo_valor"=>$pago_fecharegistro
+				],
+				[
+					"campo_nombre"=>"pago_campeonatoid",
+					"campo_marcador"=>":Campeonatoid",
+					"campo_valor"=>$pago_campeonatoid
 				],				
 				[
 					"campo_nombre"=>"pago_recibo",
@@ -1235,13 +1516,14 @@
 		public function listarPagosRubro($alumnoid, $rubro){ //29052024			
 			$tabla="";
 			$eliminarpago="";
-			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY pago_id) AS fila_numero, IFNULL(P.PAGOS_PENDIENTES, 0)PAGOS_PENDIENTES , A.* 
+			$consulta_datos="SELECT ROW_NUMBER() OVER (ORDER BY pago_id) AS fila_numero, IFNULL(P.PAGOS_PENDIENTES, 0)PAGOS_PENDIENTES , A.*, T.torneo_nombre
 				FROM alumno_pago A  
 				LEFT JOIN (
 					SELECT COUNT(1)PAGOS_PENDIENTES, transaccion_pagoid 
 					FROM alumno_pago_transaccion
 					GROUP BY transaccion_pagoid
 				)P ON P.transaccion_pagoid = A.pago_id 
+				LEFT JOIN torneo_torneo T ON T.torneo_id = A.pago_campeonatoid 
 				WHERE (A.pago_alumnoid = '".$alumnoid."' AND A.pago_rubroid = '".$rubro."' AND A.pago_estado NOT IN ('E')) ORDER BY pago_id DESC";		
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
@@ -1277,9 +1559,31 @@
 						<tr '.$class.'>
 							<td>'.$rows['fila_numero'].'</td>
 							<td>'.$rows['pago_fecharegistro'].'</td>
-							<td>'.$rows['pago_periodo'].'</td>
 							<td>'.$rows['pago_valor'].'</td>
 							<td>'.$rows['pago_saldo'].'</td>
+							<td>'.$rows['torneo_nombre'].'</td>
+							<td>'.$rows['pago_recibo'].'</td>
+							<td>'.$estado.'</td>
+							<td>
+								<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
+									<input type="hidden" name="modulo_pagos" value="eliminar">
+									<input type="hidden" name="pago_id" value="'.$rows['pago_id'].'">						
+									<button type="submit" class="btn float-right btn-danger btn-sm " style="margin-right: 5px;" '.$eliminarpago.'>Eliminar</button>
+								</form>							
+
+								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
+								'.$btnPagar.'
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" >Recibo</a>
+							</td>
+						</tr>';	
+				}elseif($rubro != 'RPC'){
+					$tabla.='
+						<tr '.$class.'>
+							<td>'.$rows['fila_numero'].'</td>
+							<td>'.$rows['pago_fecharegistro'].'</td>
+							<td>'.$rows['pago_periodo'].'</td>
+							<td>'.$rows['pago_valor'].'</td>
+							<td>'.$rows['pago_saldo'].'</td>						
 							<td>'.$rows['pago_recibo'].'</td>
 							<td>'.$estado.'</td>
 							<td>
@@ -1422,6 +1726,7 @@
 						A.alumno_primernombre,
 						A.alumno_segundonombre,
 						A.alumno_fechanacimiento,
+						T.torneo_nombre,
 						P.*,
 						A.*
 						FROM alumno_pago P	
@@ -1430,6 +1735,7 @@
 							INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
 							INNER JOIN general_sede S on S.sede_id = A.alumno_sedeid 
 							LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
+							LEFT JOIN torneo_torneo T ON T.torneo_id = P.pago_campeonatoid
 							LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
 								FROM alumno_pago_transaccion PT
 								WHERE PT.transaccion_estado = 'C'
