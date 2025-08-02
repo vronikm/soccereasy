@@ -1187,36 +1187,68 @@
 						order by Base.sede_id";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
-			return $datos;
-			/*$datos = $datos->fetchAll();
+			return $datos;			
+		}
 
-			$sede = [];
-			$lugarentrena = [];
-			$alumnos 	  = [];
-			$pagos 		  = [];
-			$recaudado 	  = [];
-			$pensiones	  = [];
+		public function ingresosMoraLugarEntr($fecha_inicio, $fecha_fin){		
+			$tabla = "";
+			$consulta_datos="SELECT sede_nombre SEDE, IFNULL(lugar_nombre, 'NO ASIGNADO')LUGARENTRENAMIENTO, CONCAT(alumno_primernombre, ' ', alumno_segundonombre, ' ', alumno_apellidopaterno,  ' ', alumno_apellidomaterno)ALUMNO, CASE WHEN alumno_estado = 'A' THEN 'ACTIVO' WHEN alumno_estado = 'I' THEN 'INACTIVO' ELSE alumno_estado end ESTADOALUMNO, 'No Registra' FECHA_ULTPAGO, 'No Registra' SITUACION, '' PAGO_PERIODO, '' PAGO_CONCEPTO, '' PAGO_VALOR, '' PAGO_SALDO, '' ESTADOPAGO
+								FROM sujeto_alumno A
+								inner join general_sede on sede_id = alumno_sedeid
+								left join (SELECT distinct detalle_lugarid, asignahorario_alumnoid 
+														from asistencia_asignahorario
+														left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+														left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
+														where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
+								left join asistencia_lugar on lugar_id = detalle_lugarid       
+								where A.alumno_id not in (select AlumnoId
+																from (SELECT X.alumno_id AlumnoId, alumno_sedeid SedeAlumno, alumno_estado, MAX(P.pago_fecha) AS FECHA_ULTPAGO
+																				FROM sujeto_alumno X
+																				LEFT JOIN alumno_pago P ON P.pago_alumnoid = X.alumno_id
+																				WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A'
+																		group by X.alumno_id, alumno_sedeid, alumno_estado) as FechaPagos)
+										and alumno_estado = 'A'
 
-			foreach($datos as $rows){
-				$sede[] 		= $rows['sede_nombre'];
-				$lugarentrena[] = $rows['lugar_nombre'];
-				$alumnos[] 		= (int)$rows['ALUMNOS_ENTRENAN'];
-				$pensiones[] 	= (float)$rows['TOTALPENSIONES'];
-				$recaudado[]	= (float)$rows['VALORECAUDADO'];
-				$pagos[] 		= (int)$rows['PAGOSRECEPTADOS'];
-			}
-			foreach($datos as $rows){
-				$tabla.='
-					<tr>
-						<td>'.$rows['sede_nombre'].'</td>
-						<td>'.$rows['lugar_nombre'].'</td>
-						<td>'.$rows['ALUMNOS_ENTRENAN'].'</td>
-						<td>'.$rows['TOTALPENSIONES'].'</td>
-						<td>'.$rows['VALORECAUDADO'].'</td>
-						<td>'.$rows['PAGOSRECEPTADOS'].'</td>											
-					</tr>';	
-			}
-			return $tabla;	*/
+							UNION ALL
+
+							select sede_nombre, IFNULL(lugar_nombre, 'NO ASIGNADO')LUGARENTRENAMIENTO, CONCAT(alumno_primernombre, ' ', alumno_segundonombre, ' ', alumno_apellidopaterno,  ' ', alumno_apellidomaterno)ALUMNO, CASE WHEN alumno_estado = 'A' THEN 'ACTIVO' WHEN alumno_estado = 'I' THEN 'INACTIVO' ELSE alumno_estado end ESTADOALUMNO, pago_fecha, 'AL DÍA' SITUACION, pago_periodo, pago_concepto, pago_valor, pago_saldo,
+									case when pago_estado = 'C' then 'Completo' when pago_estado = 'P' then 'Pendiente' when pago_estado = 'J' then 'Justificado' else pago_estado end EstadoPago
+								from alumno_pago
+								left join sujeto_alumno on pago_alumnoid = alumno_id
+								left join general_sede on sede_id = alumno_sedeid
+								left join (SELECT distinct detalle_lugarid, asignahorario_alumnoid 
+													from asistencia_asignahorario
+													left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+													left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
+													where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
+								left join asistencia_lugar on lugar_id = detalle_lugarid  
+								WHERE pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A'
+											and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								
+							UNION ALL
+
+							select sede_nombre, IFNULL(lugar_nombre, 'NO ASIGNADO')LUGARENTRENAMIENTO, ALUMNO, CASE WHEN alumno_estado = 'A' THEN 'ACTIVO' WHEN alumno_estado = 'I' THEN 'INACTIVO' ELSE alumno_estado end ESTADOALUMNO, pago_fecha, SITUACION, '' PAGO_PERIODO, '' PAGO_CONCEPTO, '' PAGO_VALOR, '' PAGO_SALDO, '' ESTADOPAGO
+									from alumno_pago P
+									inner join (select alumno_id, alumno_identificacion, ALUMNO, detalle_lugarid, lugar_nombre, alumno_sedeid, sede_nombre, alumno_estado, FECHA_ULTPAGO, case when FECHA_ULTPAGO < ' ".$fecha_inicio."' THEN 'EN MORA' ELSE 'POR DEFINIR' end SITUACION
+													from (SELECT X.alumno_id, X.alumno_identificacion, CONCAT(alumno_primernombre, ' ', alumno_segundonombre, ' ', alumno_apellidopaterno,  ' ', alumno_apellidomaterno)ALUMNO, alumno_sedeid, sede_nombre, alumno_estado, detalle_lugarid, lugar_nombre, MAX(P.pago_fecha) AS FECHA_ULTPAGO
+																	FROM sujeto_alumno X
+																	left join general_sede on sede_id = alumno_sedeid
+																	left join (SELECT distinct detalle_lugarid, asignahorario_alumnoid 
+																					from asistencia_asignahorario
+																					left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
+																					left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
+																					where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
+																	left join asistencia_lugar on lugar_id = detalle_lugarid    
+																	LEFT JOIN alumno_pago P ON P.pago_alumnoid = X.alumno_id
+																	WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A'                                        
+															group by X.alumno_id, X.alumno_identificacion, alumno_sedeid, sede_nombre, alumno_estado, ALUMNO
+															having MAX(pago_fecha) < ' ".$fecha_inicio."') as FechaPagos
+													) F on pago_fecha = F.FECHA_ULTPAGO and F.alumno_id = pago_alumnoid
+									WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' 
+									ORDER BY FECHA_ULTPAGO DESC, SEDE, LUGARENTRENAMIENTO";
+
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			return $datos;			
 		}
 	}
 			

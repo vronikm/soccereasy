@@ -6,13 +6,6 @@
               </li>
 
               <li class="nav-item">
-                <a href="<?php echo APP_URL."estadisticas/" ?>" class="nav-link <?php if ($url[0]=='estadisticas') echo 'active'; else echo ''; ?>">
-                  <i class="nav-icon fas fa-chart-bar"></i>
-                  <p>Estadísticas</p>
-                </a>
-              </li>
-
-              <li class="nav-item">
                 <a href="<?php echo APP_URL."representanteList/" ?>" class="nav-link <?php if ($url[0]=='representanteList') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-diagnoses text-info"></i>
                   <p>Representantes</p>
@@ -47,7 +40,7 @@
                 </a>
               </li>
 
-              <li class="nav-header">Asistencia alumno</li>
+              <li class="nav-header">ASISTENCIA ALUMNO</li>
               <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-clipboard-list"></i>
@@ -70,7 +63,7 @@
                 </ul>
               </li>
               
-              <li class="nav-header">Horarios</li>
+              <li class="nav-header">HORARIOS</li>
               <li class="nav-item <?php if ($url[0]=='asistenciaHora' || $url[0]=='asistenciaLugar' || $url[0]=='asistenciaListHorario' || $url[0]=='asistenciaVerHorario' || $url[0]=='asistenciaHorario' || $url[0]=='asistenciaHorarioLista' || $url[0]=='asistenciaHorarioJugador') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='asistenciaHora' || $url[0]=='asistenciaLugar' || $url[0]=='asistenciaListHorario' || $url[0]=='asistenciaVerHorario' || $url[0]=='asistenciaHorario' || $url[0]=='asistenciaHorarioLista' || $url[0]=='asistenciaHorarioJugador') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-clock"></i>
@@ -99,7 +92,7 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Empleados</li>
+              <li class="nav-header">EMPLEADOS</li>
               <li class="nav-item <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoEntrada' || $url[0]=='empleadoAsistencias') echo 'menu-open'; else echo ''; ?>">  
               <a href="#" class="nav-link <?php if ($url[0]=='empleadoList' || $url[0]=='empleadoEntrada' || $url[0]=='empleadoAsistencias') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon far fa-address-card"></i>
@@ -126,8 +119,32 @@
                   </li>
                 </ul>
               </li>
+          
+              <li class="nav-header">INGRESOS LUGAR ENTRENAMIENTO</li>
+                <li class="nav-item <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'menu-open'; else echo ''; ?>">
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."estadisticas/" ?>" class="nav-link <?php if ($url[0]=='estadisticas') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon fas fa-chart-bar"></i>
+                      <p>Estadísticas</p>
+                    </a>
+                  </li>
+                </li>
 
-              <li class="nav-header">Estado financiero</li>
+                <li class="nav-item <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'menu-open'; else echo ''; ?>">
+                  <a href="<?php echo APP_URL."ingresosLugarEntrenamiento/" ?>" class="nav-link <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
+                    <i class="nav-icon fas fa-sitemap"></i>
+                    <p>Consolidado por mes</p>
+                  </a>                  
+                </li>
+
+                <li class="nav-item <?php if ($url[0]=='reporteIngresosMorames') echo 'menu-open'; else echo ''; ?>">
+                  <a href="<?php echo APP_URL."reporteIngresosMorames/" ?>" class="nav-link <?php if ($url[0]=='reporteIngresosMorames') echo 'active'; else echo ''; ?>">
+                    <i class="nav-icon fas fa-file"></i>
+                    <p>Reporte detallado </p>
+                  </a>                  
+                </li>
+
+              <li class="nav-header">ESTADO FINANCIERO</li>
                 <li class="nav-item <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'menu-open'; else echo ''; ?>">
                   <a href="#" class="nav-link <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'active'; else echo ''; ?>">
                     <i class="nav-icon fas fa-balance-scale"></i> 
@@ -159,22 +176,7 @@
                   </ul>
                 </li>
 
-                <li class="nav-item <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'menu-open'; else echo ''; ?>">
-                  <a href="#" class="nav-link <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
-                    <i class="nav-icon fas fa-sitemap"></i>
-                    <p>Ingresos lugar entrenamiento<i class="fas fa-angle-left right"></i></p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="<?php echo APP_URL."ingresosLugarEntrenamiento/" ?>" class="nav-link <?php if ($url[0]=='ingresosLugarEntrenamiento') echo 'active'; else echo ''; ?>">
-                        <i class="nav-icon far fa-circle text-info"></i>
-                        <p>Resultados</p> 
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-
-              <li class="nav-header">Cobranza</li>
+              <li class="nav-header">COBRANZA</li>
               <li class="nav-item <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaPensionInactivos' || $url[0]=='cobranzaUniforme') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='cobranzaPension' || $url[0]=='cobranzaPensionInactivos' || $url[0]=='cobranzaUniforme') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-book"></i>
@@ -206,7 +208,7 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Reportes</li>
+              <li class="nav-header">REPORTES</li>
               <li class="nav-item <?php if ($url[0]=='reportePagos' || $url[0]=='reporteRubros' || $url[0]=='reportePagosReceptadosResumen' || $url[0]=='reporteRepresentanteFactura') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='reportePagos' || $url[0]=='reporteRubros' || $url[0]=='reportePagosReceptadosResumen' || $url[0]=='reporteRepresentanteFactura') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-th"></i>
@@ -250,7 +252,7 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Seguridad</li>
+              <li class="nav-header">SEGURIDAD</li>
               <li class="nav-item <?php if ($url[0]=='userList' || $url[0]=='roList') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='userList' || $url[0]=='roList') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon fas fa-key"></i>
@@ -278,7 +280,7 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Configuración</li>
+              <li class="nav-header">CONFIGURACIÓN</li>
               <li class="nav-item <?php if ($url[0]=='escuelaNew' || $url[0]=='sedeList' || $url[0]=='tablasNew' || $url[0]=='catalogosNew') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='escuelaNew' || $url[0]=='sedeList' || $url[0]=='tablasNew' || $url[0]=='catalogosNew') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon far fa-edit"></i>
@@ -316,7 +318,7 @@
                 </ul>
               </li>
 
-              <li class="nav-header">Salir</li>
+              <li class="nav-header">SALIR</li>
               <li class="nav-item">
                 <a href=<?php echo APP_URL."logOut/";?> class="nav-link" id="btn_exit">
                   <i class="nav-icon far fa-circle text-danger"></i>
