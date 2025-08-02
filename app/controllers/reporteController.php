@@ -1200,7 +1200,7 @@
 														left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
 														left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
 														where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
-								left join asistencia_lugar on lugar_id = detalle_lugarid       
+								left join asistencia_lugar on lugar_id = T.detalle_lugarid       
 								where A.alumno_id not in (select AlumnoId
 																from (SELECT X.alumno_id AlumnoId, alumno_sedeid SedeAlumno, alumno_estado, MAX(P.pago_fecha) AS FECHA_ULTPAGO
 																				FROM sujeto_alumno X
@@ -1221,7 +1221,7 @@
 													left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
 													left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
 													where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
-								left join asistencia_lugar on lugar_id = detalle_lugarid  
+								left join asistencia_lugar on lugar_id = T.detalle_lugarid  
 								WHERE pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A'
 											and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
 								
@@ -1238,10 +1238,11 @@
 																					left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
 																					left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
 																					where alumno_estado = 'A')T on asignahorario_alumnoid = alumno_id
-																	left join asistencia_lugar on lugar_id = detalle_lugarid    
+
+																	left join asistencia_lugar on lugar_id = T.detalle_lugarid    
 																	LEFT JOIN alumno_pago P ON P.pago_alumnoid = X.alumno_id
 																	WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' AND alumno_estado = 'A'                                        
-															group by X.alumno_id, X.alumno_identificacion, alumno_sedeid, sede_nombre, alumno_estado, ALUMNO
+															group by X.alumno_id, X.alumno_identificacion, alumno_sedeid, sede_nombre, alumno_estado, detalle_lugarid, lugar_nombre, ALUMNO
 															having MAX(pago_fecha) < ' ".$fecha_inicio."') as FechaPagos
 													) F on pago_fecha = F.FECHA_ULTPAGO and F.alumno_id = pago_alumnoid
 									WHERE P.pago_rubroid = 'RPE' AND pago_estado != 'E' 
