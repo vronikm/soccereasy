@@ -317,7 +317,7 @@
 												</div>
 												<div class="col-md-4">
 													<div class="form-group">
-														<label for="pago_valor">Valor</label>
+														<label for="pago_valor">Pago</label>
 														<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" pattern="^\d+(\.\d{1,2})?$" <?php echo ' value="'.$rubro_valor.'" '.$disabled; ?>  required>
 													</div>
 												</div>
@@ -409,7 +409,7 @@
 															<th>No</th>															
 															<th>Fecha registro</th>
 															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Pago</th>
 															<th>Saldo</th>	
 															<th>Recibo</th>													
 															<th>Estado</th>															
@@ -467,7 +467,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor inscripción</label>
+															<label for="pago_valor">Pago inscripción</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" <?php echo ' value="'.$rubro_inscripcion.'" '.$disabled; ?>  required>
 														</div>
 													</div>
@@ -557,13 +557,14 @@
 												<table id="example1" class="table table-bordered table-striped table-sm">
 													<thead>
 														<tr>
-															<th>No</th>
+															<th>No</th>															
+															<th>Fecha registro</th>
 															<th>Mes/Año</th>
-															<th>Valor</th>
-															<th>Saldo</th>														
-															<th>Estado</th>
-															<th>Recibo</th>
-															<th style="width:300px;">Opciones</th>																
+															<th>Pago</th>
+															<th>Saldo</th>	
+															<th>Recibo</th>													
+															<th>Estado</th>															
+															<th style="width:280px;">Opciones</th>																	
 														</tr>
 													</thead>
 													<tbody>
@@ -687,10 +688,10 @@
 													<thead>
 														<tr>
 															<th>No</th>															
-															<th>Fecha registro</th>															
+															<th>Fecha registro</th>		
+															<th>Campeonato</th>													
 															<th>Pago</th>
 															<th>Saldo</th>
-															<th>Campeonato</th>
 															<th>Recibo</th>													
 															<th>Estado</th>															
 															<th style="width:280px;">Opciones</th>																
@@ -756,7 +757,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor uniforme</label>
+															<label for="pago_valor">Pago uniforme</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -820,12 +821,14 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
-															<th>Saldo</th>														
-															<th>Estado</th>
+															<th>Fecha registro</th>
+															<th>Periodo</th>
+															<th>Talla</th>
+															<th>Pago</th>
+															<th>Saldo</th>															
 															<th>Recibo</th>
-															<th style="width:300px;">Opciones</th>																
+															<th>Estado</th>
+															<th style="width:280px;">Opciones</th>																
 														</tr>
 													</thead>
 													<tbody>
@@ -839,7 +842,7 @@
 
 										<!-- /.tab-pane -->										
 										<div class="tab-pane" id="kit">
-												<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
 											<input type="hidden" name="modulo_pagos" value="registrar">											
 											<input type="hidden" name="pago_alumnoid" value="<?php echo $datos['alumno_id']; ?>">
 											<input type="hidden" name="pago_rubro" value="kit">
@@ -878,7 +881,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor accesorio entrenamiento</label>
+															<label for="pago_valor">Pago accesorio entrenamiento</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -942,11 +945,12 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Fecha registro</th>		
+															<th>Periodo</th>													
+															<th>Pago</th>
 															<th>Saldo</th>														
-															<th>Estado</th>
 															<th>Recibo</th>
+															<th>Estado</th>
 															<th style="width:300px;">Opciones</th>																
 														</tr>
 													</thead>
@@ -1000,7 +1004,7 @@
 													
 													<div class="col-md-4">
 														<div class="form-group">
-															<label for="pago_valor">Valor Otros</label>
+															<label for="pago_valor">Pago Otros</label>
 															<input type="text" class="pull-right form-control" style="text-align:right;" id="pago_valor" name="pago_valor" placeholder="0.00" required>
 														</div>
 													</div>
@@ -1065,11 +1069,12 @@
 													<thead>
 														<tr>
 															<th>No</th>
-															<th>Mes/Año</th>
-															<th>Valor</th>
+															<th>Fecha registro</th>
+															<th>Periodo</th>
+															<th>Pago</th>
 															<th>Saldo</th>														
-															<th>Estado</th>															
 															<th>Recibo</th>
+															<th>Estado</th>		
 															<th style="width:300px;">Opciones</th>																
 														</tr>
 													</thead>

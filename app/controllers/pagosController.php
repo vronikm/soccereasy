@@ -1554,15 +1554,15 @@
 					$eliminarpago="";
 				}
 					
-				if($rubro != 'RNU'){
+				if($rubro == 'RPE'){
 					$tabla.='
 						<tr '.$class.'>
 							<td>'.$rows['fila_numero'].'</td>
 							<td>'.$rows['pago_fecharegistro'].'</td>
+							<td>'.$rows['pago_periodo'].'</td>								
 							<td>'.$rows['pago_valor'].'</td>
-							<td>'.$rows['pago_saldo'].'</td>
-							<td>'.$rows['torneo_nombre'].'</td>
-							<td>'.$rows['pago_recibo'].'</td>
+							<td>'.$rows['pago_saldo'].'</td>						
+							<td>'.$rows['pago_recibo'].'</td>								
 							<td>'.$estado.'</td>
 							<td>
 								<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
@@ -1573,15 +1573,15 @@
 
 								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
 								'.$btnPagar.'
-								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" >Recibo</a>
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
 							</td>
 						</tr>';	
-				}elseif($rubro != 'RPC'){
+				}elseif($rubro == 'RPC'){
 					$tabla.='
 						<tr '.$class.'>
 							<td>'.$rows['fila_numero'].'</td>
-							<td>'.$rows['pago_fecharegistro'].'</td>
-							<td>'.$rows['pago_periodo'].'</td>
+							<td>'.$rows['pago_fecharegistro'].'</td>							
+							<td>'.$rows['torneo_nombre'].'</td>							
 							<td>'.$rows['pago_valor'].'</td>
 							<td>'.$rows['pago_saldo'].'</td>						
 							<td>'.$rows['pago_recibo'].'</td>
@@ -1595,7 +1595,30 @@
 
 								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
 								'.$btnPagar.'
-								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" >Recibo</a>
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
+							</td>
+						</tr>';	
+				}elseif($rubro == 'RNU'){
+					$tabla.='
+						<tr '.$class.'>
+							<td>'.$rows['fila_numero'].'</td>
+							<td>'.$rows['pago_fecharegistro'].'</td>
+							<td>'.$rows['pago_periodo'].'</td>
+							<td>'.$rows['pago_talla'].'</td>
+							<td>'.$rows['pago_valor'].'</td>
+							<td>'.$rows['pago_saldo'].'</td>
+							<td>'.$rows['pago_recibo'].'</td>							
+							<td>'.$estado.'</td>
+							<td>
+								<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
+									<input type="hidden" name="modulo_pagos" value="eliminar">
+									<input type="hidden" name="pago_id" value="'.$rows['pago_id'].'">						
+									<button type="submit" class="btn float-right btn-danger btn-sm " style="margin-right: 5px;" '.$eliminarpago.'>Eliminar</button>
+								</form>							
+
+								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
+								'.$btnPagar.'
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
 							</td>
 						</tr>';	
 				}else{
@@ -1606,7 +1629,7 @@
 						<td>'.$rows['pago_periodo'].'</td>
 						<td>'.$rows['pago_valor'].'</td>
 						<td>'.$rows['pago_saldo'].'</td>
-						<td>'.$rows['pago_recibo'].'</td>
+						<td>'.$rows['pago_recibo'].'</td>						
 						<td>'.$estado.'</td>
 						<td>
 							<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
@@ -1615,9 +1638,9 @@
 								<button type="submit" class="btn float-right btn-danger btn-sm " style="margin-right: 5px;" '.$eliminarpago.'>Eliminar</button>
 							</form>							
 
-							<a href="'.APP_URL.'pagosUniformeUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
+							<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
 							'.$btnPagar.'
-							<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" >Recibo</a>
+							<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
 						</td>
 					</tr>';	
 				}
@@ -1696,9 +1719,10 @@
 
 		public function BuscarPago($pagoid){
 		
-			$consulta_datos="SELECT  R.catalogo_descripcion RUBRO, P.* 
+			$consulta_datos="SELECT  R.catalogo_descripcion RUBRO, T.torneo_nombre, P.* 
 					FROM alumno_pago P	
-						INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 				
+						INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid
+						LEFT JOIN torneo_torneo T ON T.torneo_id = P.pago_campeonatoid		
 					WHERE P.pago_id = ".$pagoid;	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
@@ -1905,8 +1929,9 @@
 				$estado = "C";
 			}
 			
+			
 			# Verificando campos obligatorios #
-			if($pago_fecha=="" || $pago_fecharegistro=="" || $pago_periodo=="" || $pago_valor=="" || $pago_formapagoid=="" ){
+			if($pago_fecha=="" || $pago_fecharegistro=="" || $pago_valor=="" || $pago_formapagoid=="" ){
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
@@ -1952,18 +1977,39 @@
 						"campo_nombre"=>"pago_fecharegistro",
 						"campo_marcador"=>":Fecharegistro",
 						"campo_valor"=>$pago_fecharegistro
-					],
-					[
-						"campo_nombre"=>"pago_periodo",
-						"campo_marcador"=>":Periodo",
-						"campo_valor"=>$pago_periodo
-					],
+					],					
 					[
 						"campo_nombre"=>"pago_estado",
 						"campo_marcador"=>":Estado",
 						"campo_valor"=> $estado
 					]
 				];
+
+				# Verificando si el pago es por Campeonato #
+				if($datos['pago_rubroid'] == 'RPC'){
+					$pago_campeonatoid = $this->limpiarCadena($_POST['pago_campeonatoid']);
+					if($pago_campeonatoid==""){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Ocurrió un error inesperado",
+							"texto"=>"No has seleccionado el campeonato al que pertenece el pago",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}else{
+						$pago_datos_reg[]=[
+							"campo_nombre"=>"pago_campeonatoid",
+							"campo_marcador"=>":Campeonatoid",
+							"campo_valor"=>$pago_campeonatoid
+						];
+					}
+				}else{
+					$pago_datos_reg[]=[						
+						"campo_nombre"=>"pago_periodo",
+						"campo_marcador"=>":Periodo",
+						"campo_valor"=>$pago_periodo					
+					];
+				}
 			
 			}ELSE{
 				# Creando directorio #
@@ -2039,56 +2085,13 @@
 				if(is_file($img_dir.$datos['pago_archivo']) && $datos['pago_archivo']!=$foto){
 					chmod($img_dir.$datos['pago_archivo'], 0777);
 					unlink($img_dir.$datos['pago_archivo']);
-				}				
+				}	
 				
-				$pago_datos_reg=[					
-					[
-						"campo_nombre"=>"pago_formapagoid",
-						"campo_marcador"=>":Formapagoid",
-						"campo_valor"=>$pago_formapagoid
-					],			
-								
-					[
-						"campo_nombre"=>"pago_valor",
-						"campo_marcador"=>":Valor",
-						"campo_valor"=>$pago_valor
-					],
-					[
-						"campo_nombre"=>"pago_saldo",
-						"campo_marcador"=>":Saldo",
-						"campo_valor"=>$pago_saldo
-					],		
-					[
-						"campo_nombre"=>"pago_concepto",
-						"campo_marcador"=>":Concepto",
-						"campo_valor"=>$pago_concepto
-					],
-					[
-						"campo_nombre"=>"pago_fecha",
-						"campo_marcador"=>":Fecha",
-						"campo_valor"=>$pago_fecha
-					],				
-					[
-						"campo_nombre"=>"pago_fecharegistro",
-						"campo_marcador"=>":Fecharegistro",
-						"campo_valor"=>$pago_fecharegistro
-					],
-					[
-						"campo_nombre"=>"pago_periodo",
-						"campo_marcador"=>":Periodo",
-						"campo_valor"=>$pago_periodo
-					],
-					[
-						"campo_nombre"=>"pago_estado",
-						"campo_marcador"=>":Estado",
-						"campo_valor"=>$estado
-					],
-					[
+				$pago_datos_reg[]=[						
 						"campo_nombre"=>"pago_archivo",
 						"campo_marcador"=>":Imagenpago",
-						"campo_valor"=>$foto
-					]
-				];
+						"campo_valor"=>$foto					
+					];
 			}
 
 			$condicion=[
