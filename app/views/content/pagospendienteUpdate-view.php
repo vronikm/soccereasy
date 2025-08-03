@@ -329,7 +329,7 @@
 	<!--script src="app/views/dist/js/main.js" ></script-->
 	
 	<!-- fileinput -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
+	<!--script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script-->
     
 	<!-- Page specific script -->
 	<script>

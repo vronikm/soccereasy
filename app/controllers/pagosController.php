@@ -261,15 +261,19 @@
 			return $option;
 		}
 
-		public function listarCampeonatos(){
+		public function listarCampeonatos($torneo_id = null){
 			$option="";
 
 			$consulta_datos="select torneo_id, torneo_nombre from torneo_torneo where torneo_estado = 'A'";	
 					
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
-			foreach($datos as $rows){			
-				$option.='<option value='.$rows['torneo_id'].'>'.$rows['torneo_nombre'].'</option>';					
+			foreach($datos as $rows){	
+				if($torneo_id == $rows['torneo_id']){	
+					$option.='<option value='.$rows['torneo_id'].' selected="selected">'.$rows['torneo_nombre'].'</option>';
+				}else{		
+					$option.='<option value='.$rows['torneo_id'].'>'.$rows['torneo_nombre'].'</option>';					
+				}
 			}
 			return $option;
 		}
@@ -1120,18 +1124,21 @@
 		}
 
 		public function registrarPagoPendiente(){
+			
 			# Almacenando datos#
 			$transaccion_pagoid			= $this->limpiarCadena($_POST['pago_id']);
 			$total						= $this->limpiarCadena($_POST['pago_total']);
 			$transaccion_valorcalculado	= $this->limpiarCadena($_POST['pago_saldo']);
 			$transaccion_fecha			= $this->limpiarCadena($_POST['pago_fecha']);
 			$transaccion_fecharegistro	= $this->limpiarCadena($_POST['pago_fecharegistro']);
-			$transaccion_periodo 		= $this->limpiarCadena($_POST['pago_periodo']);			
+			//$transaccion_periodo 		= $this->limpiarCadena($_POST['pago_periodo']);			
 			$transaccion_valor 			= $_POST['pago_valor'];
 			$transaccion_formapagoid 	= $this->limpiarCadena($_POST['pago_formapagoid']);
 			$transaccion_concepto 		= $this->limpiarCadena($_POST['pago_concepto']);			
 			$pago_rubro					= $this->limpiarCadena($_POST['pago_rubro']);
 			$estado 					= "C";
+
+			$transaccion_periodo = isset($_POST['pago_periodo']) && !empty(trim($_POST['pago_periodo'])) ? $this->limpiarCadena($_POST['pago_periodo']) : date("Y");
 
 			// Actualizar saldo del rubro				
 			$saldo = $transaccion_valorcalculado - $transaccion_valor;
@@ -1144,7 +1151,7 @@
 			}
 			
 			# Verificando campos obligatorios #
-		    if($transaccion_fecha=="" || $transaccion_fecharegistro=="" || $transaccion_periodo=="" || $transaccion_valorcalculado=="" || $transaccion_valor=="" ){
+		    if($transaccion_fecha=="" || $transaccion_fecharegistro=="" || $transaccion_valorcalculado=="" || $transaccion_valor=="" ){
 		    	$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
@@ -1489,14 +1496,20 @@
 				$estado = ' Justificado';
 				$class = 'class="text-primary"';
 			}
+
+			if ($rows['pago_archivo']!=""){
+					$imagen = APP_URL.'app/views/imagenes/pagos/'.$rows['pago_archivo'];
+			}else{
+				$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
+			}
 				
 			$tabla.='
 				<tr '.$class.'>
 					<td>'.$rows['fila_numero'].'</td>
 					<td>'.$rows['transaccion_fecha'].'</td>
 					<td>'.$rows['transaccion_periodo'].'</td>
-					<td>'.$rows['transaccion_valorcalculado'].'</td>					
-					<td>'.$rows['transaccion_valor'].'</td>			
+					<td>'.$rows['transaccion_valorcalculado'].'</td>	
+					<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['transaccion_valor'].'</a></td>				
 					<td>'.$rows['transaccion_recibo'].'</td>	
 					<td>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
@@ -1506,7 +1519,7 @@
 						</form>							
 
 						<a href="'.APP_URL.'pagospendienteUpdate/'.$rows['transaccion_id'].'/" class="btn float-right btn-success btn-sm" style="margin-right: 5px;">Editar</a>
-						<a href="'.APP_URL.'pagospendienteRecibo/'.$rows['transaccion_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;">Recibo</a>
+						<a href="'.APP_URL.'pagospendienteRecibo/'.$rows['transaccion_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
 					</td>
 				</tr>';	
 			}
@@ -1553,6 +1566,12 @@
 				}else{
 					$eliminarpago="";
 				}
+
+				if ($rows['pago_archivo']!=""){
+					$imagen = APP_URL.'app/views/imagenes/pagos/'.$rows['pago_archivo'];
+				}else{
+					$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
+				}
 					
 				if($rubro == 'RPE'){
 					$tabla.='
@@ -1560,7 +1579,7 @@
 							<td>'.$rows['fila_numero'].'</td>
 							<td>'.$rows['pago_fecharegistro'].'</td>
 							<td>'.$rows['pago_periodo'].'</td>								
-							<td>'.$rows['pago_valor'].'</td>
+							<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['pago_valor'].'</a></td>
 							<td>'.$rows['pago_saldo'].'</td>						
 							<td>'.$rows['pago_recibo'].'</td>								
 							<td>'.$estado.'</td>
@@ -1573,7 +1592,7 @@
 
 								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
 								'.$btnPagar.'
-								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank" target="_blank">Recibo</a>
 							</td>
 						</tr>';	
 				}elseif($rubro == 'RPC'){
@@ -1582,7 +1601,7 @@
 							<td>'.$rows['fila_numero'].'</td>
 							<td>'.$rows['pago_fecharegistro'].'</td>							
 							<td>'.$rows['torneo_nombre'].'</td>							
-							<td>'.$rows['pago_valor'].'</td>
+							<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['pago_valor'].'</a></td>
 							<td>'.$rows['pago_saldo'].'</td>						
 							<td>'.$rows['pago_recibo'].'</td>
 							<td>'.$estado.'</td>
@@ -1595,7 +1614,7 @@
 
 								<a href="'.APP_URL.'pagosUpdate/'.$rows['pago_id'].'/" class="btn float-right btn-success btn-sm '.$eliminarpago.'" style="margin-right: 5px;" >Editar</a>
 								'.$btnPagar.'
-								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank">Recibo</a>
+								<a href="'.APP_URL.'pagosRecibo/'.$rows['pago_id'].'/" class="btn float-right btn-secondary btn-sm" style="margin-right: 5px;" target="_blank" target="_blank">Recibo</a>
 							</td>
 						</tr>';	
 				}elseif($rubro == 'RNU'){
@@ -1605,7 +1624,7 @@
 							<td>'.$rows['pago_fecharegistro'].'</td>
 							<td>'.$rows['pago_periodo'].'</td>
 							<td>'.$rows['pago_talla'].'</td>
-							<td>'.$rows['pago_valor'].'</td>
+							<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['pago_valor'].'</a></td>
 							<td>'.$rows['pago_saldo'].'</td>
 							<td>'.$rows['pago_recibo'].'</td>							
 							<td>'.$estado.'</td>
@@ -1627,7 +1646,7 @@
 						<td>'.$rows['fila_numero'].'</td>
 						<td>'.$rows['pago_fecharegistro'].'</td>
 						<td>'.$rows['pago_periodo'].'</td>
-						<td>'.$rows['pago_valor'].'</td>
+						<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['pago_valor'].'</a></td>
 						<td>'.$rows['pago_saldo'].'</td>
 						<td>'.$rows['pago_recibo'].'</td>						
 						<td>'.$estado.'</td>
@@ -1775,7 +1794,7 @@
 		
 			$consulta_datos="SELECT sede_nombre, R.catalogo_descripcion RUBRO, F.catalogo_descripcion FORMAPAGO, 
 					concat(E.repre_primernombre, ' ', E.repre_segundonombre, ' ', E.repre_apellidopaterno, ' ', E.repre_apellidomaterno) REPRESENTANTE,
-					E.repre_correo CORREO_REP,
+					E.repre_correo CORREO_REP, T.torneo_nombre TORNEO,
 					P.*, A.*, PT.* 
 				FROM alumno_pago P	
 					INNER JOIN sujeto_alumno A ON A.alumno_id = P.pago_alumnoid 
@@ -1783,7 +1802,8 @@
 					INNER JOIN general_sede S on S.sede_id = A.alumno_sedeid 
 					LEFT JOIN alumno_representante E on E.repre_id = A.alumno_repreid
  					INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = PT.transaccion_formapagoid				
+					INNER JOIN general_tabla_catalogo F ON F.catalogo_valor = PT.transaccion_formapagoid	
+					LEFT JOIN torneo_torneo T ON T.torneo_id = P.pago_campeonatoid			
 				WHERE PT.transaccion_id = ".$transaccion_id;	
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
@@ -1911,8 +1931,7 @@
 
 			# Almacenando datos#
 			$pago_fecha			= $this->limpiarCadena($_POST['pago_fecha']);
-			$pago_fecharegistro	= $this->limpiarCadena($_POST['pago_fecharegistro']);
-			$pago_periodo 		= $this->limpiarCadena($_POST['pago_periodo']);
+			$pago_fecharegistro	= $this->limpiarCadena($_POST['pago_fecharegistro']);			
 			$pago_valor 		= $_POST['pago_valor'];
 			$pago_saldo 		= $_POST['pago_saldo'];
 			$pago_formapagoid 	= $this->limpiarCadena($_POST['pago_formapagoid']);
@@ -1984,32 +2003,7 @@
 						"campo_valor"=> $estado
 					]
 				];
-
-				# Verificando si el pago es por Campeonato #
-				if($datos['pago_rubroid'] == 'RPC'){
-					$pago_campeonatoid = $this->limpiarCadena($_POST['pago_campeonatoid']);
-					if($pago_campeonatoid==""){
-						$alerta=[
-							"tipo"=>"simple",
-							"titulo"=>"Ocurrió un error inesperado",
-							"texto"=>"No has seleccionado el campeonato al que pertenece el pago",
-							"icono"=>"error"
-						];
-						return json_encode($alerta);
-					}else{
-						$pago_datos_reg[]=[
-							"campo_nombre"=>"pago_campeonatoid",
-							"campo_marcador"=>":Campeonatoid",
-							"campo_valor"=>$pago_campeonatoid
-						];
-					}
-				}else{
-					$pago_datos_reg[]=[						
-						"campo_nombre"=>"pago_periodo",
-						"campo_marcador"=>":Periodo",
-						"campo_valor"=>$pago_periodo					
-					];
-				}
+				
 			
 			}ELSE{
 				# Creando directorio #
@@ -2092,6 +2086,33 @@
 						"campo_marcador"=>":Imagenpago",
 						"campo_valor"=>$foto					
 					];
+			}
+
+			# Verificando si el pago es por Campeonato #
+			if($datos['pago_rubroid'] == 'RPC'){
+				$pago_campeonatoid = $this->limpiarCadena($_POST['pago_campeonatoid']);
+				if($pago_campeonatoid==""){
+					$alerta=[
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error inesperado",
+						"texto"=>"No has seleccionado el campeonato al que pertenece el pago",
+						"icono"=>"error"
+					];
+					return json_encode($alerta);
+				}else{
+					$pago_datos_reg[]=[
+						"campo_nombre"=>"pago_campeonatoid",
+						"campo_marcador"=>":Campeonatoid",
+						"campo_valor"=>$pago_campeonatoid
+					];
+				}
+			}else{
+				$pago_periodo = $this->limpiarCadena($_POST['pago_periodo']);
+				$pago_datos_reg[]=[						
+					"campo_nombre"=>"pago_periodo",
+					"campo_marcador"=>":Periodo",
+					"campo_valor"=>$pago_periodo					
+				];
 			}
 
 			$condicion=[

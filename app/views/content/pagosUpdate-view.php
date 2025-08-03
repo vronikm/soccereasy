@@ -13,7 +13,8 @@
 			$imagen = APP_URL.'app/views/imagenes/pagos/'.$datos['pago_archivo'];
 		}else{
 			$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
-		} 
+		}
+
 	}else{
 		include "<?php echo APP_URL; ?>/app/views/inc/error_alert.php";
 	}
@@ -58,6 +59,10 @@
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
     
+		<!-- Ekko Lightbox -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
+
+	
 	<style>
 		.errorMSG {
 		  display: none;
@@ -173,7 +178,7 @@
 								<div class="card-body">
 									<div class="tab-content">
 										<div class="active tab-pane" id="pension"> 
-											<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
+										<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
 											<input type="hidden" name="modulo_pagos" value="actualizar">											
 											<input type="hidden" name="pago_id" value="<?php echo $pagoid; ?>">
 																	<!-- Post -->
@@ -203,12 +208,30 @@
 															<!-- /.input group -->
 														</div>								
 													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<label for="pago_periodo">Periodo(mes/año)</label>															
-															<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="<?php echo $datos['pago_periodo']; ?>" required>															
-														</div>								
-													</div>
+
+													<?php
+														if($datos['pago_rubroid'] == 'RPC'){
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																	<label for="pago_campeonatoid">Campeonato</label>
+																	<select id="pago_campeonatoid" class="form-control select2" name="pago_campeonatoid">																									
+																		'.$insAlumno->listarCampeonatos($datos['pago_campeonatoid']).'
+																	</select>	
+																	</div>
+																</div>';
+														}else{
+															echo '
+																<div class="col-md-4">
+																	<div class="form-group">
+																		<label for="pago_periodo">Periodo(mes/año)</label>															
+																		<input type="text" class="form-control" id="pago_periodo" name="pago_periodo" value="'.$datos['pago_periodo'].'" required>															
+																	</div>								
+																</div>';
+														}
+													?>
+													
+													
 													<div class="col-md-4">
 														<div class="form-group">
 															<label for="pago_valor">Valor</label>
@@ -316,6 +339,11 @@
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
 		
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
+
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>    
+
+	<!-- Ekko Lightbox -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
 
 	<!--script src="app/views/dist/js/main.js" ></script-->
     
