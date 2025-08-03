@@ -59,7 +59,8 @@
 							usuario_tienebloqueo,
 							usuario_usuario,
 							usuario_rolid,
-							usuario_clave
+							usuario_clave,
+							usuario_id
 					FROM    seguridad_usuario
 					LEFT    JOIN sujeto_empleado ON empleado_id   = usuario_empleadoid
 					LEFT    JOIN general_sede    ON empleado_sedeid = sede_id
@@ -96,6 +97,7 @@
 
 			$_SESSION = [
 				'usuario'        => $user['usuario_usuario'],
+				'usuarioid'      => $user['usuario_id'],
 				'rol'            => (int)$user['usuario_rolid'],
 				'foto'           => $user['empleado_foto'],
 				'sede'           => $user['sede'],

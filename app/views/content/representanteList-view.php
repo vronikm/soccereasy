@@ -24,7 +24,7 @@
 
 ?>
 
-
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8">
@@ -154,8 +154,8 @@
 									<th>Nombres</th>
 									<th>Apellidos</th>	
 									<th>Representado</th>		
-									<th style width="141px">Protección de datos</th>								
-									<th>Operaciones</th>
+									<th style width="140px">Protección de datos</th>								
+									<th style width="160px">Operaciones</th>
 								</tr>
 							</thead>
 							<tbody>
