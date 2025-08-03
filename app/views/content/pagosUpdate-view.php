@@ -6,7 +6,7 @@
 
 	$datos=$insAlumno->BuscarPago($pagoid);
 	
-	if($datos->rowCount()==1){
+	if($datos->rowCount()>0){
 		$datos=$datos->fetch(); 
 
 		if ($datos['pago_archivo']!=""){

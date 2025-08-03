@@ -1508,8 +1508,8 @@
 					<td>'.$rows['fila_numero'].'</td>
 					<td>'.$rows['transaccion_fecha'].'</td>
 					<td>'.$rows['transaccion_periodo'].'</td>
-					<td>'.$rows['transaccion_valorcalculado'].'</td>	
 					<td><a href="'.$imagen.'" data-toggle="lightbox" data-title="Pago" data-gallery="gallery">'.$rows['transaccion_valor'].'</a></td>				
+					<td>'.$rows['transaccion_valorcalculado'].'</td>	
 					<td>'.$rows['transaccion_recibo'].'</td>	
 					<td>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
@@ -1738,7 +1738,7 @@
 
 		public function BuscarPago($pagoid){
 		
-			$consulta_datos="SELECT  R.catalogo_descripcion RUBRO, T.torneo_nombre, P.* 
+			$consulta_datos="SELECT R.catalogo_descripcion RUBRO, T.torneo_nombre, P.* 
 					FROM alumno_pago P	
 						INNER JOIN general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid
 						LEFT JOIN torneo_torneo T ON T.torneo_id = P.pago_campeonatoid		

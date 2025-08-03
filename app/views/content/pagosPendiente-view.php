@@ -345,9 +345,9 @@
 												<tr>
 													<th>No</th>
 													<th>Fecha</th>
-													<th>Periodo</th>
-													<th>Saldo</th>
-													<th>Pago</th>											
+													<th>Periodo</th>													
+													<th>Pago</th>	
+													<th>Saldo</th>										
 													<th>Recibo</th>
 													<th style="width:250px;">Opciones</th>																
 												</tr>

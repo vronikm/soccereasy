@@ -50,9 +50,7 @@
 	<!-- BS Stepper -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/css/bs-stepper.min.css">
 	
-	<!-- Ekko Lightbox -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
-	
+		
 	<!-- Theme style -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 
@@ -62,6 +60,9 @@
 
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
+
+	<!-- Ekko Lightbox -->
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.css">
 
 	<style>
 		.errorMSG {
@@ -316,10 +317,7 @@
 	<!-- Bootstrap Switch -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 	<!-- BS-Stepper -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-
-	<!-- Ekko Lightbox -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bs-stepper/js/bs-stepper.min.js"></script>	
 	
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
@@ -329,7 +327,10 @@
 	<!--script src="app/views/dist/js/main.js" ></script-->
 	
 	<!-- fileinput -->
-	<!--script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script-->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
+
+	<!-- Ekko Lightbox -->
+	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
     
 	<!-- Page specific script -->
 	<script>
