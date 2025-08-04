@@ -29,7 +29,8 @@
                         }else{
                             echo '<img class="img-circle elevation-2" alt="User Image" src="'.APP_URL.'app/views/dist/img/default.png">';
                         }
-                    ?>                                    
+                    ?>       
+                    <span ><?php echo  $_SESSION['usuario'];?></span>                             
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-xs dropdown-menu-right">              
