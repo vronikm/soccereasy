@@ -213,7 +213,7 @@
 					<!-- /.col -->
 					<div class="col-md-9">
 						<div class="card card-primary card-outline">
-							<div class="card-body p-0">
+							<div class="card-body p-0">		
 								<!-- THE CALENDAR -->
 								<div id="calendar">
 									<?php 
