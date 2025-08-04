@@ -1497,8 +1497,8 @@
 				$class = 'class="text-primary"';
 			}
 
-			if ($rows['pago_archivo']!=""){
-					$imagen = APP_URL.'app/views/imagenes/pagos/'.$rows['pago_archivo'];
+			if ($rows['transaccion_archivo']!=""){
+					$imagen = APP_URL.'app/views/imagenes/pagos/'.$rows['transaccion_archivo'];
 			}else{
 				$imagen = APP_URL.'app/views/dist/img/sinpago.jpg';
 			}
