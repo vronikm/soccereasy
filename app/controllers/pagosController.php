@@ -1514,7 +1514,8 @@
 					<td>
 						<form class="FormularioAjax" action="'.APP_URL.'app/ajax/pagosAjax.php" method="POST" autocomplete="off" >
 							<input type="hidden" name="modulo_pagos" value="eliminarpendiente">
-							<input type="hidden" name="transaccion_id" value="'.$rows['transaccion_id'].'">						
+							<input type="hidden" name="transaccion_id" value="'.$rows['transaccion_id'].'">	
+							<input type="hidden" name="transaccion_pagoid" value="'.$rows['transaccion_pagoid'].'">						
 							<button type="submit" class="btn float-right btn-danger btn-sm" style="margin-right: 5px;">Eliminar</button>
 						</form>							
 
@@ -1702,8 +1703,25 @@
 			return json_encode($alerta);
 		}
 
-		public function eliminarPagoPendiente(){			
+		public function eliminarPagoPendiente(){	
+
 			$transaccion_id=$this->limpiarCadena($_POST['transaccion_id']);
+			$transaccion_pagoid=$this->limpiarCadena($_POST['transaccion_pagoid']);
+
+			$datos = $this->ejecutarConsulta("SELECT * FROM alumno_pago_transaccion WHERE transaccion_id = '$transaccion_id'");			
+			if($datos->rowCount()<=0){
+		        $alerta=[
+					"tipo"=>"simple",
+					"titulo"=>"Ocurrió un error inesperado",
+					"texto"=>"No hemos encontrado el pago en el sistema: ".$transaccion_id,
+					"icono"=>"error"
+				];
+				return json_encode($alerta);
+		    }else{
+		    	$datos=$datos->fetch();				
+		    }
+
+			
 			$pago_datos=[
 				[
 					"campo_nombre"=>"transaccion_estado",
@@ -1721,15 +1739,31 @@
 			if($this->actualizarDatos("alumno_pago_transaccion", $pago_datos, $condicion)){
 				$alerta=[
 					"tipo"=>"recargar",
-					"titulo"=>"Usuario actualizado",
-					"texto"=>"La pensión fue eliminada correctamente",
+					"titulo"=>"Pago eliminado",
+					"texto"=>"El rubro fue eliminado correctamente",
 					"icono"=>"success"
 				];
+
+				$check_pago=$this->ejecutarConsulta("SELECT pago_valor, pago_saldo FROM alumno_pago WHERE pago_id = ".$transaccion_pagoid);
+				//$check_pago=$this->seleccionarDatos("Unico","general_escuela","escuela_id","1");
+				if($check_pago->rowCount()>0){				
+					foreach($check_pago as $rows){	
+						$pago_saldo = $rows["pago_saldo"]; 	
+						$pago_valor = $rows["pago_valor"];
+					}					
+				}			
+				// Actualizar saldo del rubro				
+				$pago_saldo += $datos["transaccion_valor"]; 	
+				$pago_valor -= $datos["transaccion_valor"];
+
+				// Actualizar saldo y valor
+				$this->ejecutarConsulta("UPDATE alumno_pago SET pago_valor = ".$pago_valor.", pago_saldo = ".$pago_saldo.", pago_estado = 'P' WHERE pago_id = ".$transaccion_pagoid);
+			
 			}else{
 				$alerta=[
 					"tipo"=>"simple",
 					"titulo"=>"Ocurrió un error inesperado",
-					"texto"=>"No hemos podido eliminar la pensión, por favor intente nuevamente",
+					"texto"=>"No hemos podido eliminar el pago, por favor intente nuevamente",
 					"icono"=>"error"
 				];
 			}
