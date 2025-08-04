@@ -1166,8 +1166,8 @@
 
 			if($this->actualizarDatos("seguridad_usuario",$usuario_datos_up,$condicion)){		
 				$alerta=[					
-					"tipo"=>"Toast_Success",
-					"titulo"=>"Usuario actualizado",
+					"tipo"=>"Toast_Success_simple",
+					"titulo"=>"Contraseña actualizada",
 					"texto"=>"la contraseña se actualizó correctamente",
 					"icono"=>"success"
 				];
