@@ -1535,6 +1535,7 @@
 				LEFT JOIN (
 					SELECT COUNT(1)PAGOS_PENDIENTES, transaccion_pagoid 
 					FROM alumno_pago_transaccion
+					where transaccion_estado NOT IN ('E')
 					GROUP BY transaccion_pagoid
 				)P ON P.transaccion_pagoid = A.pago_id 
 				LEFT JOIN torneo_torneo T ON T.torneo_id = A.pago_campeonatoid 
