@@ -1479,24 +1479,24 @@
 			$datos = $datos->fetchAll();
 			foreach($datos as $rows){
 				$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
-			switch ($rows['asistencia_dia']) {
-				case 'J':
-					$btn_j = 'btn-info';
-					break;
-				case 'F':
-					$btn_f = 'btn-info';
-					break;
-				case 'A':
-					$btn_a = 'btn-info';
-					break;
-				case 'P':
-					$btn_p = 'btn-info';
-					break;
-				default:
-					$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
-					$rows['asistencia_dia'] = 'NR';
-					break;
-			}	
+				switch ($rows['asistencia_dia']) {
+					case 'J':
+						$btn_j = 'btn-info';
+						break;
+					case 'F':
+						$btn_f = 'btn-info';
+						break;
+					case 'A':
+						$btn_a = 'btn-info';
+						break;
+					case 'P':
+						$btn_p = 'btn-info';
+						break;
+					default:
+						$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
+						$rows['asistencia_dia'] = 'NR';
+						break;
+				}	
 				
 				$tabla .= '					
 							<tr>
