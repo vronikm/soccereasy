@@ -1289,6 +1289,8 @@
 			return $tabla;			
 		}
 
+		
+		/*
 		public function ListadoAlumnos($horarioid, $fecha){			
 			$tabla="";
 			
@@ -1412,6 +1414,106 @@
 			}
 			return $tabla;			
 		}
+		*/
+
+		public function ListadoAlumnos($horarioid, $fecha){			
+			$tabla="";
+			
+			$dateTime = new DateTime($fecha);
+			$fecha_formateada = $dateTime->format("d-m-Y");
+
+			$anio 		= date('Y', strtotime($fecha)); // Obtiene el año
+			$mes 		= date('m', strtotime($fecha));  // Obtiene el mes
+			$dia 		= date('d', strtotime($fecha)); // Obtiene el día		
+			
+			$consulta_datos = "SELECT 
+									A.alumno_id, A.alumno_identificacion, 
+									CONCAT(A.alumno_primernombre, ' ',A.alumno_segundonombre) AS NOMBRES,  
+									CONCAT(A.alumno_apellidopaterno, ' ',A.alumno_apellidomaterno) AS APELLIDOS,
+									YEAR(A.alumno_fechanacimiento) AS CATEGORIA, H.*,
+									CASE 
+										WHEN $dia = 1 THEN E.asistencia_D01
+										WHEN $dia = 2 THEN E.asistencia_D02
+										WHEN $dia = 3 THEN E.asistencia_D03
+										WHEN $dia = 4 THEN E.asistencia_D04
+										WHEN $dia = 5 THEN E.asistencia_D05
+										WHEN $dia = 6 THEN E.asistencia_D06
+										WHEN $dia = 7 THEN E.asistencia_D07
+										WHEN $dia = 8 THEN E.asistencia_D08
+										WHEN $dia = 9 THEN E.asistencia_D09
+										WHEN $dia = 10 THEN E.asistencia_D10
+										WHEN $dia = 11 THEN E.asistencia_D11
+										WHEN $dia = 12 THEN E.asistencia_D12
+										WHEN $dia = 13 THEN E.asistencia_D13
+										WHEN $dia = 14 THEN E.asistencia_D14
+										WHEN $dia = 15 THEN E.asistencia_D15
+										WHEN $dia = 16 THEN E.asistencia_D16
+										WHEN $dia = 17 THEN E.asistencia_D17
+										WHEN $dia = 18 THEN E.asistencia_D18
+										WHEN $dia = 19 THEN E.asistencia_D19
+										WHEN $dia = 20 THEN E.asistencia_D20
+										WHEN $dia = 21 THEN E.asistencia_D21
+										WHEN $dia = 22 THEN E.asistencia_D22
+										WHEN $dia = 23 THEN E.asistencia_D23
+										WHEN $dia = 24 THEN E.asistencia_D24
+										WHEN $dia = 25 THEN E.asistencia_D25
+										WHEN $dia = 26 THEN E.asistencia_D26
+										WHEN $dia = 27 THEN E.asistencia_D27
+										WHEN $dia = 28 THEN E.asistencia_D28
+										WHEN $dia = 29 THEN E.asistencia_D29
+										WHEN $dia = 30 THEN E.asistencia_D30
+										WHEN $dia = 31 THEN E.asistencia_D31
+									END AS asistencia_dia
+
+								FROM asistencia_asignahorario H
+									INNER JOIN sujeto_alumno A ON A.alumno_id = H.asignahorario_alumnoid	
+									LEFT JOIN (
+										SELECT * 
+										FROM asistencia_asistencia 
+										WHERE asistencia_aniomes = $anio$mes
+									) E ON E.asistencia_alumnoid = H.asignahorario_alumnoid								
+								WHERE H.asignahorario_horarioid = $horarioid AND A.alumno_estado = 'A'
+								ORDER BY APELLIDOS";
+			
+			$datos = $this->ejecutarConsulta($consulta_datos);
+			$datos = $datos->fetchAll();
+			foreach($datos as $rows){
+				$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
+				switch ($rows['asistencia_dia']) {
+					case 'J':
+						$btn_j = 'btn-info';
+						break;
+					case 'F':
+						$btn_f = 'btn-info';
+						break;
+					case 'A':
+						$btn_a = 'btn-info';
+						break;
+					case 'P':
+						$btn_p = 'btn-info';
+						break;
+					default:
+						$btn_j = $btn_f = $btn_a = $btn_p = 'btn-dark';
+						$rows['asistencia_dia'] = 'NR';
+						break;
+				}	
+				
+				$tabla .= '					
+							<tr>
+								<td>'.$rows['CATEGORIA'].'</td>
+								<td>'.$rows['APELLIDOS'].' '.$rows['NOMBRES'].'</td>
+								<td style="width: 220px;">
+									<button type="button" class="btn '.$btn_p.' btn-xs btn-asistencia" data-estado="P" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Presente</button>
+									<button type="button" class="btn '.$btn_a.' btn-xs btn-asistencia" data-estado="A" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Atraso</button>
+									<button type="button" class="btn '.$btn_f.' btn-xs btn-asistencia" data-estado="F" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Falta</button>
+									<button type="button" class="btn '.$btn_j.' btn-xs btn-asistencia" data-estado="J" data-alumnoid="'.$rows['alumno_id'].'" data-fecha="'.$fecha_formateada.'">Justificado</button>								
+								</td>
+							</tr>';
+
+			}
+			return $tabla;			
+		}
+
 		public function BuscarHorarioSede($horario_id){
 			$consulta_datos="SELECT S.sede_nombre, H.* 
 								FROM asistencia_horario H

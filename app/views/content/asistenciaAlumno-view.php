@@ -69,19 +69,21 @@
 											echo '<input class="form-control" value="'.$fechahoy.'" disabled>';
 											echo '<input type="hidden" name="fecha" value="'.$fechahoy.'">';
 										}else{
-											echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>';
+											echo '<input type="date" class="form-control" id="fecha" name="fecha" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask value="'.$fechahoy.'" required>
+											  <span class="input-group-append">
+												<button type="submit" class="btn btn-info btn-flat">Generar lista</button>
+											</span>
+											';
 										}
 									?>							
-								</div>				
+								</div>								
 							</div>				
 						</li>
 					</div>
-					<div class="col-xm-6">
-						<li class="nav-item d-sm-inline-block">
-							<button type="submit" class="nav-link form-control btn-xs btn-info">Generar lista</button>											
-						</li>
-					</div>
+					
+					
 				</div>
+					
 				</form>	
 				
 			</ul>
@@ -122,7 +124,9 @@
 								<?php 
 									if(isset($_POST['fecha'])){												
 										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"],$fechahoy);		
-									}										
+									}else{
+										echo $insAlumno->ListadoAlumnos($horarioSede["horario_id"], date('Y-m-d'));		
+									}								
 								?>								
 							</tbody>	
 						</table>	
@@ -216,6 +220,46 @@
 			window.close();
 		}
     </script>
+
+	<script>
+		// NUEVO: Evento para Toma de Asistencia
+		$(document).on('click', '.btn-asistencia', function() {
+			var estado = $(this).data('estado');
+			var alumno_id = $(this).data('alumnoid');
+			var fecha = $(this).data('fecha');
+			var boton = $(this);
+
+			$.ajax({
+				type: 'POST',
+				url: '<?php echo APP_URL; ?>app/ajax/asistenciaAjax.php',
+				data: {
+					modulo_asistencia: 'asistencia',
+					estado: estado,
+					fecha: fecha,
+					alumno_id: alumno_id
+				},
+				beforeSend: function() {
+					boton.prop('disabled', true);
+				},
+				success: function(response) {
+					// Puedes mostrar un toast, cambiar color, etc.
+					$('.btn-asistencia[data-alumnoid="' + alumno_id + '"]').removeClass('btn-info').addClass('btn-dark'); // Reset buttons
+					boton.removeClass('btn-dark').addClass('btn-info'); // Highlight selected
+
+					// Si quieres mostrar un mensaje de éxito:
+					// alert("Asistencia guardada!");
+				},
+				error: function() {
+					alert('Error al registrar asistencia.');
+				},
+				complete: function() {
+					boton.prop('disabled', false);
+				}
+			});
+		});
+		
+	</script>
+
 
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/main.js" ></script>
