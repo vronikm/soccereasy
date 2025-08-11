@@ -37,7 +37,9 @@
 			}
 
 			# Verificando campos obligatorios #
-			if($empleado_tipopersonalid!="TPP"){
+			if($empleado_tipopersonalid == "TPP"){
+				$empleado_especialidadid = $this->limpiarCadena($_POST['empleado_especialidadid']);
+			}else{				
 				$empleado_especialidadid = "";
 			}
 
@@ -436,10 +438,10 @@
 			}
 
 			# Verificando campos obligatorios #
-			if($empleado_tipopersonalid!="TPP"){
-				$empleado_especialidadid = "";
+			if($empleado_tipopersonalid == "TPP"){
+				$empleado_especialidadid = $this->limpiarCadena($_POST['empleado_especialidadid']);
 			}else{				
-				$empleado_especialidadid	= $this->limpiarCadena($_POST['empleado_especialidadid']);
+				$empleado_especialidadid = "";
 			}
 
 			$empleado_datos_reg=[
