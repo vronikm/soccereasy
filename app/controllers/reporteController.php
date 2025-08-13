@@ -97,65 +97,52 @@
 			$tabla="";
 			$VALOR_PAGADO = 0;
 			$VALOR_PENDIENTE = 0;
-			$consulta_datos="SELECT IdLE, lugar_nombre, IFNULL(count(*),0) PagosReceptados, sum(VALOR_PAGADO) ValoRecaudado
-								from asistencia_lugar
-								inner join (SELECT sede_nombre SEDEALUMNO, A.alumno_identificacion IDENTIFICACION, alumno_id, LE.detalle_lugarid IdLE,
-												concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
-												pago_fecha FECHA_PAGO, 
-												pago_fecharegistro FECHA_REG_SISTEMA, 
-												pago_periodo PERIODO,  
-												R.catalogo_descripcion RUBRO,  
-												F.catalogo_descripcion FORMA_PAGO, 
-												((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))VALOR_PAGADO, 
-												IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) VALOR_PENDIENTE,
-												case IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
-											from alumno_pago P
-												inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
-												inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
-												inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid
-												inner join general_sede S on S.sede_id = alumno_sedeid 
-												left join (SELECT distinct detalle_lugarid, asignahorario_alumnoid 
-																	from asistencia_asignahorario
-																	left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
-																	left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
-																	where alumno_estado = 'A'
-																		and alumno_fechaingreso <= ' ".$fecha_fin."')LE on LE.asignahorario_alumnoid = alumno_id
-												LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
-												FROM alumno_pago_transaccion PT
-												WHERE PT.transaccion_estado = 'C'
-												GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
-												LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
-											where pago_estado <> 'E'
-												and pago_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
-											
-											union all 
-																		
-											SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION, alumno_id, LE.detalle_lugarid IdLE,
-												concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
-												transaccion_fecha FECHA_PAGO, 
-												transaccion_fecharegistro FECHA_REG_SISTEMA, 
-												transaccion_periodo PERIODO,  
-												R.catalogo_descripcion RUBRO,  
-												F.catalogo_descripcion FORMA_PAGO, 
-												transaccion_valor VALOR_PAGADO, 
-												transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
-												case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
-											from alumno_pago P
-												inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 							
-												inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
-												inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id								
-												inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
-												inner join general_sede S on S.sede_id = alumno_sedeid
-												left join (SELECT distinct detalle_lugarid, asignahorario_alumnoid 
-																from asistencia_asignahorario
-																left join asistencia_horario_detalle on detalle_horarioid = asignahorario_horarioid
-																left join sujeto_alumno on alumno_id = asignahorario_alumnoid 
-																where alumno_estado = 'A'
-																	and alumno_fechaingreso <= ' ".$fecha_fin."')LE on LE.asignahorario_alumnoid = alumno_id
-											where transaccion_estado <> 'E'
-												and transaccion_fecharegistro between ' ".$fecha_inicio." ' and ' ".$fecha_fin."')DR on DR.IdLE = lugar_id
-								WHERE lugar_estado = 'A'
-								GROUP by IdLE, lugar_nombre";
+			$consulta_datos="SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
+								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
+								pago_fecha FECHA_PAGO, 
+								pago_fecharegistro FECHA_REG_SISTEMA, 
+								pago_periodo PERIODO,  
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO, 
+								pago_concepto CONCEPTO,
+								((P.pago_saldo + P.pago_valor) - (IFNULL(PT.transaccion_valorcalculado, P.pago_saldo)))VALOR_PAGADO, 
+								IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) VALOR_PENDIENTE,
+								case IFNULL(PT.transaccion_valorcalculado, P.pago_saldo) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
+							from alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 
+								inner join general_tabla_catalogo F ON F.catalogo_valor = P.pago_formapagoid
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid
+								inner join general_sede S on S.sede_id = alumno_sedeid 
+								LEFT JOIN(SELECT COUNT(1) total, PT.transaccion_pagoid, MIN(PT.transaccion_id) IDT
+								FROM alumno_pago_transaccion PT
+								WHERE PT.transaccion_estado = 'C'
+								GROUP BY PT.transaccion_pagoid)T ON T.transaccion_pagoid = P.pago_id
+								LEFT JOIN alumno_pago_transaccion PT ON PT.transaccion_id  = T.IDT
+							where pago_estado <> 'E'
+								and pago_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+							
+							union all 
+														
+							SELECT sede_nombre SEDE, A.alumno_identificacion IDENTIFICACION,
+								concat(A.alumno_primernombre, ' ', A.alumno_segundonombre, ' ', A.alumno_apellidopaterno, ' ', A.alumno_apellidomaterno) ALUMNO,
+								transaccion_fecha FECHA_PAGO, 
+								transaccion_fecharegistro FECHA_REG_SISTEMA, 
+								transaccion_periodo PERIODO,  
+								R.catalogo_descripcion RUBRO,  
+								F.catalogo_descripcion FORMA_PAGO, 
+								transaccion_concepto CONCEPTO,
+								transaccion_valor VALOR_PAGADO, 
+								transaccion_valorcalculado - transaccion_valor VALOR_PENDIENTE,
+								case (transaccion_valorcalculado - transaccion_valor) when 0 then 'Cancelado' else 'Pendiente' end ESTADO_PAGO
+							from alumno_pago P
+								inner join general_tabla_catalogo R ON R.catalogo_valor = P.pago_rubroid 							
+								inner join sujeto_alumno A on A.alumno_id = P.pago_alumnoid 
+								inner join alumno_pago_transaccion T on T.transaccion_pagoid = P.pago_id								
+								inner join general_tabla_catalogo F ON F.catalogo_valor = T.transaccion_formapagoid 
+								inner join general_sede S on S.sede_id = alumno_sedeid
+							where transaccion_estado <> 'E'
+								and transaccion_fecha between ' ".$fecha_inicio." ' and ' ".$fecha_fin."'
+								ORDER BY FECHA_PAGO DESC";
 
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();

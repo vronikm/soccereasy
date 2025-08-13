@@ -4,20 +4,16 @@
 	$sede_id 	  = ($url[1] != "") ? $url[1] : 0;
 
 	if(isset($_POST['pago_fecha_inicio'])){
-		$fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
+		$rp_fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
 	} ELSE{
-		$fecha_inicio = $insRecibidos->fechaPagosReceptados($sede_id);
-		$fecha_inicio = $fecha_inicio->fetch(); 
-		$fecha_inicio = $fecha_inicio['FECHA_MAXIMA'];
+		$rp_fecha_inicio = date('Y-m-01'); // Primer día del mes actual;
 	}
 
 	if(isset($_POST['pago_fecha_fin'])){
-		$fecha_fin = $insRecibidos->limpiarCadena($_POST['pago_fecha_fin']);
+		$rp_fecha_fin = $insRecibidos->limpiarCadena($_POST['pago_fecha_fin']);
 	} ELSE{
-		$fecha_fin = $insRecibidos->fechaPagosReceptados($sede_id);
-		$fecha_fin = $fecha_fin->fetch(); 
-		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
-	}	
+		$rp_fecha_fin = date('Y-m-t');     // Último día del mes actual
+	}
 
 	$datos=$insRecibidos->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
 	if($datos->rowCount()==1){
@@ -103,7 +99,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_inicio" name="pago_fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $rp_fecha_inicio;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -115,7 +111,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
 										</div>
-										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $fecha_inicio;?> data-mask required>										
+										<input type="date" class="form-control" id="pago_fecha_fin" name="pago_fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" value=<?php echo $rp_fecha_fin;?> data-mask required>										
 									</div>
 									<!-- /.input group -->
 								</div>
@@ -163,9 +159,9 @@
 							<tbody>
 								<?php 
 									if($sede_id!=0){
-										echo $insRecibidos->listarPagos($fecha_inicio, $fecha_fin, $sede_id); 
+										echo $insRecibidos->listarPagos($rp_fecha_inicio, $rp_fecha_fin, $sede_id); 
 									}else{
-										echo $insRecibidos->listarPagosConsolidado($fecha_inicio, $fecha_fin); 
+										echo $insRecibidos->listarPagosConsolidado($rp_fecha_inicio, $rp_fecha_fin); 
 									}	
 								?>								
 							</tbody>
