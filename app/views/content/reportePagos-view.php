@@ -1,7 +1,7 @@
 <?php
 	use app\controllers\reporteController;
 	$insRecibidos = new reporteController();
-	$sede_id 	  = ($url[1] != "") ? $url[1] : 0;
+	$sede_id 	  = ($url[1] != "") ? $url[1] : "";
 
 	if(isset($_POST['pago_fecha_inicio'])){
 		$rp_fecha_inicio = $insRecibidos->limpiarCadena($_POST['pago_fecha_inicio']);
@@ -78,7 +78,7 @@
 
 		<!-- Section listado de alumnos -->
 		<section class="content">
-			<form action="<?php echo APP_URL."reportePagos/" ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
+			<form action="<?php echo APP_URL."reportePagos/".$sede_id ?>" method="POST" autocomplete="off" enctype="multipart/form-data" >			
 			<div class="container-fluid">
 				<div class="card card-default">
 					<div class="card-header">
@@ -158,7 +158,7 @@
 							</thead>
 							<tbody>
 								<?php 
-									if($sede_id!=0){
+									if($sede_id!=""){
 										echo $insRecibidos->listarPagos($rp_fecha_inicio, $rp_fecha_fin, $sede_id); 
 									}else{
 										echo $insRecibidos->listarPagosConsolidado($rp_fecha_inicio, $rp_fecha_fin); 
