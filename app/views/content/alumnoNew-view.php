@@ -15,7 +15,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo APP_NAME; ?> | Registro nuevo alumno</title>
-
+	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -256,7 +256,7 @@
 											</div>	 
 											<div class="col-md-3">
 												<div class="form-group">
-													<label for="alumno_genero">Sexo</label>
+													<label for="alumno_genero">Género</label>
 													<div class="form-check">
 														<input class="col-sm-1 form-check-input" type="radio" id="alumno_generoM" name="alumno_genero" value="M" required="required">
 														<label class="col-sm-5 form-check-label" for="alumno_generoM">Masculino</label>
@@ -370,7 +370,7 @@
 												<div class="form-group">
 													<label for="cemer_parentesco">Parentesco</label>
 													<select class="form-control select2" style="width: 100%;" id="cemer_parentesco" name="cemer_parentesco">
-														<?php echo $insAlumno->listarCatalogoParentesco(); ?>
+														<?php echo $insAlumno->listarCatalogoParentesco($cemer_parentesco); ?>
 													</select>
 												</div> 
 											</div>
@@ -465,7 +465,8 @@
 									
 									<div class="card-footer">						
 										<button type="submit" class="btn btn-success btn-sm">Guardar</button>
-										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>						
+										<button type="reset" class="btn btn-dark btn-sm">Limpiar</button>
+										<a class="btn btn-dark btn-sm" href="#" onclick="cerrarVentana(); return false;">Regresar</a>					
 									</div>	
 								</form>	
 

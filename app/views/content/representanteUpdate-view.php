@@ -81,7 +81,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo APP_NAME; ?> | Ficha representante</title>
-
+		<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -225,13 +225,13 @@
 											<div class="form-group">
 												<label for="repre_parentesco">Parentesco</label>
 												<select class="form-control select2" style="width: 100%;" id="repre_parentesco" name="repre_parentesco" >													
-													<?php echo $insRepre->listarOptionParentesco($repre_parentesco); ?>
+													<?php echo $insRepre->listarCatalogoParentesco($repre_parentesco); ?>
 												</select>
 											</div> 
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="repre_sexo">Sexo</label>
+												<label for="repre_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="repre_sexoM" name="repre_sexo" value="M" <?php echo $repre_sexoM;?> >
 													<label class="col-sm-5 form-check-label" for="repre_sexoM" style="font-size: 14px;">Masculino</label>
@@ -329,7 +329,7 @@
 										</div>              
 										<div class="col-md-4">
 											<div class="form-group">
-												<label for="conyuge_sexo">Sexo</label>
+												<label for="conyuge_sexo">Género</label>
 												<div class="form-check">
 													<input class="col-sm-1 form-check-input" type="radio" id="conyuge_sexoM" name="conyuge_sexo" value="M" <?php echo $conyuge_sexoM;?> >
 													<label class="col-sm-5 form-check-label" for="conyuge_sexoM">Masculino</label>

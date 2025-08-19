@@ -158,7 +158,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo APP_NAME; ?> | Ficha alumno</title>
-
+	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
@@ -381,7 +381,7 @@
 									<!-- Fin segunda sección foto-->			
 								</div>
 
-								<!-- Tab información contacto de emergencia -->
+								<!-- Tab información representante -->
 								<div class="tab-pane" id="representante">
 									<div class="row">
 										<div class="col-md-3">
@@ -535,7 +535,7 @@
 											<div class="form-group">
 												<label for="cemer_parentesco">Parentesco</label>
 												<select class="form-control select2" style="width: 100%;" id="cemer_parentesco" name="cemer_parentesco" disabled="" >
-													<?php echo $insAlumno->listarOptionParentesco($cemer_parentesco); ?>
+													<?php echo $insAlumno->listarCatalogoParentesco($cemer_parentesco); ?>
 												</select>
 											</div> 
 										</div>
