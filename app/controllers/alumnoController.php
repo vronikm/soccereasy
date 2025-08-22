@@ -1362,35 +1362,51 @@
 
 				/*---------------Actulizar horario de entrenamiento---------------------*/
 				$horario_id = $this->limpiarCadena($_POST['horarioid']);
-
-				$cmer=$this->ejecutarConsulta("SELECT * FROM asistencia_asignahorario WHERE asignahorario_alumnoid = '$alumnoid'");
-				if($cmer->rowCount()>0){					
-									
-					$asignacion_horario_reg = [
-						["campo_nombre" => "asignahorario_horarioid","campo_marcador" => ":Horarioid","campo_valor" => $horario_id],
-						["campo_nombre" => "asignahorario_alumnoid","campo_marcador" => ":Alumnoid","campo_valor" => $alumnoid]
-					];
-
-					$condicion=[
-						"condicion_campo"=>"asignahorario_alumnoid",
-						"condicion_marcador"=>":Alumnoid",
-						"condicion_valor"=>$alumnoid
-					];	
-					
-					$this->actualizarDatos("asistencia_asignahorario",$asignacion_horario_reg,$condicion);
-
-				}else{
-					if($horario_id!="" || $alumnoid!=""){
-
+				if($horario_id != null){
+					$cmer=$this->ejecutarConsulta("SELECT * FROM asistencia_asignahorario WHERE asignahorario_alumnoid = '$alumnoid'");
+					if($cmer->rowCount()>0){					
+										
 						$asignacion_horario_reg = [
 							["campo_nombre" => "asignahorario_horarioid","campo_marcador" => ":Horarioid","campo_valor" => $horario_id],
 							["campo_nombre" => "asignahorario_alumnoid","campo_marcador" => ":Alumnoid","campo_valor" => $alumnoid]
 						];
 
-						$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
+						$condicion=[
+							"condicion_campo"=>"asignahorario_alumnoid",
+							"condicion_marcador"=>":Alumnoid",
+							"condicion_valor"=>$alumnoid
+						];	
+						
+						$this->actualizarDatos("asistencia_asignahorario",$asignacion_horario_reg,$condicion);
+					}else{
+						if($horario_id!="" || $alumnoid!=""){
+
+							$asignacion_horario_reg = [
+								["campo_nombre" => "asignahorario_horarioid","campo_marcador" => ":Horarioid","campo_valor" => $horario_id],
+								["campo_nombre" => "asignahorario_alumnoid","campo_marcador" => ":Alumnoid","campo_valor" => $alumnoid]
+							];
+
+							$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
+						}
 					}
-				}
-				return json_encode($alerta);
+				}else{
+					$eliminar_alumno = $this->eliminarRegistro("asistencia_asignahorario","asignahorario_alumnoid",$alumnoid);
+					if($eliminar_alumno->rowCount()>0){
+						$alerta=[
+							"tipo"=>"recargar",
+							"titulo"=>"Alumno eliminado del horario",
+							"texto"=> "Horario del alumno actualizado correctamente",
+							"icono"=>"success"
+						];
+					}else{
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"No fue posible eliminar el alumno del horario",
+							"icono"=>"error"
+						];
+					}
+				}				return json_encode($alerta);
 				/*---------------Fin de actualizacion de horariop de entrenamiento------*/
 
 			}catch (Exception $e) {
