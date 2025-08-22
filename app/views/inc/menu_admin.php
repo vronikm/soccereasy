@@ -40,6 +40,13 @@
                 </a>
               </li>
 
+              <li class="nav-item">
+                <a href="<?php echo APP_URL."facturasList/" ?>" class="nav-link <?php if ($url[0]=='facturasList' || $url[0]=='facturasNew') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon fa fa-address-card text-info"></i>
+                  <p>Facturas</p>
+                </a>
+              </li>
+
               <li class="nav-header">ASISTENCIA ALUMNO</li>
               <li class="nav-item <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'menu-open'; else echo ''; ?>">
                 <a href="#" class="nav-link <?php if ($url[0]=='asistencia' || $url[0]=='asistenciaAlumno' || $url[0]=='reporteAsistencia') echo 'active'; else echo ''; ?>">
