@@ -175,7 +175,6 @@
 
 
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
 
 	<!-- fileinput -->
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.css">
@@ -235,7 +234,7 @@
 			<!-- Main content -->
 			<section class="content">				
 				<!-- /.container-fluid información alumno -->
-				<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/alumnoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+				<form id="formAlumno" class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/alumnoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" novalidate>
 				<input type="hidden" name="modulo_alumno" value="actualizar">
 				<input type="hidden" name="alumno_id" value="<?php echo $datos['alumno_id']; ?>">
 				<div class="container-fluid">						
@@ -486,13 +485,13 @@
 									<div class="row">
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="CEmergencia">Celular</label>
-												<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" value="<?php echo $cemer_celular;?>" >                          
+												<label for="cemer_celular">Celular emergencia</label>
+												<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" value="<?php echo $cemer_celular;?>" required>                          
 											</div>
 										</div>
 										<div class="col-md-3">
 											<div class="form-group">
-												<label for="Nomcontactoemer">Nombre contacto</label>
+												<label for="cemer_nombre">Nombre contacto emergencia</label>
 												<input type="text" class="form-control" id="cemer_nombre" name="cemer_nombre" value="<?php echo $cemer_nombre;?>" >                          
 											</div>
 										</div>
@@ -659,10 +658,8 @@
 
 	<!-- AdminLTE App -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
-		
+	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/ajax.js" ></script>
-
-	<!--script src="app/views/dist/js/main.js" ></script-->
 	
 	<!-- fileinput -->
 	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/fileinput/fileinput.js"></script>
@@ -772,8 +769,80 @@
 				}
 			});
 		});
-	</script>	
+	</script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("formAlumno").addEventListener("submit", function(e) {
+        let form = this;
+        let camposRequeridos = form.querySelectorAll("[required]");
+        let valido = true;
+        let primerCampoVacio = null;
+
+        camposRequeridos.forEach(function(campo){
+            if((campo.type === "radio" || campo.type === "checkbox")){
+                // Validación para radios/checkbox
+                let grupo = form.querySelectorAll(`[name="${campo.name}"]`);
+                let algunoMarcado = Array.from(grupo).some(el => el.checked);
+                if(!algunoMarcado){
+                    valido = false;
+                    if(!primerCampoVacio) primerCampoVacio = campo;
+                }
+            } else if(!campo.value.trim()){
+                valido = false;
+                campo.style.border = "1px solid red";
+                if(!primerCampoVacio) primerCampoVacio = campo;
+            } else {
+                campo.style.border = "";
+            }
+        });
+
+        if(!valido){
+            e.preventDefault();
+
+            if(primerCampoVacio){
+                // Obtener label del campo
+                let labelTexto = "";
+                let label = form.querySelector(`label[for="${primerCampoVacio.id}"]`);
+                if(label){
+                    labelTexto = label.innerText.trim();
+                } else {
+                    let labelPadre = primerCampoVacio.closest("label");
+                    if(labelPadre){
+                        labelTexto = labelPadre.innerText.trim();
+                    }
+                }
+
+                // Abrir tab donde está el campo vacío
+                let tabPane = primerCampoVacio.closest(".tab-pane");
+                if(tabPane && !tabPane.classList.contains("active")){
+                    let trigger =
+                        document.querySelector(`.nav-pills [href="#${tabPane.id}"]`) ||
+                        document.querySelector(`.nav-pills [data-toggle="tab"][data-target="#${tabPane.id}"]`);
+                    if(trigger){
+                        trigger.click(); // activa el tab
+                    }
+                }
+
+                // Dar foco al campo vacío
+                setTimeout(() => {
+                    primerCampoVacio.focus();
+                }, 200);
+
+                // Mostrar alerta con nombre del campo
+                Swal.fire({
+                    title: "Error",
+                    text: `Por favor complete el campo obligatorio: "${labelTexto}"`,
+                    icon: "error"
+                });
+            }
+        }
+    });
+});
+</script>
+
+
+	
 	<script type="text/javascript">
 		function cerrarPestana() {
 			window.close();

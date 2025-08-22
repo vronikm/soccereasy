@@ -2,6 +2,7 @@
 
 	namespace app\controllers;
 	use app\models\mainModel;
+	use Exception;
 
 	class alumnoController extends mainModel{
 
@@ -889,434 +890,358 @@
 
 		/*----------  Controlador actualizar alumno  ----------*/
 		public function actualizarAlumnoControlador(){
-			
-			$alumnoid=$this->limpiarCadena($_POST['alumno_id']);
+			# Verificando si se envió el formulario #			
+			try {
+				if(!isset($_POST['alumno_id'])){
+					throw new Exception("No se recibió el identificador del alumno.");
+				}
+				$alumnoid=$this->limpiarCadena($_POST['alumno_id']);
 
-			# Verificando usuario #
-		    $datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id ='$alumnoid'");
-		    if($datos->rowCount()<=0){
-		        $alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"El alumno no se encuentra en el sistema",
-					"icono"=>"error"
+				# Verificando existencia del alumno #				
+				$datos=$this->ejecutarConsulta("SELECT * FROM sujeto_alumno WHERE alumno_id = :id", [":id"=>$alumnoid]);
+				if(!$datos || $datos->rowCount()<=0){
+					return json_encode([
+						"tipo"=>"simple",
+						"titulo"=>"Ocurrió un error",
+						"texto"=>"El alumno no se encuentra en el sistema",
+						"icono"=>"error"
+					]);	    
+				}
+				$datos=$datos->fetch();
+   
+				/*---------------Variables para el registro del tab del alumno----------------*/
+				$alumno_identificacion 		= $this->limpiarCadena($_POST['alumno_identificacion'] ?? "");
+				$alumno_apellidopaterno 	= $this->limpiarCadena($_POST['alumno_apellido1'] ?? "");
+				$alumno_apellidomaterno 	= $this->limpiarCadena($_POST['alumno_apellido2'] ?? "");
+				$alumno_tipoidentificacion 	= $this->limpiarCadena($_POST['alumno_tipoidentificacion'] ?? "");			
+				$alumno_primernombre 		= $this->limpiarCadena($_POST['alumno_nombre1'] ?? "");
+				$alumno_segundonombre 		= $this->limpiarCadena($_POST['alumno_nombre2'] ?? "");
+				$alumno_nacionalidadid		= $this->limpiarCadena($_POST['alumno_nacionalidadid'] ?? "");
+				$alumno_fechanacimiento 	= $this->limpiarCadena($_POST['alumno_fechanacimiento'] ?? "");
+				$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion'] ?? "");	
+				$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso'] ?? "");
+				$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid'] ?? "");				
+				$alumno_numcamiseta 		= intval($_POST['alumno_numcamiseta'] ?? 0);
+				$alumno_genero 				= $_POST['alumno_genero'] ?? "";
+				$alumno_hermanos 			= $_POST['alumno_hermanos'] ?? "";
+				
+				# Verificando campos obligatorios #
+				if($alumno_identificacion=="" || $alumno_primernombre=="" || $alumno_apellidopaterno=="" || $alumno_fechanacimiento==""){
+					 throw new Exception("No ha completado todos los campos que son obligatorios.");
+				}
+
+				# Verificando integridad de los datos #
+				if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,40}",$alumno_primernombre)){
+					 throw new Exception("El campo nombre no coincide con el formato solicitado.");
+				}
+				
+				$alumno_datos_reg=[
+					["campo_nombre"=>"alumno_sedeid","campo_marcador"=>":Sedeid","campo_valor"=>$alumno_sedeid],
+					["campo_nombre"=>"alumno_nacionalidadid","campo_marcador"=>":Nacionalidadid","campo_valor"=>$alumno_nacionalidadid],
+					["campo_nombre"=>"alumno_tipoidentificacion","campo_marcador"=>":Tipoidentificacion","campo_valor"=>$alumno_tipoidentificacion],
+					["campo_nombre"=>"alumno_identificacion","campo_marcador"=>":Identificacion","campo_valor"=>$alumno_identificacion],				
+					["campo_nombre"=>"alumno_primernombre","campo_marcador"=>":Primernombre","campo_valor"=>$alumno_primernombre],
+					["campo_nombre"=>"alumno_segundonombre","campo_marcador"=>":Segundonombre","campo_valor"=>$alumno_segundonombre],				
+					["campo_nombre"=>"alumno_apellidopaterno","campo_marcador"=>":Apellidopaterno","campo_valor"=>$alumno_apellidopaterno],
+					["campo_nombre"=>"alumno_apellidomaterno","campo_marcador"=>":Apellidomaterno","campo_valor"=>$alumno_apellidomaterno],
+					["campo_nombre"=>"alumno_direccion","campo_marcador"=>":Direccion","campo_valor"=>$alumno_direccion],
+					["campo_nombre"=>"alumno_fechanacimiento","campo_marcador"=>":Fechanacimiento","campo_valor"=>$alumno_fechanacimiento],
+					["campo_nombre"=>"alumno_fechaingreso","campo_marcador"=>":Fechaingreso","campo_valor"=>$alumno_fechaingreso],
+					["campo_nombre"=>"alumno_genero","campo_marcador"=>":Genero","campo_valor"=>$alumno_genero],
+					["campo_nombre"=>"alumno_hermanos","campo_marcador"=>":Hermanos","campo_valor"=>$alumno_hermanos],			
+					["campo_nombre"=>"alumno_numcamiseta","campo_marcador"=>":Camiseta","campo_valor"=>$alumno_numcamiseta]
 				];
-				return json_encode($alerta);		    
-		    }else{
-		    	$datos=$datos->fetch();
-		    }
 
-			/*---------------Variables para el registro del tab del alumno----------------*/
-			$alumno_identificacion 		= $this->limpiarCadena($_POST['alumno_identificacion']);
-			$alumno_apellidopaterno 	= $this->limpiarCadena($_POST['alumno_apellido1']);
-			$alumno_apellidomaterno 	= $this->limpiarCadena($_POST['alumno_apellido2']);
-			$alumno_tipoidentificacion 	= $this->limpiarCadena($_POST['alumno_tipoidentificacion']);			
-			$alumno_primernombre 		= $this->limpiarCadena($_POST['alumno_nombre1']);
-			$alumno_segundonombre 		= $this->limpiarCadena($_POST['alumno_nombre2']);
-			$alumno_nacionalidadid		= $this->limpiarCadena($_POST['alumno_nacionalidadid']);
-			$alumno_fechanacimiento 	= $this->limpiarCadena($_POST['alumno_fechanacimiento']);
-			$alumno_direccion 			= $this->limpiarCadena($_POST['alumno_direccion']);	
-			$alumno_fechaingreso		= $this->limpiarCadena($_POST['alumno_fechaingreso']);
-			$alumno_sedeid 				= $this->limpiarCadena($_POST['alumno_sedeid']);
-			$alumno_nombrecorto 		= ""; //$this->limpiarCadena($_POST['alumno_nombrecorto']);
-			$alumno_posicionid			= ""; //$this->limpiarCadena($_POST['alumno_posicionid']);					
-			$alumno_numcamiseta 		= $_POST['alumno_numcamiseta'];
-			$alumno_genero 				= "";
-			$alumno_hermanos 			= "";			
+				# Directorio de fotos #
+				$codigorand=rand(0,100);
+				$img_dir="../views/imagenes/fotos/alumno/";
 
-			if ($alumno_numcamiseta == ""){$alumno_numcamiseta = 0;}
-
-			if (isset($_POST['alumno_genero']) && isset($_POST['alumno_hermanos'])) {
-				$alumno_genero 				= $_POST['alumno_genero'];
-				$alumno_hermanos 			= $_POST['alumno_hermanos'];
-
-			}else{
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Ocurrió un error",
-					"texto"=>"No ha completado los campos obligatorios del alumno",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-			}			
+				# Directorio de imagenes cedula#
+				$dir_cedula="../views/imagenes/cedulas/";
+				/*
+				# Comprobar si se selecciono una imagen #
+				if($_FILES['alumno_foto']['name']!="" && $_FILES['alumno_foto']['size']>0){
 			
-		    # Verificando campos obligatorios #
-		    if($alumno_identificacion=="" || $alumno_primernombre=="" || $alumno_apellidopaterno=="" || $alumno_fechanacimiento==""){
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"No ha completado todos los campos que son obligatorios",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		    }
+					# Creando directorio #
+					if(!file_exists($img_dir)){
+						if(!mkdir($img_dir,0777)){
+							$alerta=[
+								"tipo"=>"simple",
+								"titulo"=>"Error",
+								"texto"=>"No se creó el directorio",
+								"icono"=>"error"
+							];
+							return json_encode($alerta);
+							//exit();
+						} 
+					}
 
-		    # Verificando integridad de los datos #
-		    if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ]{3,40}",$alumno_primernombre)){
-		    	$alerta=[
-					"tipo"=>"simple",
-					"titulo"=>"Error",
-					"texto"=>"El campo nombre no coincide con el formato solicitado",
-					"icono"=>"error"
-				];
-				return json_encode($alerta);
-		    }
-			
-			$alumno_datos_reg=[
-				[
-					"campo_nombre"=>"alumno_sedeid",
-					"campo_marcador"=>":Sedeid",
-					"campo_valor"=>$alumno_sedeid
-				],
-				[
-					"campo_nombre"=>"alumno_posicionid",
-					"campo_marcador"=>":Posicionid",
-					"campo_valor"=>$alumno_posicionid
-				],
-				[
-					"campo_nombre"=>"alumno_nacionalidadid",
-					"campo_marcador"=>":Nacionalidadid",
-					"campo_valor"=>$alumno_nacionalidadid
-				],
-				[
-					"campo_nombre"=>"alumno_tipoidentificacion",
-					"campo_marcador"=>":Tipoidentificacion",
-					"campo_valor"=>$alumno_tipoidentificacion
-				],
-				[
-					"campo_nombre"=>"alumno_identificacion",
-					"campo_marcador"=>":Identificacion",
-					"campo_valor"=>$alumno_identificacion
-				],				
-				[
-					"campo_nombre"=>"alumno_primernombre",
-					"campo_marcador"=>":Primernombre",
-					"campo_valor"=>$alumno_primernombre
-				],
-				[
-					"campo_nombre"=>"alumno_segundonombre",
-					"campo_marcador"=>":Segundonombre",
-					"campo_valor"=>$alumno_segundonombre
-				],				
-				[
-					"campo_nombre"=>"alumno_apellidopaterno",
-					"campo_marcador"=>":Apellidopaterno",
-					"campo_valor"=>$alumno_apellidopaterno
-				],
-				[
-					"campo_nombre"=>"alumno_apellidomaterno",
-					"campo_marcador"=>":Apellidomaterno",
-					"campo_valor"=>$alumno_apellidomaterno
-				],
-				[
-					"campo_nombre"=>"alumno_nombrecorto",
-					"campo_marcador"=>":Nombrecorto",
-					"campo_valor"=>$alumno_nombrecorto
-				],
-				[
-					"campo_nombre"=>"alumno_direccion",
-					"campo_marcador"=>":Direccion",
-					"campo_valor"=>$alumno_direccion
-				],
-				[
-					"campo_nombre"=>"alumno_fechanacimiento",
-					"campo_marcador"=>":Fechanacimiento",
-					"campo_valor"=>$alumno_fechanacimiento
-				],
-				[
-					"campo_nombre"=>"alumno_fechaingreso",
-					"campo_marcador"=>":Fechaingreso",
-					"campo_valor"=>$alumno_fechaingreso
-				],
-				[
-					"campo_nombre"=>"alumno_genero",
-					"campo_marcador"=>":Genero",
-					"campo_valor"=>$alumno_genero
-				],
-				[
-					"campo_nombre"=>"alumno_hermanos",
-					"campo_marcador"=>":Hermanos",
-					"campo_valor"=>$alumno_hermanos
-				],			
-				[
-					"campo_nombre"=>"alumno_numcamiseta",
-					"campo_marcador"=>":Camiseta",
-					"campo_valor"=>$alumno_numcamiseta
-				]
-			];
-
-			# Directorio de fotos #
-			$codigorand=rand(0,100);
-			$img_dir="../views/imagenes/fotos/alumno/";
-
-			# Directorio de imagenes cedula#
-			$dir_cedula="../views/imagenes/cedulas/";
-			
-    		# Comprobar si se selecciono una imagen #
-    		if($_FILES['alumno_foto']['name']!="" && $_FILES['alumno_foto']['size']>0){
-		
-				# Creando directorio #
-				if(!file_exists($img_dir)){
-					if(!mkdir($img_dir,0777)){
+					# Verificando formato de imagenes #
+					if(mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/png"){
 						$alerta=[
 							"tipo"=>"simple",
 							"titulo"=>"Error",
-							"texto"=>"No se creó el directorio",
+							"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
 						//exit();
-					} 
-				}
+					}
 
-				# Verificando formato de imagenes #
-				if(mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_foto']['tmp_name'])!="image/png"){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-					//exit();
-				}
-
-				# Verificando peso de imagen #
-				if(($_FILES['alumno_foto']['size']/1024)>4000){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-					//exit();
-				}
-
-				#nombre de la foto
-				$foto=str_ireplace(" ","_",$alumno_identificacion);
-				$foto=$foto."_".$codigorand;
-				
-
-				# Extension de la imagen #
-				switch(mime_content_type($_FILES['alumno_foto']['tmp_name'])){
-					case 'image/jpeg':
-						$foto=$foto.".jpg";
-					break;
-					case 'image/png':
-						$foto=$foto.".png";
-					break;
-				}
-				$maxWidth = 800;
-    			$maxHeight = 600;
-
-				chmod($img_dir,0777);
-				$inputFile = ($_FILES['alumno_foto']['tmp_name']);
-       			$outputFile = $img_dir.$foto;
-
-				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
-				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
-					
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"No es posible subir la imagen al sistema en este momento",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-				
-				# Eliminando imagen anterior #
-				if(is_file($img_dir.$datos['alumno_imagen']) && $datos['alumno_imagen']!=$foto){
-					chmod($img_dir.$datos['alumno_imagen'], 0777);
-					unlink($img_dir.$datos['alumno_imagen']);
-				}				
-				
-				$alumno_datos_reg[] = [
-					"campo_nombre" => "alumno_imagen",
-					"campo_marcador" => ":Foto",
-					"campo_valor" => $foto
-				];				
-			}
-
-			if($_FILES['alumno_cedulaA']['name']!="" && $_FILES['alumno_cedulaA']['size']>0){
-		
-				# Creando directorio #
-				if(!file_exists($dir_cedula)){
-					if(!mkdir($dir_cedula,0777)){
+					# Verificando peso de imagen #
+					if(($_FILES['alumno_foto']['size']/1024)>4000){
 						$alerta=[
 							"tipo"=>"simple",
 							"titulo"=>"Error",
-							"texto"=>"No se creó el directorio",
+							"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-					} 
-				}
+						//exit();
+					}
 
-				# Verificando formato de imagenes #
-				if(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/png"){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-				# Verificando peso de imagen #
-				if(($_FILES['alumno_cedulaA']['size']/1024)>4000){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-				#nombre de la imagen cedula
-				$CedulaA=str_ireplace(" ","_",$alumno_identificacion);
-				$CedulaA=$CedulaA."_A".$codigorand=rand(0,100);					
-
-				# Extension de la imagen #
-				switch(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])){
-					case 'image/jpeg':
-						$CedulaA=$CedulaA.".jpg";
-					break;
-					case 'image/png':
-						$CedulaA=$CedulaA.".png";
-					break;
-				}
-				$maxWidth = 800;
-    			$maxHeight = 600;
-
-				chmod($img_dir,0777);
-				$inputFile = ($_FILES['alumno_cedulaA']['tmp_name']);
-       			$outputFile = $dir_cedula.$CedulaA;
-
-				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
-				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					#nombre de la foto
+					$foto=str_ireplace(" ","_",$alumno_identificacion);
+					$foto=$foto."_".$codigorand;
 					
-				}else{
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-				
-				# Eliminando imagen anterior #
-				if(is_file($dir_cedula.$datos['alumno_cedulaA']) && $datos['alumno_cedulaA']!=$CedulaA){
-					chmod($dir_cedula.$datos['alumno_cedulaA'], 0777);
-					unlink($dir_cedula.$datos['alumno_cedulaA']);
-				}				
-				
-				$alumno_datos_reg[] = [
-					"campo_nombre" => "alumno_cedulaA",
-					"campo_marcador" => ":CedulaA",
-					"campo_valor" => $CedulaA
-				];				
-			}
 
-			if($_FILES['alumno_cedulaR']['name']!="" && $_FILES['alumno_cedulaR']['size']>0){
-		
-				# Creando directorio #
-				if(!file_exists($dir_cedula)){
-					if(!mkdir($dir_cedula,0777)){
+					# Extension de la imagen #
+					switch(mime_content_type($_FILES['alumno_foto']['tmp_name'])){
+						case 'image/jpeg':
+							$foto=$foto.".jpg";
+						break;
+						case 'image/png':
+							$foto=$foto.".png";
+						break;
+					}
+					$maxWidth = 800;
+					$maxHeight = 600;
+
+					chmod($img_dir,0777);
+					$inputFile = ($_FILES['alumno_foto']['tmp_name']);
+					$outputFile = $img_dir.$foto;
+
+					# Moviendo imagen al directorio #
+					//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+					if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+						
+					}else{
 						$alerta=[
 							"tipo"=>"simple",
 							"titulo"=>"Error",
-							"texto"=>"No se creó el directorio",
+							"texto"=>"No es posible subir la imagen al sistema en este momento",
 							"icono"=>"error"
 						];
 						return json_encode($alerta);
-					} 
-				}
-
-				# Verificando formato de imagenes #
-				if(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/png"){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-				# Verificando peso de imagen #
-				if(($_FILES['alumno_cedulaR']['size']/1024)>4000){
-					$alerta=[
-						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
-						"icono"=>"error"
-					];
-					return json_encode($alerta);
-				}
-
-				#nombre imagen cedula reverso
-				$CedulaR=str_ireplace(" ","_",$alumno_identificacion);
-				$CedulaR=$CedulaR."_R".$codigorand;				
-
-				# Extension de la imagen #
-				switch(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])){
-					case 'image/jpeg':
-						$CedulaR=$CedulaR.".jpg";
-					break;
-					case 'image/png':
-						$CedulaR=$CedulaR.".png";
-					break;
-				}
-				$maxWidth = 800;
-    			$maxHeight = 600;
-
-				chmod($img_dir,0777);
-				$inputFile = ($_FILES['alumno_cedulaR']['tmp_name']);
-       			$outputFile = $dir_cedula.$CedulaR;
-
-				# Moviendo imagen al directorio #
-				//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
-				if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+					}
 					
-				}else{
-					$alerta=[
+					# Eliminando imagen anterior #
+					if(is_file($img_dir.$datos['alumno_imagen']) && $datos['alumno_imagen']!=$foto){
+						chmod($img_dir.$datos['alumno_imagen'], 0777);
+						unlink($img_dir.$datos['alumno_imagen']);
+					}														
+					$alumno_datos_reg[] = [
+						"campo_nombre" => "alumno_imagen",
+						"campo_marcador" => ":Foto",
+						"campo_valor" => $foto
+					];				
+				}*/
+
+				# Manejo de archivos con try/catch aparte #
+				try {
+					if(isset($_FILES['alumno_foto']) && $_FILES['alumno_foto']['error'] === UPLOAD_ERR_OK){
+						$foto = $this->procesarImagen($_FILES['alumno_foto'], "../views/imagenes/fotos/alumno/", $alumno_identificacion);
+						if($foto){
+							$alumno_datos_reg[] = ["campo_nombre"=>"alumno_imagen","campo_marcador"=>":Foto","campo_valor"=>$foto];
+						}
+					}
+				} catch (Exception $e) {
+					return json_encode([
 						"tipo"=>"simple",
-						"titulo"=>"Error",
-						"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
+						"titulo"=>"Error en la imagen",
+						"texto"=>$e->getMessage(),
 						"icono"=>"error"
-					];
-					return json_encode($alerta);
+					]);
 				}
-				
-				# Eliminando imagen anterior #
-				if(is_file($dir_cedula.$datos['alumno_cedulaR']) && $datos['alumno_cedulaR']!=$CedulaR){
-					chmod($dir_cedula.$datos['alumno_cedulaR'], 0777);
-					unlink($dir_cedula.$datos['alumno_cedulaR']);
-				}				
-				
-				$alumno_datos_reg[] = [
-					"campo_nombre" => "alumno_cedulaR",
-					"campo_marcador" => ":CedulaR",
-					"campo_valor" => $CedulaR
-				];				
-			}
 
-			$condicion=[
-				"condicion_campo"=>"alumno_id",
-				"condicion_marcador"=>":Alumnoid",
-				"condicion_valor"=>$alumnoid
-			];
+				if($_FILES['alumno_cedulaA']['name']!="" && $_FILES['alumno_cedulaA']['size']>0){
+			
+					# Creando directorio #
+					if(!file_exists($dir_cedula)){
+						if(!mkdir($dir_cedula,0777)){
+							$alerta=[
+								"tipo"=>"simple",
+								"titulo"=>"Error",
+								"texto"=>"No se creó el directorio",
+								"icono"=>"error"
+							];
+							return json_encode($alerta);
+						} 
+					}
 
-			if($this->actualizarDatos("sujeto_alumno",$alumno_datos_reg,$condicion)){					
-				
+					# Verificando formato de imagenes #
+					if(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])!="image/png"){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+
+					# Verificando peso de imagen #
+					if(($_FILES['alumno_cedulaA']['size']/1024)>4000){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+
+					#nombre de la imagen cedula
+					$CedulaA=str_ireplace(" ","_",$alumno_identificacion);
+					$CedulaA=$CedulaA."_A".$codigorand=rand(0,100);					
+
+					# Extension de la imagen #
+					switch(mime_content_type($_FILES['alumno_cedulaA']['tmp_name'])){
+						case 'image/jpeg':
+							$CedulaA=$CedulaA.".jpg";
+						break;
+						case 'image/png':
+							$CedulaA=$CedulaA.".png";
+						break;
+					}
+					$maxWidth = 800;
+					$maxHeight = 600;
+
+					chmod($img_dir,0777);
+					$inputFile = ($_FILES['alumno_cedulaA']['tmp_name']);
+					$outputFile = $dir_cedula.$CedulaA;
+
+					# Moviendo imagen al directorio #
+					//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+					if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+						
+					}else{
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+					
+					# Eliminando imagen anterior #
+					if(is_file($dir_cedula.$datos['alumno_cedulaA']) && $datos['alumno_cedulaA']!=$CedulaA){
+						chmod($dir_cedula.$datos['alumno_cedulaA'], 0777);
+						unlink($dir_cedula.$datos['alumno_cedulaA']);
+					}				
+					
+					$alumno_datos_reg[] = [
+						"campo_nombre" => "alumno_cedulaA",
+						"campo_marcador" => ":CedulaA",
+						"campo_valor" => $CedulaA
+					];				
+				}
+
+				if($_FILES['alumno_cedulaR']['name']!="" && $_FILES['alumno_cedulaR']['size']>0){
+			
+					# Creando directorio #
+					if(!file_exists($dir_cedula)){
+						if(!mkdir($dir_cedula,0777)){
+							$alerta=[
+								"tipo"=>"simple",
+								"titulo"=>"Error",
+								"texto"=>"No se creó el directorio",
+								"icono"=>"error"
+							];
+							return json_encode($alerta);
+						} 
+					}
+
+					# Verificando formato de imagenes #
+					if(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/jpeg" && mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])!="image/png"){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"La imagen que ha seleccionado es de un formato no permitido ",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+
+					# Verificando peso de imagen #
+					if(($_FILES['alumno_cedulaR']['size']/1024)>4000){
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"La imagen que ha seleccionado supera el peso permitido 4MB",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+
+					#nombre imagen cedula reverso
+					$CedulaR=str_ireplace(" ","_",$alumno_identificacion);
+					$CedulaR=$CedulaR."_R".$codigorand;				
+
+					# Extension de la imagen #
+					switch(mime_content_type($_FILES['alumno_cedulaR']['tmp_name'])){
+						case 'image/jpeg':
+							$CedulaR=$CedulaR.".jpg";
+						break;
+						case 'image/png':
+							$CedulaR=$CedulaR.".png";
+						break;
+					}
+					$maxWidth = 800;
+					$maxHeight = 600;
+
+					chmod($img_dir,0777);
+					$inputFile = ($_FILES['alumno_cedulaR']['tmp_name']);
+					$outputFile = $dir_cedula.$CedulaR;
+
+					# Moviendo imagen al directorio #
+					//if(!move_uploaded_file($_FILES['alumno_foto']['tmp_name'],$img_dir.$foto)){
+					if ($this->resizeImageGD($inputFile, $maxWidth, $maxHeight, $outputFile)) {
+						
+					}else{
+						$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"No es posible subir la imagen de la cedula al sistema en este momento",
+							"icono"=>"error"
+						];
+						return json_encode($alerta);
+					}
+					
+					# Eliminando imagen anterior #
+					if(is_file($dir_cedula.$datos['alumno_cedulaR']) && $datos['alumno_cedulaR']!=$CedulaR){
+						chmod($dir_cedula.$datos['alumno_cedulaR'], 0777);
+						unlink($dir_cedula.$datos['alumno_cedulaR']);
+					}				
+					
+					$alumno_datos_reg[] = [
+						"campo_nombre" => "alumno_cedulaR",
+						"campo_marcador" => ":CedulaR",
+						"campo_valor" => $CedulaR
+					];				
+				}
+
+				$condicion=[
+					"condicion_campo"=>"alumno_id",
+					"condicion_marcador"=>":Alumnoid",
+					"condicion_valor"=>$alumnoid
+				];
+
+				if(!$this->actualizarDatos("sujeto_alumno",$alumno_datos_reg,$condicion)){
+					throw new Exception("No fue posible actualizar los datos del alumno, por favor intente nuevamente.");
+				}
+		
 				$alerta=[
 					"tipo"=>"recargar",
 					"titulo"=>"Alumno actualizado",
@@ -1325,15 +1250,15 @@
 				];
 
 				/*---------------Inicio de registro de Información de los tabs*/
-				$infomedic_tiposangre 	= $this->limpiarCadena($_POST['infomedic_tiposangre']);
-				$infomedic_peso		  	= $this->limpiarCadena($_POST['infomedic_peso']);
-				$infomedic_talla 	  	= $this->limpiarCadena($_POST['infomedic_talla']);
-				$infomedic_enfermedad 	= $this->limpiarCadena($_POST['infomedic_enfermedad']);
-				$infomedic_medicamentos = $this->limpiarCadena($_POST['infomedic_medicamentos']);
-				$infomedic_alergia1 	= $this->limpiarCadena($_POST['infomedic_alergia1']);
-				$infomedic_alergia2 	= $this->limpiarCadena($_POST['infomedic_alergia2']);
-				$infomedic_cirugias 	= $this->limpiarCadena($_POST['infomedic_cirugias']);
-				$infomedic_observacion	= $this->limpiarCadena($_POST['infomedic_observacion']);
+				$infomedic_tiposangre 	= $this->limpiarCadena($_POST['infomedic_tiposangre'] ?? "");
+				$infomedic_peso		  	= $this->limpiarCadena($_POST['infomedic_peso'] ?? "");
+				$infomedic_talla 	  	= $this->limpiarCadena($_POST['infomedic_talla'] ?? "");
+				$infomedic_enfermedad 	= $this->limpiarCadena($_POST['infomedic_enfermedad'] ?? "");
+				$infomedic_medicamentos = $this->limpiarCadena($_POST['infomedic_medicamentos'] ?? "");
+				$infomedic_alergia1 	= $this->limpiarCadena($_POST['infomedic_alergia1'] ?? "");
+				$infomedic_alergia2 	= $this->limpiarCadena($_POST['infomedic_alergia2'] ?? "");
+				$infomedic_cirugias 	= $this->limpiarCadena($_POST['infomedic_cirugias'] ?? "");
+				$infomedic_observacion	= $this->limpiarCadena($_POST['infomedic_observacion'] ?? "");
 
 				if(isset($_POST['infomedic_covid'])){ $infomedic_covid  = $_POST['infomedic_covid']; }else {$infomedic_covid="";}
 				if(isset($_POST['infomedic_vacunas'])){ $infomedic_vacunas  = $_POST['infomedic_vacunas']; }else {$infomedic_vacunas="";}
@@ -1344,74 +1269,20 @@
                 
 				$infomedic=$this->ejecutarConsulta("SELECT * FROM alumno_infomedic WHERE infomedic_alumnoid='$alumnoid'");
 				if($infomedic->rowCount()>0){
-				
-
 					$infomedic_reg=[
-						[
-							"campo_nombre"=>"infomedic_alumnoid",
-							"campo_marcador"=>":Alumnoid",
-							"campo_valor"=>$alumnoid
-						],
-						[
-							"campo_nombre"=>"infomedic_fecha",
-							"campo_marcador"=>":Fechacreacion",
-							"campo_valor"=>date("Y-m-d H:i:s")
-						],
-						[
-							"campo_nombre"=>"infomedic_tiposangre",
-							"campo_marcador"=>":Tiposangre",
-							"campo_valor"=>$infomedic_tiposangre
-						],
-						[
-							"campo_nombre"=>"infomedic_peso",
-							"campo_marcador"=>":Peso",
-							"campo_valor"=>$infomedic_peso
-						],
-						[
-							"campo_nombre"=>"infomedic_talla",
-							"campo_marcador"=>":Talla",
-							"campo_valor"=>$infomedic_talla
-						],
-						[
-							"campo_nombre"=>"infomedic_enfermedad",
-							"campo_marcador"=>":Enfermedad",
-							"campo_valor"=>$infomedic_enfermedad
-						],
-						[
-							"campo_nombre"=>"infomedic_medicamentos",
-							"campo_marcador"=>":Medicamentos",
-							"campo_valor"=>$infomedic_medicamentos
-						],
-						[
-							"campo_nombre"=>"infomedic_alergia1",
-							"campo_marcador"=>":AlergiaMedicamentos",
-							"campo_valor"=>$infomedic_alergia1
-						],
-						[
-							"campo_nombre"=>"infomedic_alergia2",
-							"campo_marcador"=>":AlergiaObjetos",
-							"campo_valor"=>$infomedic_alergia2
-						],
-						[
-							"campo_nombre"=>"infomedic_cirugias",
-							"campo_marcador"=>":Cirugias",
-							"campo_valor"=>$infomedic_cirugias
-						],
-						[
-							"campo_nombre"=>"infomedic_observacion",
-							"campo_marcador"=>":Observacion",
-							"campo_valor"=>$infomedic_observacion
-						],
-						[
-							"campo_nombre"=>"infomedic_covid",
-							"campo_marcador"=>":VacunasCovid",
-							"campo_valor"=>$infomedic_covid
-						],
-						[
-							"campo_nombre"=>"infomedic_vacunas",
-							"campo_marcador"=>":Vacunas",
-							"campo_valor"=>$infomedic_vacunas
-						]
+						["campo_nombre"=>"infomedic_alumnoid","campo_marcador"=>":Alumnoid","campo_valor"=>$alumnoid],
+						["campo_nombre"=>"infomedic_fecha","campo_marcador"=>":Fechacreacion","campo_valor"=>date("Y-m-d H:i:s")],
+						["campo_nombre"=>"infomedic_tiposangre","campo_marcador"=>":Tiposangre","campo_valor"=>$infomedic_tiposangre],
+						["campo_nombre"=>"infomedic_peso","campo_marcador"=>":Peso","campo_valor"=>$infomedic_peso],
+						["campo_nombre"=>"infomedic_talla","campo_marcador"=>":Talla","campo_valor"=>$infomedic_talla],
+						["campo_nombre"=>"infomedic_enfermedad","campo_marcador"=>":Enfermedad","campo_valor"=>$infomedic_enfermedad],
+						["campo_nombre"=>"infomedic_medicamentos","campo_marcador"=>":Medicamentos","campo_valor"=>$infomedic_medicamentos],
+						["campo_nombre"=>"infomedic_alergia1","campo_marcador"=>":AlergiaMedicamentos","campo_valor"=>$infomedic_alergia1],
+						["campo_nombre"=>"infomedic_alergia2","campo_marcador"=>":AlergiaObjetos","campo_valor"=>$infomedic_alergia2],
+						["campo_nombre"=>"infomedic_cirugias","campo_marcador"=>":Cirugias","campo_valor"=>$infomedic_cirugias],
+						["campo_nombre"=>"infomedic_observacion","campo_marcador"=>":Observacion","campo_valor"=>$infomedic_observacion],
+						["campo_nombre"=>"infomedic_covid","campo_marcador"=>":VacunasCovid","campo_valor"=>$infomedic_covid],
+						["campo_nombre"=>"infomedic_vacunas","campo_marcador"=>":Vacunas","campo_valor"=>$infomedic_vacunas]
 					];
 					
 					$condicion=[
@@ -1424,86 +1295,28 @@
 
 				}else{
 					if($infomedic_tiposangre!="" || $infomedic_peso>0 || $infomedic_talla>0 || $infomedic_enfermedad!=""||
-					$infomedic_medicamentos!="" || $infomedic_alergia1!="" || $infomedic_alergia2!="" || $infomedic_cirugias!="" ||
-					$infomedic_observacion!=""){
-						//if (!is_int($infomedic_peso) && !is_float($infomedic_peso)){$infomedic_peso = 0;}
-						//if (!is_int($infomedic_talla) && !is_float($infomedic_talla)){$infomedic_talla = 0;}
-
-						$infomedic_reg=[
-							[
-								"campo_nombre"=>"infomedic_alumnoid",
-								"campo_marcador"=>":Alumnoid",
-								"campo_valor"=>$alumnoid
-							],
-							[
-								"campo_nombre"=>"infomedic_fecha",
-								"campo_marcador"=>":Fechacreacion",
-								"campo_valor"=>date("Y-m-d H:i:s")
-							],
-							[
-								"campo_nombre"=>"infomedic_tiposangre",
-								"campo_marcador"=>":Tiposangre",
-								"campo_valor"=>$infomedic_tiposangre
-							],
-							[
-								"campo_nombre"=>"infomedic_peso",
-								"campo_marcador"=>":Peso",
-								"campo_valor"=>$infomedic_peso
-							],
-							[
-								"campo_nombre"=>"infomedic_talla",
-								"campo_marcador"=>":Talla",
-								"campo_valor"=>$infomedic_talla
-							],
-							[
-								"campo_nombre"=>"infomedic_enfermedad",
-								"campo_marcador"=>":Enfermedad",
-								"campo_valor"=>$infomedic_enfermedad
-							],
-							[
-								"campo_nombre"=>"infomedic_medicamentos",
-								"campo_marcador"=>":Medicamentos",
-								"campo_valor"=>$infomedic_medicamentos
-							],
-							[
-								"campo_nombre"=>"infomedic_alergia1",
-								"campo_marcador"=>":AlergiaMedicamentos",
-								"campo_valor"=>$infomedic_alergia1
-							],
-							[
-								"campo_nombre"=>"infomedic_alergia2",
-								"campo_marcador"=>":AlergiaObjetos",
-								"campo_valor"=>$infomedic_alergia2
-							],
-							[
-								"campo_nombre"=>"infomedic_cirugias",
-								"campo_marcador"=>":Cirugias",
-								"campo_valor"=>$infomedic_cirugias
-							],
-							[
-								"campo_nombre"=>"infomedic_observacion",
-								"campo_marcador"=>":Observacion",
-								"campo_valor"=>$infomedic_observacion
-							],
-							[
-								"campo_nombre"=>"infomedic_covid",
-								"campo_marcador"=>":VacunasCovid",
-								"campo_valor"=>$infomedic_covid
-							],
-							[
-								"campo_nombre"=>"infomedic_vacunas",
-								"campo_marcador"=>":Vacunas",
-								"campo_valor"=>$infomedic_vacunas
-							]
-						];
+						$infomedic_medicamentos!="" || $infomedic_alergia1!="" || $infomedic_alergia2!="" || $infomedic_cirugias!="" ||
+						$infomedic_observacion!=""){
+							$infomedic_reg=[
+								["campo_nombre"=>"infomedic_alumnoid","campo_marcador"=>":Alumnoid","campo_valor"=>$alumnoid],
+								["campo_nombre"=>"infomedic_fecha","campo_marcador"=>":Fechacreacion","campo_valor"=>date("Y-m-d H:i:s")],
+								["campo_nombre"=>"infomedic_tiposangre","campo_marcador"=>":Tiposangre","campo_valor"=>$infomedic_tiposangre],
+								["campo_nombre"=>"infomedic_peso","campo_marcador"=>":Peso","campo_valor"=>$infomedic_peso],
+								["campo_nombre"=>"infomedic_talla","campo_marcador"=>":Talla","campo_valor"=>$infomedic_talla],
+								["campo_nombre"=>"infomedic_enfermedad","campo_marcador"=>":Enfermedad","campo_valor"=>$infomedic_enfermedad],
+								["campo_nombre"=>"infomedic_medicamentos","campo_marcador"=>":Medicamentos","campo_valor"=>$infomedic_medicamentos],
+								["campo_nombre"=>"infomedic_alergia1","campo_marcador"=>":AlergiaMedicamentos","campo_valor"=>$infomedic_alergia1],
+								["campo_nombre"=>"infomedic_alergia2","campo_marcador"=>":AlergiaObjetos","campo_valor"=>$infomedic_alergia2],
+								["campo_nombre"=>"infomedic_cirugias","campo_marcador"=>":Cirugias","campo_valor"=>$infomedic_cirugias],
+								["campo_nombre"=>"infomedic_observacion","campo_marcador"=>":Observacion","campo_valor"=>$infomedic_observacion],
+								["campo_nombre"=>"infomedic_covid","campo_marcador"=>":VacunasCovid","campo_valor"=>$infomedic_covid],
+								["campo_nombre"=>"infomedic_vacunas","campo_marcador"=>":Vacunas","campo_valor"=>$infomedic_vacunas]
+							];
 
 						$this->guardarDatos("alumno_infomedic",$infomedic_reg);
 					}
-
 				}
 				/*---------------Fin de registro del tab Información Médica del alumno*/
-
-
 				/*---------------Registro del tab Contacto Emergencia del alumno------------*/
 				$cemer_nombre 		= $this->limpiarCadena($_POST['cemer_nombre']);
 				$cemer_celular 		= $this->limpiarCadena($_POST['cemer_celular']);
@@ -1513,26 +1326,10 @@
 				if($cmer->rowCount()>0){
 
 					$cemergencia_reg=[
-						[
-							"campo_nombre"=>"cemer_alumnoid",
-							"campo_marcador"=>":Alumnoid",
-							"campo_valor"=>$alumnoid
-						],						
-						[
-							"campo_nombre"=>"cemer_nombre",
-							"campo_marcador"=>":NombreContactoEmer",
-							"campo_valor"=>$cemer_nombre
-						],
-						[
-							"campo_nombre"=>"cemer_celular",
-							"campo_marcador"=>":CelularContactoEmer",
-							"campo_valor"=>$cemer_celular
-						],
-						[
-							"campo_nombre"=>"cemer_parentesco",
-							"campo_marcador"=>":ParentescoContactoEmer",
-							"campo_valor"=>$cemer_parentesco
-						]
+						["campo_nombre"=>"cemer_alumnoid","campo_marcador"=>":Alumnoid","campo_valor"=>$alumnoid],
+						["campo_nombre"=>"cemer_nombre","campo_marcador"=>":NombreContactoEmer","campo_valor"=>$cemer_nombre],
+						["campo_nombre"=>"cemer_celular","campo_marcador"=>":CelularContactoEmer","campo_valor"=>$cemer_celular],
+						["campo_nombre"=>"cemer_parentesco","campo_marcador"=>":ParentescoContactoEmer","campo_valor"=>$cemer_parentesco]
 					];
 	
 					$condicion=[
@@ -1547,26 +1344,10 @@
 					if($cemer_nombre!="" || $cemer_celular!=""){
 
 						$cemergencia_reg=[
-							[
-								"campo_nombre"=>"cemer_alumnoid",
-								"campo_marcador"=>":Alumnoid",
-								"campo_valor"=>$alumnoid
-							],						
-							[
-								"campo_nombre"=>"cemer_nombre",
-								"campo_marcador"=>":NombreContactoEmer",
-								"campo_valor"=>$cemer_nombre
-							],
-							[
-								"campo_nombre"=>"cemer_celular",
-								"campo_marcador"=>":CelularContactoEmer",
-								"campo_valor"=>$cemer_celular
-							],
-							[
-								"campo_nombre"=>"cemer_parentesco",
-								"campo_marcador"=>":ParentescoContactoEmer",
-								"campo_valor"=>$cemer_parentesco
-							]
+							["campo_nombre"=>"cemer_alumnoid","campo_marcador"=>":Alumnoid","campo_valor"=>$alumnoid],						
+							["campo_nombre"=>"cemer_nombre","campo_marcador"=>":NombreContactoEmer","campo_valor"=>$cemer_nombre],
+							["campo_nombre"=>"cemer_celular","campo_marcador"=>":CelularContactoEmer","campo_valor"=>$cemer_celular],
+							["campo_nombre"=>"cemer_parentesco","campo_marcador"=>":ParentescoContactoEmer","campo_valor"=>$cemer_parentesco]
 						];
 		
 						$condicion=[
@@ -1576,7 +1357,6 @@
 						];
 						$this->guardarDatos("alumno_cemergencia",$cemergencia_reg);
 					}
-
 				}
 				/*---------------Fin de registro del tab Contacto Emergencia del alumno------*/
 
@@ -1587,16 +1367,8 @@
 				if($cmer->rowCount()>0){					
 									
 					$asignacion_horario_reg = [
-						[
-							"campo_nombre" => "asignahorario_horarioid",
-							"campo_marcador" => ":Horarioid",
-							"campo_valor" => $horario_id
-						],
-						[
-							"campo_nombre" => "asignahorario_alumnoid",
-							"campo_marcador" => ":Alumnoid",
-							"campo_valor" => $alumnoid						
-						]
+						["campo_nombre" => "asignahorario_horarioid","campo_marcador" => ":Horarioid","campo_valor" => $horario_id],
+						["campo_nombre" => "asignahorario_alumnoid","campo_marcador" => ":Alumnoid","campo_valor" => $alumnoid]
 					];
 
 					$condicion=[
@@ -1611,34 +1383,55 @@
 					if($horario_id!="" || $alumnoid!=""){
 
 						$asignacion_horario_reg = [
-							[
-								"campo_nombre" => "asignahorario_horarioid",
-								"campo_marcador" => ":Horarioid",
-								"campo_valor" => $horario_id
-							],
-							[
-								"campo_nombre" => "asignahorario_alumnoid",
-								"campo_marcador" => ":Alumnoid",
-								"campo_valor" => $alumnoid						
-							]
+							["campo_nombre" => "asignahorario_horarioid","campo_marcador" => ":Horarioid","campo_valor" => $horario_id],
+							["campo_nombre" => "asignahorario_alumnoid","campo_marcador" => ":Alumnoid","campo_valor" => $alumnoid]
 						];
 
 						$this->guardarDatos("asistencia_asignahorario",$asignacion_horario_reg);
 					}
-
 				}
+				return json_encode($alerta);
 				/*---------------Fin de actualizacion de horariop de entrenamiento------*/
 
-			}else{
-				$alerta=[
+			}catch (Exception $e) {
+				return json_encode([
 					"tipo"=>"simple",
-					"titulo"=>"Alumno no actualizado",
-					"texto"=>"No fue posible actualizar los datos del alumno ".$alumno_identificacion." | ".$alumno_primernombre." ".$alumno_apellidopaterno.", por favor intente nuevamente",
-					"icono"=>"success"
-				];
+					"titulo"=>"Error",
+					"texto"=>$e->getMessage(),
+					"icono"=>"error"
+				]);
 			}
-			return json_encode($alerta);
 		}
+
+		
+		/**
+		 * Procesa y valida una imagen subida
+		 */
+		private function procesarImagen($file, $directorio, $identificacion){
+			if($file['size']/1024 > 4000){
+				throw new Exception("La imagen supera el peso permitido (4MB).");
+			}
+			$mime = mime_content_type($file['tmp_name']);
+			if(!in_array($mime, ["image/jpeg","image/png"])){
+				throw new Exception("El formato de la imagen no está permitido.");
+			}
+
+			if(!file_exists($directorio)){
+				if(!mkdir($directorio,0777,true)){
+					throw new Exception("No se pudo crear el directorio de imágenes.");
+				}
+			}
+
+			$ext = ($mime=="image/jpeg")?".jpg":".png";
+			$nombre = str_ireplace(" ","_",$identificacion)."_".rand(0,100).$ext;
+			$rutaFinal = $directorio.$nombre;
+
+			if(!$this->resizeImageGD($file['tmp_name'],800,600,$rutaFinal)){
+				throw new Exception("No fue posible guardar la imagen.");
+			}
+			return $nombre;
+		}
+
 
 		/*----------  Controlador eliminar foto alumno  ----------*/
 		public function eliminarFotoAlumnoControlador(){
