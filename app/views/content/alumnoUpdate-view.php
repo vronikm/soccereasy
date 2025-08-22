@@ -486,7 +486,7 @@
 										<div class="col-md-3">
 											<div class="form-group">
 												<label for="cemer_celular">Celular emergencia</label>
-												<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" value="<?php echo $cemer_celular;?>" required>                          
+												<input type="text" class="form-control" id="cemer_celular" name="cemer_celular" value="<?php echo $cemer_celular;?>" >                          
 											</div>
 										</div>
 										<div class="col-md-3">
