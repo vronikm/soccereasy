@@ -1134,38 +1134,18 @@
 		}
 
 		//-------------------------------------------------Asignar alumnos--------------------------------------
-		public function listarAlumnos($horario_id, $identificacion, $apellidopaterno, $primernombre, $anio, $sede){	
-			if($identificacion!=""){
-				$identificacion .= '%'; 
-			}
-			if($primernombre!=""){
-				$primernombre .= '%';
-			} 
-			if($apellidopaterno!=""){
-				$apellidopaterno .= '%';
-			} 			
-
+		public function listarAlumnos($horario_id, $sede){	
+			// Preparar condiciones dinámicas
 			$tabla="";
-			$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
-								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid
-								WHERE (A.alumno_primernombre LIKE '".$primernombre."' 
-								OR A.alumno_identificacion LIKE '".$identificacion."' 
-								OR A.alumno_apellidopaterno LIKE '".$apellidopaterno."') ";			
-			if($anio!=""){
-				$consulta_datos .= " and YEAR(alumno_fechanacimiento) = '".$anio."'"; 
-			}
+			$condiciones = [];
+			
+			$condiciones[] = "A.alumno_estado = 'A' AND A.alumno_sedeid='".$sede."' AND A.alumno_id NOT IN (SELECT asignahorario_alumnoid FROM asistencia_asignahorario)";
 
-
-
-			if($identificacion=="" && $primernombre=="" && $apellidopaterno==""){
-				$consulta_datos="SELECT S.sede_nombre, A.* FROM sujeto_alumno A
-								INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid WHERE YEAR(A.alumno_fechanacimiento) = '".$anio."'";
-			}	
-
-			$consulta_datos .= " AND A.alumno_estado = 'A' AND A.alumno_sedeid='".$sede."'";
-
-			$consulta_datos .= " AND A.alumno_id NOT IN (SELECT asignahorario_alumnoid FROM asistencia_asignahorario)";
-
+			$consulta_datos = "SELECT S.sede_nombre, A.* FROM sujeto_alumno A
+							   INNER JOIN general_sede S ON S.sede_id = A.alumno_sedeid
+							   WHERE " . implode(" AND ", $condiciones);
+			
+			// Ejecutar consulta			
 			$datos = $this->ejecutarConsulta($consulta_datos);
 			$datos = $datos->fetchAll();
 
@@ -1190,7 +1170,16 @@
 		}
 
 		public function buscarHorario($horario_id){
-			$consulta_datos="SELECT * FROM asistencia_horario WHERE horario_id = ".$horario_id;	
+			$consulta_datos="SELECT AH.horario_id, CONCAT(HORA.hora_inicio, ' - ', HORA.hora_fin, ' - ', AH.horario_detalle) AS HORARIO
+								FROM asistencia_horario AH
+									INNER JOIN( 
+										SELECT detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+										FROM asistencia_horario_detalle D
+										INNER JOIN asistencia_hora H on H.hora_id = D.detalle_horaid
+										GROUP BY detalle_horarioid, detalle_horaid, H.hora_inicio, H.hora_fin
+									)HORA ON HORA.detalle_horarioid = AH.horario_id
+
+								WHERE AH.horario_estado = 'A' AND AH.horario_id = ".$horario_id;
 
 			$datos = $this->ejecutarConsulta($consulta_datos);		
 			return $datos;
