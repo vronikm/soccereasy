@@ -128,7 +128,7 @@
               </li>
           
               <li class="nav-header">INGRESOS LUGAR ENTRENAMIENTO</li>
-                <li class="nav-item <?php if ($url[0]=='ingresoList' || $url[0]=='egresoList' || $url[0]=='balanceResultados') echo 'menu-open'; else echo ''; ?>">
+                <li class="nav-item <?php if ($url[0]=='estadisticas' || $url[0]=='ingresosLugarEntrenamiento' || $url[0]=='reporteIngresosMorames') echo 'menu-open'; else echo ''; ?>">
                   <li class="nav-item">
                     <a href="<?php echo APP_URL."estadisticas/" ?>" class="nav-link <?php if ($url[0]=='estadisticas') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon fas fa-chart-bar"></i>
