@@ -3,7 +3,7 @@
   use app\controllers\menuController;
   $insGenerar = new menuController();	
 
-    $nombre= ($_SESSION['sede'] != "") ? 'Champions '.$_SESSION['sede'] : "Champions admin";
+    $nombre= ($_SESSION['sede'] != "") ? 'Champions '.$_SESSION['sede'] : "Champions C.F";
     $session_rolid= $_SESSION['rol'];
     $usuario_login=$_SESSION['usuario'];
 
