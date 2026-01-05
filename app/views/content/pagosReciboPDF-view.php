@@ -134,7 +134,7 @@
     $pdf->Image(APP_URL.$filename, 165, 89, 23, 23);
     //$pdf->Image(APP_URL.'app/views/dist/img/temp/50416091422114.png', 165, 89, 23, 23);
 
-    $pdf->Image(APP_URL.'app/views/imagenes/rubricas/FirmaIDVLoja.jpg', 110, 89, 47, 23);
+    $pdf->Image(APP_URL.'app/views/imagenes/rubricas/FirmaChampions.jpg', 110, 89, 47, 23);
      
     unlink($filename);
     //echo "$fecha";		
