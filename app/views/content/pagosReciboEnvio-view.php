@@ -131,7 +131,7 @@
         $pdf->SetXY( 120, 112); $pdf->SetFont( "Arial", "B", 8 ); $pdf->Cell( 65, 8, "FIRMA AUTORIZADA", 0, 0, 'C');    
 
         $pdf->Image(APP_URL.$filename, 165, 89, 23, 23);
-        $pdf->Image(APP_URL.'app/views/imagenes/rubricas/FirmaIDVLoja.jpg', 110, 89, 47, 23);
+        $pdf->Image(APP_URL.'app/views/imagenes/rubricas/FirmaChampions.jpg', 110, 89, 47, 23);
         
         unlink($filename);
 
@@ -152,11 +152,11 @@
     
     NOTA: Este correo electrónico servirá como recibo oficial de su pago.
     
-    Escuela de Fútbol Inpendiente del Valle ".$nombre_sede;
+    Champions Club de Fútbol ".$nombre_sede;
     
 	$message = mb_convert_encoding($message, 'ISO-8859-1', 'UTF-8');
 
-	$from = "escuelaidvloja@gmail.com";
+	$from = "championsclubdefutbol@gmail.com";
 	$headers = "From: " . $from;
 
 	// Ruta del archivo adjunto

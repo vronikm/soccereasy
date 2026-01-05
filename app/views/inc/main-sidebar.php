@@ -3,7 +3,7 @@
   use app\controllers\menuController;
   $insGenerar = new menuController();	
 
-    $nombre= ($_SESSION['sede'] != "") ? 'IDV '.$_SESSION['sede'] : "IDV admin";
+    $nombre= ($_SESSION['sede'] != "") ? 'Champions '.$_SESSION['sede'] : "Champions admin";
     $session_rolid= $_SESSION['rol'];
     $usuario_login=$_SESSION['usuario'];
 
@@ -22,7 +22,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-      <img src="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png" alt="IDVLoja Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png" alt="Champions Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light"><?php echo $nombre; ?></span>
     </a>
 
