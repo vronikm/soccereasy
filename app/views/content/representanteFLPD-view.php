@@ -38,6 +38,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo APP_NAME; ?> | Formulario PDP</title>
+	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
 
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -117,7 +118,7 @@
 									<!-- /.col -->
 									<div class="col-sm-5 invoice-col">									
 										<address class="text-center">	
-											<strong class="profile-username">ESCUELA DE FÚTBOL <br> INDEPENDIENTE DEL VALLE <?php echo $sede_nombre ?> </strong><br><br>
+											<strong class="profile-username">ESCUELA <br> <?php echo mb_strtoupper(APP_NAME, 'UTF-8'); ?> </strong><br><br>
 												<p class="lead">Fecha: <?php echo  $fechahoy; ?></p>								
 										</address>
 									</div>
@@ -144,8 +145,8 @@
 													<th>2. Finalidad del tratamiento de datos</th>																					
 												</tr>	
 												<tr>													
-													<td colspan="3">En Escuela INDEPENDIENTE DEL VALLE <?php echo $sede_nombre ?>, recolectamos y tratamos los datos personales de nuestros alumnos y sus representantes legales con las siguientes finalidades:<br>
-																	•	Gestión administrativa y operativa de la inscripción, pagos mensuales y participación del alumno en las actividades de la Escuela IDV <?php echo $sede_nombre ?>.<br>
+													<td colspan="3">En Escuela <?php echo mb_strtoupper(APP_NAME, 'UTF-8'); ?>, recolectamos y tratamos los datos personales de nuestros alumnos y sus representantes legales con las siguientes finalidades:<br>
+																	•	Gestión administrativa y operativa de la inscripción, pagos mensuales y participación del alumno en las actividades de la Escuela <?php echo mb_strtoupper(APP_NAME, 'UTF-8'); ?><br>
 																	•	Comunicación de eventos, horarios de entrenamiento, fechas de torneos, actividades y todo tipo de información relevante.<br>
 																	•	Atención de situaciones de emergencia, incluyendo acceso a información de contacto y datos médicos básicos proporcionados por el representante legal.<br>
 																	•	Registro de contenido audiovisual (fotos y videos) para la promoción de actividades en redes sociales y material institucional, siempre con el consentimiento del representante del alumno.
@@ -179,13 +180,13 @@
 													<th>6. Consentimiento</th>																					
 												</tr>	
 												<tr>													
-													<td colspan="3">Declaro que he leído y comprendido los términos de este consentimiento y autorizo a la Escuela de Fútbol INDEPENDIENTE DEL VALLE <?php echo $sede_nombre ?> a recolectar y tratar los datos personales mencionados, en los términos señalados en este documento.</td>												
+													<td colspan="3">Declaro que he leído y comprendido los términos de este consentimiento y autorizo a la Escuela <?php echo mb_strtoupper(APP_NAME, 'UTF-8'); ?> a recolectar y tratar los datos personales mencionados, en los términos señalados en este documento.</td>												
 												</tr>
 												<tr>
 													<td></td>
 												</tr>
 												<tr>													
-													<td colspan="3">Sí, autorizo el uso de imágenes de mi(s) representado(s) (fotos y videos) en las redes sociales y material promocional de la Escuela de Fútbol INDEPENDIENTE DEL VALLE <?php echo $sede_nombre ?> y en todas sus sedes.<br>
+													<td colspan="3">Sí, autorizo el uso de imágenes de mi(s) representado(s) (fotos y videos) en las redes sociales y material promocional de la Escuela <?php echo mb_strtoupper(APP_NAME, 'UTF-8'); ?> y en todas sus sedes.<br>
 																	Sí, consiento el tratamiento de los datos personales de mi(s) representado(s) con las finalidades descritas.<br>
 													</td>												
 												</tr>

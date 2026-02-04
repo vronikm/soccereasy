@@ -18,15 +18,6 @@
 		$fecha_fin = $fecha_fin->fetch(); 
 		$fecha_fin = $fecha_fin['FECHA_MAXIMA'];
 	}	
-/*
-	$datos=$pago_fecharegistro->seleccionarDatos("Unico","general_sede","sede_id",$sede_id);
-	if($datos->rowCount()==1){
-		$datos=$datos->fetch();
-		$sede_nombre		= $datos['sede_nombre'];
-	}else{
-		$sede_nombre = "";
-	}
-		*/
 ?>
 
 <html lang="es">
@@ -34,8 +25,9 @@
     <meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>IDV Loja| Reporte de pagos para facturación</title>
-
+	<title><?php echo APP_NAME; ?>| Reporte de pagos para facturación</title>
+	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
+	
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
