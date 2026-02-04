@@ -54,6 +54,9 @@
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
 	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/sweetalert2.min.css">
 	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
+	
+	<link rel="stylesheet" href="<?php echo APP_URL; ?>config/server.php">	
+
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -72,7 +75,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h5 class="m-0">Detalle de pensiones pendientes <?php echo $repre_nombre; ?></h5>
+							<h5 class="m-0"><?php echo $tdetallepension.' '. $repre_nombre; ?></h5>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -95,7 +98,7 @@
 							<div class="invoice p-3 mb-3">							
 								<div class="col-sm-11 invoice-col">									
 									<address class="text-center"><br>
-										<strong class="profile-username">ESCUELA INDEPENDIENTE DEL VALLE</strong><br><br>											
+										<strong class="profile-username">CHAMPIONS CLUB DE FÚTBOL</strong><br><br>											
 										<div class="row">
 											<div class="row">
 												<div class="col-4"></div>														
