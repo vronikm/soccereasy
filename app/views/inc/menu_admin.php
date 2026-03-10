@@ -27,6 +27,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="<?php echo APP_URL."carnetList/" ?>" class="nav-link <?php if ($url[0]=='carnetList') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon far fa-address-card text-info"></i>
+                  <p>Carnets</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="<?php echo APP_URL."torneoList/" ?>" class="nav-link <?php if ($url[0]=='torneoList' || $url[0]=='equipoList' || $url[0]=='jugadorNew' || $url[0]=='jugadorLista') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon far fa-futbol text-info"></i>
                   <p>Torneos</p>
@@ -42,8 +49,8 @@
 
               <li class="nav-item">
                 <a href="<?php echo APP_URL."facturasList/" ?>" class="nav-link <?php if ($url[0]=='facturasList' || $url[0]=='facturasNew') echo 'active'; else echo ''; ?>">
-                  <i class="nav-icon fa fa-address-card text-info"></i>
-                  <p>Facturas</p>
+                  <i class="nav-icon fa fa-money-check text-info"></i>
+                  <p>Facturación</p>
                 </a>
               </li>
 
@@ -65,6 +72,12 @@
                     <a href="<?php echo APP_URL."reporteAsistencia/" ?>" class="nav-link <?php if ($url[0]=='reporteAsistencia' || $url[0]=='buscarAsistencia') echo 'active'; else echo ''; ?>">
                       <i class="nav-icon far fa-circle text-info"></i>
                       <p>Ver registro</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."asistenciaList/" ?>" class="nav-link <?php if ($url[0]=='asistenciaList') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-circle text-info"></i>
+                      <p>Ver asistencias</p>
                     </a>
                   </li>
                 </ul>
@@ -314,7 +327,19 @@
                       <p>Tablas</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."carnetConf/" ?>" class="nav-link <?php if ($url[0]=='carnetConf') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-address-card text-info"></i>
+                      <p>Carnets</p>
+                    </a>
+                  </li>
 
+                  <li class="nav-item">
+                    <a href="<?php echo APP_URL."feriadosList/" ?>" class="nav-link <?php if ($url[0]=='feriadosList') echo 'active'; else echo ''; ?>">
+                      <i class="nav-icon far fa-calendar-alt text-info"></i>
+                      <p>Feriados</p>
+                    </a>
+                  </li>
                   <li class="nav-item">
                     <a href="<?php echo APP_URL."catalogosNew/" ?>" class="nav-link <?php if ($url[0]=='catalogosNew') echo 'active'; else echo ''; ?>" >
                       <i class="nav-icon far fa-circle text-info"></i>
