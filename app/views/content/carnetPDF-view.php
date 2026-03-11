@@ -167,7 +167,7 @@ foreach($carnetsData as $carnet) {
     // ====================
     $logoPath = "./app/views/imagenes/fotos/sedes/" . $sede['sede_foto'];
     if(file_exists($logoPath)) {
-        $pdf->Image($logoPath, $x + 40, $y + 2, 12, 17);
+        $pdf->Image($logoPath, $x + 40, $y + 2, 18, 17);
     }
     
     // Código QR
