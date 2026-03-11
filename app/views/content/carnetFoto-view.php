@@ -10,6 +10,16 @@
     
     $alumnoid=$insCarnet->limpiarCadena($url[1]);
     $datos=$insCarnet->infoAlumnoCarnet($alumnoid);
+
+    if(is_string($datos)){
+        $alerta = json_decode($datos, true);
+        die('<div style="font-family:sans-serif; padding:30px; color:#c0392b;">
+                <h2>⚠️ ' . htmlspecialchars($alerta['titulo']) . '</h2>
+                <p>' . htmlspecialchars($alerta['texto']) . '</p>
+                <a href="javascript:history.back()">← Volver</a>
+            </div>');
+    }
+
 	if($datos->rowCount()==1){
 		$datos=$datos->fetch();
         

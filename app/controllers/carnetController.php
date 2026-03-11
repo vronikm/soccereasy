@@ -118,7 +118,17 @@
 								INNER JOIN asistencia_horario on asignahorario_horarioid = horario_id
 								WHERE alumno_id = $alumnoid";
             $datos = $this->ejecutarConsulta($consulta_datos);
-            return $datos;
+			if($datos && $datos->rowCount() <=0) {
+				$alerta=[
+							"tipo"=>"simple",
+							"titulo"=>"Error",
+							"texto"=>"Alumno no tiene un horario asignado, asigne un horario para generar el carnet.",
+							"icono"=>"error"
+				];
+				return json_encode($alerta);				
+			}else{
+				return $datos;
+			}
         }
 
         public function EstadoAlumno($alumnoid){		
