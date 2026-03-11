@@ -109,8 +109,8 @@ body {
 }
 
 .logo {
-    width: 120px;
-    height: 120px;
+    width: 145px;
+    height: 100px;
     border-radius: 8px;
     border: 2px solid #fff;
     margin-bottom: -20px; /* Distancia entre el logo y los datos del alumno */
