@@ -200,7 +200,7 @@ foreach($carnetsData as $carnet) {
     $pdf->SetFont('Arial', 'B', 8.5);
     $pdf->SetTextColor(0, 0, 0);
     $pdf->SetXY($x + $carnetWidth - 15, $y + 14);
-    $pdf->Cell(12, 3, $carnet['alumno_carnet'], 0, 0, 'C');
+
 
     // ====================
     // FOTO DEL ALUMNO

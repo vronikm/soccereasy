@@ -521,7 +521,7 @@
 			$sql = "INSERT INTO alumno_carnet 
 					(carnet_mes, carnet_anio, carnet_alumnoid, carnet_fecha_emision, carnet_fecha_impresion) 
 					VALUES
-					(:numero, :mes, :anio, :alumno_id, CURDATE(), CURDATE())";
+					(:mes, :anio, :alumno_id, CURDATE(), CURDATE())";
 			
 			$parametros = [
 				':mes' => $mes,
