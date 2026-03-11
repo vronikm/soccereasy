@@ -77,6 +77,23 @@
         9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
     ];
     $nombreMesActual = $nombresMeses[$mesActual];
+
+    // Convertir imágenes decorativas a base64 para evitar CORS en html2canvas
+    function imagenABase64($ruta_absoluta) {
+        if (file_exists($ruta_absoluta)) {
+            $tipo = mime_content_type($ruta_absoluta);
+            $data = base64_encode(file_get_contents($ruta_absoluta));
+            return 'data:' . $tipo . ';base64,' . $data;
+        }
+        return '';
+    }
+
+    // Convertir rutas URL a rutas absolutas del servidor
+   
+    $b64_fondo      = imagenABase64(APP_URL . 'app/views/imagenes/carnet/' . $sede['escuela_verticalfondo']);
+    $b64_principal  = imagenABase64(APP_URL . 'app/views/imagenes/carnet/' . $sede['escuela_verticalprincipal']);
+    $b64_foto       = imagenABase64(APP_URL . 'app/views/imagenes/fotos/alumno/' . $datos['alumno_imagen']);
+    $b64_sede_foto  = imagenABase64(APP_URL . 'app/views/imagenes/fotos/sedes/' . $sede['sede_foto']);
 ?>
 
 <!DOCTYPE html>

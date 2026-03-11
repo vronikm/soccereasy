@@ -26,12 +26,13 @@ body {
     position: relative;
     z-index: 2;
     width: 550px;
-    height: 400px;
+    height: 400px;        /* Altura visual en pantalla */
+    min-height: 400px;    /* Garantiza mínimo visible */
     background: #fff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    margin-bottom: 15px; /** Espacio para el botón de descarga **/
+    overflow: visible;    /* ← CRÍTICO: permite que html2canvas capture todo el contenido */
+    margin-bottom: 15px;  /* Espacio para el botón de descarga */
 }
 
 /* ============================================
@@ -47,12 +48,14 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 150px; /* Ancho de la silueta izquierda */
-    height: 100%;
+    width: 150px;
+    height: 400px;        /* Altura fija igual al diseño original */
     object-fit: cover;
     opacity: 1;
     z-index: 1;
     pointer-events: none;
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
 }
 
 /* Capa 1: Camiseta base del jugador */
@@ -61,7 +64,7 @@ body {
     left: 5px;
     top: 0;
     width: 150px;
-    height: 100%;
+    height: 400px;        /* Altura fija igual al diseño original */
     object-fit: cover;
     z-index: 1;
     opacity: 0.4;
@@ -72,11 +75,11 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 148px; /* Distancia de la imagen izquierda*/
-    height: 100%;
+    width: 148px;
+    height: 400px;        /* Altura fija igual al diseño original */
     object-fit: cover;
     z-index: 2;
-    opacity: 0.1; /* Ajusta para ver la silueta debajo */
+    opacity: 0.1;
 }
 
 /* ============================================
@@ -85,10 +88,10 @@ body {
 
 .decorativo-derecha {
     position: absolute;
-    left: 27%; /* Justo después de la silueta izquierda */
+    left: 27%;
     top: 0;
-    width: 2%; /* Ancho de la decoración central */
-    height: 100%;
+    width: 2%;
+    height: 400px;        /* Altura fija igual al diseño original */
     object-fit: cover;
     z-index: 2;
     pointer-events: none;
@@ -304,4 +307,3 @@ body {
         page-break-after: always;
     }
 }
-
