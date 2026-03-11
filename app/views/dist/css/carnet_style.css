@@ -35,10 +35,10 @@ body {
 }
 
 /* ============================================
-   LADO IZQUIERDO: Silueta del jugador + color del mes
+   LADO IZQUIERDO: Camiseta del jugador + color del mes
    ============================================
    Estructura:
-   1. Silueta del jugador (vertical_fondo.png) - z-index: 1
+   1. Camiseta del jugador (vertical_fondo.png) - z-index: 1
    2. Máscara de color (vertical_azul.png) - z-index: 2
    3. Overlay de color del mes - z-index: 3
    ============================================ */
@@ -55,12 +55,12 @@ body {
     pointer-events: none;
 }
 
-/* Capa 1: Silueta base del jugador */
-.capa-silueta {
+/* Capa 1: Camiseta base del jugador */
+.capa-camiseta {
     position: absolute;
-    left: 20px;
+    left: 5px;
     top: 0;
-    width: 120px;
+    width: 150px;
     height: 100%;
     object-fit: cover;
     z-index: 1;

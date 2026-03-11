@@ -108,10 +108,10 @@
     <body>
         <div class="carnet" id="carnet">
 
-            <!-- LADO IZQUIERDO: Silueta del jugador con color del mes -->
+            <!-- LADO IZQUIERDO: Camiseta del jugador con color del mes -->
             <div class="decorativo-izquierda">
-                <!-- Capa 1: Silueta base del jugador (fondo) -->
-                <img src="<?php echo $carnet_verticalfondo ?>" class="capa-silueta" alt="Silueta jugador">
+                <!-- Capa 1: Camiseta base del jugador (fondo) -->
+                <img src="<?php echo $carnet_verticalfondo ?>" class="capa-camiseta" alt="Camiseta jugador">
                 
                 <!-- Capa 2: Máscara de color del mes (vertical_azul.png coloreada) -->
                 <!-- <img src="<?php echo $carnet_verticalcolor ?>" class="capa-color" alt="Color del mes"> -->
