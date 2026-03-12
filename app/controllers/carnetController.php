@@ -75,7 +75,7 @@
 							<td>' . $rows['FechaUltPension'] . '</td>
 							<td>' . $rows['Condicion'] . '</td>
 							<td>							
-								<a href="' . APP_URL . 'carnetFoto/' . $rows['alumno_id'] . '/" 
+								<a href="' . APP_URL . 'carnetFotoPDF/' . $rows['alumno_id'] . '/" 
 								class="btn float-right btn-success btn-xs" 
 								style="margin-right: 5px;">
 								Ver carnet
