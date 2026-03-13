@@ -114,10 +114,28 @@
 	);
 	$edad = (int)$alumno['edad'] + 1;
 
-	// Buscar fuente TrueType (Windows + ruta del proyecto)
+	// Buscar fuente TrueType — primero fuentes incluidas en el proyecto,
+	// luego rutas comunes de hosting Linux/Unix, finalmente Windows (desarrollo local).
 	$font_paths = [
-		$base_path . '/app/views/dist/fonts/sourcesanspro/SourceSansPro-Bold.ttf',
+		// ── Fuentes del proyecto (funciona en cualquier hosting) ──
 		$base_path . '/app/views/dist/fonts/OpenSans-Bold.ttf',
+		$base_path . '/app/views/dist/fonts/OpenSans-Regular.ttf',
+		// ── Linux hosting: DejaVu (instalado en casi todos) ──────
+		'/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',
+		'/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf',
+		'/usr/share/fonts/TTF/DejaVuSans-Bold.ttf',
+		'/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf',
+		// ── Linux hosting: Liberation (cPanel/CentOS/AlmaLinux) ──
+		'/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',
+		'/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf',
+		'/usr/share/fonts/liberation/LiberationSans-Bold.ttf',
+		// ── Linux hosting: FreeSans ───────────────────────────────
+		'/usr/share/fonts/truetype/freefont/FreeSansBold.ttf',
+		'/usr/share/fonts/gnu-free/FreeSansBold.ttf',
+		// ── Linux hosting: Ubuntu fonts ───────────────────────────
+		'/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf',
+		'/usr/share/fonts/ubuntu/Ubuntu-B.ttf',
+		// ── Windows (desarrollo local) ────────────────────────────
 		'C:/Windows/Fonts/arialbd.ttf',
 		'C:/Windows/Fonts/arial.ttf',
 	];
