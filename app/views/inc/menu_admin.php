@@ -34,6 +34,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="<?php echo APP_URL."cumpleaniosList/" ?>" class="nav-link <?php if ($url[0]=='cumpleaniosList' || $url[0]=='cumpleaniosTarjeta') echo 'active'; else echo ''; ?>">
+                  <i class="nav-icon fas fa-birthday-cake" style="color:#ffe001;"></i>
+                  <p>Cumpleaños</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="<?php echo APP_URL."torneoList/" ?>" class="nav-link <?php if ($url[0]=='torneoList' || $url[0]=='equipoList' || $url[0]=='jugadorNew' || $url[0]=='jugadorLista') echo 'active'; else echo ''; ?>">
                   <i class="nav-icon far fa-futbol text-info"></i>
                   <p>Torneos</p>
