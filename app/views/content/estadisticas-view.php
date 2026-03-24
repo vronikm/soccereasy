@@ -1,332 +1,528 @@
 <?php
 	use app\controllers\dashboardController;
 	$insDashboard = new dashboardController();
-	
-	$ingresosLugar=$insDashboard->ingresosLugarEntr();
-	
-	foreach($ingresosLugar as $rows){
-		$sede[] = $rows['sede_nombre'];
-		$lugar[] = $rows['lugar_nombre'];
-        $alumnos[] = (int)$rows['ALUMNOS_ENTRENAN'];
-        $sinregpago[] = (int)$rows['ALUMNOS_SINREGPAGOS'];
+
+	$ingresosLugar = $insDashboard->ingresosLugarEntr();
+	$datos = $ingresosLugar->fetchAll();
+
+	$sede = $lugar = $alumnos = $sinregpago = $alumnosad = $pensiones = $recaudado = [];
+
+	foreach($datos as $rows){
+		$sede[]      = $rows['sede_nombre'];
+		$lugar[]     = $rows['lugar_nombre'];
+		$alumnos[]   = (int)$rows['ALUMNOS_ENTRENAN'];
+		$sinregpago[]= (int)$rows['ALUMNOS_SINREGPAGOS'];
 		$alumnosad[] = (int)$rows['ALUMNOS_ADEUDAN'];
 		$pensiones[] = (float)$rows['TOTALPENSIONES'];
-		$recaudado[] = (float)$rows['TOTALRECAUDADO'];        
-	}	
-?>
+		$recaudado[] = (float)$rows['TOTALRECAUDADO'];
+	}
 
+	$totalAlumnos    = array_sum($alumnos);
+	$totalAlumnosAd  = array_sum($alumnosad);
+	$totalAlSinPagos = array_sum($sinregpago);
+	$totalPensiones  = array_sum($pensiones);
+	$totalRecaudado  = array_sum($recaudado);
+	$totalPorRecaudar= $totalPensiones - $totalRecaudado;
+	$pctTotal        = $totalPensiones > 0 ? ($totalRecaudado / $totalPensiones * 100) : 0;
+
+	$meses   = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+	$mesAnio = $meses[(int)date('n')] . ' ' . date('Y');
+?>
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo APP_NAME; ?>| Dashboard</title>
-	<link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
-	<!-- Google Font: Source Sans Pro -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
-	<!-- Ionicons -->
-	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-	<!-- Tempusdominus Bootstrap 4 -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-	<!-- iCheck -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-	<!-- JQVMap -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/jqvmap/jqvmap.min.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/apexcharts.css">
-	<link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/bootstrap-icons.min.css">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?php echo APP_NAME; ?> | Estadísticas</title>
+  <link rel="icon" type="image/png" href="<?php echo APP_URL; ?>app/views/dist/img/Logos/1104523691001_2.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>app/views/dist/css/adminlte.css">
+  <style>
+    /* ── KPI cards ─────────────────────────────────── */
+    .kpi-card            { border-left: 4px solid; position: relative; overflow: hidden; }
+    .kpi-azul            { border-color: #3498db; }
+    .kpi-rojo            { border-color: #e74c3c; }
+    .kpi-naranja         { border-color: #e67e22; }
+    .kpi-verde           { border-color: #2ecc71; }
+    .kpi-amarillo        { border-color: #f1c40f; }
+    .kpi-card .kpi-valor { font-size: 1.55rem; font-weight: 700; line-height: 1.2; }
+    .kpi-card .kpi-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+    .kpi-card .kpi-icon  {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 3.2rem; opacity: 0.08; pointer-events: none;
+    }
 
-	<link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-      integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI="
-      crossorigin="anonymous"
-    />
+    /* ── Badges % ──────────────────────────────────── */
+    .badge-pct           { font-size: 0.82rem; padding: 3px 8px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
+    .pct-verde           { background: #d4edda; color: #155724; }
+    .pct-amarillo        { background: #fff3cd; color: #856404; }
+    .pct-rojo            { background: #f8d7da; color: #721c24; }
 
-  </head>
-  <div class="hold-transition sidebar-mini layout-fixed">	
-    <div class="wrapper">
+    /* ── Color filas ───────────────────────────────── */
+    tr.fila-verde   td   { background-color: #f0fff4 !important; }
+    tr.fila-amarillo td  { background-color: #fffdf0 !important; }
+    tr.fila-rojo    td   { background-color: #fff5f5 !important; }
 
-      <!-- Preloader -->
-      <!--?php require_once "app/views/inc/preloader.php"; ?-->
-      <!-- /.Preloader -->
+    /* ── Tabla ─────────────────────────────────────── */
+    .tabla-estadisticas th {
+      background-color: #343a40; color: #fff;
+      text-align: center; vertical-align: middle; font-size: 0.8rem;
+    }
+    .tabla-estadisticas td  { vertical-align: middle; font-size: 0.86rem; }
+    .tabla-estadisticas tfoot td { background-color: #e9ecef; font-weight: 700; text-align: center; }
 
-      <!-- Navbar -->
-      <?php require_once "app/views/inc/navbar.php"; ?>
-      <!-- /.navbar -->
+    /* ── Mini progress-bar ─────────────────────────── */
+    .prog-wrap           { min-width: 80px; }
+    .prog-wrap .progress { height: 7px; border-radius: 4px; margin-top: 3px; }
 
-      <!-- Main Sidebar Container -->
-      <?php require_once "app/views/inc/main-sidebar.php"; ?>
-      <!-- /.Main Sidebar Container -->  
+    /* ── Botones icono ─────────────────────────────── */
+    .boton-icono {
+      width: 30px; height: 30px; background-color: transparent;
+      background-size: contain; background-repeat: no-repeat;
+      background-position: center; border: none; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .boton-icono:hover   { transform: scale(1.15); }
 
-      <!-- vista -->
-      <div class="content-wrapper">
+    /* ── Barra progreso recaudo en KPI ─────────────── */
+    .kpi-progress        { height: 6px; border-radius: 3px; margin-top: 6px; }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
 
-        <!-- Content Header (Page header) -->
-		<div class="content-header">
-			<div class="container-fluid">
-			<div class="row mb-1">
-				<div class="col-sm-6">
-				<h1 class="m-0">Estadísticas</h1>
-				</div><!-- /.col -->
-				<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-					<li class="breadcrumb-item active">Dashboard v1</li>
-				</ol>
-				</div><!-- /.col -->
-			</div><!-- /.row -->
-			</div><!-- /.container-fluid -->
-		</div>
-		<!-- /.content-header -->
+  <?php require_once "app/views/inc/navbar.php"; ?>
+  <?php require_once "app/views/inc/main-sidebar.php"; ?>
 
-		<!-- Main content -->
-		<section class="content">
-			<!-- Gráfica -->
-			<div class="card card-default">
-				<div class="card-header">
-					<h3 class="card-title">Por lugar de entrenamiento</h3>
-					<div class="card-tools">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
-							<i class="fas fa-minus"></i>
-						</button>
-					</div>
-				</div>
-				
-				<title>Gráfico de Estadísticas</title>
-				<canvas id="grafico" width="700" height="200"></canvas>
+  <div class="content-wrapper">
 
-				<!-- Contenedor que envuelve botón + tabla -->
-				<div style="position: absolute; left: 90%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 1;">
-					<!-- Botón Exportar a Excel -->
-					<button onclick="exportarTablaAExcel('tablaDatos', 'IDVLoja-EstadisticasEntrenamiento')" 
-							  class="boton-icono" 
-							  style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Excel.png');" 
-							  title="Exportar a Excel"></button>
-					
-					<!-- Botón Exportar a PDF -->
-					<button onclick="exportarTablaAPDF('tablaDatos', 'IDVLoja-EstadisticasEntrenamiento')" 
-							class="boton-icono" 
-							style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Pdf.png');"
-							title="Exportar a PDF"></button>
-				</div>
-				<div>
-					<table id="tablaDatos" table border="1" cellpadding="8" cellspacing="0" style="margin-top: 30px; width: 100%; border-collapse: collapse;">
-						<thead style="background-color: #f2f2f2;">
-							<tr>
-								<th>Sede</th>
-								<th>Lugar de Entrenamiento</th>
-								<th>Alumnos Entrenando</th>
-								<th>Alumnos adeudan mes</th>
-								<th>Alumnos sin registro pagos</th>	
-								<th>Total Pensiones ($)</th>
-								<th>Valor Recaudado en el mes ($)</th>															
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							$totalAlumnos = $totalAlumnosAd = $totalAlSinPagos = $totalRecaudado = $totalPensiones = 0;
-							for ($i = 0; $i < count($lugar); $i++) {
-								echo '<tr>';
-								echo '<td>' . $sede[$i] . '</td>';
-								echo '<td>' . $lugar[$i] . '</td>';
-								echo '<td style="text-align:center;">' . $alumnos[$i] . '</td>';
-								echo '<td style="text-align:center;">' . $alumnosad[$i] . '</td>';								
-								echo '<td style="text-align:center;">' . $sinregpago[$i] . '</td>';									
-								echo '<td style="text-align:center;">$' . number_format($pensiones[$i], 2) . '</td>';
-								echo '<td style="text-align:center;">$' . number_format($recaudado[$i], 2) . '</td>';																
-								echo '</tr>'; 
-
-								// Acumuladores
-								$totalAlumnos += $alumnos[$i];
-								$totalAlumnosAd += $alumnosad[$i];	
-								$totalAlSinPagos += $sinregpago[$i];
-								$totalRecaudado += $recaudado[$i];
-								$totalPensiones += $pensiones[$i];
-							}
-							?>
-						</tbody>
-						<tfoot style="font-weight: bold; background-color: #eef;">
-							<tr>
-								<td style="text-align: right;"></td>
-								<td style="text-align: right;">Totales:</td>
-								<td style="text-align:center;"><?php echo $totalAlumnos; ?></td>
-								<td style="text-align:center;"><?php echo $totalAlumnosAd; ?></td>
-								<td style="text-align:center;"><?php echo $totalAlSinPagos; ?></td>
-								<td style="text-align:center;">$<?php echo number_format($totalPensiones, 2); ?></td>
-								<td style="text-align:center;">$<?php echo number_format($totalRecaudado, 2); ?></td>					
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-		</section>
-		<!-- /.content -->      
+    <!-- Content Header -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-1">
+          <div class="col-sm-6">
+            <h1 class="m-0">Estadísticas
+              <small class="text-muted" style="font-size:0.55em; font-weight:400;">
+                &nbsp;— <?php echo $mesAnio; ?>
+              </small>
+            </h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="<?php echo APP_URL; ?>dashboard/">Inicio</a></li>
+              <li class="breadcrumb-item active">Estadísticas <?php echo $mesAnio; ?></li>
+            </ol>
+          </div>
+        </div>
       </div>
-      <!-- /.vista -->
-
-      <?php require_once "app/views/inc/footer.php"; ?>
-
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-      </aside>
-      <!-- /.control-sidebar -->
     </div>
-    <!-- ./wrapper -->    
-	<!-- jQuery -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
-	<!-- jQuery UI 1.11.4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-ui/jquery-ui.min.js"></script>
-	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
-	<!-- Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<!-- ChartJS -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/chart.js/Chart.min.js"></script>
-	<!-- Sparkline -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/sparklines/sparkline.js"></script>
-	<!-- JQVMap -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jqvmap/jquery.vmap.min.js"></script>
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-	<!-- jQuery Knob Chart -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery-knob/jquery.knob.min.js"></script>
-	<!-- daterangepicker -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/moment/moment.min.js"></script>
-	<!-- Tempusdominus Bootstrap 4 -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-	<!-- AdminLTE App -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.js"></script>
+    <section class="content">
+      <div class="container-fluid">
 
-	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/pages/dashboard.js"></script>
+        <?php if(empty($lugar)): ?>
+        <!-- Estado vacío -->
+        <div class="card card-default">
+          <div class="card-body text-center py-5">
+            <i class="fas fa-chart-bar fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No hay datos disponibles para <?php echo $mesAnio; ?></h4>
+            <p class="text-muted">Verifique que existan alumnos activos con lugares de entrenamiento asignados.</p>
+          </div>
+        </div>
+        <?php else: ?>
 
-	<script src="<?php echo APP_URL; ?>app/views/js/ajax.js" ></script>
-	<script src="<?php echo APP_URL; ?>app/views/js/main.js" ></script>	
-	<script src="<?php echo APP_URL; ?>app/views/dist/js/sweetalert2.all.min.js" ></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <!-- ── KPI cards ────────────────────────────────── -->
+        <div class="row mb-3">
 
-	<script>
-		const ctx = document.getElementById('grafico').getContext('2d');
-		const chart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: <?php echo json_encode($lugar); ?>,
-				datasets: [
-				{
-					label: 'Total Pensiones ($)',
-					backgroundColor: '#2ecc71',
-					data: <?php echo json_encode($pensiones); ?>
-				},
-				{
-					label: 'Valor Recaudado ($)',
-					backgroundColor: '#f1c40f',
-					data: <?php echo json_encode($recaudado); ?>
-				},
-				{
-					label: 'Alumnos que adeudan',
-					backgroundColor: '#e74c3c',
-					data: <?php echo json_encode($alumnosad); ?>
-				},
-				{
-					label: 'Alumnos Entrenando',
-					backgroundColor: '#3498db',
-					data: <?php echo json_encode($alumnos); ?>
-				}
-				]
-			},
-			options: {
-				indexAxis: 'y', // Esto cambia el gráfico a horizontal
-				responsive: true,
-				plugins: {
-					datalabels: {
-						color: 'black',
-						font: {
-						weight: 'bold'
-						},
-						anchor: 'start',
-						align: 'right',
-						display: function(context) {
-						const { chart, dataset, dataIndex, datasetIndex } = context;
-						const datasets = chart.data.datasets;
+          <!-- Alumnos entrenando -->
+          <div class="col-6 col-md-4 col-lg mb-2">
+            <div class="card kpi-card kpi-azul h-100 mb-0">
+              <div class="card-body py-3 px-3">
+                <div class="kpi-label">Alumnos entrenando</div>
+                <div class="kpi-valor text-primary"><?php echo $totalAlumnos; ?></div>
+                <i class="fas fa-running kpi-icon text-primary"></i>
+              </div>
+            </div>
+          </div>
 
-						// Obtener el valor actual
-						const currentValue = dataset.data[dataIndex];
+          <!-- Adeudan -->
+          <div class="col-6 col-md-4 col-lg mb-2">
+            <div class="card kpi-card kpi-rojo h-100 mb-0">
+              <div class="card-body py-3 px-3">
+                <div class="kpi-label">Adeudan este mes</div>
+                <div class="kpi-valor text-danger"><?php echo $totalAlumnosAd; ?></div>
+                <i class="fas fa-exclamation-circle kpi-icon text-danger"></i>
+              </div>
+            </div>
+          </div>
 
-						// Obtener todos los valores en la misma pila (misma categoría del eje Y)
-						const stackValues = datasets.map(ds => ds.data[dataIndex] || 0);
+          <!-- Sin registro -->
+          <div class="col-6 col-md-4 col-lg mb-2">
+            <div class="card kpi-card kpi-naranja h-100 mb-0">
+              <div class="card-body py-3 px-3">
+                <div class="kpi-label">Sin registro pagos</div>
+                <div class="kpi-valor text-warning"><?php echo $totalAlSinPagos; ?></div>
+                <i class="fas fa-user-clock kpi-icon text-warning"></i>
+              </div>
+            </div>
+          </div>
 
-						// Encontrar el valor máximo de la pila
-						const maxValue = Math.max(...stackValues);
+          <!-- Pensiones -->
+          <div class="col-6 col-md-4 col-lg mb-2">
+            <div class="card kpi-card kpi-verde h-100 mb-0">
+              <div class="card-body py-3 px-3">
+                <div class="kpi-label">Total pensiones est.</div>
+                <div class="kpi-valor text-success">$<?php echo number_format($totalPensiones, 2); ?></div>
+                <i class="fas fa-file-invoice-dollar kpi-icon text-success"></i>
+              </div>
+            </div>
+          </div>
 
-						// Mostrar etiqueta solo si este valor es el mayor en la pila
-						return currentValue === maxValue;
-						},
-						formatter: function(value) {
-						return value;
-						}
-					}
-					},
-				scales: {
-					x: {
-						stacked: true
-					},
-					y: {
-						stacked: true,
-						beginAtZero: true,
-						title: { display: true,	text: 'Cantidad / Valor ($)' },
-						ticks: { stepSize: 500 }// Ajusta según el rango
-					}
-				}
-			},
-			plugins: [ChartDataLabels]
-		});
+          <!-- Recaudado + barra de progreso -->
+          <div class="col-6 col-md-4 col-lg mb-2">
+            <div class="card kpi-card kpi-amarillo h-100 mb-0">
+              <div class="card-body py-3 px-3">
+                <div class="kpi-label">Total recaudado</div>
+                <div class="kpi-valor" style="color:#b8860b;">$<?php echo number_format($totalRecaudado, 2); ?></div>
+                <?php $badgeClass = $pctTotal >= 80 ? 'pct-verde' : ($pctTotal >= 50 ? 'pct-amarillo' : 'pct-rojo');
+                      $barColor   = $pctTotal >= 80 ? 'bg-success' : ($pctTotal >= 50 ? 'bg-warning'  : 'bg-danger'); ?>
+                <div class="mt-1">
+                  <span class="badge-pct <?php echo $badgeClass; ?>"><?php echo number_format($pctTotal, 1); ?>% recaudado</span>
+                </div>
+                <i class="fas fa-hand-holding-usd kpi-icon" style="color:#b8860b;"></i>
+              </div>
+            </div>
+          </div>
 
-		function exportarTablaAExcel(tablaID, nombreArchivo) {
-			const tabla = document.getElementById(tablaID);
-			const libro = XLSX.utils.table_to_book(tabla, {sheet: "Datos"});
-			XLSX.writeFile(libro, nombreArchivo + ".xlsx");
-			}
+        </div>
 
-		async function exportarTablaAPDF(tablaID, nombreArchivo) {
-			const tabla = document.getElementById(tablaID);
-			const canvas = await html2canvas(tabla);
-			const imgData = canvas.toDataURL('image/png');
-			const { jsPDF } = window.jspdf;
-			const pdf = new jsPDF();
-			const imgProps = pdf.getImageProperties(imgData);
-			const pdfWidth = pdf.internal.pageSize.getWidth();
-			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-			pdf.addImage(imgData, 'PNG', 0, 20, pdfWidth, pdfHeight);
-			pdf.save(nombreArchivo + ".pdf");
-		}
-	</script>
+        <!-- ── Card tabla ────────────────────────────────── -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-table mr-1"></i> Detalle por lugar de entrenamiento</h3>
+            <div class="card-tools d-flex align-items-center flex-wrap" style="gap:6px;">
+              <!-- Leyenda semáforo -->
+              <span class="badge-pct pct-verde d-none d-md-inline"><i class="fas fa-circle mr-1"></i> ≥ 80%</span>
+              <span class="badge-pct pct-amarillo d-none d-md-inline"><i class="fas fa-circle mr-1"></i> 50–79%</span>
+              <span class="badge-pct pct-rojo d-none d-md-inline"><i class="fas fa-circle mr-1"></i> &lt; 50%</span>
+              <div style="width:1px; height:20px; background:#dee2e6;" class="d-none d-md-inline-block mx-1"></div>
+              <button onclick="exportarTablaAExcel('tablaDatos','IDVLoja-Estadisticas-<?php echo date('Y-m'); ?>')"
+                      class="boton-icono"
+                      style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Excel.png');"
+                      title="Exportar a Excel"></button>
+              <button onclick="exportarTablaAPDF('tablaDatos','IDVLoja-Estadisticas-<?php echo date('Y-m'); ?>')"
+                      class="boton-icono"
+                      style="background-image: url('<?php echo APP_URL; ?>app/views/imagenes/iconos/Pdf.png');"
+                      title="Exportar a PDF"></button>
+              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Colapsar">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table id="tablaDatos" class="table table-bordered table-sm tabla-estadisticas mb-0">
+                <thead>
+                  <tr>
+                    <th>Sede</th>
+                    <th>Lugar de Entrenamiento</th>
+                    <th>Alumnos<br>Entrenando</th>
+                    <th>Adeudan<br>el mes</th>
+                    <th>Sin registro<br>de pagos</th>
+                    <th>Pensiones<br>Estimadas ($)</th>
+                    <th>Recaudado ($)</th>
+                    <th>Por recaudar ($)</th>
+                    <th>% Recaudado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php for ($i = 0; $i < count($lugar); $i++):
+                    $pct         = $pensiones[$i] > 0 ? ($recaudado[$i] / $pensiones[$i] * 100) : 0;
+                    $porRecaudar = $pensiones[$i] - $recaudado[$i];
+                    $filaClass   = $pct >= 80 ? 'fila-verde'   : ($pct >= 50 ? 'fila-amarillo'  : 'fila-rojo');
+                    $badgeClass  = $pct >= 80 ? 'pct-verde'    : ($pct >= 50 ? 'pct-amarillo'   : 'pct-rojo');
+                    $barColor    = $pct >= 80 ? 'bg-success'   : ($pct >= 50 ? 'bg-warning'     : 'bg-danger');
+                  ?>
+                  <tr class="<?php echo $filaClass; ?>">
+                    <td><?php echo $sede[$i]; ?></td>
+                    <td><?php echo $lugar[$i]; ?></td>
+                    <td class="text-center"><?php echo $alumnos[$i]; ?></td>
+                    <td class="text-center"><?php echo $alumnosad[$i]; ?></td>
+                    <td class="text-center"><?php echo $sinregpago[$i]; ?></td>
+                    <td class="text-right">$<?php echo number_format($pensiones[$i], 2); ?></td>
+                    <td class="text-right">$<?php echo number_format($recaudado[$i], 2); ?></td>
+                    <td class="text-right <?php echo $porRecaudar > 0 ? 'text-danger' : 'text-success'; ?>">
+                      <?php echo $porRecaudar > 0 ? '$'.number_format($porRecaudar, 2) : '<i class="fas fa-check-circle text-success"></i>'; ?>
+                    </td>
+                    <td class="text-center">
+                      <div class="prog-wrap">
+                        <span class="badge-pct <?php echo $badgeClass; ?>"><?php echo number_format($pct, 1); ?>%</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <?php endfor; ?>
+                </tbody>
+                <tfoot>
+                  <?php
+                    $totalPorRecaudar = $totalPensiones - $totalRecaudado;
+                    $badgeTotal = $pctTotal >= 80 ? 'pct-verde' : ($pctTotal >= 50 ? 'pct-amarillo' : 'pct-rojo');
+                    $barTotal   = $pctTotal >= 80 ? 'bg-success' : ($pctTotal >= 50 ? 'bg-warning'  : 'bg-danger');
+                  ?>
+                  <tr>
+                    <td colspan="2" class="text-right">Totales:</td>
+                    <td><?php echo $totalAlumnos; ?></td>
+                    <td><?php echo $totalAlumnosAd; ?></td>
+                    <td><?php echo $totalAlSinPagos; ?></td>
+                    <td class="text-right">$<?php echo number_format($totalPensiones, 2); ?></td>
+                    <td class="text-right">$<?php echo number_format($totalRecaudado, 2); ?></td>
+                    <td class="text-right <?php echo $totalPorRecaudar > 0 ? 'text-danger' : 'text-success'; ?>">
+                      $<?php echo number_format($totalPorRecaudar, 2); ?>
+                    </td>
+                    <td class="text-center">
+                      <div class="prog-wrap">
+                        <span class="badge-pct <?php echo $badgeTotal; ?>"><?php echo number_format($pctTotal, 1); ?>%</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
 
-	<style>
-		.boton-icono {
-			width: 32px;
-			height: 32px;
-			background-color: transparent;
-			background-size: contain;
-			background-repeat: no-repeat;
-			background-position: center;
-			border: none;
-			cursor: pointer;
-			transition: transform 0.2s;
-		}
-		.boton-icono:hover {
-			transform: scale(1.1);
-		}
-	</style>
+        <!-- ── Card gráficos ─────────────────────────────── -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-chart-bar mr-1"></i> Gráficos por lugar de entrenamiento</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Colapsar">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Gráfico 1: Monetario -->
+              <div class="col-12 col-xl-6 mb-3 mb-xl-0">
+                <p class="text-center text-muted mb-1" style="font-size:0.82rem; text-transform:uppercase; letter-spacing:.5px;">
+                  <i class="fas fa-dollar-sign mr-1"></i> Pensiones estimadas vs. Recaudado ($)
+                </p>
+                <canvas id="graficoMonetario"></canvas>
+              </div>
+              <!-- Gráfico 2: Conteos -->
+              <div class="col-12 col-xl-6">
+                <p class="text-center text-muted mb-1" style="font-size:0.82rem; text-transform:uppercase; letter-spacing:.5px;">
+                  <i class="fas fa-users mr-1"></i> Alumnos entrenando / adeudan / sin registro
+                </p>
+                <canvas id="graficoAlumnos"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  </body>
+        <!-- Leyenda semáforo mobile (visible solo en móvil) -->
+        <div class="d-flex d-md-none mb-3" style="gap:8px; flex-wrap:wrap;">
+          <span class="badge-pct pct-verde"><i class="fas fa-circle mr-1"></i> ≥ 80% recaudado</span>
+          <span class="badge-pct pct-amarillo"><i class="fas fa-circle mr-1"></i> 50–79%</span>
+          <span class="badge-pct pct-rojo"><i class="fas fa-circle mr-1"></i> &lt; 50%</span>
+        </div>
+
+        <?php endif; ?>
+
+      </div>
+    </section>
+  </div>
+
+  <?php require_once "app/views/inc/footer.php"; ?>
+  <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+
+<!-- jQuery -->
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/jszip/jszip.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="<?php echo APP_URL; ?>app/views/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- AdminLTE -->
+<script src="<?php echo APP_URL; ?>app/views/dist/js/adminlte.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<!-- Exportar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<?php if(!empty($lugar)): ?>
+<script>
+$(function () {
+  // ── DataTables ────────────────────────────────────
+  $("#tablaDatos").DataTable({
+    "paging":       false,
+    "lengthChange": false,
+    "searching":    false,
+    "ordering":     true,
+    "info":         true,
+    "autoWidth":    false,
+    "responsive":   true,
+    "order":        [[8, "asc"]],
+    "columnDefs": [
+      { "orderable": false, "targets": [8] }
+    ],
+    "language": {
+      "emptyTable":   "No hay datos disponibles",
+      "info":         "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+      "infoEmpty":    "Mostrando 0 a 0 de 0 entradas",
+      "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+      "thousands":    ",",
+      "zeroRecords":  "No se encontraron registros coincidentes",
+      "buttons": { "copy":"Copiar","print":"Imprimir","colvis":"Columnas" }
+    },
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+  }).buttons().container().appendTo('#tablaDatos_wrapper .col-md-6:eq(0)');
+});
+
+// ── Gráfico 1: Monetario ──────────────────────────
+const ctxMon = document.getElementById('graficoMonetario').getContext('2d');
+new Chart(ctxMon, {
+  type: 'bar',
+  data: {
+    labels: <?php echo json_encode($lugar); ?>,
+    datasets: [
+      {
+        label: 'Pensiones estimadas ($)',
+        backgroundColor: 'rgba(46,204,113,0.75)',
+        borderColor: 'rgba(46,204,113,1)',
+        borderWidth: 1,
+        data: <?php echo json_encode($pensiones); ?>
+      },
+      {
+        label: 'Recaudado ($)',
+        backgroundColor: 'rgba(241,196,15,0.75)',
+        borderColor: 'rgba(241,196,15,1)',
+        borderWidth: 1,
+        data: <?php echo json_encode($recaudado); ?>
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      datalabels: {
+        color: '#333', font: { weight: 'bold', size: 10 },
+        anchor: 'end', align: 'right',
+        display: function(ctx) { return ctx.dataset.data[ctx.dataIndex] > 0; },
+        formatter: function(v) {
+          return '$' + v.toLocaleString('es-EC', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': $' +
+              ctx.parsed.x.toLocaleString('es-EC', { minimumFractionDigits: 2 });
+          }
+        }
+      }
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { display: false } },
+      y: { beginAtZero: true }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+// ── Gráfico 2: Conteos alumnos ────────────────────
+const ctxAlu = document.getElementById('graficoAlumnos').getContext('2d');
+new Chart(ctxAlu, {
+  type: 'bar',
+  data: {
+    labels: <?php echo json_encode($lugar); ?>,
+    datasets: [
+      {
+        label: 'Alumnos entrenando',
+        backgroundColor: 'rgba(52,152,219,0.75)',
+        borderColor: 'rgba(52,152,219,1)',
+        borderWidth: 1,
+        data: <?php echo json_encode($alumnos); ?>
+      },
+      {
+        label: 'Adeudan el mes',
+        backgroundColor: 'rgba(231,76,60,0.75)',
+        borderColor: 'rgba(231,76,60,1)',
+        borderWidth: 1,
+        data: <?php echo json_encode($alumnosad); ?>
+      },
+      {
+        label: 'Sin registro de pagos',
+        backgroundColor: 'rgba(230,126,34,0.75)',
+        borderColor: 'rgba(230,126,34,1)',
+        borderWidth: 1,
+        data: <?php echo json_encode($sinregpago); ?>
+      }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      datalabels: {
+        color: '#333', font: { weight: 'bold', size: 10 },
+        anchor: 'end', align: 'right',
+        display: function(ctx) { return ctx.dataset.data[ctx.dataIndex] > 0; },
+        formatter: function(v) { return v; }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.x; }
+        }
+      }
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { display: false } },
+      y: { beginAtZero: true }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+// ── Exportar ──────────────────────────────────────
+function exportarTablaAExcel(tablaID, nombreArchivo) {
+  const libro = XLSX.utils.table_to_book(document.getElementById(tablaID), { sheet: "Estadísticas" });
+  XLSX.writeFile(libro, nombreArchivo + ".xlsx");
+}
+
+async function exportarTablaAPDF(tablaID, nombreArchivo) {
+  const canvas  = await html2canvas(document.getElementById(tablaID), { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'landscape' });
+  const w   = pdf.internal.pageSize.getWidth();
+  pdf.addImage(imgData, 'PNG', 0, 10, w, (canvas.height * w) / canvas.width);
+  pdf.save(nombreArchivo + ".pdf");
+}
+</script>
+<?php endif; ?>
+
+</body>
 </html>
