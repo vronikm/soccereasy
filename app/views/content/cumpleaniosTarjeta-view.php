@@ -107,11 +107,9 @@
 	}
 
 	// ── Nombre del alumno sobre la franja inferior de la foto ──
-	$nombre = strtoupper(
-		trim($alumno['alumno_primernombre'] . ' ' . $alumno['alumno_segundonombre'])
+	$nombre = trim($alumno['alumno_primernombre'] . ' ' . $alumno['alumno_segundonombre'])
 		. ' ' .
-		trim($alumno['alumno_apellidopaterno'] . ' ' . $alumno['alumno_apellidomaterno'])
-	);
+		trim($alumno['alumno_apellidopaterno'] . ' ' . $alumno['alumno_apellidomaterno']);
 	$edad = (int)$alumno['edad'] + 1;
 
 	// Buscar fuente TrueType — primero fuentes incluidas en el proyecto,
