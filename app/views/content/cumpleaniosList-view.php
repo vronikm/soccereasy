@@ -133,7 +133,7 @@
 										<div class="alumno-id"><?php echo htmlspecialchars($a['alumno_identificacion']); ?></div>
 										<span class="edad-badge">
 											<i class="fas fa-birthday-cake"></i>
-											<?php echo $edad + 1; ?> años
+											<?php echo $edad; ?> años
 										</span>
 										<div class="fecha-nacimiento">
 											<i class="fas fa-calendar"></i> <?php echo $fechaNacLabel; ?>
