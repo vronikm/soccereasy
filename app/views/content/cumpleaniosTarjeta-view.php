@@ -110,7 +110,7 @@
 	$nombre = trim($alumno['alumno_primernombre'] . ' ' . $alumno['alumno_segundonombre'])
 		. ' ' .
 		trim($alumno['alumno_apellidopaterno'] . ' ' . $alumno['alumno_apellidomaterno']);
-	$edad = (int)$alumno['edad'] + 1;
+	$edad = (int)$alumno['edad'];
 
 	// Buscar fuente TrueType — primero fuentes incluidas en el proyecto,
 	// luego rutas comunes de hosting Linux/Unix, finalmente Windows (desarrollo local).
